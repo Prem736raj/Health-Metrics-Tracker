@@ -435,6 +435,22 @@ These cannot be proven by a Windows unit/build run:
   large-font, theme and interaction checks, plus signing/Firebase/Play Console
   work, remain owner-only.
 
+## Calorie education trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Calorie education sections, food-category rows, minimum-needs
+  context, mindful note and disclaimer now use shared semantic colors and
+  stable vector icons. Simplified calorie-balance math is labeled as an
+  estimate; universal daily minimum targets and overconfident restrictive-diet
+  claims were removed or qualified.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** Connected-device expandable-guide rendering, TalkBack,
+  large-font and light/dark theme checks, plus signing/Firebase/Play Console
+  work, remain owner-only.
+
 ## Heart-rate education trust and visual consistency follow-up — 2026-09-13
 
 - **Status:** Code-fixable polish complete; device/accessibility validation

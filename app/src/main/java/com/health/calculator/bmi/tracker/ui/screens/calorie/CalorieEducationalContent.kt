@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +24,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+
+/** Legacy education labels remain in the content model, but are rendered as
+ * stable Material icons so the guide is consistent across fonts and themes. */
+private fun calorieEducationIcon(label: String): ImageVector = when {
+    label.contains("⚡") -> Icons.Outlined.Bolt
+    label.contains("🥗") || label.contains("🥩") || label.contains("🍚") || label.contains("🍽️") || label.contains("🥦") || label.contains("🥑") || label.contains("🍎") || label.contains("☕") -> Icons.Outlined.Restaurant
+    label.contains("🔬") || label.contains("🧬") -> Icons.Outlined.Science
+    label.contains("📐") || label.contains("⚖") -> Icons.Outlined.Straighten
+    label.contains("⚠") || label.contains("🚨") -> Icons.Outlined.Warning
+    label.contains("💪") || label.contains("🏋") -> Icons.Outlined.FitnessCenter
+    label.contains("📊") || label.contains("📋") -> Icons.Outlined.Assessment
+    label.contains("🔄") -> Icons.Outlined.Timeline
+    label.contains("🎯") -> Icons.Outlined.Flag
+    label.contains("🥤") -> Icons.Outlined.WaterDrop
+    label.contains("📱") -> Icons.Outlined.Info
+    label.contains("🌱") -> Icons.Outlined.FavoriteBorder
+    label.contains("👩") || label.contains("👨") || label.contains("Women") || label.contains("Men") -> Icons.Outlined.Person
+    else -> Icons.Outlined.Info
+}
+
+private val LeadingLegacyMarker = Regex("^[\\p{So}\\p{Sk}\\p{M}\\p{Cf}\\s]+")
+private fun cleanLegacyMarker(value: String): String = value.replaceFirst(LeadingLegacyMarker, "").trim()
 
 @Composable
 fun CalorieEducationalContent() {
@@ -45,7 +70,7 @@ fun CalorieEducationalContent() {
         // Section 1: Understanding Calories
         EducationCard(
             icon = Icons.Default.Lightbulb,
-            iconColor = Color(0xFFFFEB3B),
+            iconColor = HealthColors.Warning,
             title = "Understanding Calories",
             content = { UnderstandingCaloriesContent() }
         )
@@ -53,7 +78,7 @@ fun CalorieEducationalContent() {
         // Section 2: Deficit vs Surplus
         EducationCard(
             icon = Icons.Default.Balance,
-            iconColor = Color(0xFF2196F3),
+            iconColor = HealthColors.Good,
             title = "Calorie Deficit vs Surplus",
             content = { DeficitVsSurplusContent() }
         )
@@ -61,7 +86,7 @@ fun CalorieEducationalContent() {
         // Section 3: Danger of Too Few Calories
         EducationCard(
             icon = Icons.Default.Warning,
-            iconColor = Color(0xFFF44336),
+            iconColor = HealthColors.Danger,
             title = "The Danger of Too Few Calories",
             content = { TooFewCaloriesContent() }
         )
@@ -69,7 +94,7 @@ fun CalorieEducationalContent() {
         // Section 4: Calories in Common Foods
         EducationCard(
             icon = Icons.Default.Restaurant,
-            iconColor = Color(0xFF4CAF50),
+            iconColor = HealthColors.Healthy,
             title = "Calories in Common Foods",
             content = { CommonFoodsReferenceContent() }
         )
@@ -77,7 +102,7 @@ fun CalorieEducationalContent() {
         // Section 5: Accurate Tracking Tips
         EducationCard(
             icon = Icons.Default.CheckCircle,
-            iconColor = Color(0xFF9C27B0),
+            iconColor = HealthColors.Severe,
             title = "Tips for Accurate Calorie Tracking",
             content = { AccurateTrackingTipsContent() }
         )
@@ -168,21 +193,21 @@ private fun UnderstandingCaloriesContent() {
             emoji = "⚡",
             title = "Energy In, Energy Out",
             text = "Your body uses calories in three main ways:\n\n• BMR (Basal Metabolic Rate): ~60-75% — energy to keep you alive at rest (breathing, circulation, cell repair)\n• Physical Activity: ~15-30% — energy for movement and exercise\n• TEF (Thermic Effect of Food): ~10% — energy to digest and absorb food",
-            color = Color(0xFFFFEB3B)
+            color = HealthColors.Warning
         )
 
         EduHighlight(
             emoji = "🥗",
             title = "Quality Matters as Much as Quantity",
-            text = "While calorie balance drives weight change, food quality drives health outcomes:\n\n• 500 calories from broccoli and chicken provides vitamins, minerals, and protein\n• 500 calories from cookies provides mostly sugar and fat\n• Both affect weight the same, but they affect your health very differently\n\nA sustainable approach combines appropriate calorie intake with nutritious food choices.",
-            color = Color(0xFF4CAF50)
+            text = "Calorie balance is one part of weight change, while food quality affects nutrition, satiety, and overall wellbeing:\n\n• 500 calories from broccoli and chicken provides a different mix of fibre, vitamins, minerals, and protein than 500 calories from cookies\n• Equal energy does not guarantee equal fullness or nutrition\n\nA sustainable approach combines an appropriate intake with foods you enjoy and can consistently access.",
+            color = HealthColors.Healthy
         )
 
         EduHighlight(
             emoji = "🔬",
             title = "Not All Calories Are Processed Equally",
-            text = "Your body processes different foods at different rates:\n• Protein has a high thermic effect (20-35%) — your body burns more calories digesting it\n• Fat is efficiently stored (0-5% thermic effect)\n• Whole foods take longer to digest than processed foods\n• Fiber slows glucose absorption, preventing energy spikes and crashes",
-            color = Color(0xFF2196F3)
+            text = "Your body processes different foods differently:\n• Protein generally has a higher thermic effect than carbohydrate or fat\n• Fat is energy-dense and is efficiently stored\n• Whole foods often provide more fibre and take longer to digest than many highly processed foods\n• Fibre can slow digestion and glucose absorption, although responses vary",
+            color = HealthColors.Good
         )
     }
 }
@@ -202,60 +227,70 @@ private fun DeficitVsSurplusContent() {
             Surface(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFF2196F3).copy(alpha = 0.08f)
+                color = HealthColors.Good.copy(alpha = 0.08f)
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_19), fontSize = 28.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.TrendingDown,
+                        contentDescription = null,
+                        tint = HealthColors.Good,
+                        modifier = Modifier.size(28.dp)
+                    )
                     Text(
                         stringResource(R.string.txt_deficit),
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = Color(0xFF2196F3)
+                        color = HealthColors.Good
                     )
                     Text(
                         "Calories In\n< Calories Out",
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                         fontSize = 11.sp,
-                        color = Color(0xFF2196F3)
+                        color = HealthColors.Good
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         stringResource(R.string.txt_weight_loss),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = Color(0xFF2196F3)
+                        color = HealthColors.Good
                     )
                 }
             }
             Surface(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFF9C27B0).copy(alpha = 0.08f)
+                color = HealthColors.Severe.copy(alpha = 0.08f)
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_4), fontSize = 28.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.TrendingUp,
+                        contentDescription = null,
+                        tint = HealthColors.Severe,
+                        modifier = Modifier.size(28.dp)
+                    )
                     Text(
                         stringResource(R.string.txt_surplus),
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = Color(0xFF9C27B0)
+                        color = HealthColors.Severe
                     )
                     Text(
                         "Calories In\n> Calories Out",
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                         fontSize = 11.sp,
-                        color = Color(0xFF9C27B0)
+                        color = HealthColors.Severe
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         stringResource(R.string.txt_weight_gain),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = Color(0xFF9C27B0)
+                        color = HealthColors.Severe
                     )
                 }
             }
@@ -263,23 +298,23 @@ private fun DeficitVsSurplusContent() {
 
         EduHighlight(
             emoji = "📐",
-            title = "The 500 Calorie Rule",
-            text = "1 kg of body fat contains approximately 7,700 kcal of stored energy.\n\n• 500 cal/day deficit × 7 days = 3,500 kcal/week ≈ 0.45 kg/week\n• 1,000 cal/day deficit × 7 days = 7,000 kcal/week ≈ 0.9 kg/week\n\nThis is a reliable estimate, though real-world results vary based on water retention, muscle gain, hormones, and metabolic adaptation.",
-            color = Color(0xFF2196F3)
+            title = "A calorie-balance estimate",
+            text = "A commonly used estimate is that 1 kg of body fat stores roughly 7,700 kcal.\n\n• 500 kcal/day deficit × 7 days ≈ 3,500 kcal/week\n• 1,000 kcal/day deficit × 7 days ≈ 7,000 kcal/week\n\nThese are simplified estimates, not promises. Real-world change varies with water shifts, muscle, appetite, activity, medicines, and metabolic adaptation.",
+            color = HealthColors.Good
         )
 
         EduHighlight(
             emoji = "⚠️",
             title = "Why Extreme Deficits Backfire",
-            text = "Cutting too many calories at once is counterproductive:\n\n• Your body adapts by slowing metabolism (metabolic adaptation)\n• Muscle mass is broken down for energy — lowering your BMR further\n• Intense hunger leads to overeating and rebound weight gain\n• Energy and motivation plummet, making exercise harder\n• After stopping, you may gain weight back faster than before\n\nA moderate deficit (250-500 cal/day) is sustainable and effective.",
-            color = Color(0xFFFF9800)
+            text = "Cutting intake too sharply can make a plan harder to sustain:\n\n• Energy, concentration, training, and recovery may suffer\n• Inadequate protein and nutrients can increase the risk of muscle loss\n• Hunger and restriction can make eating patterns harder to manage\n• Adaptive changes in appetite and energy expenditure can slow progress\n\nA gradual approach with enough food and nutrients is usually easier to maintain. Consider a qualified professional for personalised guidance.",
+            color = HealthColors.Caution
         )
 
         EduHighlight(
             emoji = "💪",
             title = "Lean Bulk vs Aggressive Surplus",
             text = "For weight gain/muscle building:\n\n• Lean bulk (250 cal surplus): slower but mostly muscle gain\n• Aggressive surplus: faster weight gain but more fat accumulation\n• Your body can only synthesize a limited amount of muscle per week regardless of calorie surplus\n• Excess calories beyond muscle synthesis needs are stored as fat",
-            color = Color(0xFF9C27B0)
+            color = HealthColors.Severe
         )
     }
 }
@@ -291,19 +326,19 @@ private fun TooFewCaloriesContent() {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Surface(
             shape = RoundedCornerShape(12.dp),
-            color = Color(0xFFF44336).copy(alpha = 0.08f),
+            color = HealthColors.Danger.copy(alpha = 0.08f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
                 Icon(
                     Icons.Default.Warning, null,
-                    tint = Color(0xFFF44336), modifier = Modifier.size(20.dp)
+                    tint = HealthColors.Danger, modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     stringResource(R.string.txt_eating_too_few_calories_can_be),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFF44336).copy(alpha = 0.9f),
+                    color = HealthColors.Danger.copy(alpha = 0.9f),
                     lineHeight = 18.sp
                 )
             }
@@ -324,8 +359,8 @@ private fun TooFewCaloriesContent() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    MinCalCard("👩 Women", "1,200", "kcal/day", Color(0xFFE91E63))
-                    MinCalCard("👨 Men", "1,500", "kcal/day", Color(0xFF2196F3))
+                    MinCalCard("Women", "Varies", "individual needs", HealthColors.Caution)
+                    MinCalCard("Men", "Varies", "individual needs", HealthColors.Good)
                 }
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
@@ -340,28 +375,28 @@ private fun TooFewCaloriesContent() {
         // Consequences
         listOf(
             Triple("🧬", "Metabolic Adaptation",
-                "When calories drop too low, your body enters 'survival mode.' Metabolism slows by 15-25% as your body burns fewer calories to preserve fat stores. This makes further weight loss increasingly difficult."),
+                "When intake stays well below needs, the body can adapt through changes in appetite, movement, and energy expenditure. The size and timing of these changes vary; 'survival mode' is not a precise diagnosis."),
             Triple("💪", "Muscle Loss",
-                "Without enough calories, your body breaks down muscle tissue for energy. This lowers your BMR (fewer calories burned at rest), making it even harder to lose fat long-term."),
-            Triple("🥦", "Nutrient Deficiencies",
-                "Very low-calorie diets rarely provide adequate vitamins and minerals. This can cause fatigue, hair loss, weakened immune function, poor bone health, and anemia."),
-            Triple("⚖️", "Hormonal Disruption",
-                "Severe restriction disrupts hunger hormones (ghrelin increases, leptin decreases), sex hormones, thyroid function, and cortisol levels — creating a biochemical drive to overeat.")
+                "Very low intake can make it harder to meet protein and training needs, which may increase the risk of losing lean tissue."),
+            Triple("🥦", "Nutrient Gaps",
+                "Very low-calorie diets can make it difficult to get enough vitamins, minerals, protein, fibre, and essential fats. Symptoms depend on the person and duration."),
+            Triple("⚖️", "Changes in Appetite and Hormones",
+                "Severe restriction can affect appetite signals, reproductive hormones, thyroid-related measures, mood, and stress responses. Persistent symptoms deserve professional support.")
         ).forEach { (emoji, title, text) ->
-            EduHighlight(emoji = emoji, title = title, text = text, color = Color(0xFFF44336))
+            EduHighlight(emoji = emoji, title = title, text = text, color = HealthColors.Danger)
         }
 
         // Warning signs
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF44336).copy(alpha = 0.06f))
+            colors = CardDefaults.cardColors(containerColor = HealthColors.Danger.copy(alpha = 0.06f))
         ) {
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
                     stringResource(R.string.txt_signs_you_may_be_eating_too_li),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = Color(0xFFF44336)
+                    color = HealthColors.Danger
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 val signs = listOf(
@@ -375,7 +410,7 @@ private fun TooFewCaloriesContent() {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         pair.forEach { sign ->
                             Row(modifier = Modifier.weight(1f).padding(vertical = 2.dp)) {
-                                Text(stringResource(R.string.txt_text_placeholder_50), color = Color(0xFFF44336), style = MaterialTheme.typography.bodySmall)
+                                Text("• ", color = HealthColors.Danger, style = MaterialTheme.typography.bodySmall)
                                 Text(sign, style = MaterialTheme.typography.bodySmall, fontSize = 11.sp)
                             }
                         }
@@ -397,7 +432,16 @@ private fun MinCalCard(label: String, value: String, unit: String, color: Color)
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(label, style = MaterialTheme.typography.labelSmall, color = color)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = calorieEducationIcon(label),
+                    contentDescription = null,
+                    tint = color,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(cleanLegacyMarker(label), style = MaterialTheme.typography.labelSmall, color = color)
+            }
             Text(
                 value,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
@@ -422,7 +466,7 @@ private fun CommonFoodsReferenceContent() {
     val categories = remember {
         listOf(
             FoodCategoryRef(
-                "Proteins", "🥩", Color(0xFFF44336),
+                "Proteins", "🥩", FeatureColors.HeartStart,
                 listOf(
                     "Chicken breast (100g)" to "165 kcal",
                     "Salmon (100g)" to "208 kcal",
@@ -435,7 +479,7 @@ private fun CommonFoodsReferenceContent() {
                 )
             ),
             FoodCategoryRef(
-                "Carbohydrates", "🍚", Color(0xFF2196F3),
+                "Carbohydrates", "🍚", FeatureColors.StepsStart,
                 listOf(
                     "Rice, white (1 cup, cooked)" to "206 kcal",
                     "Oatmeal (1 cup, cooked)" to "166 kcal",
@@ -448,7 +492,7 @@ private fun CommonFoodsReferenceContent() {
                 )
             ),
             FoodCategoryRef(
-                "Fats", "🥑", Color(0xFF4CAF50),
+                "Fats", "🥑", HealthColors.Healthy,
                 listOf(
                     "Avocado (1 medium)" to "234 kcal",
                     "Olive oil (1 tbsp)" to "119 kcal",
@@ -461,7 +505,7 @@ private fun CommonFoodsReferenceContent() {
                 )
             ),
             FoodCategoryRef(
-                "Fruits", "🍎", Color(0xFFFF9800),
+                "Fruits", "🍎", HealthColors.Caution,
                 listOf(
                     "Apple (1 medium)" to "95 kcal",
                     "Banana (1 medium)" to "105 kcal",
@@ -474,7 +518,7 @@ private fun CommonFoodsReferenceContent() {
                 )
             ),
             FoodCategoryRef(
-                "Vegetables", "🥦", Color(0xFF009688),
+                "Vegetables", "🥦", HealthColors.Healthy,
                 listOf(
                     "Broccoli (1 cup)" to "55 kcal",
                     "Spinach (1 cup, raw)" to "7 kcal",
@@ -487,7 +531,7 @@ private fun CommonFoodsReferenceContent() {
                 )
             ),
             FoodCategoryRef(
-                "Beverages", "☕", Color(0xFF795548),
+                "Beverages", "☕", HealthColors.Info,
                 listOf(
                     "Coffee, black (1 cup)" to "2 kcal",
                     "Tea, unsweetened (1 cup)" to "2 kcal",
@@ -526,7 +570,12 @@ private fun CommonFoodsReferenceContent() {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(category.emoji, fontSize = 20.sp)
+                            Icon(
+                                imageVector = calorieEducationIcon(category.emoji),
+                                contentDescription = null,
+                                tint = category.color,
+                                modifier = Modifier.size(22.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 category.name,
@@ -673,7 +722,7 @@ private fun AccurateTrackingTipsContent() {
         )
 
         tips.forEach { (emoji, title, text) ->
-            EduHighlight(emoji = emoji, title = title, text = text, color = Color(0xFF9C27B0))
+            EduHighlight(emoji = emoji, title = title, text = text, color = FeatureColors.CalorieDeep)
         }
     }
 }
@@ -698,7 +747,12 @@ private fun EduHighlight(emoji: String, title: String, text: String, color: Colo
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(emoji, fontSize = 16.sp)
+                Icon(
+                    imageVector = calorieEducationIcon(emoji),
+                    contentDescription = null,
+                    tint = color,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     title,
@@ -724,17 +778,22 @@ private fun MindfulNoteCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF4CAF50).copy(alpha = 0.08f)
+            containerColor = HealthColors.Healthy.copy(alpha = 0.08f)
         )
     ) {
         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.Top) {
-            Text(stringResource(R.string.txt_text_placeholder_49), fontSize = 22.sp)
+            Icon(
+                imageVector = Icons.Outlined.FavoriteBorder,
+                contentDescription = null,
+                tint = HealthColors.Healthy,
+                modifier = Modifier.size(22.dp)
+            )
             Spacer(modifier = Modifier.width(10.dp))
             Column {
                 Text(
                     stringResource(R.string.txt_a_mindful_approach_to_tracking),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = Color(0xFF4CAF50)
+                    color = HealthColors.Healthy
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -754,26 +813,26 @@ private fun MedicalDisclaimerEducation() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF44336).copy(alpha = 0.06f)
+            containerColor = HealthColors.Danger.copy(alpha = 0.06f)
         )
     ) {
         Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
             Icon(
                 Icons.Default.MedicalInformation, null,
-                tint = Color(0xFFF44336).copy(alpha = 0.7f), modifier = Modifier.size(18.dp)
+                tint = HealthColors.Danger.copy(alpha = 0.7f), modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
                     stringResource(R.string.txt_medical_disclaimer),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = Color(0xFFF44336).copy(alpha = 0.8f)
+                    color = HealthColors.Danger.copy(alpha = 0.8f)
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     stringResource(R.string.txt_this_educational_content_is_fo_3),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFF44336).copy(alpha = 0.7f),
+                    color = HealthColors.Danger.copy(alpha = 0.7f),
                     fontSize = 11.sp, lineHeight = 16.sp
                 )
             }

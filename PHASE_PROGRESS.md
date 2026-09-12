@@ -325,6 +325,28 @@ This file is the source of truth for the sequential product-development phases. 
   continue deep-screen cleanup only where it improves trust, accessibility or
   reliability.
 
+## Follow-up — Calorie education trust and visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** The calorie education guide now uses shared calorie,
+  health, caution, warning, and informational palette roles and stable vector
+  icons for section headers, food categories, guidance, and mindful notes.
+  Calorie-balance math is explicitly described as a simplified estimate, and
+  fixed daily minimums were replaced with context-aware wording to avoid
+  unsafe universal targets. Restrictive-diet copy now encourages gradual,
+  individualised guidance without diagnosis or certainty claims.
+- **Tests:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  pass with `GRADLE_EXIT=0`.
+- **Known limitations:** Legacy content labels remain in source data for
+  compatibility, but emoji are not rendered. TalkBack, large-font, theme and
+  expandable-content checks require a connected device.
+- **Next phase:** Execute the documented device/console release checklist;
+  continue deep-screen cleanup only when it improves trust, accessibility or
+  reliability.
+
+Updated: 2026-09-13
+
 Updated: 2026-09-12
 
 ## Follow-up — Heart-rate education trust and visual consistency

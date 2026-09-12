@@ -766,10 +766,10 @@
 <string name="txt_calories">Calories</string>
 <string name="txt_food_item">Food Item</string>
 <string name="txt_text_placeholder_50">• </string>
-<string name="txt_signs_you_may_be_eating_too_li">🚨 Signs You May Be Eating Too Little</string>
-<string name="txt_these_are_absolute_minimums_mo">These are absolute minimums. Most people need significantly more for safe, sustainable results.</string>
-<string name="txt_minimum_daily_calorie_recommen">⚡ Minimum Daily Calorie Recommendations</string>
-<string name="txt_eating_too_few_calories_can_be">Eating too few calories can be just as harmful as overeating. Here\'s what happens when you restrict calories too severely:</string>
+<string name="txt_signs_you_may_be_eating_too_li">Signs You May Be Eating Too Little</string>
+<string name="txt_these_are_absolute_minimums_mo">There is no universal safe minimum. These example values are not personal targets; needs vary with age, body size, activity, health, and goals.</string>
+<string name="txt_minimum_daily_calorie_recommen">Calorie needs need context</string>
+<string name="txt_eating_too_few_calories_can_be">Eating far less than your body needs can affect energy, nutrition, and wellbeing. Here\'s why overly restrictive plans deserve care:</string>
 <string name="txt_weight_gain">→ Weight Gain</string>
 <string name="txt_surplus">Surplus</string>
 <string name="txt_weight_loss">→ Weight Loss</string>
