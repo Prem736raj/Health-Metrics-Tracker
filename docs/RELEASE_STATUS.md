@@ -451,6 +451,22 @@ These cannot be proven by a Windows unit/build run:
   large-font and light/dark theme checks, plus signing/Firebase/Play Console
   work, remain owner-only.
 
+## Ideal-weight metrics trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Ideal-weight category scales, adjusted-weight and body-
+  composition surfaces now use shared semantic colors and stable vector icons;
+  sport-note legacy markers remain compatible but are not rendered. Adjusted
+  body weight is described as an informational estimate used in some clinical
+  methods, never as a dosing instruction or weight goal.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** Connected-device category-scale, expandable-sport-note,
+  TalkBack, large-font and light/dark theme checks, plus signing/Firebase/Play
+  Console work, remain owner-only.
+
 ## Heart-rate education trust and visual consistency follow-up — 2026-09-13
 
 - **Status:** Code-fixable polish complete; device/accessibility validation

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,7 +31,19 @@ import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.domain.usecase.AdjustedWeightMetrics
 import com.health.calculator.bmi.tracker.domain.usecase.SportWeightNote
 import com.health.calculator.bmi.tracker.domain.usecase.getSportWeightNotes
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.abs
+
+/** Sport-note models keep emoji labels for persistence compatibility. Render
+ * stable vector icons so the calculator uses one visual language everywhere. */
+private fun sportWeightIcon(label: String): ImageVector = when {
+    label.contains("🏃") || label.contains("🚴") || label.contains("⚽") -> Icons.Outlined.DirectionsWalk
+    label.contains("🏊") -> Icons.Outlined.WaterDrop
+    label.contains("🏋️") || label.contains("💪") || label.contains("🥋") -> Icons.Outlined.FitnessCenter
+    label.contains("👤") -> Icons.Outlined.Person
+    else -> Icons.Outlined.FitnessCenter
+}
 
 @Composable
 fun IBWAdditionalMetricsSection(
@@ -127,19 +141,19 @@ private fun WeightCategoryCard(
     val percent = metrics.weightCategoryPercent
 
     val categoryColor = when {
-        percent < 80 -> Color(0xFFF44336)
-        percent < 90 -> Color(0xFFFF9800)
-        percent <= 110 -> Color(0xFF4CAF50)
-        percent <= 120 -> Color(0xFFFF9800)
-        else -> Color(0xFFF44336)
+        percent < 80 -> HealthColors.Danger
+        percent < 90 -> HealthColors.Caution
+        percent <= 110 -> HealthColors.Healthy
+        percent <= 120 -> HealthColors.Caution
+        else -> HealthColors.Danger
     }
 
     val categoryIcon = when {
-        percent < 80 -> "⚠️"
-        percent < 90 -> "📉"
-        percent <= 110 -> "✅"
-        percent <= 120 -> "📈"
-        else -> "⚠️"
+        percent < 80 -> Icons.Outlined.Warning
+        percent < 90 -> Icons.Outlined.TrendingDown
+        percent <= 110 -> Icons.Outlined.CheckCircle
+        percent <= 120 -> Icons.Outlined.TrendingUp
+        else -> Icons.Outlined.Warning
     }
 
     Card(
@@ -157,9 +171,11 @@ private fun WeightCategoryCard(
                     text = stringResource(R.string.txt_weight_vs_ideal),
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold)
                 )
-                Text(
-                    text = categoryIcon,
-                    fontSize = 20.sp
+                Icon(
+                    imageVector = categoryIcon,
+                    contentDescription = null,
+                    tint = categoryColor,
+                    modifier = Modifier.size(22.dp)
                 )
             }
 
@@ -247,11 +263,11 @@ private fun WeightCategoryCard(
 @Composable
 private fun WeightCategoryScale(percent: Double) {
     val zones = listOf(
-        Triple(0f to 80f, Color(0xFFF44336), "<80%"),
-        Triple(80f to 90f, Color(0xFFFF9800), "80-89%"),
-        Triple(90f to 110f, Color(0xFF4CAF50), "90-110%"),
-        Triple(110f to 120f, Color(0xFFFF9800), "111-120%"),
-        Triple(120f to 160f, Color(0xFFF44336), ">120%")
+        Triple(0f to 80f, HealthColors.Danger, "<80%"),
+        Triple(80f to 90f, HealthColors.Caution, "80-89%"),
+        Triple(90f to 110f, HealthColors.Healthy, "90-110%"),
+        Triple(110f to 120f, HealthColors.Caution, "111-120%"),
+        Triple(120f to 160f, HealthColors.Danger, ">120%")
     )
 
     val animatedPos by animateFloatAsState(
@@ -294,11 +310,11 @@ private fun WeightCategoryScale(percent: Double) {
                     center = Offset(markerX, barY)
                 )
                 val markerColor = when {
-                    percent < 80 -> Color(0xFFF44336)
-                    percent < 90 -> Color(0xFFFF9800)
-                    percent <= 110 -> Color(0xFF4CAF50)
-                    percent <= 120 -> Color(0xFFFF9800)
-                    else -> Color(0xFFF44336)
+                    percent < 80 -> HealthColors.Danger
+                    percent < 90 -> HealthColors.Caution
+                    percent <= 110 -> HealthColors.Healthy
+                    percent <= 120 -> HealthColors.Caution
+                    else -> HealthColors.Danger
                 }
                 drawCircle(
                     color = markerColor,
@@ -315,7 +331,7 @@ private fun WeightCategoryScale(percent: Double) {
         ) {
             Text(stringResource(R.string.txt_60), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
             Text(stringResource(R.string.txt_80), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
-            Text(stringResource(R.string.txt_100_1), style = MaterialTheme.typography.labelSmall, color = Color(0xFF4CAF50), fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.txt_100_1), style = MaterialTheme.typography.labelSmall, color = HealthColors.Healthy, fontWeight = FontWeight.Bold)
             Text(stringResource(R.string.txt_120), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
             Text(stringResource(R.string.txt_160), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
         }
@@ -362,7 +378,7 @@ private fun AdjustedBodyWeightCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFE91E63).copy(alpha = 0.06f)
+            containerColor = FeatureColors.HeartStart.copy(alpha = 0.06f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -370,14 +386,14 @@ private fun AdjustedBodyWeightCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
                     shape = CircleShape,
-                    color = Color(0xFFE91E63).copy(alpha = 0.15f),
+                    color = FeatureColors.HeartStart.copy(alpha = 0.15f),
                     modifier = Modifier.size(36.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         Icon(
                             Icons.Default.MedicalServices,
                             contentDescription = null,
-                            tint = Color(0xFFE91E63),
+                            tint = FeatureColors.HeartStart,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -414,13 +430,13 @@ private fun AdjustedBodyWeightCard(
                 Text(
                     text = "${"%.1f".format(animatedAbw)}",
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    color = Color(0xFFE91E63)
+                    color = FeatureColors.HeartStart
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = unit,
                     style = MaterialTheme.typography.titleSmall,
-                    color = Color(0xFFE91E63).copy(alpha = 0.7f),
+                    color = FeatureColors.HeartStart.copy(alpha = 0.7f),
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
@@ -458,7 +474,7 @@ private fun AdjustedBodyWeightCard(
                     Icons.Default.Info,
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
-                    tint = Color(0xFFE91E63).copy(alpha = 0.6f)
+                    tint = FeatureColors.HeartStart.copy(alpha = 0.6f)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -542,7 +558,7 @@ private fun LeanBodyWeightCard(
                     unit = unit,
                     label = "Fat Mass",
                     percent = fatPercent.toFloat(),
-                    color = Color(0xFFFF9800)
+                    color = HealthColors.Caution
                 )
 
                 // Body Fat %
@@ -551,7 +567,7 @@ private fun LeanBodyWeightCard(
                     unit = "%",
                     label = "Body Fat",
                     percent = fatPercent.toFloat(),
-                    color = Color(0xFFE91E63)
+                    color = FeatureColors.HeartStart
                 )
             }
 
@@ -671,13 +687,13 @@ private fun BodyCompositionBar(leanPercent: Float, fatPercent: Float) {
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(animatedLean.coerceAtLeast(1f))
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(FeatureColors.WeightStart)
             )
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight((100f - animatedLean).coerceAtLeast(1f))
-                    .background(Color(0xFFFF9800))
+                    .background(HealthColors.Caution)
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -690,7 +706,7 @@ private fun BodyCompositionBar(leanPercent: Float, fatPercent: Float) {
                     modifier = Modifier
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
+                        .background(FeatureColors.WeightStart)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -704,7 +720,7 @@ private fun BodyCompositionBar(leanPercent: Float, fatPercent: Float) {
                     modifier = Modifier
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFFFF9800))
+                        .background(HealthColors.Caution)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -736,14 +752,14 @@ private fun SportSpecificNotesCard() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Surface(
                         shape = CircleShape,
-                        color = Color(0xFF673AB7).copy(alpha = 0.12f),
+                        color = FeatureColors.BmiStart.copy(alpha = 0.12f),
                         modifier = Modifier.size(36.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                             Icon(
                                 Icons.Default.SportsGymnastics,
                                 contentDescription = null,
-                                tint = Color(0xFF673AB7),
+                                tint = FeatureColors.BmiStart,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -789,10 +805,13 @@ private fun SportSpecificNotesCard() {
                                     .padding(12.dp),
                                 verticalAlignment = Alignment.Top
                             ) {
-                                Text(
-                                    text = note.icon,
-                                    fontSize = 24.sp,
-                                    modifier = Modifier.padding(top = 2.dp)
+                                Icon(
+                                    imageVector = sportWeightIcon(note.icon),
+                                    contentDescription = null,
+                                    tint = FeatureColors.BmiStart,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .padding(top = 2.dp)
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column(modifier = Modifier.weight(1f)) {
@@ -809,12 +828,12 @@ private fun SportSpecificNotesCard() {
                                         )
                                         Surface(
                                             shape = RoundedCornerShape(4.dp),
-                                            color = Color(0xFF673AB7).copy(alpha = 0.1f)
+                                            color = FeatureColors.BmiStart.copy(alpha = 0.1f)
                                         ) {
                                             Text(
                                                 text = note.bmiRange,
                                                 style = MaterialTheme.typography.labelSmall,
-                                                color = Color(0xFF673AB7),
+                                                color = FeatureColors.BmiStart,
                                                 modifier = Modifier.padding(
                                                     horizontal = 6.dp,
                                                     vertical = 2.dp
@@ -837,7 +856,7 @@ private fun SportSpecificNotesCard() {
                     // Disclaimer
                     Surface(
                         shape = RoundedCornerShape(8.dp),
-                        color = Color(0xFFFF9800).copy(alpha = 0.08f)
+                        color = HealthColors.Caution.copy(alpha = 0.08f)
                     ) {
                         Row(
                             modifier = Modifier.padding(10.dp),
@@ -847,13 +866,13 @@ private fun SportSpecificNotesCard() {
                                 Icons.Default.Warning,
                                 contentDescription = null,
                                 modifier = Modifier.size(14.dp),
-                                tint = Color(0xFFFF9800)
+                                tint = HealthColors.Caution
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = stringResource(R.string.txt_athletes_may_have_ideal_weight),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = Color(0xFFFF9800).copy(alpha = 0.9f),
+                                color = HealthColors.Caution.copy(alpha = 0.9f),
                                 fontSize = 11.sp
                             )
                         }

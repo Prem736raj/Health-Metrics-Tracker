@@ -980,9 +980,9 @@
 <string name="txt_this_is_an_estimation_based_on">This is an estimation based on BMI-derived formulas. For accurate body composition, consider DEXA scan or bioimpedance analysis.</string>
 <string name="txt_estimated_weight_minus_body_fa">Estimated weight minus body fat</string>
 <string name="txt_lean_body_weight">Lean Body Weight</string>
-<string name="txt_used_by_healthcare_providers_f">Used by healthcare providers for medication dosing in patients significantly above ideal weight. This is not a weight goal — it\'s a clinical reference value.</string>
+<string name="txt_used_by_healthcare_providers_f">Some clinicians use this type of estimate in medication-dosing calculations when weight is substantially above an IBW estimate. It is not a weight goal; never adjust medication from this value.</string>
 <string name="txt_formula_ibw_0_4_actual_weight_">Formula: IBW + 0.4 × (Actual Weight − IBW)</string>
-<string name="txt_for_clinical_use_when_weight_1">For clinical use when weight > 120% of IBW</string>
+<string name="txt_for_clinical_use_when_weight_1">Informational estimate used in some clinical methods above 120% of an IBW estimate</string>
 <string name="txt_adjusted_body_weight">Adjusted Body Weight</string>
 <string name="txt_160">160%</string>
 <string name="txt_120">120%</string>
