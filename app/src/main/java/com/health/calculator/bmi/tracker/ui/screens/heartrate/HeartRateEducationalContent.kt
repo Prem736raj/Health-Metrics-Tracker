@@ -12,12 +12,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +27,33 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+
+/**
+ * Legacy content models keep their emoji labels for backwards compatibility.
+ * The rendered guide uses stable vector icons instead so the visual language
+ * is consistent across themes, fonts, and accessibility settings.
+ */
+private fun heartRateEducationIcon(label: String): ImageVector = when {
+    label.contains("❤️") || label.contains("💓") || label.contains("🫀") || label.contains("🔴") -> Icons.Outlined.MonitorHeart
+    label.contains("📊") || label.contains("📋") -> Icons.Outlined.Assessment
+    label.contains("💤") || label.contains("😴") -> Icons.Outlined.Schedule
+    label.contains("🏃") || label.contains("🏋️") || label.contains("💪") -> Icons.Outlined.FitnessCenter
+    label.contains("🔬") -> Icons.Outlined.Science
+    label.contains("📐") -> Icons.Outlined.Straighten
+    label.contains("🎯") || label.contains("🏆") -> Icons.Outlined.Flag
+    label.contains("⛽") || label.contains("⚡") -> Icons.Outlined.Bolt
+    label.contains("⚠") || label.contains("🚨") -> Icons.Outlined.Warning
+    label.contains("😮") || label.contains("😵") || label.contains("🤢") || label.contains("🥶") || label.contains("🤕") || label.contains("😫") -> Icons.Outlined.Warning
+    label.contains("⌚") || label.contains("📟") || label.contains("🎧") || label.contains("💍") -> Icons.Outlined.AccessTime
+    label.contains("✋") -> Icons.Outlined.FrontHand
+    label.contains("💡") -> Icons.Outlined.Lightbulb
+    else -> Icons.Outlined.Info
+}
+
+private val LeadingLegacyMarker = Regex("^[\\p{So}\\p{Sk}\\p{M}\\p{Cf}\\s]+")
+private fun cleanLegacyMarker(value: String): String = value.replaceFirst(LeadingLegacyMarker, "").trim()
 
 // ============================================================
 // MAIN EDUCATIONAL SECTION
@@ -40,7 +69,12 @@ fun HeartRateEducationalSection(
     ) {
         // Section header
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(stringResource(R.string.txt_text_placeholder_24), fontSize = 22.sp)
+            Icon(
+                imageVector = Icons.Outlined.MonitorHeart,
+                contentDescription = null,
+                tint = FeatureColors.HeartStart,
+                modifier = Modifier.size(24.dp)
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
@@ -82,7 +116,7 @@ private fun UnderstandingHeartRateSection() {
         emoji = "❤️",
         title = "Understanding Heart Rate",
         subtitle = "The basics of how your heart works during rest and activity",
-        color = Color(0xFFE53935),
+        color = FeatureColors.HeartStart,
         isExpanded = isExpanded,
         onToggle = { isExpanded = !isExpanded }
     ) {
@@ -92,9 +126,8 @@ private fun UnderstandingHeartRateSection() {
                 title = "What is Heart Rate?",
                 emoji = "💓",
                 content = "Heart rate is the number of times your heart beats per minute (BPM). " +
-                        "It's one of the simplest and most powerful indicators of your cardiovascular health and fitness level. " +
-                        "Your heart pumps blood carrying oxygen and nutrients to every cell in your body — " +
-                        "the stronger and more efficient your heart, the fewer beats it needs."
+                        "It can provide useful context about cardiovascular fitness when considered alongside activity, sleep, stress, illness, medicines, and how you feel. " +
+                        "Heart rate varies from person to person, so a single reading does not diagnose a condition."
             )
 
             // Types of heart rate
@@ -108,8 +141,8 @@ private fun UnderstandingHeartRateSection() {
                         name = "Resting Heart Rate (RHR)",
                         range = "60-100 BPM (normal adult)",
                         description = "Your heart rate when completely at rest, ideally measured first thing in the morning. " +
-                                "Athletes can have RHR as low as 40 BPM. A lower RHR generally means a more efficient heart.",
-                        color = Color(0xFF90CAF9)
+                                "Some well-trained athletes have lower readings, but a low value is not automatically better. Trends and symptoms matter.",
+                        color = HealthColors.Good
                     )
                     HeartRateTypeCard(
                         emoji = "🏃",
@@ -117,15 +150,14 @@ private fun UnderstandingHeartRateSection() {
                         range = "Varies by intensity",
                         description = "Your heart rate during physical activity. It increases with exercise intensity " +
                                 "to pump more oxygen-rich blood to working muscles.",
-                        color = Color(0xFF66BB6A)
+                        color = HealthColors.Healthy
                     )
                     HeartRateTypeCard(
                         emoji = "🔴",
                         name = "Maximum Heart Rate (MHR)",
                         range = "~220 minus age",
-                        description = "The highest rate your heart can safely beat. This is your ceiling — " +
-                                "all training zones are calculated as percentages of MHR.",
-                        color = Color(0xFFEF5350)
+                        description = "An estimate of peak heart rate during maximal effort. It is not a personal safety limit, and training zones are estimates.",
+                        color = FeatureColors.HeartStart
                     )
                     HeartRateTypeCard(
                         emoji = "📐",
@@ -133,7 +165,7 @@ private fun UnderstandingHeartRateSection() {
                         range = "MHR minus RHR",
                         description = "The difference between your max and resting heart rate. " +
                                 "Used in the Karvonen formula for more personalized zone calculations.",
-                        color = Color(0xFF42A5F5)
+                        color = FeatureColors.StepsStart
                     )
                 }
             }
@@ -142,18 +174,18 @@ private fun UnderstandingHeartRateSection() {
             ContentBlock(
                 title = "Why Resting Heart Rate Matters",
                 emoji = "🔬",
-                content = "Your resting heart rate is one of the best indicators of cardiovascular fitness:"
+                content = "Your resting heart rate can add useful context to a broader picture of fitness and wellbeing:"
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     val points = listOf(
-                        "A lower RHR means your heart pumps more blood per beat (higher stroke volume)",
-                        "Aerobic exercise over time strengthens the heart, lowering RHR",
-                        "RHR typically decreases 1 BPM per week in the first months of training",
-                        "A sudden RHR increase (5+ BPM above normal) can indicate illness, overtraining, or stress",
-                        "Studies link higher RHR (>80 BPM) to increased cardiovascular risk"
+                        "A lower RHR can occur when the heart pumps more blood per beat, but readings vary by person",
+                        "Regular aerobic activity may lower a person’s usual resting heart rate over time",
+                        "There is no universal week-by-week target; look for gradual trends rather than one reading",
+                        "A sustained change from your usual pattern can reflect stress, illness, recovery, or other factors",
+                        "Higher resting values have been associated with health risk in population studies, but one reading is not a diagnosis"
                     )
                     points.forEach { point ->
-                        BulletPoint(text = point, color = Color(0xFFE53935))
+                    BulletPoint(text = point, color = FeatureColors.HeartStart)
                     }
                 }
             }
@@ -164,15 +196,15 @@ private fun UnderstandingHeartRateSection() {
                 emoji = "📋"
             ) {
                 val ageRanges = listOf(
-                    Triple("Newborn (0-1 mo)", "70-190 BPM", Color(0xFFF44336)),
-                    Triple("Infant (1-12 mo)", "80-160 BPM", Color(0xFFFF5722)),
-                    Triple("Toddler (1-3 yr)", "80-130 BPM", Color(0xFFFF9800)),
-                    Triple("Child (3-5 yr)", "80-120 BPM", Color(0xFFFFC107)),
-                    Triple("Child (6-12 yr)", "70-110 BPM", Color(0xFF8BC34A)),
-                    Triple("Teen (13-17 yr)", "60-100 BPM", Color(0xFF4CAF50)),
-                    Triple("Adult (18-64 yr)", "60-100 BPM", Color(0xFF2196F3)),
-                    Triple("Senior (65+ yr)", "60-100 BPM", Color(0xFF42A5F5)),
-                    Triple("Athlete", "40-60 BPM", Color(0xFF1565C0))
+                    Triple("Newborn (0-1 mo)", "70-190 BPM", HealthColors.Danger),
+                    Triple("Infant (1-12 mo)", "80-160 BPM", HealthColors.Caution),
+                    Triple("Toddler (1-3 yr)", "80-130 BPM", HealthColors.Warning),
+                    Triple("Child (3-5 yr)", "80-120 BPM", HealthColors.Warning),
+                    Triple("Child (6-12 yr)", "70-110 BPM", HealthColors.Healthy),
+                    Triple("Teen (13-17 yr)", "60-100 BPM", HealthColors.Healthy),
+                    Triple("Adult (18-64 yr)", "60-100 BPM", HealthColors.Good),
+                    Triple("Senior (65+ yr)", "60-100 BPM", FeatureColors.StepsStart),
+                    Triple("Athlete", "40-60 BPM", FeatureColors.StepsDeep)
                 )
 
                 Card(
@@ -230,7 +262,7 @@ private fun HeartRateTrainingSection() {
         emoji = "🏋️",
         title = "Heart Rate Training Explained",
         subtitle = "Why training in zones matters and the science behind it",
-        color = Color(0xFF4CAF50),
+        color = HealthColors.Healthy,
         isExpanded = isExpanded,
         onToggle = { isExpanded = !isExpanded }
     ) {
@@ -257,8 +289,8 @@ private fun HeartRateTrainingSection() {
                         glycogenPercent = 15,
                         description = "Your body primarily burns fat as fuel. This is sustainable for long periods. " +
                                 "Fat is an almost unlimited energy source — even lean people have tens of thousands of calories stored as fat.",
-                        fatColor = Color(0xFFFFC107),
-                        glycogenColor = Color(0xFF2196F3)
+                        fatColor = HealthColors.Warning,
+                        glycogenColor = FeatureColors.StepsStart
                     )
                     FuelSourceCard(
                         zone = "Zone 3",
@@ -267,8 +299,8 @@ private fun HeartRateTrainingSection() {
                         glycogenPercent = 50,
                         description = "An even mix of fat and carbohydrates (glycogen). This is the sweet spot " +
                                 "for building cardiovascular endurance without depleting your energy stores too quickly.",
-                        fatColor = Color(0xFFFFC107),
-                        glycogenColor = Color(0xFF2196F3)
+                        fatColor = HealthColors.Warning,
+                        glycogenColor = FeatureColors.StepsStart
                     )
                     FuelSourceCard(
                         zone = "Zone 4",
@@ -277,8 +309,8 @@ private fun HeartRateTrainingSection() {
                         glycogenPercent = 85,
                         description = "Mostly glycogen (stored carbs). Your body can't deliver oxygen fast enough, " +
                                 "so it switches to anaerobic metabolism. Lactic acid builds up — this is why it burns.",
-                        fatColor = Color(0xFFFFC107),
-                        glycogenColor = Color(0xFF2196F3)
+                        fatColor = HealthColors.Warning,
+                        glycogenColor = FeatureColors.StepsStart
                     )
                     FuelSourceCard(
                         zone = "Zone 5",
@@ -287,8 +319,8 @@ private fun HeartRateTrainingSection() {
                         glycogenPercent = 95,
                         description = "Almost entirely glycogen and phosphocreatine. Sustainable for only 1-3 minutes. " +
                                 "This zone pushes your absolute physiological limits.",
-                        fatColor = Color(0xFFFFC107),
-                        glycogenColor = Color(0xFF2196F3)
+                        fatColor = HealthColors.Warning,
+                        glycogenColor = FeatureColors.StepsStart
                     )
                 }
             }
@@ -301,7 +333,7 @@ private fun HeartRateTrainingSection() {
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFF9800).copy(alpha = 0.06f)
+                        containerColor = HealthColors.Caution.copy(alpha = 0.06f)
                     )
                 ) {
                     Column(
@@ -309,12 +341,12 @@ private fun HeartRateTrainingSection() {
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         val reasons = listOf(
-                            "🔥 Overtraining — Your body can't recover from daily Zone 5 sessions, leading to fatigue, insomnia, and decreased performance",
-                            "🤕 Injury risk — High intensity dramatically increases risk of muscle, tendon, and joint injuries",
-                            "📉 Diminishing returns — More Zone 5 ≠ more fitness. Your body needs Zone 2 base to support high-intensity gains",
-                            "😫 Burnout — Constantly pushing your limits is mentally exhausting and unsustainable long-term",
-                            "❤️ Heart stress — Excessive high-intensity training may stress the heart beyond healthy limits",
-                            "🏆 Elite secret — Professional athletes spend 80% of training time in Zone 2 and only 20% in Zone 4-5 (polarized training)"
+                            "Overtraining — Your body may not recover from daily Zone 5 sessions, leading to fatigue, sleep disruption, or decreased performance",
+                            "Injury risk — High intensity can increase the risk of muscle, tendon, and joint injuries",
+                            "Diminishing returns — More Zone 5 does not always mean more fitness; an easier aerobic base still matters",
+                            "Burnout — Constantly pushing your limits can be mentally exhausting and unsustainable long-term",
+                            "Heart stress — Excessive high-intensity training may place additional stress on the heart",
+                            "Training balance — Many endurance programs use mostly easy sessions with a smaller amount of hard work; individual plans vary"
                         )
                         reasons.forEach { reason ->
                             Text(
@@ -332,11 +364,11 @@ private fun HeartRateTrainingSection() {
             ContentBlock(
                 title = "The 80/20 Rule of Training",
                 emoji = "📊",
-                content = "Research consistently shows that the most effective training distribution is:\n\n" +
+                content = "A commonly used training distribution is:\n\n" +
                         "• 80% of training in Zone 1-3 (easy to moderate)\n" +
                         "• 20% of training in Zone 4-5 (hard to maximum)\n\n" +
-                        "This \"polarized\" approach builds a strong aerobic base while still getting the benefits " +
-                        "of high-intensity work. It's used by elite endurance athletes worldwide."
+                        "This \"polarized\" approach can build an aerobic base while retaining some high-intensity work. " +
+                        "It is a general example, not a prescription; adjust intensity to your experience and health."
             )
         }
     }
@@ -470,7 +502,7 @@ private fun MonitoringMethodsSection() {
         emoji = "⌚",
         title = "How to Monitor Heart Rate",
         subtitle = "Compare different methods and find what works for you",
-        color = Color(0xFF2196F3),
+        color = FeatureColors.StepsStart,
         isExpanded = isExpanded,
         onToggle = { isExpanded = !isExpanded }
     ) {
@@ -494,7 +526,7 @@ private fun MonitoringMethodsSection() {
                         "Can't check zones in real-time"
                     ),
                     tip = "Best for: Quick resting HR checks, especially first thing in the morning",
-                    color = Color(0xFF9E9E9E)
+                    color = MaterialTheme.colorScheme.outline
                 ),
                 MonitorMethod(
                     emoji = "📟",
@@ -516,7 +548,7 @@ private fun MonitoringMethodsSection() {
                         "Battery replacement needed"
                     ),
                     tip = "Best for: Serious training, racing, and anyone wanting precise zone data",
-                    color = Color(0xFF4CAF50)
+                    color = HealthColors.Healthy
                 ),
                 MonitorMethod(
                     emoji = "⌚",
@@ -539,7 +571,7 @@ private fun MonitoringMethodsSection() {
                         "Needs charging"
                     ),
                     tip = "Best for: Daily monitoring, general fitness tracking, and casual training",
-                    color = Color(0xFF2196F3)
+                    color = FeatureColors.StepsStart
                 ),
                 MonitorMethod(
                     emoji = "🎧",
@@ -560,7 +592,7 @@ private fun MonitoringMethodsSection() {
                         "Fewer options available"
                     ),
                     tip = "Best for: Runners and gym-goers who always use earbuds anyway",
-                    color = Color(0xFF9C27B0)
+                    color = HealthColors.Severe
                 ),
                 MonitorMethod(
                     emoji = "💍",
@@ -581,7 +613,7 @@ private fun MonitoringMethodsSection() {
                         "Fewer features than smartwatches"
                     ),
                     tip = "Best for: Resting HR tracking, sleep analysis, and daily monitoring",
-                    color = Color(0xFFFF9800)
+                    color = HealthColors.Caution
                 )
             )
 
@@ -608,11 +640,11 @@ private fun MonitoringMethodsSection() {
                             modifier = Modifier.padding(bottom = 6.dp)
                         )
                         val ranking = listOf(
-                            "1. 📟 Chest strap — Gold standard (±1-2 BPM)",
-                            "2. ⌚ Smartwatch — Good for most purposes (±3-7 BPM)",
-                            "3. 🎧 HR Earbuds — Similar to smartwatch (±3-7 BPM)",
-                            "4. 💍 Smart ring — Best at rest (±5-10 BPM during exercise)",
-                            "5. ✋ Manual — Depends on technique (±5-15 BPM)"
+                            "1. Chest strap — Often a high-accuracy consumer option; fit and device quality matter",
+                            "2. Smartwatch — Useful for trends, with accuracy varying by device and activity",
+                            "3. HR earbuds — Optical readings vary by fit, device, and movement",
+                            "4. Smart ring — Often better suited to resting trends than live exercise readings",
+                            "5. Manual — Depends on timing and counting technique"
                         )
                         ranking.forEach { item ->
                             Text(
@@ -667,7 +699,12 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = method.emoji, fontSize = 24.sp)
+                Icon(
+                    imageVector = heartRateEducationIcon(method.emoji),
+                    contentDescription = null,
+                    tint = method.color,
+                    modifier = Modifier.size(24.dp)
+                )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -718,7 +755,7 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                                 text = stringResource(R.string.txt_pros),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF4CAF50)
+                                color = HealthColors.Healthy
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             method.pros.forEach { pro ->
@@ -737,7 +774,7 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                                 text = stringResource(R.string.txt_cons),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFFF44336)
+                                color = HealthColors.Danger
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             method.cons.forEach { con ->
@@ -761,7 +798,12 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                             modifier = Modifier.padding(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 12.sp)
+                            Icon(
+                                imageVector = Icons.Outlined.Lightbulb,
+                                contentDescription = null,
+                                tint = method.color,
+                                modifier = Modifier.size(16.dp)
+                            )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = method.tip,
@@ -792,10 +834,10 @@ private fun WarningSignsCard() {
             .clickable { isExpanded = !isExpanded },
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF44336).copy(alpha = 0.06f)
+            containerColor = HealthColors.Danger.copy(alpha = 0.06f)
         ),
         border = androidx.compose.foundation.BorderStroke(
-            1.dp, Color(0xFFF44336).copy(alpha = 0.2f)
+            1.dp, HealthColors.Danger.copy(alpha = 0.2f)
         )
     ) {
         Column(
@@ -809,26 +851,31 @@ private fun WarningSignsCard() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.txt_text_placeholder_57), fontSize = 22.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = null,
+                        tint = HealthColors.Danger,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
                             text = stringResource(R.string.txt_warning_signs_during_exercise),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFFF44336)
+                            color = HealthColors.Danger
                         )
                         Text(
                             text = stringResource(R.string.txt_know_when_to_stop_your_safety_),
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFFF44336).copy(alpha = 0.7f)
+                            color = HealthColors.Danger.copy(alpha = 0.7f)
                         )
                     }
                 }
                 Icon(
                     imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     contentDescription = null,
-                    tint = Color(0xFFF44336).copy(alpha = 0.5f)
+                    tint = HealthColors.Danger.copy(alpha = 0.5f)
                 )
             }
 
@@ -838,14 +885,14 @@ private fun WarningSignsCard() {
             Card(
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFF44336).copy(alpha = 0.08f)
+                    containerColor = HealthColors.Danger.copy(alpha = 0.08f)
                 )
             ) {
                 Text(
                     text = stringResource(R.string.txt_stop_exercising_immediately_if),
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFF44336),
+                    color = HealthColors.Danger,
                     modifier = Modifier.padding(10.dp)
                 )
             }
@@ -872,17 +919,19 @@ private fun WarningSignsCard() {
                             modifier = Modifier.padding(vertical = 4.dp),
                             verticalAlignment = Alignment.Top
                         ) {
-                            Text(
-                                text = sign.substringBefore(" "),
-                                fontSize = 16.sp
+                            Icon(
+                                imageVector = Icons.Outlined.Warning,
+                                contentDescription = null,
+                                tint = HealthColors.Danger,
+                                modifier = Modifier.size(18.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Column {
                                 Text(
-                                    text = sign.substringAfter(" "),
+                                    text = cleanLegacyMarker(sign),
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color(0xFFF44336)
+                                    color = HealthColors.Danger
                                 )
                                 Text(
                                     text = explanation,
@@ -900,7 +949,7 @@ private fun WarningSignsCard() {
                     Card(
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFFF9800).copy(alpha = 0.08f)
+                            containerColor = HealthColors.Caution.copy(alpha = 0.08f)
                         )
                     ) {
                         Column(modifier = Modifier.padding(14.dp)) {
@@ -908,7 +957,7 @@ private fun WarningSignsCard() {
                                 text = stringResource(R.string.txt_consult_a_doctor_before_starti),
                                 style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFFFF9800)
+                                color = HealthColors.Caution
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             val consultReasons = listOf(
@@ -922,7 +971,7 @@ private fun WarningSignsCard() {
                                 "You have joint or bone conditions"
                             )
                             consultReasons.forEach { reason ->
-                                BulletPoint(text = reason, color = Color(0xFFFF9800))
+                                BulletPoint(text = reason, color = HealthColors.Caution)
                             }
                         }
                     }
@@ -933,7 +982,7 @@ private fun WarningSignsCard() {
                 Text(
                     text = stringResource(R.string.txt_tap_to_read_all_warning_signs),
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFFF44336).copy(alpha = 0.5f),
+                    color = HealthColors.Danger.copy(alpha = 0.5f),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 6.dp),
@@ -956,7 +1005,7 @@ private fun HeartRateMythsSection() {
         emoji = "🔍",
         title = "Heart Rate Myths — Debunked",
         subtitle = "Common misconceptions about heart rate and training",
-        color = Color(0xFF9C27B0),
+        color = HealthColors.Severe,
         isExpanded = isExpanded,
         onToggle = { isExpanded = !isExpanded }
     ) {
@@ -965,7 +1014,7 @@ private fun HeartRateMythsSection() {
                 mythNumber = 1,
                 myth = "\"The fat burning zone is the best zone for weight loss\"",
                 verdict = "Partially True",
-                verdictColor = Color(0xFFFF9800),
+                verdictColor = HealthColors.Caution,
                 explanation = "Zone 2 does burn a higher PERCENTAGE of calories from fat (~60% vs ~35% in Zone 4). " +
                         "However, higher-intensity zones burn MORE TOTAL CALORIES per minute. " +
                         "For weight loss, total calorie burn matters most.\n\n" +
@@ -978,7 +1027,7 @@ private fun HeartRateMythsSection() {
                 mythNumber = 2,
                 myth = "\"Higher heart rate always means a better workout\"",
                 verdict = "False",
-                verdictColor = Color(0xFFF44336),
+                verdictColor = HealthColors.Danger,
                 explanation = "A \"better\" workout depends on your goal. If your goal is endurance, " +
                         "a long Zone 2 session is far more effective than a short Zone 5 burst.\n\n" +
                         "Training too hard too often leads to overtraining, injury, and burnout. " +
@@ -990,7 +1039,7 @@ private fun HeartRateMythsSection() {
                 mythNumber = 3,
                 myth = "\"220 minus age gives your exact max heart rate\"",
                 verdict = "Approximation Only",
-                verdictColor = Color(0xFFFF9800),
+                verdictColor = HealthColors.Caution,
                 explanation = "The 220-age formula was never meant to be precise for individuals. " +
                         "It's a population average with a standard deviation of ±10-12 BPM.\n\n" +
                         "That means a 30-year-old might have a true MHR anywhere from 178 to 202, not exactly 190. " +
@@ -1003,7 +1052,7 @@ private fun HeartRateMythsSection() {
                 mythNumber = 4,
                 myth = "\"If my heart rate is low, I'm not working hard enough\"",
                 verdict = "False",
-                verdictColor = Color(0xFFF44336),
+                verdictColor = HealthColors.Danger,
                 explanation = "Fit individuals have lower heart rates at the same effort level because their hearts " +
                         "are more efficient (pumping more blood per beat). A well-trained runner may run at 130 BPM " +
                         "while an untrained person walks at 130 BPM.\n\n" +
@@ -1014,7 +1063,7 @@ private fun HeartRateMythsSection() {
                 mythNumber = 5,
                 myth = "\"You should always exercise at the same heart rate\"",
                 verdict = "False",
-                verdictColor = Color(0xFFF44336),
+                verdictColor = HealthColors.Danger,
                 explanation = "Varying intensity is key to fitness gains. Your body adapts to repetitive stimuli. " +
                         "Training only in Zone 3 will lead to a plateau.\n\n" +
                         "A well-designed program includes easy days (Zone 1-2), moderate days (Zone 3), " +
@@ -1046,7 +1095,7 @@ private fun MythCard(
             Row(verticalAlignment = Alignment.Top) {
                 Surface(
                     shape = CircleShape,
-                    color = Color(0xFF9C27B0).copy(alpha = 0.12f),
+                    color = HealthColors.Severe.copy(alpha = 0.12f),
                     modifier = Modifier.size(28.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -1054,7 +1103,7 @@ private fun MythCard(
                             text = "#$mythNumber",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Color(0xFF9C27B0),
+                            color = HealthColors.Severe,
                             fontSize = 10.sp
                         )
                     }
@@ -1112,7 +1161,12 @@ private fun MedicalDisclaimerCard() {
             modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Text(stringResource(R.string.txt_text_placeholder_56), fontSize = 18.sp)
+            Icon(
+                imageVector = Icons.Outlined.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = stringResource(R.string.txt_medical_disclaimer_this_educat) +
@@ -1169,7 +1223,12 @@ private fun EducationalCard(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(text = emoji, fontSize = 22.sp)
+                    Icon(
+                        imageVector = heartRateEducationIcon(emoji),
+                        contentDescription = null,
+                        tint = color,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
@@ -1231,7 +1290,12 @@ private fun ContentBlock(
 ) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = emoji, fontSize = 16.sp)
+            Icon(
+                imageVector = heartRateEducationIcon(emoji),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(18.dp)
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = title,
@@ -1276,7 +1340,12 @@ private fun HeartRateTypeCard(
             .padding(10.dp),
         verticalAlignment = Alignment.Top
     ) {
-        Text(text = emoji, fontSize = 18.sp)
+        Icon(
+            imageVector = heartRateEducationIcon(emoji),
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier.size(20.dp)
+        )
         Spacer(modifier = Modifier.width(10.dp))
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {

@@ -434,3 +434,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device advanced-card rendering, TalkBack,
   large-font, theme and interaction checks, plus signing/Firebase/Play Console
   work, remain owner-only.
+
+## Heart-rate education trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The heart-rate education route now maps legacy emoji markers to
+  stable Material icons and shared semantic colors. Reference ranges,
+  monitoring comparisons, warning signs and myths use calmer, theme-aware
+  presentation. Population estimates and training guidance were qualified so
+  they are not framed as diagnoses, safety limits or personal prescriptions.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** Connected-device warning/expand interactions, TalkBack,
+  large-font and light/dark theme checks, plus signing/Firebase/Play Console
+  work, remain owner-only.

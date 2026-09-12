@@ -327,6 +327,26 @@ This file is the source of truth for the sequential product-development phases. 
 
 Updated: 2026-09-12
 
+## Follow-up — Heart-rate education trust and visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** The heart-rate education guide now renders legacy markers as
+  stable Material icons and uses shared heart, health, warning, and neutral
+  palette roles instead of one-off colors. Resting-rate, maximum-rate, training
+  distribution, and monitoring-accuracy copy was qualified so population
+  estimates are not presented as diagnoses, safety limits, or prescriptions.
+- **Tests:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  pass with `GRADLE_EXIT=0`.
+- **Known limitations:** Legacy education data still stores emoji labels for
+  compatibility, but they are not rendered. TalkBack, large-font, theme and
+  expandable-content checks require a connected device.
+- **Next phase:** Execute the documented device/console release checklist;
+  continue deep-screen cleanup only when it improves trust, accessibility or
+  reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — BP advanced metrics visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open
