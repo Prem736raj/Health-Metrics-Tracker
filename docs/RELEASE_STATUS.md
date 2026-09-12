@@ -467,6 +467,22 @@ These cannot be proven by a Windows unit/build run:
   TalkBack, large-font and light/dark theme checks, plus signing/Firebase/Play
   Console work, remain owner-only.
 
+## Electrolyte information trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Electrolyte, food-source, situation, ORS and warning surfaces
+  now use shared hydration/health semantic colors and stable vector icons.
+  Homemade mixtures are explicitly not WHO ORS or dehydration treatment, and
+  claims about universal supplementation, altitude, and hangover relief were
+  qualified or removed.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** Connected-device expandable-guide, ORS warning, TalkBack,
+  large-font and light/dark theme checks, plus signing/Firebase/Play Console
+  work, remain owner-only.
+
 ## Heart-rate education trust and visual consistency follow-up — 2026-09-13
 
 - **Status:** Code-fixable polish complete; device/accessibility validation

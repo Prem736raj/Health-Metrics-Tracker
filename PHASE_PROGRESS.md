@@ -347,6 +347,27 @@ This file is the source of truth for the sequential product-development phases. 
 
 Updated: 2026-09-13
 
+## Follow-up — Electrolyte information trust and visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** Electrolyte headers, foods, situations, ORS notes and
+  warning rows now use shared hydration/health semantic colors and stable
+  vector icons. The guide no longer renders emoji or one-off colors. Homemade
+  drink content is clearly labelled as a beverage illustration, not treatment
+  or WHO ORS; guidance now avoids universal supplement, altitude, or hangover
+  claims and points to commercial ORS/clinical care where appropriate.
+- **Tests:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  pass with `GRADLE_EXIT=0`.
+- **Known limitations:** Legacy food/situation marker fields remain in source
+  data for compatibility, but are not rendered. TalkBack, large-font, theme
+  and long-guide scrolling checks require a connected device.
+- **Next phase:** Execute the documented device/console release checklist;
+  continue deep-screen cleanup only when it improves trust, accessibility or
+  reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — Ideal-weight metrics trust and visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open

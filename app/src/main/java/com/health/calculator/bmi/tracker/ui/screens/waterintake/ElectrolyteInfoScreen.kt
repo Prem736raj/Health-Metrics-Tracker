@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -36,14 +38,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlinx.coroutines.delay
 
-// Electrolyte colors
-private val SodiumColor = Color(0xFFFF7043)
-private val PotassiumColor = Color(0xFFFFCA28)
-private val MagnesiumColor = Color(0xFF66BB6A)
-private val CalciumColor = Color(0xFF42A5F5)
-private val WaterBlueMedium = Color(0xFF2196F3)
+// Electrolyte colors are semantic roles shared with the rest of the wellness UI.
+private val SodiumColor = FeatureColors.CalorieStart
+private val PotassiumColor = HealthColors.Warning
+private val MagnesiumColor = HealthColors.Healthy
+private val CalciumColor = HealthColors.Good
+private val WaterBlueMedium = FeatureColors.WaterDeep
+
+private fun electrolyteIcon(label: String): ImageVector = when {
+    label.contains("⚡") -> Icons.Outlined.Bolt
+    label.contains("💧") -> Icons.Outlined.WaterDrop
+    label.contains("🫀") || label.contains("💓") -> Icons.Outlined.MonitorHeart
+    label.contains("🧠") -> Icons.Outlined.Lightbulb
+    label.contains("⚖") -> Icons.Outlined.Assessment
+    label.contains("🧂") || label.contains("🍌") || label.contains("🥜") || label.contains("🍚") || label.contains("🍋") || label.contains("🍯") -> Icons.Outlined.Restaurant
+    label.contains("🏃") || label.contains("🏔") -> Icons.Outlined.DirectionsWalk
+    label.contains("☀") -> Icons.Outlined.WbSunny
+    label.contains("🤒") || label.contains("🤢") -> Icons.Outlined.HealthAndSafety
+    label.contains("⚠") || label.contains("🚨") || label.contains("😵") || label.contains("🤕") || label.contains("😴") -> Icons.Outlined.Warning
+    label.contains("🧬") || label.contains("🔬") -> Icons.Outlined.Science
+    label.contains("🏥") -> Icons.Outlined.LocalHospital
+    label.contains("🤔") -> Icons.Outlined.Info
+    label.contains("🥗") || label.contains("🥦") || label.contains("🥒") || label.contains("🫒") || label.contains("🧀") || label.contains("🥓") || label.contains("🥫") || label.contains("🥥") || label.contains("🍊") || label.contains("🥑") || label.contains("🥔") || label.contains("🍠") || label.contains("🌻") || label.contains("🍫") || label.contains("🫘") || label.contains("🥛") || label.contains("🐟") -> Icons.Outlined.Restaurant
+    else -> Icons.Outlined.Info
+}
+
+private val LeadingLegacyMarker = Regex("^[\\p{So}\\p{Sk}\\p{M}\\p{Cf}\\s]+")
+private fun cleanLegacyMarker(value: String): String = value.replaceFirst(LeadingLegacyMarker, "").trim()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +87,12 @@ fun ElectrolyteInfoScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(stringResource(R.string.txt_text_placeholder_33), fontSize = 22.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Bolt,
+                            contentDescription = null,
+                            tint = FeatureColors.CalorieStart,
+                            modifier = Modifier.size(24.dp)
+                        )
                         Text(stringResource(R.string.txt_electrolytes), fontWeight = FontWeight.Bold)
                     }
                 },
@@ -197,9 +227,9 @@ private fun ElectrolyteHeaderCard() {
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFFFF6F00),
-                            Color(0xFFFF8F00),
-                            Color(0xFFFFA726)
+                            FeatureColors.CalorieDeep,
+                            FeatureColors.CalorieStart,
+                            FeatureColors.CalorieEnd
                         )
                     ),
                     shape = RoundedCornerShape(20.dp)
@@ -239,8 +269,18 @@ private fun ElectrolyteHeaderCard() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_33), fontSize = 42.sp)
-                    Text(stringResource(R.string.txt_text_placeholder_71), fontSize = 24.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Bolt,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(42.dp)
+                    )
+                    Icon(
+                        imageVector = Icons.Outlined.WaterDrop,
+                        contentDescription = null,
+                        tint = Color.White.copy(alpha = 0.9f),
+                        modifier = Modifier.size(28.dp)
+                    )
                 }
             }
         }
@@ -267,7 +307,12 @@ private fun BasicElectrolyteInfoCard() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_23), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Science,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
                 Text(
                     stringResource(R.string.txt_what_are_electrolytes),
                     fontWeight = FontWeight.Bold,
@@ -289,7 +334,7 @@ private fun BasicElectrolyteInfoCard() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFFFF3E0)
+                    containerColor = HealthColors.Caution.copy(alpha = 0.12f)
                 )
             ) {
                 Row(
@@ -299,16 +344,21 @@ private fun BasicElectrolyteInfoCard() {
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 18.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Lightbulb,
+                        contentDescription = null,
+                        tint = HealthColors.Caution,
+                        modifier = Modifier.size(20.dp)
+                    )
                     Text(
                         buildString {
-                            append("Water alone isn't always enough. ")
-                            append("When you sweat heavily or lose fluids through illness, ")
-                            append("you also lose electrolytes that need to be replaced for optimal hydration and body function.")
+                    append("For many everyday situations, water and regular meals are enough. ")
+                    append("During prolonged heavy sweating or illness, follow product-label or clinician guidance; ")
+                    append("electrolyte products are not needed for everyone.")
                         },
                         fontSize = 13.sp,
                         lineHeight = 19.sp,
-                        color = Color(0xFFE65100)
+                        color = HealthColors.Caution
                     )
                 }
             }
@@ -330,7 +380,12 @@ private fun BasicElectrolyteInfoCard() {
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier.padding(start = 4.dp)
                 ) {
-                    Text(icon, fontSize = 14.sp)
+                    Icon(
+                        imageVector = electrolyteIcon(icon),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Text(
                         text,
                         fontSize = 13.sp,
@@ -401,7 +456,12 @@ private fun KeyElectrolytesCard() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_33), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Bolt,
+                    contentDescription = null,
+                    tint = FeatureColors.CalorieStart,
+                    modifier = Modifier.size(22.dp)
+                )
                 Text(
                     stringResource(R.string.txt_the_4_key_electrolytes),
                     fontWeight = FontWeight.Bold,
@@ -460,7 +520,12 @@ private fun ElectrolyteDetailCard(data: ElectrolyteData) {
                         .border(2.dp, data.color.copy(alpha = 0.3f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(data.emoji, fontSize = 24.sp)
+                    Icon(
+                        imageVector = electrolyteIcon(data.emoji),
+                        contentDescription = null,
+                        tint = data.color,
+                        modifier = Modifier.size(26.dp)
+                    )
                 }
 
                 Column(modifier = Modifier.weight(1f)) {
@@ -536,7 +601,7 @@ private fun ElectrolyteDetailCard(data: ElectrolyteData) {
                         stringResource(R.string.txt_deficiency_signs),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp,
-                        color = Color(0xFFE65100)
+                        color = HealthColors.Caution
                     )
                     Text(
                         data.deficiencySign,
@@ -569,7 +634,12 @@ private fun WhenToConsiderCard() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_70), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
                 Text(
                     stringResource(R.string.txt_when_do_you_need_electrolytes),
                     fontWeight = FontWeight.Bold,
@@ -591,43 +661,43 @@ private fun WhenToConsiderCard() {
                 SituationData(
                     emoji = "🏃",
                     title = "Intense Exercise (60+ minutes)",
-                    description = "During prolonged physical activity, you lose significant sodium and other electrolytes through sweat. " +
-                            "After about an hour, water alone may not be enough to maintain performance.",
+                            description = "During prolonged activity, especially in heat, sweat can contain sodium and other electrolytes. " +
+                            "Needs vary; water, food, and an appropriate drink may all be options depending on the person and activity.",
                     priority = "High"
                 ),
                 SituationData(
                     emoji = "☀️",
                     title = "Hot Weather & Heavy Sweating",
-                    description = "Heat increases sweat rate dramatically. If you're sweating profusely (wet clothes, dripping), " +
-                            "you're losing electrolytes faster than normal.",
+                            description = "Heat can increase sweat rate. With prolonged heavy sweating, replace fluids and eat regular meals; " +
+                            "an electrolyte product may be useful for some people, but is not automatically required.",
                     priority = "High"
                 ),
                 SituationData(
                     emoji = "🤒",
                     title = "Illness (Vomiting/Diarrhea)",
-                    description = "Gastrointestinal illness rapidly depletes fluids AND electrolytes. Oral rehydration solutions " +
-                            "are specifically designed for these situations.",
+                            description = "Vomiting or diarrhea can cause fluid and electrolyte losses. Commercial oral rehydration solutions " +
+                            "are designed for this purpose; follow the label and seek care if symptoms are severe or persistent.",
                     priority = "Critical"
                 ),
                 SituationData(
                     emoji = "💧",
                     title = "Drinking Large Quantities of Plain Water",
-                    description = "If you're drinking a lot of water (3+ liters) without food, you may dilute your electrolyte levels. " +
-                            "This is especially relevant during exercise or in hot weather.",
+                            description = "Drinking very large amounts quickly can be unsafe. Do not force fluids; during long or hot activities, " +
+                            "use thirst and individualized guidance rather than a fixed volume target.",
                     priority = "Moderate"
                 ),
                 SituationData(
                     emoji = "🏔️",
                     title = "High Altitude Activities",
-                    description = "At altitude, increased respiration and urination lead to higher fluid and electrolyte losses. " +
-                            "Hikers and climbers should pay extra attention.",
+                            description = "Dry air and increased breathing can change fluid needs at altitude. Plan access to water and food, " +
+                            "but electrolyte needs still depend on sweat, diet, and the activity.",
                     priority = "Moderate"
                 ),
                 SituationData(
                     emoji = "🍺",
                     title = "After Alcohol Consumption",
-                    description = "Alcohol is a diuretic that increases urine output, leading to electrolyte loss. " +
-                            "Rehydrating with electrolytes can help reduce hangover symptoms.",
+                            description = "Alcohol can increase urine output for some people. Water, food, and rest support recovery; " +
+                            "electrolyte products have not been shown to prevent a hangover.",
                     priority = "Low"
                 )
             )
@@ -649,10 +719,10 @@ data class SituationData(
 @Composable
 private fun SituationCard(data: SituationData) {
     val priorityColor = when (data.priority) {
-        "Critical" -> Color(0xFFF44336)
-        "High" -> Color(0xFFFF9800)
-        "Moderate" -> Color(0xFFFFC107)
-        else -> Color(0xFF8BC34A)
+        "Critical" -> HealthColors.Danger
+        "High" -> HealthColors.Caution
+        "Moderate" -> HealthColors.Warning
+        else -> HealthColors.Healthy
     }
 
     var expanded by remember { mutableStateOf(false) }
@@ -670,7 +740,12 @@ private fun SituationCard(data: SituationData) {
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(data.emoji, fontSize = 24.sp)
+        Icon(
+            imageVector = electrolyteIcon(data.emoji),
+            contentDescription = null,
+            tint = priorityColor,
+            modifier = Modifier.size(26.dp)
+        )
 
         Column(modifier = Modifier.weight(1f)) {
             Row(
@@ -745,7 +820,12 @@ private fun NaturalSourcesCard() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_30), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Restaurant,
+                    contentDescription = null,
+                    tint = HealthColors.Healthy,
+                    modifier = Modifier.size(22.dp)
+                )
                 Text(
                     stringResource(R.string.txt_natural_electrolyte_sources),
                     fontWeight = FontWeight.Bold,
@@ -833,7 +913,12 @@ private fun NaturalSourcesCard() {
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 16.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Lightbulb,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Text(
                         stringResource(R.string.txt_pro_tip_coconut_water_is_a_nat) +
                                 "It's a great post-workout option!",
@@ -893,7 +978,12 @@ private fun FoodSourceRow(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text(food.emoji, fontSize = 24.sp)
+                        Icon(
+                            imageVector = electrolyteIcon(food.emoji),
+                            contentDescription = null,
+                            tint = color,
+                            modifier = Modifier.size(26.dp)
+                        )
                         Text(
                             food.name,
                             fontSize = 11.sp,
@@ -939,7 +1029,7 @@ private fun DIYElectrolyteDrinksCard() {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(Color(0xFF26A69A), Color(0xFF00897B))
+                        colors = listOf(FeatureColors.StepsStart, FeatureColors.WaterDeep)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 )
@@ -952,7 +1042,12 @@ private fun DIYElectrolyteDrinksCard() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_69), fontSize = 22.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.WaterDrop,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Text(
                         stringResource(R.string.txt_diy_electrolyte_drink),
                         fontWeight = FontWeight.Bold,
@@ -965,6 +1060,12 @@ private fun DIYElectrolyteDrinksCard() {
                     stringResource(R.string.txt_make_your_own_natural_electrol),
                     fontSize = 13.sp,
                     color = Color.White.copy(alpha = 0.85f)
+                )
+                Text(
+                    "General beverage idea only; this mixture is not a treatment for dehydration and does not replace commercial ORS.",
+                    fontSize = 11.sp,
+                    lineHeight = 16.sp,
+                    color = Color.White.copy(alpha = 0.78f)
                 )
 
                 // Recipe card
@@ -1001,7 +1102,12 @@ private fun DIYElectrolyteDrinksCard() {
                                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(icon, fontSize = 16.sp)
+                                Icon(
+                                    imageVector = electrolyteIcon(icon),
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(18.dp)
+                                )
                                 Text(
                                     text,
                                     fontSize = 13.sp,
@@ -1029,7 +1135,7 @@ private fun DIYElectrolyteDrinksCard() {
                     FilledTonalButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            val recipe = "DIY Electrolyte Drink:\n- 1 liter water\n- ¼ tsp salt\n- ¼ cup lemon/orange juice\n- 2 tbsp honey\nMix and chill!"
+                            val recipe = "DIY electrolyte beverage (not ORS):\n- 1 liter water\n- ¼ tsp salt\n- ¼ cup lemon/orange juice\n- 2 tbsp honey\nMix and refrigerate; do not use to treat severe dehydration."
                             clipboardManager.setText(AnnotatedString(recipe))
                             showCopied = true
                         },
@@ -1081,7 +1187,12 @@ private fun WHOORSCard() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_64), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.LocalHospital,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
                 Text(
                     "Oral rehydration solution (educational)",
                     fontWeight = FontWeight.Bold,
@@ -1095,7 +1206,7 @@ private fun WHOORSCard() {
             Card(
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFFFEBEE)
+                    containerColor = HealthColors.Danger.copy(alpha = 0.10f)
                 )
             ) {
                 Row(
@@ -1105,13 +1216,18 @@ private fun WHOORSCard() {
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_21), fontSize = 18.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = null,
+                        tint = HealthColors.Danger,
+                        modifier = Modifier.size(20.dp)
+                    )
                     Text(
                         stringResource(R.string.txt_for_cases_of_severe_dehydratio) +
-                                "Commercial oral rehydration products follow standardized formulations. This recipe is shown for education, not as a substitute for professional advice:",
+                                "Commercial oral rehydration products follow standardized formulations. The illustration below is not a WHO ORS recipe and is not a substitute for professional advice:",
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = Color(0xFFC62828)
+                        color = HealthColors.Danger
                     )
                 }
             }
@@ -1120,7 +1236,7 @@ private fun WHOORSCard() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFF3E5F5)
+                    containerColor = FeatureColors.BmiStart.copy(alpha = 0.10f)
                 )
             ) {
                 Column(
@@ -1133,10 +1249,17 @@ private fun WHOORSCard() {
                         stringResource(R.string.txt_who_ors_formula_per_1_liter_wa),
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = Color(0xFF7B1FA2)
+                        color = FeatureColors.BmiDeep
                     )
 
-                    HorizontalDivider(color = Color(0xFF7B1FA2).copy(alpha = 0.1f))
+                    HorizontalDivider(color = FeatureColors.BmiDeep.copy(alpha = 0.1f))
+
+                    Text(
+                        "Use a commercial oral rehydration product for illness-related dehydration. Homemade mixtures can have inaccurate concentrations and are not suitable for severe symptoms.",
+                        fontSize = 11.sp,
+                        lineHeight = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
 
                     val ingredients = listOf(
                         "🧂" to "½ teaspoon (2.6g)" to "Table salt (sodium chloride)",
@@ -1151,7 +1274,12 @@ private fun WHOORSCard() {
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(icon, fontSize = 18.sp)
+                            Icon(
+                                imageVector = electrolyteIcon(icon),
+                                contentDescription = null,
+                                tint = FeatureColors.BmiDeep,
+                                modifier = Modifier.size(20.dp)
+                            )
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
                                     amount,
@@ -1167,7 +1295,7 @@ private fun WHOORSCard() {
                         }
                     }
 
-                    HorizontalDivider(color = Color(0xFF7B1FA2).copy(alpha = 0.1f))
+                    HorizontalDivider(color = FeatureColors.BmiDeep.copy(alpha = 0.1f))
 
                     Text(
                         stringResource(R.string.txt_sip_small_amounts_frequently_f) +
@@ -1193,7 +1321,12 @@ private fun WHOORSCard() {
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier.padding(start = 4.dp)
                 ) {
-                    Text(icon, fontSize = 14.sp)
+                    Icon(
+                        imageVector = electrolyteIcon(icon),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Text(
                         text,
                         fontSize = 12.sp,
@@ -1214,7 +1347,7 @@ private fun ElectrolyteImbalanceWarningsCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFFF8E1)
+            containerColor = HealthColors.Warning.copy(alpha = 0.10f)
         ),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -1228,16 +1361,21 @@ private fun ElectrolyteImbalanceWarningsCard() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_21), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Warning,
+                    contentDescription = null,
+                    tint = HealthColors.Caution,
+                    modifier = Modifier.size(22.dp)
+                )
                 Text(
                     stringResource(R.string.txt_signs_of_electrolyte_imbalance),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleSmall,
-                    color = Color(0xFFE65100)
+                    color = HealthColors.Caution
                 )
             }
 
-            HorizontalDivider(color = Color(0xFFE65100).copy(alpha = 0.1f))
+            HorizontalDivider(color = HealthColors.Caution.copy(alpha = 0.1f))
 
             Text(
                 stringResource(R.string.txt_watch_for_these_warning_signs_),
@@ -1262,17 +1400,22 @@ private fun ElectrolyteImbalanceWarningsCard() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            Color(0xFFFFE0B2).copy(alpha = 0.3f),
+                            HealthColors.Caution.copy(alpha = 0.12f),
                             RoundedCornerShape(8.dp)
                         )
                         .padding(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(symptom.substring(0, 2), fontSize = 16.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = null,
+                        tint = HealthColors.Caution,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            symptom.substring(3),
+                            cleanLegacyMarker(symptom),
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 13.sp
                         )
@@ -1289,7 +1432,7 @@ private fun ElectrolyteImbalanceWarningsCard() {
             Card(
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFFFCDD2)
+                    containerColor = HealthColors.Danger.copy(alpha = 0.12f)
                 )
             ) {
                 Row(
@@ -1299,13 +1442,18 @@ private fun ElectrolyteImbalanceWarningsCard() {
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_57), fontSize = 18.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = null,
+                        tint = HealthColors.Danger,
+                        modifier = Modifier.size(20.dp)
+                    )
                     Text(
                         stringResource(R.string.txt_seek_immediate_medical_attenti) +
                                 "loss of consciousness, severe confusion, or significant cardiac irregularities.",
                         fontSize = 12.sp,
                         lineHeight = 17.sp,
-                        color = Color(0xFFC62828),
+                        color = HealthColors.Danger,
                         fontWeight = FontWeight.Medium
                     )
                 }
