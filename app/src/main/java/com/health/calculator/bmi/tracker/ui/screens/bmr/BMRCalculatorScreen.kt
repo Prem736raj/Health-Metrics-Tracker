@@ -24,8 +24,8 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -59,6 +59,7 @@ import com.health.calculator.bmi.tracker.ui.screens.bmr.components.BMRFormulaCom
 import com.health.calculator.bmi.tracker.ui.screens.bmr.components.BMREducationalSection
 import com.health.calculator.bmi.tracker.ui.screens.bmr.components.BMRTrendSection
 import com.health.calculator.bmi.tracker.ui.screens.bmr.components.BMRWarningCards
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import com.health.calculator.bmi.tracker.data.model.GoalType
 import com.health.calculator.bmi.tracker.data.model.MacroBreakdown
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.InputModeToggle
@@ -129,7 +130,7 @@ fun BMRCalculatorScreen(
     LaunchedEffect(saveSuccess) {
         if (saveSuccess) {
             snackbarHostState.showSnackbar(
-                message = "✅ BMR result saved to history!",
+                message = "BMR result saved to history",
                 duration = SnackbarDuration.Short
             )
             viewModel.resetSaveSuccess()
@@ -567,7 +568,12 @@ fun BMRCalculatorScreen(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = stringResource(R.string.txt_text_placeholder_10), fontSize = 20.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Assessment,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(22.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(R.string.txt_your_bmr_results),
@@ -816,7 +822,12 @@ private fun BMRExplanationHeader() {
                 modifier = Modifier.size(48.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_6), fontSize = 24.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.LocalFireDepartment,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
                 }
             }
 
@@ -843,12 +854,13 @@ private fun BMRExplanationHeader() {
 
 @Composable
 private fun ProfileDataIndicator() {
+    val accent = HealthColors.Info
     Surface(
         shape = RoundedCornerShape(10.dp),
-        color = Color(0xFF4CAF50).copy(alpha = 0.08f),
+        color = accent.copy(alpha = 0.08f),
         border = androidx.compose.foundation.BorderStroke(
             1.dp,
-            Color(0xFF4CAF50).copy(alpha = 0.2f)
+            accent.copy(alpha = 0.2f)
         )
     ) {
         Row(
@@ -860,14 +872,14 @@ private fun ProfileDataIndicator() {
             Icon(
                 Icons.Outlined.Person,
                 contentDescription = null,
-                tint = Color(0xFF4CAF50),
+                tint = accent,
                 modifier = Modifier.size(16.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = stringResource(R.string.txt_using_profile_data_you_can_adj),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF388E3C),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Medium
             )
         }
@@ -892,14 +904,14 @@ private fun GenderSelector(
         ) {
             GenderChip(
                 label = "Male",
-                emoji = "♂️",
+                icon = Icons.Outlined.Male,
                 isSelected = isMale,
                 onClick = { onGenderChange(true) },
                 modifier = Modifier.weight(1f)
             )
             GenderChip(
                 label = "Female",
-                emoji = "♀️",
+                icon = Icons.Outlined.Female,
                 isSelected = !isMale,
                 onClick = { onGenderChange(false) },
                 modifier = Modifier.weight(1f)
@@ -911,7 +923,7 @@ private fun GenderSelector(
 @Composable
 private fun GenderChip(
     label: String,
-    emoji: String,
+    icon: ImageVector,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -958,7 +970,12 @@ private fun GenderChip(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = emoji, fontSize = 18.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier.size(18.dp)
+            )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = label,
@@ -1011,32 +1028,37 @@ private fun BMRQuickInfoCard() {
             Spacer(modifier = Modifier.height(10.dp))
 
             QuickInfoItem(
-                emoji = "🔥",
-                text = "BMR accounts for 60-75% of your total daily calorie burn"
+                icon = Icons.Outlined.LocalFireDepartment,
+                text = "BMR is one component of daily energy use; movement and food processing also contribute"
             )
             Spacer(modifier = Modifier.height(6.dp))
             QuickInfoItem(
-                emoji = "⚡",
-                text = "Your actual daily calorie needs (TDEE) = BMR × Activity Factor"
+                icon = Icons.Outlined.Calculate,
+                text = "A TDEE estimate combines BMR with an activity factor for planning"
             )
             Spacer(modifier = Modifier.height(6.dp))
             QuickInfoItem(
-                emoji = "📊",
-                text = "BMR varies with age, gender, weight, height, and body composition"
+                icon = Icons.Outlined.Assessment,
+                text = "Results vary with age, sex, weight, height, body composition and the selected equation"
             )
             Spacer(modifier = Modifier.height(6.dp))
             QuickInfoItem(
-                emoji = "⭐",
-                text = "Mifflin-St Jeor is the most widely recommended formula for most adults"
+                icon = Icons.Outlined.Functions,
+                text = "Mifflin–St Jeor is a commonly used adult estimate; no equation measures metabolism directly"
             )
         }
     }
 }
 
 @Composable
-private fun QuickInfoItem(emoji: String, text: String) {
+private fun QuickInfoItem(icon: ImageVector, text: String) {
     Row(verticalAlignment = Alignment.Top) {
-        Text(text = emoji, fontSize = 14.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(16.dp)
+        )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = text,

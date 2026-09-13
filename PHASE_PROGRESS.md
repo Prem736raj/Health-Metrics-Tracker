@@ -1067,3 +1067,23 @@ Updated: 2026-09-13
   truthful interpretation, accessibility or reliability.
 
 Updated: 2026-09-13
+
+## Follow-up — BMR calculator input and quick-info trust/visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** The primary BMR input flow now uses stable Material icons
+  for the result header, profile-data banner, gender choices, explanation card
+  and quick-info rows instead of emoji placeholders. Profile-data guidance uses
+  the shared informational palette rather than a health-status green. Quick
+  info copy no longer presents fixed energy-use percentages or formula claims as
+  universal facts, and save feedback is plain and accessible. Input, unit,
+  validation, calculation and navigation behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device input, large-font, TalkBack,
+  light/dark theme and route checks remain open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13

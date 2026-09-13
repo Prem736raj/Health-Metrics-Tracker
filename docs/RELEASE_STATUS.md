@@ -726,3 +726,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device chart rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing/Firebase/Play Console work,
   remain owner-only.
+
+## BMR calculator input and quick-info trust/visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The primary BMR input flow now uses stable Material icons for
+  the result header, profile-data banner, gender choices, explanation card and
+  quick-info rows instead of emoji placeholders. Profile-data guidance uses
+  the shared informational palette rather than a health-status green. Quick
+  info copy no longer presents fixed energy-use percentages or formula claims
+  as universal facts, and save feedback is plain and accessible. Input, unit,
+  validation, calculation and navigation behavior remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device input, large-font, TalkBack,
+  light/dark theme and route checks, plus signing/Firebase/Play Console work,
+  remain owner-only.
