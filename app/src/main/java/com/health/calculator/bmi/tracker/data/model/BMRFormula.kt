@@ -52,7 +52,7 @@ enum class BMRFormula(
     );
 
     val tag: String
-        get() = if (isRecommended) "⭐ Recommended" else year
+        get() = if (isRecommended) "Recommended" else year
 }
 
 data class BMRInputState(

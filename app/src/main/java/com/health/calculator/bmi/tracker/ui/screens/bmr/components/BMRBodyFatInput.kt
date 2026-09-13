@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -113,33 +114,33 @@ private fun BodyFatHelpDialog(onDismiss: () -> Unit) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 BodyFatMethod(
-                    emoji = "📏",
+                    icon = Icons.Outlined.Straighten,
                     title = "Tape Measure Method",
-                    description = "Use body measurements (waist, neck, hip) with the U.S. Navy formula. Available online."
+                    description = "Use body measurements with a population-derived equation. Results vary with technique and are estimates."
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 BodyFatMethod(
-                    emoji = "⚖️",
+                    icon = Icons.Outlined.MonitorWeight,
                     title = "Smart Scale",
-                    description = "Many body composition scales use bioelectrical impedance to estimate body fat."
+                    description = "Bioelectrical-impedance devices estimate body fat and can change with hydration and device conditions."
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 BodyFatMethod(
-                    emoji = "📐",
+                    icon = Icons.Outlined.Straighten,
                     title = "Skinfold Calipers",
-                    description = "Pinch test at multiple body sites. Best done by a trained professional."
+                    description = "Measurements at multiple sites; technique and the chosen equation affect the estimate."
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 BodyFatMethod(
-                    emoji = "🏥",
+                    icon = Icons.Outlined.LocalHospital,
                     title = "DEXA Scan",
-                    description = "Direct measurement method; availability and measurement error vary by device."
+                    description = "A clinical imaging method; availability, protocol and measurement error vary by device."
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -157,6 +158,12 @@ private fun BodyFatHelpDialog(onDismiss: () -> Unit) {
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "Broad population references only; they are not a diagnosis or a target.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            lineHeight = 16.sp
                         )
                         Spacer(modifier = Modifier.height(6.dp))
 
@@ -208,12 +215,17 @@ private fun BodyFatHelpDialog(onDismiss: () -> Unit) {
 
 @Composable
 private fun BodyFatMethod(
-    emoji: String,
+    icon: ImageVector,
     title: String,
     description: String
 ) {
     Row(verticalAlignment = Alignment.Top) {
-        Text(text = emoji, fontSize = 16.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(19.dp)
+        )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(

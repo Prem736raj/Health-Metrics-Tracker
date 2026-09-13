@@ -672,3 +672,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device activity/goal expansion, chart
   rendering, TalkBack, large-font, light/dark theme and route checks, plus
   signing/Firebase/Play Console work, remain owner-only.
+
+## BMR formula and body-fat input trust/visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Formula selection and body-fat help surfaces now use shared
+  semantic colors and clear vector method icons. The recommended formula tag
+  is plain “Recommended”, historical formula copy avoids an unsupported
+  accuracy percentage, and body-fat method/range guidance explains
+  measurement uncertainty without presenting population bands as personal
+  targets. Input visibility and selection behavior are unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate must pass before this slice is committed.
+- **Remaining gates:** Connected-device chip scrolling, body-fat dialog,
+  TalkBack, large-font, light/dark theme and route checks, plus signing/
+  Firebase/Play Console work, remain owner-only.

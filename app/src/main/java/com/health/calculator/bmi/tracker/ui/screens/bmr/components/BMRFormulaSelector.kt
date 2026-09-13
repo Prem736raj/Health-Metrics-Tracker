@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.BMRFormula
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun BMRFormulaSelector(
@@ -194,7 +195,7 @@ private fun FormulaChip(
                 shape = RoundedCornerShape(4.dp),
                 color = if (formula.isRecommended) {
                     if (isSelected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f)
-                    else Color(0xFF4CAF50).copy(alpha = 0.12f)
+                    else HealthColors.Healthy.copy(alpha = 0.12f)
                 } else {
                     contentColor.copy(alpha = 0.1f)
                 }
@@ -205,7 +206,7 @@ private fun FormulaChip(
                     fontWeight = if (formula.isRecommended) FontWeight.Bold else FontWeight.Normal,
                     color = if (formula.isRecommended) {
                         if (isSelected) MaterialTheme.colorScheme.onPrimary
-                        else Color(0xFF4CAF50)
+                        else HealthColors.Healthy
                     } else contentColor.copy(alpha = 0.7f),
                     fontSize = 10.sp,
                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)
@@ -240,12 +241,12 @@ private fun FormulaInfoDialog(
                     Spacer(modifier = Modifier.height(4.dp))
                     Surface(
                         shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF4CAF50).copy(alpha = 0.12f)
+                        color = HealthColors.Healthy.copy(alpha = 0.12f)
                     ) {
                         Text(
                             text = stringResource(R.string.txt_recommended),
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF4CAF50),
+                            color = HealthColors.Healthy,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                         )

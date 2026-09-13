@@ -409,6 +409,25 @@ This file is the source of truth for the sequential product-development phases. 
 
 Updated: 2026-09-13
 
+## Follow-up — BMR formula and body-fat input trust/visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** Formula selection and body-fat help surfaces now use
+  shared semantic colors and clear vector method icons. The recommended
+  formula tag is plain “Recommended”, historical formula copy avoids an
+  unsupported accuracy percentage, and body-fat method/range guidance now
+  explains measurement uncertainty and avoids presenting population bands as
+  personal targets. Input visibility and selection behavior are unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate must pass before this slice is committed.
+- **Known limitations:** Connected-device chip scrolling, body-fat dialog,
+  TalkBack, large-font, light/dark theme and route checks remain open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — Heart-rate dashboard and trend trust/visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open
