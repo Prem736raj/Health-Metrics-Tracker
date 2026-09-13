@@ -38,6 +38,23 @@ import com.health.calculator.bmi.tracker.ui.components.HeartRateFormula
 import com.health.calculator.bmi.tracker.ui.components.FitnessLevel
 import com.health.calculator.bmi.tracker.util.HeartRateZoneCalculator
 import com.health.calculator.bmi.tracker.util.HeartRateZoneResult
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+
+private fun fitnessLevelIcon(level: FitnessLevel) = when (level) {
+    FitnessLevel.BEGINNER -> Icons.Outlined.DirectionsWalk
+    FitnessLevel.INTERMEDIATE -> Icons.Outlined.DirectionsRun
+    FitnessLevel.ADVANCED -> Icons.Outlined.FitnessCenter
+}
+
+@Composable
+private fun formulaBadgeColor(badge: String, alpha: Float = 1f): Color = when (badge) {
+    "Most Used" -> HealthColors.Healthy.copy(alpha = alpha)
+    "Most Personalized" -> HealthColors.Good.copy(alpha = alpha)
+    "Women" -> FeatureColors.BpStart.copy(alpha = alpha)
+    "Age-adjusted", "Accurate 40+" -> HealthColors.Caution.copy(alpha = alpha)
+    else -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = alpha)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -397,16 +414,16 @@ private fun PulsingHeartIcon() {
     )
 
     val heartColor by infiniteTransition.animateColor(
-        initialValue = Color(0xFFE53935),
-        targetValue = Color(0xFFFF5252),
+        initialValue = FeatureColors.HeartDeep,
+        targetValue = FeatureColors.HeartEnd,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
                 durationMillis = 1000
-                Color(0xFFE53935) at 0
-                Color(0xFFFF5252) at 150
-                Color(0xFFE53935) at 300
-                Color(0xFFFF5252) at 450
-                Color(0xFFE53935) at 600
+                FeatureColors.HeartDeep at 0
+                FeatureColors.HeartEnd at 150
+                FeatureColors.HeartDeep at 300
+                FeatureColors.HeartEnd at 450
+                FeatureColors.HeartDeep at 600
             },
             repeatMode = RepeatMode.Restart
         ),
@@ -420,9 +437,11 @@ private fun PulsingHeartIcon() {
             .background(heartColor.copy(alpha = 0.15f)),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = stringResource(R.string.txt_text_placeholder_5),
-            fontSize = (28 * scale).sp
+        Icon(
+            imageVector = Icons.Outlined.MonitorHeart,
+            contentDescription = stringResource(R.string.txt_heart_rate_zones),
+            tint = heartColor,
+            modifier = Modifier.size((30 * scale).dp)
         )
     }
 }
@@ -437,7 +456,7 @@ private fun ProfileDataBanner(onDismiss: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF2196F3).copy(alpha = 0.08f)
+            containerColor = HealthColors.Good.copy(alpha = 0.08f)
         )
     ) {
         Row(
@@ -449,14 +468,14 @@ private fun ProfileDataBanner(onDismiss: () -> Unit) {
             Icon(
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
-                tint = Color(0xFF2196F3),
+                tint = HealthColors.Good,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.txt_using_profile_data),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF2196F3),
+                color = HealthColors.Good,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.weight(1f)
             )
@@ -468,7 +487,7 @@ private fun ProfileDataBanner(onDismiss: () -> Unit) {
                     Icons.Default.Close,
                     contentDescription = "Dismiss",
                     modifier = Modifier.size(16.dp),
-                    tint = Color(0xFF2196F3).copy(alpha = 0.6f)
+                    tint = HealthColors.Good.copy(alpha = 0.6f)
                 )
             }
         }
@@ -546,7 +565,7 @@ private fun GenderSelectionSection(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            listOf("Male" to "♂️", "Female" to "♀️").forEach { (gender, icon) ->
+            listOf("Male" to Icons.Outlined.Male, "Female" to Icons.Outlined.Female).forEach { (gender, icon) ->
                 val isSelected = selectedGender == gender
 
                 FilterChip(
@@ -556,8 +575,15 @@ private fun GenderSelectionSection(
                     },
                     label = {
                         Text(
-                            "$icon $gender",
+                            gender,
                             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
                         )
                     },
                     modifier = Modifier.weight(1f),
@@ -604,10 +630,14 @@ private fun FitnessLevelSection(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.padding(vertical = 4.dp)
                         ) {
-                            Text(
-                                text = level.emoji,
-                                fontSize = 18.sp
+                            Icon(
+                                imageVector = fitnessLevelIcon(level),
+                                contentDescription = null,
+                                tint = if (isSelected) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
                             )
+                            Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = level.label,
                                 style = MaterialTheme.typography.labelSmall,
@@ -697,19 +727,24 @@ private fun FormulaSelectionSection(
                     .padding(top = 8.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFE91E63).copy(alpha = 0.08f)
+                    containerColor = FeatureColors.BpStart.copy(alpha = 0.08f)
                 )
             ) {
                 Row(
                     modifier = Modifier.padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_60), fontSize = 16.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Female,
+                        contentDescription = null,
+                        tint = FeatureColors.BpStart,
+                        modifier = Modifier.size(20.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = stringResource(R.string.txt_gulati_formula_was_developed_s),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFFE91E63).copy(alpha = 0.9f),
+                        color = FeatureColors.BpStart.copy(alpha = 0.9f),
                         lineHeight = 16.sp
                     )
                 }
@@ -763,25 +798,13 @@ private fun FormulaOptionItem(
                     Spacer(modifier = Modifier.width(6.dp))
                     Surface(
                         shape = RoundedCornerShape(6.dp),
-                        color = when (formula.badge) {
-                            "Most Used" -> Color(0xFF4CAF50).copy(alpha = 0.15f)
-                            "Most Personalized" -> Color(0xFF2196F3).copy(alpha = 0.15f)
-                            "Women" -> Color(0xFFE91E63).copy(alpha = 0.15f)
-                            "Accurate 40+" -> Color(0xFFFF9800).copy(alpha = 0.15f)
-                            else -> MaterialTheme.colorScheme.secondaryContainer
-                        }
+                        color = formulaBadgeColor(formula.badge, alpha = 0.15f)
                     ) {
                         Text(
                             text = formula.badge,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = when (formula.badge) {
-                                "Most Used" -> Color(0xFF4CAF50)
-                                "Most Personalized" -> Color(0xFF2196F3)
-                                "Women" -> Color(0xFFE91E63)
-                                "Accurate 40+" -> Color(0xFFFF9800)
-                                else -> MaterialTheme.colorScheme.onSecondaryContainer
-                            },
+                            color = formulaBadgeColor(formula.badge),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
@@ -873,7 +896,7 @@ private fun RestingHRSection(
                     Icon(
                         Icons.Default.MonitorHeart,
                         contentDescription = null,
-                        tint = Color(0xFFE53935)
+                        tint = FeatureColors.HeartDeep
                     )
                 },
                 isError = error != null,
@@ -920,7 +943,7 @@ private fun RestingHRSection(
                                 Icons.Default.Favorite,
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFE53935)
+                                tint = FeatureColors.HeartDeep
                             )
                         },
                         shape = RoundedCornerShape(20.dp),
@@ -1051,10 +1074,10 @@ private fun CalculateButton(
         enabled = enabled,
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFE53935),
-            contentColor = Color.White,
-            disabledContainerColor = Color(0xFFE53935).copy(alpha = 0.3f),
-            disabledContentColor = Color.White.copy(alpha = 0.5f)
+            containerColor = FeatureColors.HeartDeep,
+            contentColor = FeatureColors.OnHeart,
+            disabledContainerColor = FeatureColors.HeartDeep.copy(alpha = 0.3f),
+            disabledContentColor = FeatureColors.OnHeart.copy(alpha = 0.5f)
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 4.dp,

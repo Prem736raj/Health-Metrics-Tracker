@@ -13,7 +13,7 @@ enum class HeartRateFormula(
     TANAKA(
         label = "Tanaka",
         formulaText = "208 − (0.7 × age)",
-        badge = "Accurate 40+"
+        badge = "Age-adjusted"
     ),
     GULATI(
         label = "Gulati",

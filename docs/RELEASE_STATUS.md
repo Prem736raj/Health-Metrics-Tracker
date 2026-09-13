@@ -514,3 +514,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device gauge animation, TalkBack, large-font,
   light/dark theme and route rendering checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## Heart-rate zone input/result trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Heart-rate zone input and result routes use shared feature/health
+  tokens and stable vector icons for gender, fitness level, formulas, reserve,
+  zones and detail rows. The Tanaka badge now says “Age-adjusted” rather than
+  implying universal accuracy. Zone bars, pulse animation and export actions
+  no longer render emoji or isolated raw colors; calculations, persistence and
+  history behavior are unchanged.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** Connected-device pulse/expanded-card rendering,
+  TalkBack, large-font and light/dark theme checks, plus signing/Firebase/Play
+  Console work, remain owner-only.
