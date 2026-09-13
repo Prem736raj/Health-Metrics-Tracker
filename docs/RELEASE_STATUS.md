@@ -498,3 +498,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device warning/expand interactions, TalkBack,
   large-font and light/dark theme checks, plus signing/Firebase/Play Console
   work, remain owner-only.
+
+## WHR result and animation trust/visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** WHR result categories and thresholds use calm action-point
+  wording. Risk, warning, body-shape and trend surfaces share theme-aware
+  semantic colors and stable Material vector icons; decorative emoji was
+  removed from the export summary. Calculation, persistence, save and history
+  behavior remain unchanged.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** Connected-device gauge animation, TalkBack, large-font,
+  light/dark theme and route rendering checks, plus signing/Firebase/Play
+  Console work, remain owner-only.

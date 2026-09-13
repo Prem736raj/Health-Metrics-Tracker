@@ -27,6 +27,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -42,6 +43,20 @@ import kotlin.math.sin
 import com.health.calculator.bmi.tracker.ui.screens.whr.WhrEdgeCaseHandler
 import com.health.calculator.bmi.tracker.ui.screens.whr.AnimatedBodyShapeIcon
 import com.health.calculator.bmi.tracker.ui.screens.whr.WhrShareUtils
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+
+/** Persisted WHR/BMI risk items may still carry emoji labels. Keep those
+ * labels readable in exports/data, but render stable icons in the UI. */
+private fun whrRiskIcon(label: String): ImageVector = when {
+    label.contains("⚠") || label.contains("🚨") || label.contains("🔴") || label.contains("🟠") -> Icons.Outlined.Warning
+    label.contains("🟢") || label.contains("✅") -> Icons.Outlined.CheckCircle
+    label.contains("🟡") -> Icons.Outlined.Info
+    label.contains("💓") || label.contains("🫀") || label.contains("❤️") -> Icons.Outlined.MonitorHeart
+    label.contains("📏") || label.contains("📐") -> Icons.Outlined.Straighten
+    label.contains("💡") -> Icons.Outlined.Lightbulb
+    else -> Icons.Outlined.Info
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,9 +135,9 @@ fun WhrResultScreen(
     }
 
     val categoryColor = when (result.whrCategory) {
-        WhrCategory.LOW_RISK -> Color(0xFF4CAF50)
-        WhrCategory.MODERATE_RISK -> Color(0xFFFFA726)
-        WhrCategory.HIGH_RISK -> Color(0xFFF44336)
+        WhrCategory.LOW_RISK -> HealthColors.Healthy
+        WhrCategory.MODERATE_RISK -> HealthColors.Caution
+        WhrCategory.HIGH_RISK -> HealthColors.Danger
     }
 
     Scaffold(
@@ -168,7 +183,12 @@ fun WhrResultScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(stringResource(R.string.txt_text_placeholder_21), fontSize = 16.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Warning,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Text(
                             message,
                             style = MaterialTheme.typography.bodySmall,
@@ -378,9 +398,9 @@ private fun WhrMainResultCard(
 
             // Reference thresholds
             val thresholds = if (gender == Gender.FEMALE) {
-                "Female thresholds — Low: <0.80 | Moderate: 0.80-0.84 | High: ≥0.85"
+                "Female reference points — Below: <0.80 | Near: 0.80-0.84 | Above: ≥0.85"
             } else {
-                "Male thresholds — Low: <0.90 | Moderate: 0.90-0.99 | High: ≥1.00"
+                "Male reference points — Below: <0.90 | Near: 0.90-0.99 | Above: ≥1.00"
             }
             Text(
                 thresholds,
@@ -400,9 +420,9 @@ private fun WhrGaugeCanvas(
     categoryColor: Color,
     progress: Float
 ) {
-    val green = Color(0xFF4CAF50)
-    val yellow = Color(0xFFFFA726)
-    val red = Color(0xFFF44336)
+    val green = HealthColors.Healthy
+    val yellow = HealthColors.Caution
+    val red = HealthColors.Danger
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
 
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -521,15 +541,15 @@ private fun WhrVisualScale(
 
             val categories = if (gender == Gender.FEMALE) {
                 listOf(
-                    Triple("Low Risk", "<0.80", Color(0xFF4CAF50)),
-                    Triple("Moderate", "0.80-0.84", Color(0xFFFFA726)),
-                    Triple("High Risk", "≥0.85", Color(0xFFF44336))
+                    Triple("Below action point", "<0.80", HealthColors.Healthy),
+                    Triple("Near action point", "0.80-0.84", HealthColors.Caution),
+                    Triple("Above action point", "≥0.85", HealthColors.Danger)
                 )
             } else {
                 listOf(
-                    Triple("Low Risk", "<0.90", Color(0xFF4CAF50)),
-                    Triple("Moderate", "0.90-0.99", Color(0xFFFFA726)),
-                    Triple("High Risk", "≥1.00", Color(0xFFF44336))
+                    Triple("Below action point", "<0.90", HealthColors.Healthy),
+                    Triple("Near action point", "0.90-0.99", HealthColors.Caution),
+                    Triple("Above action point", "≥1.00", HealthColors.Danger)
                 )
             }
 
@@ -615,9 +635,9 @@ private fun BodyShapeCard(
     animationProgress: Float
 ) {
     val shapeColor = when (bodyShape) {
-        BodyShape.APPLE -> Color(0xFFF44336)
-        BodyShape.PEAR -> Color(0xFF4CAF50)
-        BodyShape.BALANCED -> Color(0xFF2196F3)
+        BodyShape.APPLE -> FeatureColors.HeartStart
+        BodyShape.PEAR -> HealthColors.Healthy
+        BodyShape.BALANCED -> HealthColors.Good
     }
 
     Card(
@@ -855,8 +875,8 @@ private fun WaistToHeightCard(
     animationProgress: Float
 ) {
     val whtrColor = when {
-        whtrAtRisk == true -> Color(0xFFF44336)
-        whtrAtRisk == false -> Color(0xFF4CAF50)
+        whtrAtRisk == true -> HealthColors.Danger
+        whtrAtRisk == false -> HealthColors.Healthy
         else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
     }
 
@@ -935,13 +955,13 @@ private fun WaistToHeightCard(
                             modifier = Modifier
                                 .weight(0.5f)
                                 .fillMaxHeight()
-                                .background(Color(0xFF4CAF50).copy(alpha = 0.3f))
+                                .background(HealthColors.Healthy.copy(alpha = 0.3f))
                         )
                         Box(
                             modifier = Modifier
                                 .weight(0.5f)
                                 .fillMaxHeight()
-                                .background(Color(0xFFF44336).copy(alpha = 0.3f))
+                                .background(HealthColors.Danger.copy(alpha = 0.3f))
                         )
                     }
 
@@ -965,8 +985,8 @@ private fun WaistToHeightCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(stringResource(R.string.txt_normal_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = Color(0xFF4CAF50))
-                    Text(stringResource(R.string.txt_at_risk_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = Color(0xFFF44336))
+                    Text(stringResource(R.string.txt_normal_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = HealthColors.Healthy)
+                    Text(stringResource(R.string.txt_at_risk_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = HealthColors.Danger)
                 }
 
                 Card(
@@ -980,7 +1000,12 @@ private fun WaistToHeightCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 16.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Lightbulb,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Text(
                             stringResource(R.string.txt_keep_your_waist_to_less_than_h),
                             style = MaterialTheme.typography.bodySmall,
@@ -1079,10 +1104,10 @@ private fun HealthRisksSection(
 @Composable
 private fun HealthRiskRow(risk: HealthRiskItem) {
     val riskColor = when (risk.severity) {
-        RiskSeverity.MILD -> Color(0xFF4CAF50)
-        RiskSeverity.MODERATE -> Color(0xFFFFA726)
-        RiskSeverity.HIGH -> Color(0xFFF44336)
-        RiskSeverity.SEVERE -> Color(0xFFB71C1C)
+        RiskSeverity.MILD -> HealthColors.Healthy
+        RiskSeverity.MODERATE -> HealthColors.Caution
+        RiskSeverity.HIGH -> HealthColors.Danger
+        RiskSeverity.SEVERE -> HealthColors.Severe
     }
 
     val riskLabel = when (risk.severity) {
@@ -1116,7 +1141,12 @@ private fun HealthRiskRow(risk: HealthRiskItem) {
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(risk.icon, fontSize = 20.sp)
+                    Icon(
+                        imageVector = whrRiskIcon(risk.icon),
+                        contentDescription = null,
+                        tint = riskColor,
+                        modifier = Modifier.size(22.dp)
+                    )
                     Text(
                         risk.title,
                         style = MaterialTheme.typography.bodyMedium,
@@ -1269,10 +1299,10 @@ private fun ActionButtonsRow(
             enabled = !isSaved,
             colors = ButtonDefaults.buttonColors(
                 containerColor = if (isSaved)
-                    Color(0xFF4CAF50)
+                    HealthColors.Healthy
                 else
                     MaterialTheme.colorScheme.primary,
-                disabledContainerColor = Color(0xFF4CAF50).copy(alpha = 0.8f),
+                disabledContainerColor = HealthColors.Healthy.copy(alpha = 0.8f),
                 disabledContentColor = Color.White
             )
         ) {
@@ -1331,12 +1361,12 @@ private fun ActionButtonsRow(
 
 private fun buildShareText(result: WhrResult): String {
     return buildString {
-        appendLine("📐 Waist-to-Hip Ratio Result")
+        appendLine("Waist-to-Hip Ratio Result")
         appendLine("━━━━━━━━━━━━━━━━━━━━")
         appendLine("WHR: ${String.format("%.2f", result.whr)} — ${result.whrCategory.label}")
         appendLine("Waist: ${String.format("%.1f", result.waistCm)} cm")
         appendLine("Hip: ${String.format("%.1f", result.hipCm)} cm")
-        appendLine("Body Shape: ${result.bodyShape.emoji} ${result.bodyShape.label}")
+        appendLine("Body Shape: ${result.bodyShape.label}")
         result.whtr?.let {
             appendLine("WHtR: ${String.format("%.2f", it)} — ${if (result.whtrAtRisk == true) "At Risk" else "Normal"}")
         }

@@ -390,6 +390,27 @@ Updated: 2026-09-13
 
 Updated: 2026-09-12
 
+## Follow-up — WHR result and animation trust/visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** WHR result categories and thresholds now use calm
+  action-point wording instead of implying diagnosis. Risk, warning, body-shape
+  and trend surfaces use shared semantic/theme colors with stable Material
+  vector icons; the export summary no longer includes decorative emoji. The
+  persisted WHR model, calculation, save flow and history behavior are
+  unchanged.
+- **Tests:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  pass with `GRADLE_EXIT=0`.
+- **Known limitations:** Legacy risk/body-shape fields may retain emoji values
+  for compatibility, but they are not rendered. Gauge animation, large-font,
+  TalkBack, theme and route rendering checks require a connected device.
+- **Next phase:** Execute the documented device/console release checklist;
+  continue deep-screen cleanup only where it improves trust, accessibility or
+  reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — Heart-rate education trust and visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open

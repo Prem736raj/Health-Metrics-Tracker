@@ -9,6 +9,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.BodyShape
 import com.health.calculator.bmi.tracker.data.model.WhrTrendDirection
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 
@@ -65,9 +70,9 @@ fun AnimatedBodyShapeIcon(
     }
 
     val shapeColor = when (bodyShape) {
-        BodyShape.APPLE -> Color(0xFFF44336)
-        BodyShape.PEAR -> Color(0xFF4CAF50)
-        BodyShape.BALANCED -> Color(0xFF2196F3)
+        BodyShape.APPLE -> FeatureColors.HeartStart
+        BodyShape.PEAR -> HealthColors.Healthy
+        BodyShape.BALANCED -> HealthColors.Good
     }
 
     Box(
@@ -89,9 +94,15 @@ fun AnimatedBodyShapeIcon(
             modifier = Modifier.size(64.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Text(
-                    bodyShape.emoji,
-                    fontSize = 32.sp
+                Icon(
+                    imageVector = when (bodyShape) {
+                        BodyShape.APPLE -> Icons.Outlined.MonitorWeight
+                        BodyShape.PEAR -> Icons.Outlined.MonitorWeight
+                        BodyShape.BALANCED -> Icons.Outlined.CompareArrows
+                    },
+                    contentDescription = bodyShape.label,
+                    tint = shapeColor,
+                    modifier = Modifier.size(32.dp)
                 )
             }
         }
@@ -122,15 +133,15 @@ fun AnimatedTrendArrow(
     }
 
     val color = when (direction) {
-        WhrTrendDirection.IMPROVING -> Color(0xFF4CAF50)
-        WhrTrendDirection.WORSENING -> Color(0xFFF44336)
-        WhrTrendDirection.STEADY -> Color(0xFF9E9E9E)
+        WhrTrendDirection.IMPROVING -> HealthColors.Healthy
+        WhrTrendDirection.WORSENING -> HealthColors.Danger
+        WhrTrendDirection.STEADY -> MaterialTheme.colorScheme.outline
     }
 
-    val arrowChar = when (direction) {
-        WhrTrendDirection.IMPROVING -> "↓"
-        WhrTrendDirection.WORSENING -> "↑"
-        WhrTrendDirection.STEADY -> "→"
+    val arrowIcon = when (direction) {
+        WhrTrendDirection.IMPROVING -> Icons.Outlined.TrendingDown
+        WhrTrendDirection.WORSENING -> Icons.Outlined.TrendingUp
+        WhrTrendDirection.STEADY -> Icons.Outlined.TrendingFlat
     }
 
     Box(
@@ -144,11 +155,11 @@ fun AnimatedTrendArrow(
             modifier = Modifier.size(32.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Text(
-                    arrowChar,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = color
+                Icon(
+                    imageVector = arrowIcon,
+                    contentDescription = direction.name.lowercase().replace('_', ' '),
+                    tint = color,
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }
