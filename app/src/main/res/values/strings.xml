@@ -581,7 +581,7 @@
 <string name="txt_educational_information_only">⚠️ Educational Information Only</string>
 <string name="txt_how_bsa_is_used_in_medical_pra">How BSA is used in medical practice</string>
 <string name="txt_medical_applications_of_bsa">Medical Applications of BSA</string>
-<string name="txt_for_most_clinical_purposes_any">ℹ️ For most clinical purposes, any formula will give results within a few percent of each other. Your doctor will use the formula standard at their institution.</string>
+<string name="txt_for_most_clinical_purposes_any">For many clinical contexts, common equations may give results within a few percent of one another. Use the equation specified by a qualified professional or study protocol.</string>
 <string name="txt_formula_recommendations">Formula Recommendations</string>
 <string name="txt_4f_m_1f">%1$.4f m² (%2$.1f%%)</string>
 <string name="txt_range_spread">Range spread</string>

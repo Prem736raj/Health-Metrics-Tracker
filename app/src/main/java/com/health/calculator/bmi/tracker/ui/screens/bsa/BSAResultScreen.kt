@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -455,10 +456,45 @@ private fun BodySilhouetteVisualization(
 
 @Composable
 private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
+    if (isMale == null) {
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+            ),
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Outlined.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Adult reference context",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Add sex in your profile to see a sex-specific population estimate. BSA is an informational estimate, not a healthy range or treatment guide.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    lineHeight = 16.sp
+                )
+            }
+        }
+        return
+    }
+
     val averageMale = 1.9f
     val averageFemale = 1.6f
 
-    val gender = isMale ?: true
+    val gender = isMale
     val averageBSA = if (gender) averageMale else averageFemale
     val genderLabel = if (gender) "male" else "female"
 
@@ -491,9 +527,14 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(if (gender) "♂" else "♀", fontSize = 22.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Person,
+                    contentDescription = null,
+                    tint = comparisonColor,
+                    modifier = Modifier.size(22.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_comparison_with_average),
@@ -518,7 +559,7 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
                     Text(stringResource(R.string.txt_you), style = MaterialTheme.typography.labelSmall, modifier = Modifier.width(40.dp))
                     Box(modifier = Modifier.weight(1f).height(24.dp).clip(RoundedCornerShape(6.dp)).background(MaterialTheme.colorScheme.surfaceVariant)) {
                         Box(modifier = Modifier.fillMaxHeight().fillMaxWidth(animatedProgress).clip(RoundedCornerShape(6.dp)).background(MaterialTheme.colorScheme.primary))
-                        Text(stringResource(R.string.txt_2f_m).format(bsa), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp))
+                        Text(stringResource(R.string.txt_2f_m).format(bsa), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp))
                     }
                 }
                 Spacer(modifier = Modifier.height(6.dp))
@@ -527,7 +568,7 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
                     Text(stringResource(R.string.txt_avg_1), style = MaterialTheme.typography.labelSmall, modifier = Modifier.width(40.dp))
                     Box(modifier = Modifier.weight(1f).height(24.dp).clip(RoundedCornerShape(6.dp)).background(MaterialTheme.colorScheme.surfaceVariant)) {
                         Box(modifier = Modifier.fillMaxHeight().fillMaxWidth(animatedAvgProgress).clip(RoundedCornerShape(6.dp)).background(comparisonColor.copy(alpha = 0.6f)))
-                        Text(stringResource(R.string.txt_2f_m).format(averageBSA), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp))
+                        Text(stringResource(R.string.txt_2f_m).format(averageBSA), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp))
                     }
                 }
             }
@@ -589,17 +630,32 @@ private fun InputSummaryCard(result: BSAResult) {
     ) {
         Row(modifier = Modifier.fillMaxWidth().padding(14.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(stringResource(R.string.txt_text_placeholder_28), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.MonitorWeight,
+                    contentDescription = null,
+                    tint = FeatureColors.WeightDeep,
+                    modifier = Modifier.size(20.dp)
+                )
                 Text(stringResource(R.string.txt_1f_kg).format(result.weightKg), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
                 Text(stringResource(R.string.txt_1f_lbs).format(weightLbs), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(stringResource(R.string.txt_text_placeholder_41), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Default.Height,
+                    contentDescription = null,
+                    tint = CalculatorColors.BSA,
+                    modifier = Modifier.size(20.dp)
+                )
                 Text(stringResource(R.string.txt_1f_cm).format(result.heightCm), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
                 Text("(%d'%.0f\")".format(ft, inch), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(stringResource(R.string.txt_text_placeholder_40), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Default.Calculate,
+                    contentDescription = null,
+                    tint = CalculatorColors.BSA,
+                    modifier = Modifier.size(20.dp)
+                )
                 Text(result.selectedFormula.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
                 Text(result.selectedFormula.year, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -720,19 +776,24 @@ private fun StatColumn(label: String, value: String, subLabel: String, color: Co
 
 @Composable
 private fun FormulaRecommendationCard() {
-    Card(colors = CardDefaults.cardColors(containerColor = HealthBlue.copy(alpha = 0.06f)), shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
+    Card(colors = CardDefaults.cardColors(containerColor = HealthColors.Info.copy(alpha = 0.06f)), shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = HealthColors.Info,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.txt_formula_recommendations), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = HealthBlue)
+                Text(stringResource(R.string.txt_formula_recommendations), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = HealthColors.Info)
             }
             Spacer(modifier = Modifier.height(10.dp))
-            FormulaRecItem("🏥", "Du Bois & Du Bois", "Most widely used in clinical practice worldwide. Default choice for most applications.")
-            FormulaRecItem("⚡", "Mosteller", "Simplest formula with minimal math. Results very close to Du Bois for most adults.")
-            FormulaRecItem("👶", "Haycock", "Developed from pediatric measurements; interpret with a clinician when used for children.")
-            FormulaRecItem("🌏", "Fujimoto / Takahira", "May be more accurate for East Asian populations.")
-            FormulaRecItem("🔬", "Shuter & Aslani", "Modern formula using CT-based measurements. Considered most anatomically accurate.")
+            FormulaRecItem(Icons.Outlined.LocalHospital, "Du Bois & Du Bois", "Commonly cited adult equation; use the method requested by a qualified professional when BSA informs care.")
+            FormulaRecItem(Icons.Outlined.Bolt, "Mosteller", "A simple equation that often gives a similar adult estimate; it remains an estimate.")
+            FormulaRecItem(Icons.Outlined.Accessibility, "Haycock", "Developed using pediatric measurements; interpret with age-appropriate clinical context.")
+            FormulaRecItem(Icons.Default.Public, "Fujimoto / Takahira", "Developed from a Japanese reference population; population fit can vary.")
+            FormulaRecItem(Icons.Outlined.Science, "Shuter & Aslani", "A later equation with different source data; do not assume it is universally most accurate.")
             Spacer(modifier = Modifier.height(8.dp))
             Text(stringResource(R.string.txt_for_most_clinical_purposes_any), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 16.sp)
         }
@@ -740,9 +801,16 @@ private fun FormulaRecommendationCard() {
 }
 
 @Composable
-private fun FormulaRecItem(emoji: String, formula: String, recommendation: String) {
+private fun FormulaRecItem(icon: ImageVector, formula: String, recommendation: String) {
     Row(modifier = Modifier.padding(vertical = 3.dp), verticalAlignment = Alignment.Top) {
-        Text(emoji, fontSize = 14.sp, modifier = Modifier.width(22.dp))
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = HealthColors.Info,
+            modifier = Modifier
+                .size(18.dp)
+                .width(22.dp)
+        )
         Column {
             Text(formula, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
             Text(recommendation, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 15.sp)

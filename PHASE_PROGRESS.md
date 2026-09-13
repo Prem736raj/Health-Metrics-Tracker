@@ -345,6 +345,27 @@ This file is the source of truth for the sequential product-development phases. 
   continue deep-screen cleanup only where it improves trust, accessibility or
   reliability.
 
+## BSA result trust and visual consistency follow-up
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Major changes:** BSA result summaries, comparison context and formula
+  recommendations now use stable Material vector icons instead of emoji and
+  theme/feature semantic colors instead of isolated literals. Missing profile
+  sex no longer silently defaults to a male comparison; it shows a neutral
+  adult-context explanation. Formula guidance now describes population/source
+  context without universal accuracy or clinical-prescription claims.
+  Calculations, persistence, history and export callbacks remain unchanged.
+- **Tests:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Known limitations:** BSA remains an informational estimate and its
+  population comparisons are not reference ranges. Connected-device checks
+  are still needed for animations, large fonts, TalkBack and both themes.
+- **Next phase:** Execute the documented device/console release checklist;
+  continue deep-screen cleanup only where it improves trust, accessibility or
+  reliability.
+
 ## Follow-up — Calorie education trust and visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open

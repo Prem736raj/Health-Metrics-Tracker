@@ -566,3 +566,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device expandable-row and filter-chip checks,
   TalkBack, large-font, light/dark theme validation, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## BSA result trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BSA result summaries, comparison context and formula
+  recommendations now use stable Material vector icons and shared semantic
+  colors instead of emoji or isolated literals. Missing profile sex no longer
+  silently defaults to a male comparison; the route shows a neutral adult
+  context instead. Formula guidance describes population/source context
+  without universal accuracy or clinical-prescription claims. Calculation,
+  persistence, history and export callbacks remain unchanged.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** BSA animations, large-font, TalkBack, light/dark theme
+  and route rendering checks require a connected device; signing/Firebase/Play
+  Console work remains owner-only.
