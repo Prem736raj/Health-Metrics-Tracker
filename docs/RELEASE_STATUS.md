@@ -619,3 +619,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device comparison expansion, TalkBack,
   large-font, light/dark theme and route-rendering checks, plus signing/
   Firebase/Play Console work, remain owner-only.
+
+## BMR education trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BMR education and edge-warning surfaces now use stable Material
+  vector icons and shared calculator/health tokens instead of emoji markers
+  and isolated raw colors. Explanations remove unsupported fixed percentages
+  and clarify that BMR/TDEE values are estimates, not a personal calorie
+  floor or a prescription. Calculator formulas, validation, persistence and
+  navigation are unchanged.
+- **Verification:** Focused Kotlin compilation passed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  is run before this slice is committed.
+- **Remaining gates:** Connected-device expandable education, warning rows,
+  TalkBack, large-font, light/dark theme and route-rendering checks, plus
+  signing/Firebase/Play Console work, remain owner-only.

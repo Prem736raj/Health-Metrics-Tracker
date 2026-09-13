@@ -10,14 +10,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun BMRWarningCards(
@@ -35,21 +36,26 @@ fun BMRWarningCards(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFFFF3E0)
+                containerColor = HealthColors.Caution.copy(alpha = 0.1f)
             ),
             border = androidx.compose.foundation.BorderStroke(
-                0.5.dp, Color(0xFFFF9800).copy(alpha = 0.3f)
+                0.5.dp, HealthColors.Caution.copy(alpha = 0.3f)
             )
         ) {
             Column(modifier = Modifier.padding(12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_21), fontSize = 16.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = null,
+                        tint = HealthColors.Caution,
+                        modifier = Modifier.size(19.dp)
+                    )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(R.string.txt_note),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFE65100)
+                        color = HealthColors.Caution
                     )
                 }
                 Spacer(modifier = Modifier.height(6.dp))
@@ -58,16 +64,17 @@ fun BMRWarningCards(
                         modifier = Modifier.padding(start = 22.dp, top = 2.dp),
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text(
-                            text = stringResource(R.string.txt_text_placeholder_3),
-                            color = Color(0xFFE65100),
-                            fontWeight = FontWeight.Bold
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = null,
+                            tint = HealthColors.Caution,
+                            modifier = Modifier.size(15.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = warning,
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color(0xFF795548),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             lineHeight = 16.sp
                         )
                     }

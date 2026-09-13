@@ -57,7 +57,7 @@ object BMREducationalContent {
                     isHighlight = true
                 ),
                 EducationalParagraph(
-                    text = "Example: If your BMR is 1,500 kcal and you're moderately active, your TDEE might be around 2,325 kcal (BMR × 1.55)."
+                    text = "Example: multiplying a BMR estimate by 1.55 is one planning convention for a moderately active day, not a measurement of your actual energy use."
                 )
             )
         ),
@@ -69,31 +69,31 @@ object BMREducationalContent {
                     text = "Several factors influence your metabolic rate:"
                 ),
                 EducationalParagraph(
-                    text = "Body Size & Composition — Larger bodies and more muscle mass require more energy. Muscle burns more calories at rest than fat tissue.",
+                    text = "Body size & composition — Larger bodies generally use more energy at rest. Lean mass is one factor, but this calculator cannot measure body composition directly.",
                     isBullet = true
                 ),
                 EducationalParagraph(
-                    text = "Age — BMR decreases approximately 1-2% per decade after age 20, mainly due to loss of muscle mass.",
+                    text = "Age — Energy needs often change with age as body composition, activity and health context change; no single percentage applies to everyone.",
                     isBullet = true
                 ),
                 EducationalParagraph(
-                    text = "Gender — Males typically have higher BMR due to greater muscle mass and lower body fat percentage.",
+                    text = "Sex-related averages — Many equations use sex-specific coefficients, but individual body composition and physiology vary widely.",
                     isBullet = true
                 ),
                 EducationalParagraph(
-                    text = "Genetics — Your genetic makeup can influence metabolic rate by up to 5-10%.",
+                    text = "Individual variation — Genetics, health, medication and prior weight change can affect energy needs; this calculator cannot quantify those effects.",
                     isBullet = true
                 ),
                 EducationalParagraph(
-                    text = "Hormones — Thyroid hormones play a crucial role. Conditions like hypothyroidism can significantly lower BMR.",
+                    text = "Hormones and health — Hormonal or other health conditions can affect energy and wellbeing. Persistent concerns deserve professional evaluation rather than a self-adjusted calorie target.",
                     isBullet = true
                 ),
                 EducationalParagraph(
-                    text = "Body Temperature — A 1°C increase in body temperature can raise BMR by about 7%.",
+                    text = "Illness and temperature — Fever or illness can change energy needs, but this adult estimate is not designed to calculate those changes.",
                     isBullet = true
                 ),
                 EducationalParagraph(
-                    text = "Climate — Living in very cold or very hot environments can slightly increase BMR as your body works to maintain temperature.",
+                    text = "Environment — Climate can influence activity, appetite and fluid needs. Effects on resting energy are not reliably estimated by this calculator.",
                     isBullet = true
                 ),
                 EducationalParagraph(
@@ -178,7 +178,7 @@ object BMREducationalContent {
             emoji = "📊",
             content = listOf(
                 EducationalParagraph(
-                    text = "Understanding your BMR is the foundation of smart weight management:"
+                    text = "Understanding your BMR can provide context for weight-management planning, but it is only one estimate among many inputs:"
                 ),
                 EducationalParagraph(
                     text = "For weight change — Consider gradual adjustments and watch multi-week trends rather than relying on an exact weekly prediction.",
@@ -189,7 +189,7 @@ object BMREducationalContent {
                     isTip = true
                 ),
                 EducationalParagraph(
-                    text = "For Maintenance — Eat at your TDEE. Track your weight weekly and adjust calories if you notice unintended changes.",
+                    text = "For maintenance — A calculated TDEE can be a starting estimate. Compare it with multi-week trends and seek professional guidance if your needs or health context are changing.",
                     isTip = true
                 ),
                 EducationalParagraph(
@@ -197,10 +197,10 @@ object BMREducationalContent {
                     isHighlight = true
                 ),
                 EducationalParagraph(
-                    text = "Track regularly — Recalculate your BMR every few months or when your weight changes significantly (±5 kg). Your BMR changes as your body changes."
+                    text = "Track regularly — Revisit the estimate when your inputs or circumstances change. Your energy needs may change as your body and routine change."
                 ),
                 EducationalParagraph(
-                    text = "Remember: BMR is an estimate. Individual variation of 5-10% is normal. Use it as a starting point and adjust based on real-world results."
+                    text = "Remember: BMR is an estimate with meaningful individual uncertainty. Use it as context, compare with real-world trends and avoid treating it as a personal calorie floor."
                 )
             )
         )

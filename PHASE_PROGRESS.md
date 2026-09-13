@@ -491,6 +491,26 @@ Updated: 2026-09-13
 
 Updated: 2026-09-12
 
+## Follow-up — BMR education trust and visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** BMR education and edge-warning surfaces now use stable
+  Material vector icons and shared calculator/health tokens instead of emoji
+  markers and isolated raw colors. Explanations remove unsupported fixed
+  percentages and clarify that BMR/TDEE values are estimates, not a personal
+  calorie floor or a prescription. The calculator formulas, validation,
+  persistence and navigation remain unchanged.
+- **Tests:** Focused Kotlin compilation passed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  is run before this slice is committed.
+- **Known limitations:** Connected-device expandable education, warnings,
+  TalkBack, large-font, light/dark theme and route-rendering checks remain
+  open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — Metabolic-syndrome standards comparison trust and visual cleanup
 
 - **Status:** Complete locally; device/accessibility validation remains open

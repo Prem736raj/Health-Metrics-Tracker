@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +28,17 @@ import com.health.calculator.bmi.tracker.data.model.BMREducationalContent
 import com.health.calculator.bmi.tracker.data.model.BMRFormula
 import com.health.calculator.bmi.tracker.data.model.EducationalParagraph
 import com.health.calculator.bmi.tracker.data.model.EducationalSection
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+
+private fun bmrSectionIcon(title: String): ImageVector = when {
+    title.contains("What is", ignoreCase = true) -> Icons.Outlined.LocalFireDepartment
+    title.contains("TDEE", ignoreCase = true) -> Icons.Outlined.Calculate
+    title.contains("Factors", ignoreCase = true) -> Icons.Outlined.Science
+    title.contains("Boost", ignoreCase = true) -> Icons.Outlined.FitnessCenter
+    title.contains("Crash", ignoreCase = true) -> Icons.Outlined.Warning
+    else -> Icons.Outlined.TrendingUp
+}
 
 @Composable
 fun BMREducationalSection(
@@ -50,7 +62,12 @@ fun BMREducationalSection(
             Column(modifier = Modifier.padding(20.dp)) {
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_24), fontSize = 22.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.LocalFireDepartment,
+                        contentDescription = null,
+                        tint = CalculatorColors.BMR,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
@@ -139,7 +156,12 @@ private fun ExpandableEducationalCard(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(text = section.emoji, fontSize = 18.sp)
+                        Icon(
+                            imageVector = bmrSectionIcon(section.title),
+                            contentDescription = null,
+                            tint = CalculatorColors.BMR,
+                            modifier = Modifier.size(20.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = section.title,
@@ -248,7 +270,12 @@ private fun HighlightParagraph(paragraph: EducationalParagraph) {
         )
     ) {
         Row(modifier = Modifier.padding(10.dp)) {
-            Text(text = stringResource(R.string.txt_text_placeholder_1), fontSize = 14.sp)
+            Icon(
+                imageVector = Icons.Outlined.Lightbulb,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(18.dp)
+            )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = paragraph.text,
@@ -267,14 +294,23 @@ private fun TipParagraph(paragraph: EducationalParagraph) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF4CAF50).copy(alpha = 0.06f)
+            containerColor = HealthColors.Healthy.copy(alpha = 0.08f)
+        ),
+        border = androidx.compose.foundation.BorderStroke(
+            0.5.dp,
+            HealthColors.Healthy.copy(alpha = 0.18f)
         )
     ) {
         Row(
             modifier = Modifier.padding(10.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Text(text = stringResource(R.string.txt_text_placeholder_15), fontSize = 13.sp)
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
+                contentDescription = null,
+                tint = HealthColors.Healthy,
+                modifier = Modifier.size(17.dp)
+            )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = paragraph.text,
@@ -292,18 +328,23 @@ private fun WarningParagraph(paragraph: EducationalParagraph) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF44336).copy(alpha = 0.06f)
+            containerColor = HealthColors.Caution.copy(alpha = 0.08f)
         ),
         border = androidx.compose.foundation.BorderStroke(
             0.5.dp,
-            Color(0xFFF44336).copy(alpha = 0.15f)
+            HealthColors.Caution.copy(alpha = 0.2f)
         )
     ) {
         Row(
             modifier = Modifier.padding(10.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Text(text = stringResource(R.string.txt_text_placeholder_21), fontSize = 13.sp)
+            Icon(
+                imageVector = Icons.Outlined.Warning,
+                contentDescription = null,
+                tint = HealthColors.Caution,
+                modifier = Modifier.size(17.dp)
+            )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = paragraph.text,
@@ -342,7 +383,12 @@ fun BMRFormulaComparisonSection(
             Column(modifier = Modifier.padding(20.dp)) {
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_23), fontSize = 22.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Science,
+                        contentDescription = null,
+                        tint = CalculatorColors.BMR,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
@@ -407,7 +453,7 @@ fun BMRFormulaComparisonSection(
                             label = "Highest",
                             value = "${sorted.first().value.toInt()}",
                             formula = sorted.first().key.displayName.split(" ").first(),
-                            color = Color(0xFF4CAF50),
+                            color = HealthColors.Healthy,
                             modifier = Modifier.weight(1f)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
@@ -415,7 +461,7 @@ fun BMRFormulaComparisonSection(
                             label = "Lowest",
                             value = "${sorted.last().value.toInt()}",
                             formula = sorted.last().key.displayName.split(" ").first(),
-                            color = Color(0xFFFF9800),
+                            color = HealthColors.Caution,
                             modifier = Modifier.weight(1f)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
@@ -436,21 +482,29 @@ fun BMRFormulaComparisonSection(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFF4CAF50).copy(alpha = 0.06f)
+                        containerColor = HealthColors.Healthy.copy(alpha = 0.08f)
                     ),
                     border = androidx.compose.foundation.BorderStroke(
-                        0.5.dp, Color(0xFF4CAF50).copy(alpha = 0.15f)
+                        0.5.dp, HealthColors.Healthy.copy(alpha = 0.18f)
                     )
                 ) {
-                    Row(modifier = Modifier.padding(12.dp)) {
-                        Text(text = stringResource(R.string.txt_text_placeholder_22), fontSize = 16.sp)
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Lightbulb,
+                            contentDescription = null,
+                            tint = HealthColors.Healthy,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
                             Text(
                                 text = stringResource(R.string.txt_recommendation),
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF388E3C)
+                                color = HealthColors.Healthy
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
