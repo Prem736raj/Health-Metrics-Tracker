@@ -308,4 +308,23 @@ class MedicalCalculatorAccuracyTest {
         assertEquals(340f, data.activityCaloriesForBreakdown, 0.0001f)
         assertTrue(data.bmrPercentOfTotal + data.activityPercentOfTotal + data.tefPercentOfTotal <= 100.01f)
     }
+
+    @Test
+    fun tefIntakePercentageUsesMacroCaloriesNotTdee() {
+        val data = TEFData.calculate(
+            bmr = 1_400f,
+            activityCalories = 600f,
+            tdee = 2_000f,
+            proteinCalories = 300f,
+            carbsCalories = 400f,
+            fatCalories = 300f,
+            proteinPct = 30f,
+            carbsPct = 40f,
+            fatPct = 30f
+        )
+
+        assertEquals(1_000f, data.macroIntakeCalories, 0.0001f)
+        assertEquals(13f, data.tefPercentOfIntake, 0.0001f)
+        assertEquals(0f, TEFData(tdee = 2_000f).tefPercentOfIntake, 0.0001f)
+    }
 }

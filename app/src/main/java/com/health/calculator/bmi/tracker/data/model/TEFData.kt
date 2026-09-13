@@ -48,26 +48,32 @@ data class TEFData(
     val activityPercentOfTotal: Float get() = if (tdee > 0) (activityCaloriesForBreakdown / tdee) * 100f else 0f
     val tefPercentOfTotal: Float get() = if (tdee > 0) (totalTEF / tdee) * 100f else 0f
 
-    // TEF as percentage of food intake
-    val tefPercentOfIntake: Float get() = if (tdee > 0) (totalTEF / tdee) * 100f else 0f
+    // TEF as a percentage of the macro-calorie intake used by this estimate.
+    val macroIntakeCalories: Float
+        get() = (proteinCalories + carbsCalories + fatCalories).coerceAtLeast(0f)
+    val tefPercentOfIntake: Float
+        get() = if (macroIntakeCalories > 0f) (totalTEF / macroIntakeCalories) * 100f else 0f
 
     fun getInterpretation(): String {
-        return "Your body burns approximately ${totalTEF.toInt()} calories per day " +
-                "just digesting and processing the food you eat. This is known as the " +
-                "Thermic Effect of Food (TEF). With a higher protein diet, your TEF " +
-                "increases because protein requires more energy to digest than carbs or fat."
+        return "This model estimates about ${totalTEF.toInt()} calories per day for the " +
+                "Thermic Effect of Food (TEF), the energy used to digest and process food. " +
+                "It is not a direct measurement, and the result varies with the macro mix " +
+                "and the reference ranges used."
     }
 
     fun getPersonalizedInsight(): String {
         val proteinNote = if (proteinPercentage >= 35f) {
-            "Your high protein intake (${proteinPercentage.toInt()}%) boosts your TEF significantly — " +
-                    "protein requires 20-35% of its calories just to digest!"
+            "This estimate uses a higher protein share (${proteinPercentage.toInt()}%). " +
+                    "Protein has a higher published thermic range than carbohydrate or fat, " +
+                    "but this result does not predict weight change or prescribe an intake."
         } else if (proteinPercentage >= 25f) {
-            "Your moderate protein intake provides a good thermic boost. " +
-                    "Protein has the highest thermic effect of all macronutrients."
+            "This estimate uses a moderate protein share (${proteinPercentage.toInt()}%). " +
+                    "Macro-specific thermic ranges overlap and vary between people; use this " +
+                    "as context rather than a target."
         } else {
-            "Increasing your protein intake could boost your TEF, as protein " +
-                    "has the highest thermic effect (20-35%) compared to carbs (5-15%) and fat (0-5%)."
+            "This estimate uses a lower protein share (${proteinPercentage.toInt()}%). " +
+                    "Do not change your diet solely to alter TEF; discuss personal nutrition " +
+                    "goals with a qualified professional when needed."
         }
         return proteinNote
     }

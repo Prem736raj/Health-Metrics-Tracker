@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,15 +33,23 @@ import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.EnergyComponent
 import com.health.calculator.bmi.tracker.data.model.MacroColors
 import com.health.calculator.bmi.tracker.data.model.TEFData
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import com.health.calculator.bmi.tracker.ui.utils.CascadeAnimatedItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 // Energy component colors
-private val BMRColor = Color(0xFF5C6BC0)       // Indigo
-private val ActivityColor = Color(0xFF26A69A)   // Teal
-private val TEFColor = Color(0xFFFF7043)        // Deep Orange
+private val BMRColor = CalculatorColors.BMR
+private val ActivityColor = HealthColors.Info
+private val TEFColor = HealthColors.Caution
+
+private fun energyComponentIcon(label: String): ImageVector = when {
+    label.contains("Basal", ignoreCase = true) -> Icons.Outlined.LocalFireDepartment
+    label.contains("Physical", ignoreCase = true) -> Icons.Outlined.DirectionsRun
+    else -> Icons.Outlined.Thermostat
+}
 
 @Composable
 fun TEFSection(
@@ -102,7 +111,12 @@ private fun TEFResultCard(tefData: TEFData) {
         Column(modifier = Modifier.padding(20.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_37), fontSize = 22.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Thermostat,
+                    contentDescription = null,
+                    tint = TEFColor,
+                    modifier = Modifier.size(22.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
@@ -190,8 +204,16 @@ private fun TEFResultCard(tefData: TEFData) {
                     containerColor = TEFColor.copy(alpha = 0.05f)
                 )
             ) {
-                Row(modifier = Modifier.padding(12.dp)) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_1), fontSize = 16.sp)
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Lightbulb,
+                        contentDescription = null,
+                        tint = TEFColor,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = tefData.getInterpretation(),
@@ -212,8 +234,16 @@ private fun TEFResultCard(tefData: TEFData) {
                     containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
                 )
             ) {
-                Row(modifier = Modifier.padding(12.dp)) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_32), fontSize = 16.sp)
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Insights,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = tefData.getPersonalizedInsight(),
@@ -257,7 +287,12 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = stringResource(R.string.txt_text_placeholder_23), fontSize = 18.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Science,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(R.string.txt_tef_by_macronutrient),
@@ -324,7 +359,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
 
                     // Individual macro TEF cards
                     MacroTEFItem(
-                        emoji = "🔵",
+                        icon = Icons.Outlined.FitnessCenter,
                         label = "Protein",
                         intake = tefData.proteinCalories,
                         tefCalories = tefData.proteinTEF,
@@ -339,7 +374,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     MacroTEFItem(
-                        emoji = "🟡",
+                        icon = Icons.Outlined.LocalDining,
                         label = "Carbohydrates",
                         intake = tefData.carbsCalories,
                         tefCalories = tefData.carbsTEF,
@@ -354,7 +389,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     MacroTEFItem(
-                        emoji = "🟠",
+                        icon = Icons.Outlined.Restaurant,
                         label = "Fat",
                         intake = tefData.fatCalories,
                         tefCalories = tefData.fatTEF,
@@ -380,7 +415,12 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = stringResource(R.string.txt_text_placeholder_37), fontSize = 16.sp)
+                            Icon(
+                                imageVector = Icons.Outlined.Thermostat,
+                                contentDescription = null,
+                                tint = TEFColor,
+                                modifier = Modifier.size(18.dp)
+                            )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = stringResource(R.string.txt_total_tef),
@@ -437,7 +477,7 @@ private fun TEFRateChip(label: String, rate: String, color: Color) {
 
 @Composable
 private fun MacroTEFItem(
-    emoji: String,
+    icon: ImageVector,
     label: String,
     intake: Float,
     tefCalories: Float,
@@ -478,7 +518,12 @@ private fun MacroTEFItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(text = emoji, fontSize = 16.sp)
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = color,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Spacer(modifier = Modifier.width(6.dp))
                     Column {
                         Text(
@@ -587,7 +632,12 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
         Column(modifier = Modifier.padding(20.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_33), fontSize = 22.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Assessment,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
@@ -916,13 +966,22 @@ private fun EnergyLegendItem(component: EnergyComponent) {
         )
         Spacer(modifier = Modifier.width(6.dp))
         Column {
-            Text(
-                text = component.emoji + " " + component.label.split(" ").first(),
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 10.sp
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = energyComponentIcon(component.label),
+                    contentDescription = null,
+                    tint = component.color,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = component.label.split(" ").first(),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 10.sp
+                )
+            }
             Text(
                 text = "${component.percentage.roundToInt()}%",
                 style = MaterialTheme.typography.labelSmall,
@@ -1051,7 +1110,12 @@ private fun EnergyComponentCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f)
             ) {
-                Text(text = component.emoji, fontSize = 20.sp)
+                Icon(
+                    imageVector = energyComponentIcon(component.label),
+                    contentDescription = null,
+                    tint = component.color,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
                     Text(

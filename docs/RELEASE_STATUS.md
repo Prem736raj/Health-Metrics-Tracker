@@ -744,3 +744,23 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device input, large-font, TalkBack,
   light/dark theme and route checks, plus signing/Firebase/Play Console work,
   remain owner-only.
+
+## TEF trust, denominator correctness and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The thermic-effect view now uses shared calculator and semantic
+  health colors plus stable Material icons for TEF, macro, insight and energy
+  breakdown states instead of rendered emoji and isolated raw colors. The
+  “% of food intake” value now uses the macro-calorie intake that feeds the
+  estimate, with a zero-input guard; it no longer labels TDEE as food intake.
+  TEF explanations describe a model estimate, avoid causal weight or muscle
+  promises, and do not prescribe changing protein intake. Animation, chart,
+  macro selection and TDEE behavior remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed, including
+  the macro-intake denominator and zero-input regression. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate is
+  run before this slice is committed.
+- **Remaining gates:** Connected-device donut/bar rendering, large-font,
+  TalkBack, light/dark theme and route checks, plus signing/Firebase/Play
+  Console work, remain owner-only.

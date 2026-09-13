@@ -1087,3 +1087,25 @@ Updated: 2026-09-13
   truthful interpretation, accessibility or reliability.
 
 Updated: 2026-09-13
+
+## Follow-up — TEF trust, denominator correctness and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** The thermic-effect view now uses shared calculator and
+  semantic health colors plus stable Material icons for TEF, macro, insight and
+  energy-breakdown states instead of rendered emoji and isolated raw colors.
+  The “% of food intake” value now uses the macro-calorie intake that actually
+  feeds the estimate, with a zero-input guard; it no longer labels TDEE as food
+  intake. TEF explanations describe a model estimate, avoid causal weight or
+  muscle promises, and do not prescribe changing protein intake. Existing
+  animation, chart, macro selection and TDEE behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed, including the
+  macro-intake denominator and zero-input regression. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate is
+  run before this slice is committed.
+- **Known limitations:** Connected-device donut/bar rendering, large-font,
+  TalkBack, light/dark theme and route checks remain open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13
