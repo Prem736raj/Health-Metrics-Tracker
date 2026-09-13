@@ -11,8 +11,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.outlined.DirectionsRun
+import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +25,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.util.HeartRateZoneResult
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+
+private fun dashboardZoneColor(zone: Int): Color = when (zone) {
+    1 -> HealthColors.Good
+    2 -> FeatureColors.StepsDeep
+    3 -> HealthColors.Healthy
+    4 -> HealthColors.Caution
+    5 -> HealthColors.Danger
+    else -> HealthColors.Info
+}
 
 @Composable
 fun HeartRateDashboardCard(
@@ -76,12 +88,14 @@ fun HeartRateDashboardCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFE53935).copy(alpha = 0.1f)),
+                    .background(FeatureColors.HeartDeep.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = stringResource(R.string.txt_text_placeholder_5),
-                    fontSize = (22 * if (hasData) heartScale else 1f).sp
+                Icon(
+                    imageVector = Icons.Outlined.MonitorHeart,
+                    contentDescription = stringResource(R.string.txt_heart_rate_zones),
+                    tint = FeatureColors.HeartDeep,
+                    modifier = Modifier.size((24 * if (hasData) heartScale else 1f).dp)
                 )
             }
 
@@ -98,7 +112,7 @@ fun HeartRateDashboardCard(
                     Text(
                         text = "Max HR: $maxHR BPM",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFFE53935),
+                        color = FeatureColors.HeartDeep,
                         fontWeight = FontWeight.Medium
                     )
 
@@ -117,14 +131,7 @@ fun HeartRateDashboardCard(
                     // Last exercise zone indicator
                     lastExerciseZone?.let { zone ->
                         Spacer(modifier = Modifier.height(4.dp))
-                        val zoneColor = when (zone) {
-                            1 -> Color(0xFF90CAF9)
-                            2 -> Color(0xFF42A5F5)
-                            3 -> Color(0xFF66BB6A)
-                            4 -> Color(0xFFFFA726)
-                            5 -> Color(0xFFEF5350)
-                            else -> Color(0xFF9E9E9E)
-                        }
+                        val zoneColor = dashboardZoneColor(zone)
                         Surface(
                             shape = RoundedCornerShape(6.dp),
                             color = zoneColor.copy(alpha = 0.12f)
@@ -133,8 +140,15 @@ fun HeartRateDashboardCard(
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.DirectionsRun,
+                                    contentDescription = "Last exercise zone",
+                                    tint = zoneColor,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
                                 Text(
-                                    text = "🏃 Last: Zone $zone",
+                                    text = "Last: Zone $zone",
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.SemiBold,
                                     color = zoneColor,

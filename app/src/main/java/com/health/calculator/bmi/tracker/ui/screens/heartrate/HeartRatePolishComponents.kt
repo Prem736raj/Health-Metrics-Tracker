@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,8 +44,23 @@ import androidx.core.content.FileProvider
 import com.health.calculator.bmi.tracker.util.HeartRateZoneCalculator
 import com.health.calculator.bmi.tracker.util.HeartRateZoneResult
 import com.health.calculator.bmi.tracker.ui.components.HeartRateFormula
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+import com.health.calculator.bmi.tracker.ui.theme.OnSurfaceLight
+import com.health.calculator.bmi.tracker.ui.theme.OnSurfaceVariantLight
+import com.health.calculator.bmi.tracker.ui.theme.SurfaceLight
 import java.io.File
 import java.io.FileOutputStream
+
+private fun edgeWarningIcon(legacyIcon: String): ImageVector = when {
+    legacyIcon.contains("👶") -> Icons.Outlined.ChildCare
+    legacyIcon.contains("👴") -> Icons.Outlined.Person
+    legacyIcon.contains("⚠") -> Icons.Outlined.Warning
+    legacyIcon.contains("🏆") -> Icons.Outlined.EmojiEvents
+    legacyIcon.contains("📉") -> Icons.Outlined.TrendingDown
+    legacyIcon.contains("📊") -> Icons.Outlined.Analytics
+    else -> Icons.Outlined.Info
+}
 
 // ============================================================
 // FORMULA COMPARISON CARD
@@ -92,7 +109,12 @@ fun FormulaComparisonCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.txt_text_placeholder_42), fontSize = 20.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Calculate,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
@@ -130,7 +152,12 @@ fun FormulaComparisonCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.txt_text_placeholder_15), fontSize = 14.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.CheckCircle,
+                            contentDescription = null,
+                            tint = HealthColors.Healthy,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Selected: ${selectedFormula.label}",
@@ -178,25 +205,30 @@ fun FormulaComparisonCard(
                     Card(
                         shape = RoundedCornerShape(10.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF2196F3).copy(alpha = 0.06f)
+                            containerColor = HealthColors.Good.copy(alpha = 0.06f)
                         )
                     ) {
                         Row(
                             modifier = Modifier.padding(10.dp),
                             verticalAlignment = Alignment.Top
                         ) {
-                            Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 13.sp)
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = null,
+                                tint = HealthColors.Good,
+                                modifier = Modifier.size(18.dp)
+                            )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = buildString {
-                                    append("A practical starting option for you: ${bestForUser.label}; sensor accuracy varies. ")
+                                    append("A practical starting option based on your inputs: ${bestForUser.label}; no formula is universally best and sensor accuracy varies. ")
                                     when (bestForUser) {
-                                        HeartRateFormula.GULATI -> append("Gulati was designed specifically for women and tends to be more accurate for female heart rate estimation.")
-                                        HeartRateFormula.TANAKA -> append("Tanaka is more accurate for adults over 40, as the standard 220-age formula tends to overestimate MHR with age.")
-                                        HeartRateFormula.KARVONEN -> append("Karvonen provides the most personalized zones by using your resting heart rate.")
-                                        else -> append("The standard formula is a reliable starting point for most adults under 40.")
+                                        HeartRateFormula.GULATI -> append("Gulati was developed using women-specific data; that does not guarantee an individual estimate.")
+                                        HeartRateFormula.TANAKA -> append("Tanaka is an age-adjusted alternative; estimates can differ from a measured maximum.")
+                                        HeartRateFormula.KARVONEN -> append("Karvonen uses your resting heart rate to adjust zones; the result depends on that reading.")
+                                        else -> append("The standard formula is a commonly used starting estimate, not a measurement.")
                                     }
-                                    append("\n\nNote: All formulas are estimates with ±10-12 BPM variation. A supervised stress test is the only way to determine true MHR.")
+                                    append("\n\nAll formulas are estimates. A supervised exercise test is a separate way to assess maximum heart rate when clinically appropriate.")
                                 },
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
@@ -227,7 +259,7 @@ private fun FormulaComparisonRow(
 
     val barColor = when {
         isSelected -> MaterialTheme.colorScheme.primary
-        isBestForUser -> Color(0xFF4CAF50)
+        isBestForUser -> HealthColors.Healthy
         else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
     }
 
@@ -246,7 +278,12 @@ private fun FormulaComparisonRow(
                 )
                 if (isBestForUser && !isSelected) {
                     Spacer(modifier = Modifier.width(3.dp))
-                    Text(stringResource(R.string.txt_text_placeholder_22), fontSize = 8.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Star,
+                        contentDescription = "Suggested",
+                        tint = HealthColors.Healthy,
+                        modifier = Modifier.size(12.dp)
+                    )
                 }
             }
             formula.badge?.let {
@@ -311,9 +348,8 @@ fun HeartRateEdgeCaseWarnings(
                 add(
                     EdgeWarning(
                         emoji = "👶",
-                        message = "For children under 15, the 220-age formula may underestimate max heart rate. " +
-                                "Children can safely reach higher heart rates than the formula suggests. " +
-                                "Consult a pediatrician for age-appropriate exercise guidance.",
+                        message = "This calculator is intended for adults. Children and teens need age-appropriate " +
+                                "exercise guidance; ask a pediatric clinician if you are planning structured training.",
                         severity = WarningSeverity.INFO
                     )
                 )
@@ -324,9 +360,8 @@ fun HeartRateEdgeCaseWarnings(
                 add(
                     EdgeWarning(
                         emoji = "👴",
-                        message = "For adults over 75, max HR formulas may overestimate your true maximum. " +
-                                "The Tanaka formula (208 - 0.7×age) is generally more accurate for older adults. " +
-                                "Always exercise within your comfort zone and consult your doctor.",
+                        message = "For adults over 75, age-based maximum-heart-rate estimates may be less precise. " +
+                                "Use comfortable effort and consider professional guidance before changing intensity.",
                         severity = WarningSeverity.WARNING
                     )
                 )
@@ -337,9 +372,9 @@ fun HeartRateEdgeCaseWarnings(
                 add(
                     EdgeWarning(
                         emoji = "⚠️",
-                        message = "A resting heart rate above 100 BPM (tachycardia) may indicate a health concern " +
-                                "such as dehydration, stress, anemia, thyroid issues, or a cardiac condition. " +
-                                "Consider consulting a doctor, especially if this is consistently elevated.",
+                        message = "A resting heart rate above 100 BPM can have many explanations, including stress, " +
+                                "illness or measurement conditions. If it is persistent or you feel unwell, consider " +
+                                "speaking with a healthcare professional.",
                         severity = WarningSeverity.DANGER
                     )
                 )
@@ -351,8 +386,8 @@ fun HeartRateEdgeCaseWarnings(
                     EdgeWarning(
                         emoji = "🏆",
                         message = "A resting heart rate below 40 BPM is exceptionally low. If you're a trained athlete, " +
-                                "this can be normal (athletic bradycardia). If you're NOT a regular athlete and experience " +
-                                "dizziness, fatigue, or fainting, consult a doctor as it may indicate bradycardia.",
+                                "this can occur in some people. If you are not regularly trained, or have dizziness, " +
+                                "fatigue or fainting, consider speaking with a healthcare professional.",
                         severity = WarningSeverity.INFO
                     )
                 )
@@ -363,8 +398,8 @@ fun HeartRateEdgeCaseWarnings(
                 add(
                     EdgeWarning(
                         emoji = "📉",
-                        message = "Your estimated max HR of $maxHR BPM is quite low. This may affect zone accuracy. " +
-                                "Consider using the Tanaka formula or entering a custom max HR if you know it from testing.",
+                        message = "Your estimated max HR of $maxHR BPM is on the lower side for this age-based input. " +
+                                "This can make zone values look lower; treat the result as an estimate.",
                         severity = WarningSeverity.INFO
                     )
                 )
@@ -376,7 +411,7 @@ fun HeartRateEdgeCaseWarnings(
                     EdgeWarning(
                         emoji = "📊",
                         message = "Your resting HR is above 50% of your estimated max HR. Zone 1 may be very narrow. " +
-                                "This typically improves with regular cardiovascular exercise.",
+                                "Recheck the resting value under similar conditions and use the talk test when exercising.",
                         severity = WarningSeverity.INFO
                     )
                 )
@@ -407,9 +442,9 @@ private enum class WarningSeverity { INFO, WARNING, DANGER }
 @Composable
 private fun EdgeWarningCard(warning: EdgeWarning) {
     val (containerColor, borderColor) = when (warning.severity) {
-        WarningSeverity.INFO -> Color(0xFF2196F3).copy(alpha = 0.06f) to Color(0xFF2196F3).copy(alpha = 0.2f)
-        WarningSeverity.WARNING -> Color(0xFFFF9800).copy(alpha = 0.06f) to Color(0xFFFF9800).copy(alpha = 0.2f)
-        WarningSeverity.DANGER -> Color(0xFFF44336).copy(alpha = 0.06f) to Color(0xFFF44336).copy(alpha = 0.3f)
+        WarningSeverity.INFO -> HealthColors.Good.copy(alpha = 0.06f) to HealthColors.Good.copy(alpha = 0.2f)
+        WarningSeverity.WARNING -> HealthColors.Caution.copy(alpha = 0.06f) to HealthColors.Caution.copy(alpha = 0.2f)
+        WarningSeverity.DANGER -> HealthColors.Danger.copy(alpha = 0.06f) to HealthColors.Danger.copy(alpha = 0.3f)
     }
 
     Card(
@@ -422,7 +457,17 @@ private fun EdgeWarningCard(warning: EdgeWarning) {
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Text(text = warning.emoji, fontSize = 18.sp)
+            val iconTint = when (warning.severity) {
+                WarningSeverity.INFO -> HealthColors.Good
+                WarningSeverity.WARNING -> HealthColors.Caution
+                WarningSeverity.DANGER -> HealthColors.Danger
+            }
+            Icon(
+                imageVector = edgeWarningIcon(warning.emoji),
+                contentDescription = null,
+                tint = iconTint,
+                modifier = Modifier.size(20.dp)
+            )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = warning.message,
@@ -457,7 +502,12 @@ fun RestingHRTrendCard(
                     .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_58), fontSize = 28.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Analytics,
+                    contentDescription = null,
+                    tint = FeatureColors.HeartDeep,
+                    modifier = Modifier.size(32.dp)
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.txt_track_your_resting_hr_over_tim),
@@ -466,7 +516,7 @@ fun RestingHRTrendCard(
                 )
                 Text(
                     text = stringResource(R.string.txt_calculate_your_zones_regularly) +
-                            "A decreasing resting HR is one of the best signs of improving fitness!",
+                            "Compare readings under similar conditions; a trend alone cannot measure fitness.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center,
@@ -500,7 +550,12 @@ fun RestingHRTrendCard(
                 .padding(18.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.txt_text_placeholder_4), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Analytics,
+                    contentDescription = null,
+                    tint = FeatureColors.HeartDeep,
+                    modifier = Modifier.size(22.dp)
+                )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = stringResource(R.string.txt_resting_hr_trend),
@@ -526,11 +581,11 @@ fun RestingHRTrendCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                TrendStat(emoji = "💤", label = "Latest", value = "$latestHR BPM")
-                TrendStat(emoji = "📊", label = "Average", value = "$avgHR BPM")
-                TrendStat(emoji = "⬇️", label = "Lowest", value = "$minHR BPM")
+                TrendStat(icon = Icons.Outlined.Schedule, label = "Latest", value = "$latestHR BPM")
+                TrendStat(icon = Icons.Outlined.Analytics, label = "Average", value = "$avgHR BPM")
+                TrendStat(icon = Icons.Outlined.TrendingDown, label = "Lowest", value = "$minHR BPM")
                 TrendStat(
-                    emoji = if (isImproving) "✅" else "📈",
+                    icon = if (isImproving) Icons.Outlined.CheckCircle else Icons.Outlined.TrendingUp,
                     label = "Change",
                     value = "${if (change > 0) "+" else ""}$change BPM"
                 )
@@ -541,16 +596,23 @@ fun RestingHRTrendCard(
             // Trend message
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = if (isImproving) Color(0xFF4CAF50).copy(alpha = 0.08f)
-                else Color(0xFFFF9800).copy(alpha = 0.08f)
+                color = when {
+                    isImproving -> HealthColors.Healthy.copy(alpha = 0.08f)
+                    change == 0 -> HealthColors.Good.copy(alpha = 0.08f)
+                    else -> HealthColors.Caution.copy(alpha = 0.08f)
+                }
             ) {
                 Text(
                     text = if (isImproving)
-                        "👍 Your resting HR has decreased by ${-change} BPM — your fitness is improving!"
-                    else if (change == 0) "📊 Your resting HR is stable."
-                    else "📈 Your resting HR has increased by $change BPM. This could be due to stress, illness, or overtraining.",
+                        "Your resting HR has decreased by ${-change} BPM; this is a trend to interpret with context."
+                    else if (change == 0) "Your resting HR is stable across these readings."
+                    else "Your resting HR has increased by $change BPM. Stress, illness, sleep and measurement conditions can affect it.",
                     style = MaterialTheme.typography.labelSmall,
-                    color = if (isImproving) Color(0xFF4CAF50) else Color(0xFFFF9800),
+                    color = when {
+                        isImproving -> HealthColors.Healthy
+                        change == 0 -> HealthColors.Good
+                        else -> HealthColors.Caution
+                    },
                     modifier = Modifier.padding(10.dp),
                     lineHeight = 15.sp
                 )
@@ -564,7 +626,8 @@ private fun RestingHRMiniGraph(
     data: List<Pair<String, Int>>,
     modifier: Modifier = Modifier
 ) {
-    val lineColor = Color(0xFFE53935)
+    val lineColor = FeatureColors.HeartDeep
+    val surfaceColor = MaterialTheme.colorScheme.surface
     val minVal = (data.minOf { it.second } - 5).coerceAtLeast(30)
     val maxVal = (data.maxOf { it.second } + 5).coerceAtMost(120)
     val range = (maxVal - minVal).toFloat().coerceAtLeast(1f)
@@ -621,7 +684,7 @@ private fun RestingHRMiniGraph(
                 center = point
             )
             drawCircle(
-                color = Color.White,
+                color = surfaceColor,
                 radius = 2.dp.toPx(),
                 center = point
             )
@@ -630,9 +693,14 @@ private fun RestingHRMiniGraph(
 }
 
 @Composable
-private fun TrendStat(emoji: String, label: String, value: String) {
+private fun TrendStat(icon: ImageVector, label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = emoji, fontSize = 14.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(18.dp)
+        )
         Text(
             text = value,
             style = MaterialTheme.typography.labelSmall,
@@ -661,24 +729,24 @@ fun shareHeartRateZonesAsImage(
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)
 
-    val bgPaint = Paint().apply { color = 0xFFF8F9FA.toInt() }
+    val bgPaint = Paint().apply { color = SurfaceLight.toArgb() }
     canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
 
     val titlePaint = Paint().apply {
-        color = 0xFF212121.toInt()
+        color = OnSurfaceLight.toArgb()
         textSize = 52f
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         isAntiAlias = true
     }
 
     val subtitlePaint = Paint().apply {
-        color = 0xFF757575.toInt()
+        color = OnSurfaceVariantLight.toArgb()
         textSize = 32f
         isAntiAlias = true
     }
 
     val mhrPaint = Paint().apply {
-        color = 0xFFE53935.toInt()
+        color = FeatureColors.HeartDeep.toArgb()
         textSize = 80f
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         isAntiAlias = true
@@ -686,7 +754,7 @@ fun shareHeartRateZonesAsImage(
     }
 
     val mhrLabelPaint = Paint().apply {
-        color = 0xFFE53935.toInt()
+        color = FeatureColors.HeartDeep.toArgb()
         textSize = 28f
         isAntiAlias = true
         textAlign = Paint.Align.CENTER
@@ -707,8 +775,9 @@ fun shareHeartRateZonesAsImage(
 
     // Zone bars
     val zoneColors = listOf(
-        0xFF90CAF9.toInt(), 0xFF42A5F5.toInt(), 0xFF66BB6A.toInt(),
-        0xFFFFA726.toInt(), 0xFFEF5350.toInt()
+        HealthColors.Good.toArgb(), FeatureColors.StepsDeep.toArgb(),
+        HealthColors.Healthy.toArgb(), HealthColors.Caution.toArgb(),
+        HealthColors.Danger.toArgb()
     )
 
     var yPos = 400f
@@ -720,11 +789,11 @@ fun shareHeartRateZonesAsImage(
     result.zones.forEachIndexed { index, zone ->
         // Zone bar background
         val barPaint = Paint().apply {
-            color = zoneColors.getOrElse(index) { 0xFF9E9E9E.toInt() }
+            color = zoneColors.getOrElse(index) { HealthColors.Info.toArgb() }
             isAntiAlias = true
         }
         val barPaintLight = Paint().apply {
-            color = (zoneColors.getOrElse(index) { 0xFF9E9E9E.toInt() } and 0x00FFFFFF) or 0x20000000
+            color = (zoneColors.getOrElse(index) { HealthColors.Info.toArgb() } and 0x00FFFFFF) or 0x20000000
             isAntiAlias = true
         }
 
@@ -736,13 +805,13 @@ fun shareHeartRateZonesAsImage(
 
         // Zone text
         val zoneTextPaint = Paint().apply {
-            color = 0xFFFFFFFF.toInt()
+            color = FeatureColors.OnHeart.toArgb()
             textSize = 36f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             isAntiAlias = true
         }
         val zoneDetailPaint = Paint().apply {
-            color = 0xFFFFFFFF.toInt()
+            color = FeatureColors.OnHeart.toArgb()
             textSize = 24f
             isAntiAlias = true
         }
@@ -759,7 +828,7 @@ fun shareHeartRateZonesAsImage(
     // Footer
     yPos += 20f
     val footerPaint = Paint().apply {
-        color = 0xFF9E9E9E.toInt()
+        color = OnSurfaceVariantLight.toArgb()
         textSize = 24f
         isAntiAlias = true
         textAlign = Paint.Align.CENTER
@@ -795,14 +864,14 @@ fun shareHeartRateZonesAsImage(
 
 fun shareHeartRateZonesText(@ApplicationContext context: Context, result: HeartRateZoneResult) {
     val text = buildString {
-        appendLine("❤️ My Heart Rate Zones (Age: ${result.age}, MHR: ${result.maxHeartRate} BPM)")
+        appendLine("My Heart Rate Zones (Age: ${result.age}, MHR: ${result.maxHeartRate} BPM)")
         result.restingHeartRate?.let {
             appendLine("Resting HR: $it BPM | HR Reserve: ${result.heartRateReserve} BPM")
         }
         appendLine("Formula: ${result.formulaUsed.label}")
         appendLine("━━━━━━━━━━━━━━━━━━━━━━━━")
         result.zones.forEach { zone ->
-            appendLine("${zone.icon} Zone ${zone.zoneNumber} — ${zone.zoneName}: ${zone.bpmLow}-${zone.bpmHigh} BPM (${zone.percentLow}-${zone.percentHigh}%)")
+            appendLine("Zone ${zone.zoneNumber} — ${zone.zoneName}: ${zone.bpmLow}-${zone.bpmHigh} BPM (${zone.percentLow}-${zone.percentHigh}%)")
         }
         appendLine("━━━━━━━━━━━━━━━━━━━━━━━━")
         appendLine()

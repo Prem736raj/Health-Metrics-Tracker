@@ -531,3 +531,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device pulse/expanded-card rendering,
   TalkBack, large-font and light/dark theme checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## Heart-rate dashboard and trend trust/visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Heart-rate dashboard, formula comparison, edge-warning and
+  resting-trend surfaces now share feature/health tokens and stable vector
+  icons. Formula guidance is presented as a starting estimate without a
+  universal-accuracy claim; warning and trend copy avoids diagnosis or causal
+  fitness conclusions. Heart-rate image/text exports use the semantic palette
+  and plain labels while calculations, history callbacks and legacy marker
+  compatibility remain unchanged.
+- **Verification:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Remaining gates:** Connected-device trend/export rendering, TalkBack,
+  large-font and light/dark theme checks, plus signing/Firebase/Play Console
+  work, remain owner-only.

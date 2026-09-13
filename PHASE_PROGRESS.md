@@ -347,6 +347,25 @@ This file is the source of truth for the sequential product-development phases. 
 
 Updated: 2026-09-13
 
+## Follow-up — Heart-rate dashboard and trend trust/visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** Heart-rate dashboard, formula comparison, edge-warning and
+  resting-trend surfaces now use shared feature/health tokens and stable vector
+  icons. Formula guidance is framed as a starting estimate rather than a
+  universally best or guaranteed-accurate method; warning and trend copy avoids
+  diagnosis or causal fitness claims. Exported heart-rate images/text use the
+  same semantic palette and plain, accessible labels. Existing calculations,
+  history callbacks and legacy marker compatibility remain unchanged.
+- **Tests:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  pass with `GRADLE_EXIT=0`.
+- **Known limitations:** Export rendering and trend animation still need
+  connected-device checks for TalkBack, large fonts and light/dark themes.
+- **Next phase:** Execute the documented device/console release checklist;
+  continue deep-screen cleanup only where it improves trust, accessibility or
+  reliability.
+
 ## Follow-up — Heart-rate zone input/result trust and visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open
