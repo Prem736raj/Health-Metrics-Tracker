@@ -708,3 +708,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device chip scrolling, body-fat dialog,
   TalkBack, large-font, light/dark theme and route checks, plus signing/
   Firebase/Play Console work, remain owner-only.
+
+## BMR age comparison trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The age-comparison card now uses stable Material chart,
+  information and schedule icons with shared semantic tokens. The chart's user
+  marker follows the active surface color in both themes, and long comparison
+  and age notes align safely at the top. Reference copy no longer implies that
+  an estimate identifies muscle mass, fitness or metabolic health; the
+  age-curve text is population context rather than a personal forecast.
+  Interpolation and chart interaction behavior remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device chart rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing/Firebase/Play Console work,
+  remain owner-only.

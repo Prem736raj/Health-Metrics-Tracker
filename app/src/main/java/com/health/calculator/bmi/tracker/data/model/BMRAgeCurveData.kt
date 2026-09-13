@@ -54,27 +54,27 @@ object BMRAgeCurveData {
         val genderText = if (isMale) "men" else "women"
 
         return when {
-            percentage > 15f -> "Your BMR is significantly higher than average for $genderText your age " +
-                    "(+${percentage.toInt()}%). This is often seen with higher muscle mass or larger body frame."
-            percentage > 5f -> "Your BMR is above average for $genderText your age " +
-                    "(+${percentage.toInt()}%). This could indicate good muscle mass."
-            percentage > -5f -> "Your BMR is right around the average for $genderText your age. " +
-                    "This is typical and healthy."
-            percentage > -15f -> "Your BMR is slightly below average for $genderText your age " +
-                    "(${percentage.toInt()}%). This is normal and can vary with body composition."
-            else -> "Your BMR is notably below average for $genderText your age " +
-                    "(${percentage.toInt()}%). Consider discussing metabolism with your healthcare provider."
+            percentage > 15f -> "Your BMR estimate is higher than the reference average for $genderText your age " +
+                    "(+${percentage.toInt()}%). This comparison reflects the inputs and equation; it cannot identify muscle mass or health."
+            percentage > 5f -> "Your BMR estimate is above the reference average for $genderText your age " +
+                    "(+${percentage.toInt()}%). A comparison like this is informational and does not measure fitness or health."
+            percentage > -5f -> "Your BMR estimate is close to the reference average for $genderText your age. " +
+                    "Expected variation is common; this is not a health assessment."
+            percentage > -15f -> "Your BMR estimate is below the reference average for $genderText your age " +
+                    "(${percentage.toInt()}%). Differences can reflect body-size inputs or model assumptions and are not diagnostic."
+            else -> "Your BMR estimate is well below the reference average for $genderText your age " +
+                    "(${percentage.toInt()}%). Verify the entries and discuss a persistent unexpected result with a qualified professional."
         }
     }
 
     fun getDecadeDeclineText(age: Int): String {
         return when {
-            age < 25 -> "Your metabolism is near its peak! It will gradually decrease about 1-2% per decade starting around age 20."
-            age < 35 -> "You're in the early stages of natural metabolic decline. Stay active to minimize the effect."
-            age < 45 -> "By this age, your BMR has likely decreased about 3-5% from your peak. Regular exercise helps maintain it."
-            age < 55 -> "Your metabolism has naturally slowed. Strength training is especially important to preserve muscle mass and BMR."
-            age < 65 -> "Metabolic decline accelerates in this decade. Focus on protein intake and resistance exercise."
-            else -> "Natural metabolic slowing is significant at this age. Staying active and eating protein-rich foods helps maintain metabolic health."
+            age < 25 -> "Age is one input in many BMR equations. This population reference is a comparison, not a forecast of your future metabolism."
+            age < 35 -> "For adults in this age range, BMR estimates can vary with body size, body composition and the equation selected."
+            age < 45 -> "Use consistent entries and the same equation when comparing estimates over time; a chart cannot explain the cause of a change."
+            age < 55 -> "A BMR estimate is sensitive to its inputs. Compare like-for-like readings rather than treating the curve as a personal target."
+            age < 65 -> "Population averages describe groups, not individuals. Consider professional context for a persistent unexpected change."
+            else -> "This reference remains informational. It does not diagnose metabolic health or predict how your energy needs will change."
         }
     }
 }

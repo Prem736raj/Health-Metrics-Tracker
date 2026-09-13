@@ -430,6 +430,26 @@ Updated: 2026-09-13
 
 Updated: 2026-09-13
 
+## Follow-up — BMR age comparison trust and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** The age-comparison card now uses a stable Material chart,
+  information and schedule icon set with shared semantic tokens. The chart's
+  user marker follows the active surface color in both themes, and long
+  comparison/age notes align safely at the top. Reference copy no longer
+  implies that an estimate identifies muscle mass, fitness or metabolic health;
+  age-curve text is clearly population context rather than a personal forecast.
+  Interpolation and chart interaction behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device chart rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — BMR formula and body-fat input trust/visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open

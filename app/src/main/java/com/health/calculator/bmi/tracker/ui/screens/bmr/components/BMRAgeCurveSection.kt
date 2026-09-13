@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.BMRAgeCurveData
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import com.health.calculator.bmi.tracker.ui.utils.CascadeAnimatedItem
 
 @Composable
@@ -62,7 +63,12 @@ fun BMRAgeCurveSection(
             Column(modifier = Modifier.padding(20.dp)) {
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_4), fontSize = 22.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.ShowChart,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
@@ -104,7 +110,7 @@ fun BMRAgeCurveSection(
                         label = "Difference",
                         value = "${if (diff >= 0) "+" else ""}${diff.toInt()}",
                         unit = "${if (diffPercent >= 0) "+" else ""}${diffPercent.toInt()}%",
-                        color = if (diff >= 0) Color(0xFF4CAF50) else Color(0xFFFF9800),
+                        color = HealthColors.Info,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -150,8 +156,16 @@ fun BMRAgeCurveSection(
                         containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
                     )
                 ) {
-                    Row(modifier = Modifier.padding(12.dp)) {
-                        Text(text = stringResource(R.string.txt_text_placeholder_20), fontSize = 16.sp)
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = comparisonText,
@@ -172,8 +186,16 @@ fun BMRAgeCurveSection(
                         containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     )
                 ) {
-                    Row(modifier = Modifier.padding(12.dp)) {
-                        Text(text = stringResource(R.string.txt_text_placeholder_19), fontSize = 16.sp)
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Schedule,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
                             Text(
@@ -208,7 +230,7 @@ fun BMRAgeCurveSection(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = stringResource(R.string.txt_bmr_decreases_approximately_1_),
+                    text = stringResource(R.string.txt_bmr_decreases_approximately_1_),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                         fontSize = 10.sp,
@@ -300,6 +322,7 @@ private fun BMRAgeCurveChart(
     val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
     val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
     val fillColor = curveColor.copy(alpha = 0.08f)
+    val surfaceColor = MaterialTheme.colorScheme.surface
     val textMeasurer = rememberTextMeasurer()
 
     val animProgress = remember { Animatable(0f) }
@@ -457,7 +480,7 @@ private fun BMRAgeCurveChart(
         )
         // Outer ring
         drawCircle(
-            color = Color.White,
+            color = surfaceColor,
             radius = dotRadius,
             center = Offset(userX, userY)
         )

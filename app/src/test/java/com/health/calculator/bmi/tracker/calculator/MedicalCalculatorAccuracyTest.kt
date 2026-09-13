@@ -9,6 +9,7 @@ import com.health.calculator.bmi.tracker.data.model.TEFData
 import com.health.calculator.bmi.tracker.data.model.BMRFormula
 import com.health.calculator.bmi.tracker.data.model.BMRChangeInsight
 import com.health.calculator.bmi.tracker.data.model.BMRTrendStats
+import com.health.calculator.bmi.tracker.data.model.BMRAgeCurveData
 import com.health.calculator.bmi.tracker.data.model.BloodPressureCalculator
 import com.health.calculator.bmi.tracker.data.model.BpCategory
 import com.health.calculator.bmi.tracker.data.model.WaterActivityLevel
@@ -78,6 +79,17 @@ class MedicalCalculatorAccuracyTest {
         )
 
         assertEquals(BMRChangeInsight.STABLE, stats.getChangeInsight())
+    }
+
+    @Test
+    fun bmrAgeReferenceClampsBoundariesAndStaysInformational() {
+        assertEquals(1820f, BMRAgeCurveData.getAverageBMRForAge(10, true), 0.001f)
+        assertEquals(1150f, BMRAgeCurveData.getAverageBMRForAge(100, false), 0.001f)
+        assertEquals(1842f, BMRAgeCurveData.getAverageBMRForAge(22, true), 0.001f)
+
+        val comparison = BMRAgeCurveData.getComparisonText(1800f, 30, true)
+        assertTrue(comparison.contains("not a health assessment"))
+        assertTrue(BMRAgeCurveData.getDecadeDeclineText(40).contains("equation", ignoreCase = true))
     }
 
     @Test

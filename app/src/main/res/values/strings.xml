@@ -425,7 +425,7 @@
 <string name="txt_your_bmr_results">Your BMR Results</string>
 <string name="txt_the_who_fao_unu_equation_prima">The WHO/FAO/UNU equation primarily uses weight. Height is optional for this formula.</string>
 <string name="txt_bmr_calculator">BMR Calculator</string>
-<string name="txt_bmr_decreases_approximately_1_">BMR decreases approximately 1-2% per decade after age 20, primarily due to loss of lean muscle mass.</string>
+<string name="txt_bmr_decreases_approximately_1_">Age is one input in many BMR equations. Population curves are comparisons, not forecasts of an individual\'s future metabolism.</string>
 <string name="txt_age_metabolism">Age &amp; Metabolism</string>
 <string name="txt_text_placeholder_19">📉</string>
 <string name="txt_text_placeholder_20">💬</string>
