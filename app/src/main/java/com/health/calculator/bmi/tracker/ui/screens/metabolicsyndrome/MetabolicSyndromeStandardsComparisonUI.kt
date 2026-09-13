@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +29,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.calculator.*
 import com.health.calculator.bmi.tracker.ui.theme.*
+
+private data class StandardContext(
+    val icon: ImageVector,
+    val region: String,
+    val standard: String,
+    val note: String
+)
 
 @Composable
 fun StandardsComparisonSection(
@@ -163,19 +171,22 @@ private fun QuickResultBanner(comparison: MultiStandardComparison) {
                     name = "ATP III",
                     isMet = comparison.atpResult.isMet,
                     count = "${comparison.atpResult.criteriaMetCount}/5",
-                    color = HealthBlue
+                    color = HealthBlue,
+                    isScored = comparison.atpResult.criteriaDetails.isNotEmpty()
                 )
                 StandardQuickBadge(
                     name = "IDF",
                     isMet = comparison.idfResult.isMet,
                     count = "${comparison.idfResult.criteriaMetCount}/5",
-                    color = HealthTeal
+                    color = HealthTeal,
+                    isScored = comparison.idfResult.criteriaDetails.isNotEmpty()
                 )
                 StandardQuickBadge(
                     name = "WHO",
                     isMet = comparison.whoResult.isMet,
-                    count = "${comparison.whoResult.criteriaMetCount}/5",
-                    color = HealthOrange
+                    count = if (comparison.whoResult.criteriaDetails.isEmpty()) "—" else "${comparison.whoResult.criteriaMetCount}/5",
+                    color = HealthOrange,
+                    isScored = comparison.whoResult.criteriaDetails.isNotEmpty()
                 )
             }
 
@@ -191,7 +202,12 @@ private fun QuickResultBanner(comparison: MultiStandardComparison) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(stringResource(R.string.txt_text_placeholder_15), fontSize = 14.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.CheckCircle,
+                            contentDescription = null,
+                            tint = HealthGreen,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = stringResource(R.string.txt_all_three_standards_agree_on_t),
@@ -213,7 +229,12 @@ private fun QuickResultBanner(comparison: MultiStandardComparison) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(stringResource(R.string.txt_text_placeholder_21), fontSize = 14.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Warning,
+                            contentDescription = null,
+                            tint = HealthOrange,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = stringResource(R.string.txt_standards_disagree_see_details),
@@ -233,18 +254,30 @@ private fun StandardQuickBadge(
     name: String,
     isMet: Boolean,
     count: String,
-    color: Color
+    color: Color,
+    isScored: Boolean
 ) {
+    val statusColor = when {
+        !isScored -> HealthColors.Info
+        isMet -> HealthColors.Caution
+        else -> HealthColors.Healthy
+    }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Surface(
-            color = if (isMet) HealthRed.copy(alpha = 0.12f) else HealthGreen.copy(alpha = 0.12f),
+            color = statusColor.copy(alpha = 0.12f),
             shape = CircleShape,
             modifier = Modifier.size(52.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Text(
-                    text = if (isMet) "⚠️" else "✅",
-                    fontSize = 22.sp
+                Icon(
+                    imageVector = when {
+                        !isScored -> Icons.Outlined.Info
+                        isMet -> Icons.Outlined.Warning
+                        else -> Icons.Outlined.CheckCircle
+                    },
+                    contentDescription = null,
+                    tint = statusColor,
+                    modifier = Modifier.size(22.dp)
                 )
             }
         }
@@ -261,10 +294,14 @@ private fun StandardQuickBadge(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-                    text = if (isMet) "Reference met" else "Reference not met",
+            text = when {
+                !isScored -> "Not scored"
+                isMet -> "Reference met"
+                else -> "Reference not met"
+            },
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
-            color = if (isMet) HealthRed else HealthGreen
+            color = statusColor
         )
     }
 }
@@ -286,7 +323,12 @@ private fun EthnicitySelector(
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.txt_text_placeholder_67), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Public,
+                    contentDescription = null,
+                    tint = HealthTeal,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_ethnicity_specific_idf_cutoffs),
@@ -393,7 +435,12 @@ private fun StandardDetailCard(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
-    val diagnosisColor = if (result.isMet) HealthOrange else HealthGreen
+    val isScored = result.criteriaDetails.isNotEmpty()
+    val statusColor = when {
+        !isScored -> HealthColors.Info
+        result.isMet -> HealthColors.Caution
+        else -> HealthColors.Healthy
+    }
 
     Card(
         colors = CardDefaults.cardColors(
@@ -420,11 +467,15 @@ private fun StandardDetailCard(
                         .background(accentColor.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = result.shortName.take(1),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = accentColor
+                    Icon(
+                        imageVector = when {
+                            !isScored -> Icons.Outlined.Info
+                            result.isMet -> Icons.Outlined.Warning
+                            else -> Icons.Outlined.CheckCircle
+                        },
+                        contentDescription = null,
+                        tint = statusColor,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
 
@@ -444,14 +495,18 @@ private fun StandardDetailCard(
                 }
 
                 Surface(
-                    color = diagnosisColor.copy(alpha = 0.12f),
+                    color = statusColor.copy(alpha = 0.12f),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = if (result.isMet) "Reference met" else "Reference not met",
+                        text = when {
+                            !isScored -> "Not scored"
+                            result.isMet -> "Reference met"
+                            else -> "Reference not met"
+                        },
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.ExtraBold,
-                        color = diagnosisColor,
+                        color = statusColor,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                     )
                 }
@@ -491,16 +546,16 @@ private fun StandardDetailCard(
                                     .size(22.dp)
                                     .clip(CircleShape)
                                     .background(
-                                        if (criterion.isMet) HealthRed.copy(alpha = 0.12f)
-                                        else HealthGreen.copy(alpha = 0.12f)
+                                        if (criterion.isMet) HealthColors.Caution.copy(alpha = 0.12f)
+                                        else HealthColors.Healthy.copy(alpha = 0.12f)
                                     ),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(
-                                    text = if (criterion.isMet) "✗" else "✓",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = if (criterion.isMet) HealthRed else HealthGreen
+                                Icon(
+                                    imageVector = if (criterion.isMet) Icons.Outlined.Warning else Icons.Outlined.CheckCircle,
+                                    contentDescription = null,
+                                    tint = if (criterion.isMet) HealthColors.Caution else HealthColors.Healthy,
+                                    modifier = Modifier.size(14.dp)
                                 )
                             }
 
@@ -543,18 +598,25 @@ private fun StandardDetailCard(
 
                     // Notes
                     result.notes.forEach { note ->
+                        val isWarning = note.startsWith("⚠️")
+                        val cleanNote = note
+                            .removePrefix("⚠️")
+                            .removePrefix("ℹ️")
+                            .trimStart()
                         Row(
                             modifier = Modifier.padding(vertical = 2.dp),
                             verticalAlignment = Alignment.Top
                         ) {
-                            Text(
-                                text = if (note.startsWith("⚠️") || note.startsWith("ℹ️")) "" else "•",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = accentColor,
-                                modifier = Modifier.padding(end = 6.dp, top = 1.dp)
+                            Icon(
+                                imageVector = if (isWarning) Icons.Outlined.Warning else Icons.Outlined.Info,
+                                contentDescription = null,
+                                tint = if (isWarning) HealthColors.Caution else accentColor,
+                                modifier = Modifier
+                                    .size(15.dp)
+                                    .padding(end = 2.dp)
                             )
                             Text(
-                                text = note,
+                                text = cleanNote,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 lineHeight = 16.sp
@@ -626,7 +688,12 @@ private fun EthnicityWaistCutoffTable() {
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_42), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Straighten,
+                    contentDescription = null,
+                    tint = HealthColors.BelowNormal,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_idf_ethnicity_specific_waist_c),
@@ -736,7 +803,12 @@ private fun WhichStandardNote() {
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_which_standard_should_i_use),
@@ -748,32 +820,60 @@ private fun WhichStandardNote() {
             Spacer(modifier = Modifier.height(8.dp))
 
             val standards = listOf(
-                Triple("🇺🇸 United States", "ATP III / NCEP", "Most commonly used, recommended by AHA"),
-                Triple("🇪🇺 Europe & International", "IDF", "Preferred for ethnicity-specific assessment"),
-                Triple("🌐 Research / Historical", "WHO", "First published definition, requires lab-confirmed IR"),
-                Triple("🏥 Your Doctor", "Varies", "Your doctor will use the standard most appropriate for your situation")
+                StandardContext(
+                    icon = Icons.Outlined.Assessment,
+                    region = "United States",
+                    standard = "ATP III / NCEP",
+                    note = "Commonly used screening reference in the United States"
+                ),
+                StandardContext(
+                    icon = Icons.Outlined.Public,
+                    region = "Europe & International",
+                    standard = "IDF",
+                    note = "Includes ethnicity-specific waist references"
+                ),
+                StandardContext(
+                    icon = Icons.Outlined.Science,
+                    region = "Research / Historical",
+                    standard = "WHO",
+                    note = "Requires laboratory and clinical information not collected here"
+                ),
+                StandardContext(
+                    icon = Icons.Outlined.LocalHospital,
+                    region = "Your healthcare professional",
+                    standard = "Varies",
+                    note = "They can choose the reference most appropriate for your situation"
+                )
             )
 
-            standards.forEach { (region, standard, note) ->
+            standards.forEach { context ->
                 Row(
                     modifier = Modifier.padding(vertical = 3.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(
-                        text = region,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.width(130.dp)
+                    Icon(
+                        imageVector = context.icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .padding(top = 1.dp)
                     )
-                    Column {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = standard,
+                            text = context.region,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = context.standard,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Text(
-                            text = note,
+                            text = context.note,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 10.sp

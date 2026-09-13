@@ -1071,13 +1071,13 @@
 <string name="txt_clear">Clear</string>
 <string name="txt_assess">Assess</string>
 <string name="txt_metabolic_syndrome">Metabolic Syndrome</string>
-<string name="txt_this_app_uses_atp_iii_as_the_p">ℹ️ This app uses ATP III as the primary standard. The comparison above is for educational purposes. Always discuss results with your healthcare provider.</string>
+<string name="txt_this_app_uses_atp_iii_as_the_p">This app uses ATP III as the primary screening reference. The comparison above is educational; discuss results with a healthcare professional.</string>
 <string name="txt_which_standard_should_i_use">Which Standard Should I Use?</string>
 <string name="txt_ethnic_group">Ethnic Group</string>
 <string name="txt_idf_ethnicity_specific_waist_c">IDF Ethnicity-Specific Waist Cutoffs</string>
 <string name="txt_why_standards_disagree">Why Standards Disagree</string>
 <string name="txt_req">REQ</string>
-<string name="txt_idf_uses_different_waist_thres">IDF uses different waist thresholds based on ethnicity. Select yours for accurate IDF classification.</string>
+<string name="txt_idf_uses_different_waist_thres">IDF uses different waist references based on ethnicity. Select yours to show the applicable waist reference.</string>
 <string name="txt_ethnicity_specific_idf_cutoffs">Ethnicity-Specific IDF Cutoffs</string>
 <string name="txt_text_placeholder_67">🌍</string>
 <string name="txt_standards_disagree_see_details">Standards disagree — see details below</string>

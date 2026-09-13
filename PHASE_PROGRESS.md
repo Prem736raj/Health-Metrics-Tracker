@@ -491,6 +491,26 @@ Updated: 2026-09-13
 
 Updated: 2026-09-12
 
+## Follow-up — Metabolic-syndrome standards comparison trust and visual cleanup
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** The ATP III, IDF and WHO comparison surface now uses
+  stable Material vector icons instead of rendered emoji/flag characters.
+  WHO is explicitly shown as **Not scored** when the app does not collect the
+  laboratory or clinical inputs required by that definition. IDF and ATP III
+  explanatory copy now describes screening/reference context without implying
+  diagnostic accuracy; ethnicity and “which standard” guidance is clearer and
+  calmer while existing calculations and selection behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation passed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  is run before this slice is committed.
+- **Known limitations:** Connected-device comparison expansion, TalkBack,
+  large-font, light/dark theme and route-rendering checks remain open.
+- **Next phase:** Continue the deep-screen trust/visual audit only where it
+  improves accessibility, reliability or truthful interpretation.
+
+Updated: 2026-09-13
+
 ## Follow-up — WHR result and animation trust/visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open

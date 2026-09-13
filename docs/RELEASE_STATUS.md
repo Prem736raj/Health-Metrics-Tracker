@@ -601,3 +601,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device gauge/expand rendering, TalkBack,
   large-font and light/dark theme checks, plus signing/Firebase/Play Console
   work, remain owner-only.
+
+## Metabolic-syndrome standards comparison trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The ATP III, IDF and WHO comparison surface now uses stable
+  Material vector icons instead of rendered emoji/flag characters. WHO is
+  explicitly shown as **Not scored** when the app does not collect the
+  laboratory or clinical inputs required by that definition. IDF and ATP III
+  copy now describes screening/reference context without implying diagnostic
+  accuracy; ethnicity and “which standard” guidance is clearer and calmer.
+  Existing calculations, persistence and selection behavior are unchanged.
+- **Verification:** Focused Kotlin compilation passed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  is run before this slice is committed.
+- **Remaining gates:** Connected-device comparison expansion, TalkBack,
+  large-font, light/dark theme and route-rendering checks, plus signing/
+  Firebase/Play Console work, remain owner-only.
