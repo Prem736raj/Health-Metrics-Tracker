@@ -11,7 +11,7 @@ enum class BMRFormula(
     HARRIS_BENEDICT_ORIGINAL(
         displayName = "Harris-Benedict Original",
         year = "1919",
-        description = "The original BMR equation, widely used for over a century. May overestimate by 5-15% compared to modern formulas.",
+        description = "A historical equation that is useful for comparison; differences from newer equations vary by population and inputs.",
         requiresBodyFat = false,
         isRecommended = false
     ),

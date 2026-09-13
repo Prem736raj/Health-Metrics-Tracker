@@ -965,3 +965,24 @@ Updated: 2026-09-12
   reliability.
 
 Updated: 2026-09-12
+
+## Follow-up — BMR result trust and visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** BMR result, breakdown and formula-comparison surfaces now
+  use stable Material vector icons and shared calculator/health tokens instead
+  of rendered emoji and isolated color literals. Result language now calls
+  BMR a resting-energy estimate, removes a misleading calorie-floor reading,
+  and presents broad estimate bands as context rather than clinical ranges.
+  Share output is plain, explicit and informational; calculation, history and
+  unit-toggle behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation and BMR unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device animation, formula expansion,
+  TalkBack, large-font, light/dark theme and route-rendering checks remain
+  open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13

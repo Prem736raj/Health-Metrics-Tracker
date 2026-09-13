@@ -27,10 +27,10 @@ data class BMRResultData(
     val bmrRange: Float get() = highestBMR - lowestBMR
 
     fun getInterpretation(): String {
-        return "Your body burns approximately ${primaryBMR.toInt()} calories per day " +
-                "just to maintain basic life functions like breathing, circulation, " +
-                "and cell production. This is your Basal Metabolic Rate using the " +
-                "${selectedFormula.displayName} equation."
+        return "The ${selectedFormula.displayName} equation estimates resting energy use " +
+                "at approximately ${primaryBMR.toInt()} kcal/day for the inputs you entered. " +
+                "Actual energy needs vary with activity, health, body composition and " +
+                "measurement conditions; this is not a minimum intake or a prescription."
     }
 
     fun getBMRLevel(): BMRLevel {
@@ -56,15 +56,15 @@ data class BMRResultData(
 
     fun toShareText(): String {
         return buildString {
-            append("🔥 My Basal Metabolic Rate (BMR)\n")
+            append("My Basal Metabolic Rate (BMR)\n")
             append("━━━━━━━━━━━━━━━━━━━━━━━━\n")
             append("BMR: ${primaryBMR.toInt()} kcal/day")
             append(" (${bmrInKJ.toInt()} kJ/day)\n")
             append("Formula: ${selectedFormula.displayName}\n")
             append("BMR per hour: ${String.format("%.1f", bmrPerHour)} kcal\n\n")
-            append("📊 All Formula Comparison:\n")
+            append("All formula comparison:\n")
             allFormulaResults.forEach { (formula, value) ->
-                val marker = if (formula == selectedFormula) " ⬅️" else ""
+                val marker = if (formula == selectedFormula) " (selected)" else ""
                 append("  • ${formula.displayName}: ${value.toInt()} kcal$marker\n")
             }
             append("\n")
@@ -95,28 +95,28 @@ enum class BMRLevel(
     val description: String
 ) {
     LOW(
-        "Below Typical Range",
+        "Lower estimate band",
         "🔵",
-        "Your BMR is lower than typical. This could be due to lower body mass, age, or metabolism."
+        "This estimate falls in a lower broad reference band used for context by the app. It does not indicate a health problem or a slow metabolism by itself."
     ),
     BELOW_AVERAGE(
-        "Slightly Below Average",
+        "Lower-middle estimate band",
         "🟢",
-        "Your BMR is slightly below average for your demographics."
+        "This estimate falls below the middle of the broad reference bands used for context. Individual variation is expected."
     ),
     AVERAGE(
-        "Typical Range",
+        "Middle estimate band",
         "🟢",
-        "Your BMR falls within the typical range for your age and gender."
+        "This estimate falls near the middle of the broad reference bands used for context, not a clinical normal range."
     ),
     ABOVE_AVERAGE(
-        "Above Average",
+        "Upper-middle estimate band",
         "🟡",
-        "Your BMR is above average, likely due to higher body mass or muscle content."
+        "This estimate falls above the middle of the broad reference bands used for context. It does not measure muscle mass or metabolism directly."
     ),
     HIGH(
-        "Well Above Average",
+        "Higher estimate band",
         "🟠",
-        "Your BMR is notably high. This is common with larger body frames or high muscle mass."
+        "This estimate falls in a higher broad reference band used for context. It is not a diagnosis and should not be used to set a target on its own."
     )
 }

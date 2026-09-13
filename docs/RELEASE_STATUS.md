@@ -636,3 +636,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device expandable education, warning rows,
   TalkBack, large-font, light/dark theme and route-rendering checks, plus
   signing/Firebase/Play Console work, remain owner-only.
+
+## BMR result trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BMR result, breakdown and formula-comparison surfaces now use
+  stable Material vector icons and shared calculator/health tokens instead of
+  rendered emoji and isolated color literals. Result language calls BMR a
+  resting-energy estimate, removes a misleading calorie-floor reading, and
+  presents broad estimate bands as context rather than clinical ranges. Share
+  output is plain, explicit and informational; calculation, history and unit
+  toggle behavior remain unchanged.
+- **Verification:** Focused Kotlin compilation and BMR unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device animation, formula expansion,
+  TalkBack, large-font, light/dark theme and route-rendering checks, plus
+  signing/Firebase/Play Console work, remain owner-only.

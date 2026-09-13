@@ -25,13 +25,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.BMRResultData
 import com.health.calculator.bmi.tracker.data.model.BMRFormula
+import com.health.calculator.bmi.tracker.data.model.BMRLevel
 import com.health.calculator.bmi.tracker.ui.utils.CascadeAnimatedItem
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun BMRResultSection(
@@ -165,12 +170,23 @@ private fun PrimaryBMRCard(
                 shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
             ) {
-                Text(
-                    text = "📐 ${resultData.selectedFormula.displayName}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
-                )
+                Row(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Straighten,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = resultData.selectedFormula.displayName,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -187,7 +203,12 @@ private fun PrimaryBMRCard(
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = level.emoji, fontSize = 14.sp)
+                    Icon(
+                        imageVector = bmrLevelIcon(level),
+                        contentDescription = null,
+                        tint = getLevelColor(level),
+                        modifier = Modifier.size(17.dp)
+                    )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = level.label,
@@ -228,9 +249,9 @@ private fun FlameVisual(bmrValue: Float) {
         label = "innerGlow"
     )
 
-    val flameColor1 = Color(0xFFFF6D00) // Deep orange
-    val flameColor2 = Color(0xFFFF9100) // Orange
-    val flameColor3 = Color(0xFFFFAB00) // Amber
+    val flameColor1 = CalculatorColors.BMR
+    val flameColor2 = FeatureColors.CalorieEnd
+    val flameColor3 = FeatureColors.CalorieStart
 
     Box(
         modifier = Modifier.size(100.dp),
@@ -268,14 +289,16 @@ private fun FlameVisual(bmrValue: Float) {
                 )
         )
 
-        // Flame emoji
-        Text(
-            text = stringResource(R.string.txt_text_placeholder_6),
-            fontSize = (40 * flameScale).sp,
-            modifier = Modifier.graphicsLayer {
-                scaleX = flameScale
-                scaleY = flameScale
-            }
+        Icon(
+            imageVector = Icons.Outlined.LocalFireDepartment,
+            contentDescription = null,
+            tint = flameColor1,
+            modifier = Modifier
+                .size((44 * flameScale).dp)
+                .graphicsLayer {
+                    scaleX = flameScale
+                    scaleY = flameScale
+                }
         )
     }
 }
@@ -296,7 +319,12 @@ private fun InterpretationCard(resultData: BMRResultData) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_1), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(21.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_what_this_means),
@@ -345,7 +373,12 @@ private fun BMRBreakdownCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_27), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Analytics,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_bmr_breakdown),
@@ -365,7 +398,7 @@ private fun BMRBreakdownCard(
                     label = "Per Day",
                     value = if (showKJ) "${resultData.bmrInKJ.toInt()} kJ"
                     else "${resultData.primaryBMR.toInt()} kcal",
-                    icon = "📅",
+                    icon = Icons.Outlined.DateRange,
                     color = MaterialTheme.colorScheme.primary
                 )
 
@@ -375,7 +408,7 @@ private fun BMRBreakdownCard(
                     label = "Per Hour",
                     value = if (showKJ) "${String.format("%.1f", resultData.bmrPerHourKJ)} kJ"
                     else "${String.format("%.1f", resultData.bmrPerHour)} kcal",
-                    icon = "⏰",
+                    icon = Icons.Outlined.AccessTime,
                     color = MaterialTheme.colorScheme.tertiary
                 )
 
@@ -385,8 +418,8 @@ private fun BMRBreakdownCard(
                     label = "Per Minute",
                     value = if (showKJ) "${String.format("%.2f", resultData.bmrPerHourKJ / 60f)} kJ"
                     else "${String.format("%.2f", resultData.bmrPerHour / 60f)} kcal",
-                    icon = "⚡",
-                    color = Color(0xFFFF9800)
+                    icon = Icons.Outlined.Bolt,
+                    color = CalculatorColors.BMR
                 )
             }
 
@@ -440,11 +473,16 @@ private fun BMRBreakdownCard(
 private fun BreakdownItem(
     label: String,
     value: String,
-    icon: String,
+    icon: ImageVector,
     color: Color
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = icon, fontSize = 22.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier.size(22.dp)
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = value,
@@ -501,7 +539,12 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = stringResource(R.string.txt_text_placeholder_9), fontSize = 18.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Analytics,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(R.string.txt_formula_comparison),
@@ -723,11 +766,21 @@ private fun FormulaComparisonBar(
                     )
                     if (isSelected) {
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(text = stringResource(R.string.txt_text_placeholder_25), fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                        Icon(
+                            imageVector = Icons.Outlined.CheckCircle,
+                            contentDescription = "Selected formula",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(14.dp)
+                        )
                     }
                     if (isRecommended && !isSelected) {
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(text = stringResource(R.string.txt_text_placeholder_22), fontSize = 10.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Star,
+                            contentDescription = "Recommended starting formula",
+                            tint = CalculatorColors.BMR,
+                            modifier = Modifier.size(14.dp)
+                        )
                     }
                     if (requiresBodyFat) {
                         Spacer(modifier = Modifier.width(4.dp))
@@ -786,12 +839,20 @@ private fun FormulaComparisonBar(
     }
 }
 
-private fun getLevelColor(level: com.health.calculator.bmi.tracker.data.model.BMRLevel): Color {
+private fun bmrLevelIcon(level: BMRLevel): ImageVector = when (level) {
+    BMRLevel.LOW -> Icons.Outlined.Info
+    BMRLevel.BELOW_AVERAGE -> Icons.Outlined.ArrowDownward
+    BMRLevel.AVERAGE -> Icons.Outlined.CheckCircle
+    BMRLevel.ABOVE_AVERAGE -> Icons.Outlined.ArrowUpward
+    BMRLevel.HIGH -> Icons.Outlined.TrendingUp
+}
+
+private fun getLevelColor(level: BMRLevel): Color {
     return when (level) {
-        com.health.calculator.bmi.tracker.data.model.BMRLevel.LOW -> Color(0xFF2196F3)
-        com.health.calculator.bmi.tracker.data.model.BMRLevel.BELOW_AVERAGE -> Color(0xFF4CAF50)
-        com.health.calculator.bmi.tracker.data.model.BMRLevel.AVERAGE -> Color(0xFF4CAF50)
-        com.health.calculator.bmi.tracker.data.model.BMRLevel.ABOVE_AVERAGE -> Color(0xFFFFC107)
-        com.health.calculator.bmi.tracker.data.model.BMRLevel.HIGH -> Color(0xFFFF9800)
+        BMRLevel.LOW -> HealthColors.Info
+        BMRLevel.BELOW_AVERAGE -> HealthColors.Good
+        BMRLevel.AVERAGE -> CalculatorColors.BMR
+        BMRLevel.ABOVE_AVERAGE -> HealthColors.Warning
+        BMRLevel.HIGH -> HealthColors.Caution
     }
 }
