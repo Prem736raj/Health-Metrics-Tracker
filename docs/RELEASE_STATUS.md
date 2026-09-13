@@ -785,6 +785,25 @@ These cannot be proven by a Windows unit/build run:
   TalkBack, light/dark theme and route checks, plus signing/Firebase/Play
   Console work, remain owner-only.
 
+## Calorie macro planning trust and visual consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The calorie-result macro planner now uses stable Material icons
+  and shared semantic colors for diet presets, macro sliders, detail cards and
+  per-meal references instead of emoji and legacy color literals. Preset
+  descriptions are planning-oriented and avoid promising weight-loss or
+  muscle-building outcomes. Per-meal chart fractions remain finite when an
+  invalid meal count is restored, and plain food labels improve accessibility.
+  Percentage balancing, callbacks and calculations remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed, including
+  preset-copy safety and invalid meal-count finite-value regressions. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device chart/slider rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing/Firebase/Play
+  Console work, remain owner-only.
+
 ## Meal timing trust, custom schedule correctness and visual consistency follow-up — 2026-09-14
 
 - **Status:** Code-fixable polish complete; device/accessibility validation

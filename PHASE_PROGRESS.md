@@ -453,6 +453,28 @@ Updated: 2026-09-14
 
 Updated: 2026-09-13
 
+## Follow-up — Calorie macro planning trust and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** The calorie-result macro planner now uses stable Material
+  icons and shared semantic colors for diet presets, macro sliders, detail
+  cards and per-meal references instead of emoji and legacy color literals.
+  Preset descriptions are planning-oriented and avoid promising weight-loss or
+  muscle-building outcomes. Per-meal chart fractions remain finite when an
+  invalid meal count is restored, and plain food labels improve accessibility.
+  Existing percentage balancing, callbacks and calculations remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed, including preset
+  copy safety and invalid meal-count finite-value regressions. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device chart/slider rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing,
+  Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-14
+
 ## Follow-up — BMR age comparison trust and visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open

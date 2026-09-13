@@ -370,4 +370,28 @@ class MedicalCalculatorAccuracyTest {
         assertEquals(1, clamped.effectiveMealCount)
         assertEquals(1, clamped.getMeals().size)
     }
+
+    @Test
+    fun macroPerMealValuesStayFiniteWhenRestoredMealCountIsInvalid() {
+        val valid = MacroCalculatorUseCase().calculateFromPercentages(
+            totalCalories = 2_000.0,
+            carbPercent = 40,
+            proteinPercent = 30,
+            fatPercent = 30,
+            weightKg = 70.0,
+            presetName = "Test"
+        )
+        val restored = valid.copy(numberOfMeals = 0)
+
+        assertTrue(restored.proteinPerMeal.isFinite())
+        assertEquals(valid.proteinGrams, restored.proteinPerMeal, 0.0001)
+        assertEquals(valid.totalCalories, restored.caloriesPerMeal, 0.0001)
+    }
+
+    @Test
+    fun calorieDietPresetCopyAvoidsOutcomePromises() {
+        val descriptions = MacroCalculatorUseCase().dietPresets.map { it.description.lowercase() }
+
+        assertTrue(descriptions.none { "weight loss" in it || "muscle building" in it })
+    }
 }

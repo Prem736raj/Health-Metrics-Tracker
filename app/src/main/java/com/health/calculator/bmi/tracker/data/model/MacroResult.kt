@@ -18,11 +18,13 @@ data class MacroResult(
     val dietPresetName: String,
     val numberOfMeals: Int = 3
 ) {
+    private val safeMealCount: Int get() = numberOfMeals.coerceAtLeast(1)
+
     // Per meal calculations
-    val proteinPerMeal: Double get() = proteinGrams / numberOfMeals
-    val fatPerMeal: Double get() = fatGrams / numberOfMeals
-    val carbPerMeal: Double get() = carbGrams / numberOfMeals
-    val caloriesPerMeal: Double get() = totalCalories / numberOfMeals
+    val proteinPerMeal: Double get() = proteinGrams / safeMealCount
+    val fatPerMeal: Double get() = fatGrams / safeMealCount
+    val carbPerMeal: Double get() = carbGrams / safeMealCount
+    val caloriesPerMeal: Double get() = totalCalories / safeMealCount
 
     // Validation
     val isBalanced: Boolean get() = proteinPercent + fatPercent + carbPercent in 99f..101f

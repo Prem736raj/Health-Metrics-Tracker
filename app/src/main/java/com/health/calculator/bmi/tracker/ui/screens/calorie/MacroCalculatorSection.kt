@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,13 +25,19 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.DietPreset
 import com.health.calculator.bmi.tracker.data.model.MacroResult
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.roundToInt
+
+private val ProteinColor = HealthColors.Info
+private val CarbColor = HealthColors.Warning
+private val FatColor = HealthColors.Healthy
 
 @Composable
 fun MacroCalculatorSection(
@@ -46,9 +53,9 @@ fun MacroCalculatorSection(
     onCustomMacrosChanged: (carb: Int, protein: Int, fat: Int) -> Unit,
     onMealCountChanged: (Int) -> Unit
 ) {
-    val proteinColor = Color(0xFFF44336)
-    val carbColor = Color(0xFFFFEB3B)
-    val fatColor = Color(0xFF4CAF50)
+    val proteinColor = ProteinColor
+    val carbColor = CarbColor
+    val fatColor = FatColor
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         // Section Header
@@ -149,6 +156,24 @@ fun MacroCalculatorSection(
     }
 }
 
+private fun dietPresetIcon(presetId: String): ImageVector = when (presetId) {
+    "balanced" -> Icons.Outlined.Assessment
+    "low_carb" -> Icons.Outlined.Restaurant
+    "high_carb" -> Icons.Outlined.LocalDining
+    "keto" -> Icons.Outlined.HealthAndSafety
+    "high_protein" -> Icons.Outlined.FitnessCenter
+    else -> Icons.Outlined.Tune
+}
+
+private fun dietPresetColor(presetId: String): Color = when (presetId) {
+    "balanced" -> HealthColors.Healthy
+    "low_carb" -> HealthColors.Caution
+    "high_carb" -> HealthColors.Info
+    "keto" -> HealthColors.Severe
+    "high_protein" -> HealthColors.Danger
+    else -> HealthColors.BelowNormal
+}
+
 @Composable
 private fun DietPresetsSection(
     presets: List<DietPreset>,
@@ -176,7 +201,7 @@ private fun DietPresetsSection(
                 ) {
                     rowPresets.forEach { preset ->
                         val isSelected = selectedId == preset.id
-                        val presetColor = Color(preset.color)
+                        val presetColor = dietPresetColor(preset.id)
 
                         Card(
                             modifier = Modifier
@@ -199,7 +224,13 @@ private fun DietPresetsSection(
                                     .padding(10.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(preset.emoji, fontSize = 20.sp)
+                                Icon(
+                                    imageVector = dietPresetIcon(preset.id),
+                                    contentDescription = preset.name,
+                                    tint = if (isSelected) presetColor
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(22.dp)
+                                )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = preset.name,
@@ -272,13 +303,13 @@ private fun CustomMacroSliders(
                 )
                 Surface(
                     shape = RoundedCornerShape(6.dp),
-                    color = if (isValid) Color(0xFF4CAF50).copy(alpha = 0.1f)
-                    else Color(0xFFF44336).copy(alpha = 0.1f)
+                    color = if (isValid) HealthColors.Healthy.copy(alpha = 0.1f)
+                    else HealthColors.Danger.copy(alpha = 0.1f)
                 ) {
                     Text(
                         text = "Total: $total%",
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = if (isValid) Color(0xFF4CAF50) else Color(0xFFF44336),
+                        color = if (isValid) HealthColors.Healthy else HealthColors.Danger,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
@@ -289,9 +320,9 @@ private fun CustomMacroSliders(
             // Carbs slider
             MacroSliderRow(
                 label = "Carbs",
-                emoji = "🍞",
+                icon = Icons.Outlined.LocalDining,
                 percent = carbPercent,
-                color = Color(0xFFFFEB3B),
+                color = CarbColor,
                 onValueChange = { newCarb ->
                     // Adjust protein proportionally, keeping fat the same
                     val remaining = 100 - newCarb - fatPercent
@@ -306,9 +337,9 @@ private fun CustomMacroSliders(
             // Protein slider
             MacroSliderRow(
                 label = "Protein",
-                emoji = "🥩",
+                icon = Icons.Outlined.FitnessCenter,
                 percent = proteinPercent,
-                color = Color(0xFFF44336),
+                color = ProteinColor,
                 onValueChange = { newProtein ->
                     val remaining = 100 - newProtein - fatPercent
                     val newCarb = remaining.coerceIn(5, 70)
@@ -322,9 +353,9 @@ private fun CustomMacroSliders(
             // Fat slider
             MacroSliderRow(
                 label = "Fat",
-                emoji = "🥑",
+                icon = Icons.Outlined.Restaurant,
                 percent = fatPercent,
-                color = Color(0xFF4CAF50),
+                color = FatColor,
                 onValueChange = { newFat ->
                     val remaining = 100 - newFat - proteinPercent
                     val newCarb = remaining.coerceIn(5, 70)
@@ -338,7 +369,7 @@ private fun CustomMacroSliders(
                 Text(
                     text = stringResource(R.string.txt_percentages_must_total_100),
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFFF44336)
+                    color = HealthColors.Danger
                 )
             }
         }
@@ -348,7 +379,7 @@ private fun CustomMacroSliders(
 @Composable
 private fun MacroSliderRow(
     label: String,
-    emoji: String,
+    icon: ImageVector,
     percent: Int,
     color: Color,
     onValueChange: (Int) -> Unit
@@ -360,7 +391,12 @@ private fun MacroSliderRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(emoji, fontSize = 16.sp)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = label,
+                    tint = color,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     label,
@@ -433,7 +469,7 @@ private fun MacroDetailsSection(
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         // Protein Card
         MacroDetailCard(
-            emoji = "🥩",
+            icon = Icons.Outlined.FitnessCenter,
             name = "Protein",
             grams = macroResult.proteinGrams,
             calories = macroResult.proteinCalories,
@@ -448,7 +484,7 @@ private fun MacroDetailsSection(
 
         // Carbs Card
         MacroDetailCard(
-            emoji = "🍞",
+            icon = Icons.Outlined.LocalDining,
             name = "Carbohydrates",
             grams = macroResult.carbGrams,
             calories = macroResult.carbCalories,
@@ -463,7 +499,7 @@ private fun MacroDetailsSection(
 
         // Fat Card
         MacroDetailCard(
-            emoji = "🥑",
+            icon = Icons.Outlined.Restaurant,
             name = "Fat",
             grams = macroResult.fatGrams,
             calories = macroResult.fatCalories,
@@ -480,7 +516,7 @@ private fun MacroDetailsSection(
 
 @Composable
 private fun MacroDetailCard(
-    emoji: String,
+    icon: ImageVector,
     name: String,
     grams: Double,
     calories: Double,
@@ -507,7 +543,12 @@ private fun MacroDetailCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(emoji, fontSize = 24.sp)
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = name,
+                        tint = color,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
@@ -663,10 +704,19 @@ private fun PerMealMacroSection(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            "🍽️ Each of $numberOfMeals meals:",
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Outlined.LocalDining,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                "Each of $numberOfMeals meals",
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                            )
+                        }
                         Text(
                             "${"%.0f".format(macroResult.caloriesPerMeal)} kcal",
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
@@ -706,9 +756,9 @@ private fun PerMealMacroSection(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                QuickRefChip("🥚 1 egg", "6g P, 5g F")
-                QuickRefChip("🍚 1 cup rice", "45g C")
-                QuickRefChip("🥜 10 almonds", "3g P, 5g F")
+            QuickRefChip("1 egg", "6g P, 5g F")
+            QuickRefChip("1 cup rice", "45g C")
+            QuickRefChip("10 almonds", "3g P, 5g F")
             }
         }
     }
@@ -722,7 +772,9 @@ private fun MacroPerMealBar(
     maxGrams: Double
 ) {
     val animatedFraction by animateFloatAsState(
-        targetValue = (grams / maxGrams).toFloat().coerceIn(0f, 1f),
+        targetValue = if (maxGrams > 0.0) {
+            (grams / maxGrams).toFloat().coerceIn(0f, 1f)
+        } else 0f,
         animationSpec = tween(800, easing = FastOutSlowInEasing),
         label = "barFraction"
     )

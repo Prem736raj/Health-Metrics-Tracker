@@ -17,7 +17,7 @@ class MacroCalculatorUseCase {
         DietPreset(
             id = "balanced",
             name = "Balanced",
-            description = "Well-rounded for general health",
+            description = "A flexible starting pattern for everyday planning",
             carbPercent = 40,
             proteinPercent = 30,
             fatPercent = 30,
@@ -27,7 +27,7 @@ class MacroCalculatorUseCase {
         DietPreset(
             id = "low_carb",
             name = "Low Carb",
-            description = "Reduced carbs, higher protein & fat",
+            description = "A lower-carbohydrate pattern; personal preferences vary",
             carbPercent = 20,
             proteinPercent = 40,
             fatPercent = 40,
@@ -37,7 +37,7 @@ class MacroCalculatorUseCase {
         DietPreset(
             id = "high_carb",
             name = "High Carb",
-            description = "For endurance athletes",
+            description = "A higher-carbohydrate pattern for activity preferences",
             carbPercent = 55,
             proteinPercent = 25,
             fatPercent = 20,
@@ -47,7 +47,7 @@ class MacroCalculatorUseCase {
         DietPreset(
             id = "keto",
             name = "Ketogenic",
-            description = "Very low carb, high fat",
+            description = "A very-low-carbohydrate pattern that is not for everyone",
             carbPercent = 5,
             proteinPercent = 25,
             fatPercent = 70,
@@ -57,7 +57,7 @@ class MacroCalculatorUseCase {
         DietPreset(
             id = "high_protein",
             name = "High Protein",
-            description = "For muscle building & weight loss",
+            description = "A higher-protein planning pattern; individual needs vary",
             carbPercent = 30,
             proteinPercent = 40,
             fatPercent = 30,
