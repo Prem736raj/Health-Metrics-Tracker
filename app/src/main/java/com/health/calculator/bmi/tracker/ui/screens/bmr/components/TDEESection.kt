@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,10 +35,29 @@ import com.health.calculator.bmi.tracker.data.model.ActivityLevel
 import com.health.calculator.bmi.tracker.data.model.GoalType
 import com.health.calculator.bmi.tracker.data.model.TDEEData
 import com.health.calculator.bmi.tracker.ui.utils.CascadeAnimatedItem
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+import com.health.calculator.bmi.tracker.ui.theme.WellnessPalette
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
+private fun activityLevelIcon(level: ActivityLevel): ImageVector = when (level) {
+    ActivityLevel.NOT_SET -> Icons.Outlined.HelpOutline
+    ActivityLevel.SEDENTARY -> Icons.Outlined.EventSeat
+    ActivityLevel.LIGHTLY_ACTIVE -> Icons.Outlined.DirectionsWalk
+    ActivityLevel.MODERATELY_ACTIVE -> Icons.Outlined.DirectionsRun
+    ActivityLevel.VERY_ACTIVE -> Icons.Outlined.FitnessCenter
+    ActivityLevel.EXTREMELY_ACTIVE -> Icons.Outlined.LocalFireDepartment
+}
+
+private fun goalIcon(goalType: GoalType): ImageVector = when (goalType) {
+    GoalType.EXTREME_LOSS -> Icons.Outlined.Warning
+    GoalType.MODERATE_LOSS, GoalType.MILD_LOSS -> Icons.Outlined.TrendingDown
+    GoalType.MAINTAIN -> Icons.Outlined.MonitorWeight
+    GoalType.MILD_GAIN, GoalType.MODERATE_GAIN -> Icons.Outlined.TrendingUp
+}
 
 @Composable
 fun TDEESection(
@@ -78,7 +98,12 @@ fun TDEESection(
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = stringResource(R.string.txt_text_placeholder_33), fontSize = 22.sp)
+                            Icon(
+                                imageVector = Icons.Outlined.Bolt,
+                                contentDescription = null,
+                                tint = CalculatorColors.BMR,
+                                modifier = Modifier.size(24.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Column {
                                 Text(
@@ -151,9 +176,9 @@ private fun ActivityLevelSelector(
         if (profileLevel != null) {
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = Color(0xFF4CAF50).copy(alpha = 0.08f),
+                color = HealthColors.Healthy.copy(alpha = 0.08f),
                 border = androidx.compose.foundation.BorderStroke(
-                    1.dp, Color(0xFF4CAF50).copy(alpha = 0.2f)
+                    1.dp, HealthColors.Healthy.copy(alpha = 0.2f)
                 )
             ) {
                 Row(
@@ -163,14 +188,14 @@ private fun ActivityLevelSelector(
                     Icon(
                         Icons.Outlined.Person,
                         contentDescription = null,
-                        tint = Color(0xFF4CAF50),
+                        tint = HealthColors.Healthy,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "Profile: ${profileLevel.displayName}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFF388E3C),
+                        color = HealthColors.Healthy,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -240,8 +265,12 @@ private fun ActivityLevelCard(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Emoji
-            Text(text = level.emoji, fontSize = 22.sp)
+            Icon(
+                imageVector = activityLevelIcon(level),
+                contentDescription = null,
+                tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(22.dp)
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -348,7 +377,7 @@ private fun TDEEResultCard(tdeeData: TDEEData) {
                 Text(
                     text = stringResource(R.string.txt_your_daily_calorie_needs),
                     style = MaterialTheme.typography.labelLarge,
-                    color = Color.White.copy(alpha = 0.9f)
+                    color = WellnessPalette.OnHero.copy(alpha = 0.9f)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -357,29 +386,40 @@ private fun TDEEResultCard(tdeeData: TDEEData) {
                     text = "${animatedTDEE.value.toInt()}",
                     style = MaterialTheme.typography.displayLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = WellnessPalette.OnHero,
                     fontSize = 52.sp
                 )
 
                 Text(
                     text = stringResource(R.string.txt_kcal_day),
                     style = MaterialTheme.typography.titleMedium,
-                    color = Color.White.copy(alpha = 0.8f)
+                    color = WellnessPalette.OnHero.copy(alpha = 0.8f)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = Color.White.copy(alpha = 0.2f)
+                    color = WellnessPalette.OnHero.copy(alpha = 0.2f)
                 ) {
-                    Text(
-                        text = "${tdeeData.activityLevel.emoji} ${tdeeData.activityLevel.displayName} (×${tdeeData.activityLevel.multiplier})",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color.White,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
-                    )
+                    Row(
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = activityLevelIcon(tdeeData.activityLevel),
+                            contentDescription = null,
+                            tint = WellnessPalette.OnHero,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = "${tdeeData.activityLevel.displayName} (×${tdeeData.activityLevel.multiplier})",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = WellnessPalette.OnHero,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         }
@@ -401,7 +441,12 @@ private fun CalorieBreakdownCard(tdeeData: TDEEData) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_9), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Analytics,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_calorie_breakdown),
@@ -600,7 +645,12 @@ private fun DonutChart(
 
         // Center text
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = stringResource(R.string.txt_text_placeholder_33), fontSize = 20.sp)
+            Icon(
+                imageVector = Icons.Outlined.Bolt,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(22.dp)
+            )
             Text(
                 text = stringResource(R.string.txt_tdee),
                 style = MaterialTheme.typography.labelSmall,
@@ -730,7 +780,12 @@ private fun CalorieGoalsCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_32), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Flag,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_calorie_targets_by_goal),
@@ -785,8 +840,8 @@ private fun CalorieGoalsCard(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = stringResource(R.string.txt_weight_change_estimates_assume) +
-                            "Actual results vary by individual metabolism. " +
-                            "Never eat below 1,200 kcal/day without medical supervision.",
+                            " Actual results vary with individual health, appetite and activity. " +
+                            "Very low targets or intentional weight change should be reviewed with a qualified professional.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                     fontSize = 10.sp,
@@ -848,7 +903,12 @@ private fun CalorieGoalItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(text = goal.emoji, fontSize = 16.sp)
+                    Icon(
+                        imageVector = goalIcon(goal.goalType),
+                        contentDescription = null,
+                        tint = goalColor,
+                        modifier = Modifier.size(20.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = goal.name,
@@ -931,7 +991,7 @@ private fun CalorieGoalItem(
                         Spacer(modifier = Modifier.height(8.dp))
                         Surface(
                             shape = RoundedCornerShape(8.dp),
-                            color = Color(0xFFF44336).copy(alpha = 0.08f)
+                            color = HealthColors.Danger.copy(alpha = 0.08f)
                         ) {
                             Row(
                                 modifier = Modifier.padding(8.dp),
@@ -940,14 +1000,14 @@ private fun CalorieGoalItem(
                                 Icon(
                                     Icons.Outlined.Warning,
                                     contentDescription = null,
-                                    tint = Color(0xFFF44336),
+                                    tint = HealthColors.Danger,
                                     modifier = Modifier.size(14.dp)
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text(
                                     text = stringResource(R.string.txt_extreme_deficits_are_not_recom),
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = Color(0xFFD32F2F),
+                                    color = HealthColors.Danger,
                                     fontSize = 10.sp,
                                     lineHeight = 14.sp
                                 )
@@ -961,7 +1021,7 @@ private fun CalorieGoalItem(
                         Text(
                             text = stringResource(R.string.txt_minimum_1_200_kcal_day_applied),
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFFFF9800),
+                            color = HealthColors.Caution,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -1001,12 +1061,12 @@ private fun GoalDetailChip(
 
 private fun getGoalColor(goalType: GoalType): Color {
     return when (goalType) {
-        GoalType.EXTREME_LOSS -> Color(0xFFF44336)
-        GoalType.MODERATE_LOSS -> Color(0xFFFF9800)
-        GoalType.MILD_LOSS -> Color(0xFFFFC107)
-        GoalType.MAINTAIN -> Color(0xFF4CAF50)
-        GoalType.MILD_GAIN -> Color(0xFF2196F3)
-        GoalType.MODERATE_GAIN -> Color(0xFF7C4DFF)
+        GoalType.EXTREME_LOSS -> HealthColors.Danger
+        GoalType.MODERATE_LOSS -> HealthColors.Caution
+        GoalType.MILD_LOSS -> HealthColors.Warning
+        GoalType.MAINTAIN -> HealthColors.Healthy
+        GoalType.MILD_GAIN -> HealthColors.Good
+        GoalType.MODERATE_GAIN -> CalculatorColors.BMI
     }
 }
 

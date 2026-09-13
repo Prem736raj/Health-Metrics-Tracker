@@ -986,3 +986,24 @@ Updated: 2026-09-12
   truthful interpretation, accessibility or reliability.
 
 Updated: 2026-09-13
+
+## Follow-up — TDEE goals and activity trust/visual consistency
+
+- **Status:** Complete locally; device/accessibility validation remains open
+- **Major changes:** TDEE activity and goal surfaces now use stable Material
+  vector icons, shared calculator/health tokens and a theme-aware hero instead
+  of emoji markers and isolated raw colors. Goal descriptions and the safety
+  note now present calorie targets as planning estimates, remove universal
+  “healthy pace”/minimum-intake implications, and encourage professional
+  context for very low targets. Formula, selection, unit and callback
+  behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate must pass before this slice is committed.
+- **Known limitations:** Connected-device activity/goal expansion, chart
+  rendering, TalkBack, large-font, light/dark theme and route checks remain
+  open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13

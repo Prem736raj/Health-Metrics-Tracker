@@ -654,3 +654,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device animation, formula expansion,
   TalkBack, large-font, light/dark theme and route-rendering checks, plus
   signing/Firebase/Play Console work, remain owner-only.
+
+## TDEE goals and activity trust/visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** TDEE activity and goal surfaces now use stable Material vector
+  icons, shared calculator/health tokens and a theme-aware hero instead of
+  emoji markers and isolated raw colors. Goal descriptions and the safety note
+  present calorie targets as planning estimates, remove universal “healthy
+  pace”/minimum-intake implications, and encourage professional context for
+  very low targets. Formula, selection, unit and callback behavior are
+  unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate must pass before this slice is committed.
+- **Remaining gates:** Connected-device activity/goal expansion, chart
+  rendering, TalkBack, large-font, light/dark theme and route checks, plus
+  signing/Firebase/Play Console work, remain owner-only.

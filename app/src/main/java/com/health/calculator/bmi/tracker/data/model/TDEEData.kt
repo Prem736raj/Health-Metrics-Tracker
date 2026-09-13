@@ -23,7 +23,7 @@ data class TDEEData(
                 calorieAdjustment = -750,
                 dailyCalories = (tdee - 750f).coerceAtLeast(1200f),
                 weeklyWeightChangeKg = -750f / 7700f * 7f, // ~0.68 kg/week planning estimate
-                description = "Faster change; personal context and professional guidance matter",
+                description = "Faster change; suitability varies and professional guidance may be useful",
                 goalType = GoalType.EXTREME_LOSS
             ),
             CalorieGoal(
@@ -32,7 +32,7 @@ data class TDEEData(
                 calorieAdjustment = -500,
                 dailyCalories = (tdee - 500f).coerceAtLeast(1200f),
                 weeklyWeightChangeKg = -500f / 7700f * 7f, // ~0.45 kg/week loss
-                description = "Recommended pace — sustainable and healthy",
+                description = "Moderate change; a common planning option, but suitability varies",
                 goalType = GoalType.MODERATE_LOSS
             ),
             CalorieGoal(
@@ -41,7 +41,7 @@ data class TDEEData(
                 calorieAdjustment = -250,
                 dailyCalories = (tdee - 250f).coerceAtLeast(1200f),
                 weeklyWeightChangeKg = -250f / 7700f * 7f, // ~0.23 kg/week loss
-                description = "Gentle approach — easier to maintain long-term",
+                description = "Gentle change; often easier to adapt, but individual results vary",
                 goalType = GoalType.MILD_LOSS
             ),
             CalorieGoal(
@@ -59,7 +59,7 @@ data class TDEEData(
                 calorieAdjustment = 250,
                 dailyCalories = tdee + 250f,
                 weeklyWeightChangeKg = 250f / 7700f * 7f, // ~0.23 kg/week gain
-                description = "Lean gaining — minimize fat gain",
+                description = "A modest surplus for gradual gain; body-composition results vary",
                 goalType = GoalType.MILD_GAIN
             ),
             CalorieGoal(
@@ -68,7 +68,7 @@ data class TDEEData(
                 calorieAdjustment = 500,
                 dailyCalories = tdee + 500f,
                 weeklyWeightChangeKg = 500f / 7700f * 7f, // ~0.45 kg/week gain
-                description = "Standard bulking — muscle building focus",
+                description = "A larger surplus for weight gain; it is not a personalized training plan",
                 goalType = GoalType.MODERATE_GAIN
             )
         )
@@ -76,14 +76,14 @@ data class TDEEData(
 
     fun toShareText(): String {
         return buildString {
-            append("⚡ My TDEE (Total Daily Energy Expenditure)\n")
+            append("My TDEE (Total Daily Energy Expenditure)\n")
             append("━━━━━━━━━━━━━━━━━━━━━━━━\n")
             append("BMR: ${bmr.toInt()} kcal/day\n")
             append("Activity Level: ${activityLevel.displayName}\n")
             append("TDEE: ${tdee.toInt()} kcal/day\n\n")
-            append("📊 Calorie Goals:\n")
+            append("Calorie goals (planning estimates):\n")
             getCalorieGoals().forEach { goal ->
-                append("  ${goal.emoji} ${goal.name}: ${goal.dailyCalories.toInt()} kcal/day\n")
+                append("  ${goal.name}: ${goal.dailyCalories.toInt()} kcal/day\n")
             }
             append("\n")
             append(ExportDisclosurePolicy.shareFooter())

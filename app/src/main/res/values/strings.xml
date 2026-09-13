@@ -497,9 +497,9 @@
 <string name="txt_plan_when_and_how_often_to_eat">Plan when and how often to eat</string>
 <string name="txt_meal_timing_schedule">Meal Timing &amp; Schedule</string>
 <string name="txt_text_placeholder_31">⏰</string>
-<string name="txt_minimum_1_200_kcal_day_applied">⚠️ App planning floor applied (not a universal medical minimum)</string>
+<string name="txt_minimum_1_200_kcal_day_applied">App planning floor applied; this is not a universal medical minimum.</string>
 <string name="txt_extreme_deficits_are_not_recom">Very low targets need individual professional guidance; this app does not prescribe a diet.</string>
-<string name="txt_weight_change_estimates_assume">Weight change estimates assume 1 kg ≈ 7,700 kcal. </string>
+<string name="txt_weight_change_estimates_assume">Weight-change planning uses an approximate energy conversion and is not a personal prediction. </string>
 <string name="txt_tap_any_goal_to_see_details_an">Tap any goal to see details and projected weight change</string>
 <string name="txt_calorie_targets_by_goal">Calorie Targets by Goal</string>
 <string name="txt_text_placeholder_32">🎯</string>
