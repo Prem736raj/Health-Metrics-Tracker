@@ -31,11 +31,11 @@ fun animateRiskColor(
     animationSpec: AnimationSpec<Color> = tween(800)
 ): Color {
     val targetColor = when {
-        criteriaMet >= 4 -> Color(0xFFB71C1C)
-        criteriaMet >= 3 -> HealthRed
-        criteriaMet >= 2 -> HealthOrange
-        criteriaMet >= 1 -> HealthYellow
-        else -> HealthGreen
+        criteriaMet >= 4 -> HealthColors.Danger
+        criteriaMet >= 3 -> HealthColors.Caution
+        criteriaMet >= 2 -> HealthColors.Warning
+        criteriaMet >= 1 -> HealthColors.Good
+        else -> HealthColors.Healthy
     }
 
     val animatedColor by animateColorAsState(

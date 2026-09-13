@@ -79,14 +79,13 @@ fun MetabolicSyndromeResultScreen(
         RiskGauge(
             criteriaMet = animatedCount,
             animationProgress = gaugeProgress,
-            riskColor = riskColor,
-            isSyndromePresent = result.isSyndromePresent
+            riskColor = riskColor
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // === Diagnosis Card ===
-        DiagnosisCard(result = result, animationStarted = animationStarted, riskColor = riskColor)
+        // === Screening Summary ===
+        ScreeningSummaryCard(result = result, animationStarted = animationStarted)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -202,9 +201,9 @@ fun MetabolicSyndromeResultScreen(
 private fun RiskGauge(
     criteriaMet: Int,
     animationProgress: Float,
-    riskColor: Color,
-    isSyndromePresent: Boolean
+    riskColor: Color
 ) {
+    val trackColor = MaterialTheme.colorScheme.outlineVariant
     Box(contentAlignment = Alignment.Center, modifier = Modifier.size(220.dp)) {
         Canvas(modifier = Modifier.size(200.dp)) {
             val strokeWidth = 20.dp.toPx()
@@ -212,14 +211,20 @@ private fun RiskGauge(
             val topLeft = Offset(strokeWidth / 2, strokeWidth / 2)
 
             drawArc(
-                color = Color.LightGray.copy(alpha = 0.3f),
+                color = trackColor.copy(alpha = 0.45f),
                 startAngle = 135f, sweepAngle = 270f, useCenter = false,
                 topLeft = topLeft, size = arcSize,
                 style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
             )
 
             val segmentAngle = 270f / 5f
-            val segColors = listOf(HealthGreen, HealthYellow, HealthOrange, HealthRed, Color(0xFFB71C1C))
+            val segColors = listOf(
+                HealthColors.Healthy,
+                HealthColors.Good,
+                HealthColors.Warning,
+                HealthColors.Caution,
+                HealthColors.Danger
+            )
             for (i in 0 until 5) {
                 drawArc(
                     color = segColors[i].copy(alpha = 0.15f),
@@ -257,25 +262,25 @@ private fun RiskGauge(
 }
 
 @Composable
-private fun DiagnosisCard(result: MetabolicSyndromeResult, animationStarted: Boolean, riskColor: Color) {
-    val diagnosisColor = if (result.isSyndromePresent) Color(0xFFB26A00) else HealthGreen
-    val diagnosisIcon = if (result.isSyndromePresent) Icons.Filled.Info else Icons.Filled.CheckCircle
+private fun ScreeningSummaryCard(result: MetabolicSyndromeResult, animationStarted: Boolean) {
+    val screeningColor = if (result.isSyndromePresent) HealthColors.Caution else HealthColors.Healthy
+    val screeningIcon = if (result.isSyndromePresent) Icons.Outlined.Info else Icons.Outlined.CheckCircle
 
     AnimatedVisibility(
         visible = animationStarted,
         enter = scaleIn(tween(500, delayMillis = 600)) + fadeIn(tween(500, delayMillis = 600))
     ) {
         Card(
-            colors = CardDefaults.cardColors(containerColor = diagnosisColor.copy(alpha = 0.1f)),
+            colors = CardDefaults.cardColors(containerColor = screeningColor.copy(alpha = 0.1f)),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(modifier = Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(
-                    modifier = Modifier.size(48.dp).clip(CircleShape).background(diagnosisColor.copy(alpha = 0.2f)),
+                    modifier = Modifier.size(48.dp).clip(CircleShape).background(screeningColor.copy(alpha = 0.2f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(diagnosisIcon, contentDescription = null, tint = diagnosisColor, modifier = Modifier.size(28.dp))
+                    Icon(screeningIcon, contentDescription = null, tint = screeningColor, modifier = Modifier.size(28.dp))
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
@@ -283,7 +288,7 @@ private fun DiagnosisCard(result: MetabolicSyndromeResult, animationStarted: Boo
                         text = "Screening reference: ${result.criteriaMet} of 5 markers",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = diagnosisColor
+                        color = screeningColor
                     )
                     Text(
                         text = "Selected ${result.selectedEthnicity.displayName} waist reference; not a diagnosis",
@@ -298,8 +303,8 @@ private fun DiagnosisCard(result: MetabolicSyndromeResult, animationStarted: Boo
 
 @Composable
 private fun CriterionCard(criterion: MetabolicCriterion) {
-    val statusColor = if (criterion.isMet) HealthRed else HealthGreen
-    val statusIcon = if (criterion.isMet) Icons.Filled.Warning else Icons.Filled.CheckCircle
+    val statusColor = if (criterion.isMet) HealthColors.Caution else HealthColors.Healthy
+    val statusIcon = if (criterion.isMet) Icons.Outlined.Warning else Icons.Outlined.CheckCircle
 
     val bgAlpha by animateFloatAsState(
         targetValue = 0.06f,
@@ -352,12 +357,12 @@ private fun CriterionCard(criterion: MetabolicCriterion) {
 
 @Composable
 private fun RiskMessageCard(riskLevel: MetabolicRiskLevel, criteriaMet: Int) {
-    val (icon, message) = when (riskLevel) {
-        MetabolicRiskLevel.NONE -> Pair("✅", "No screening markers met in the values entered. Keep tracking consistently.")
-        MetabolicRiskLevel.LOW -> Pair("👀", "One screening marker met. Review the value and its context rather than drawing a diagnosis from one screen.")
-        MetabolicRiskLevel.MODERATE -> Pair("⚠️", "Two screening markers met. Consider discussing the pattern at a routine visit.")
-        MetabolicRiskLevel.HIGH -> Pair("🟠", "Three screening markers met. This is not a diagnosis; ask a healthcare professional for context.")
-        MetabolicRiskLevel.VERY_HIGH -> Pair("🟠", "$criteriaMet of 5 screening markers met. This is not a diagnosis; arrange professional review.")
+    val (icon, message, color) = when (riskLevel) {
+        MetabolicRiskLevel.NONE -> Triple(Icons.Outlined.CheckCircle, "No screening markers met in the values entered. Keep tracking consistently.", HealthColors.Healthy)
+        MetabolicRiskLevel.LOW -> Triple(Icons.Outlined.Info, "One screening marker met. Review the value and its context rather than drawing a diagnosis from one screen.", HealthColors.Good)
+        MetabolicRiskLevel.MODERATE -> Triple(Icons.Outlined.Info, "Two screening markers met. Consider discussing the pattern at a routine visit.", HealthColors.Warning)
+        MetabolicRiskLevel.HIGH -> Triple(Icons.Outlined.Warning, "Three screening markers met. This is not a diagnosis; ask a healthcare professional for context.", HealthColors.Caution)
+        MetabolicRiskLevel.VERY_HIGH -> Triple(Icons.Outlined.Warning, "$criteriaMet of 5 screening markers met. This is not a diagnosis; arrange professional review.", HealthColors.Danger)
     }
 
     Card(
@@ -366,7 +371,11 @@ private fun RiskMessageCard(riskLevel: MetabolicRiskLevel, criteriaMet: Int) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("$icon ${riskLevel.label}", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(riskLevel.label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = color)
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 20.sp)
         }

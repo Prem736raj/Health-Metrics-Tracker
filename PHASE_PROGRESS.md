@@ -366,6 +366,27 @@ This file is the source of truth for the sequential product-development phases. 
   continue deep-screen cleanup only where it improves trust, accessibility or
   reliability.
 
+## Metabolic screening result trust and visual consistency follow-up
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Major changes:** The metabolic screening result route now uses shared
+  semantic health colors and stable vector icons for the gauge, screening
+  summary, criteria states and risk message instead of a raw red literal or
+  rendered emoji. The helper is explicitly named as a screening summary, and
+  the existing non-diagnostic wording is preserved. Screening calculations,
+  ethnicity thresholds, medication markers, persistence and share callbacks
+  remain unchanged.
+- **Tests:** Focused Kotlin compilation and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with `GRADLE_EXIT=0`.
+- **Known limitations:** This remains an informational screening aid, not a
+  diagnosis. Gauge animation, expandable recommendations, large-font,
+  TalkBack and light/dark theme checks require a connected device.
+- **Next phase:** Execute the documented device/console release checklist;
+  continue deep-screen cleanup only where it improves trust, accessibility or
+  reliability.
+
 ## Follow-up — Calorie education trust and visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open
