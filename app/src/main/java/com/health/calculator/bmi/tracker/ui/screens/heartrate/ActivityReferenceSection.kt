@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -26,7 +28,40 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import com.health.calculator.bmi.tracker.util.*
+
+private fun categoryIcon(category: ActivityCategory): ImageVector = when (category) {
+    ActivityCategory.DAILY -> Icons.Outlined.Home
+    ActivityCategory.CARDIO -> Icons.Outlined.DirectionsRun
+    ActivityCategory.STRENGTH -> Icons.Outlined.FitnessCenter
+    ActivityCategory.SPORTS -> Icons.Outlined.Flag
+}
+
+/**
+ * ActivityReference keeps its emoji field for persisted/backwards-compatible
+ * data, but the shipped UI uses one consistent vector icon family. Matching on
+ * the stable activity name means old saved data still renders correctly.
+ */
+private fun activityIcon(activity: ActivityReference): ImageVector = when {
+    activity.name.contains("sleep", ignoreCase = true) -> Icons.Outlined.FavoriteBorder
+    activity.name.contains("walk", ignoreCase = true) -> Icons.Outlined.DirectionsWalk
+    activity.name.contains("run", ignoreCase = true) ||
+            activity.name.contains("jog", ignoreCase = true) ||
+            activity.name.contains("sprint", ignoreCase = true) -> Icons.Outlined.DirectionsRun
+    activity.name.contains("cycle", ignoreCase = true) -> Icons.Outlined.DirectionsRun
+    activity.name.contains("weight", ignoreCase = true) ||
+            activity.name.contains("training", ignoreCase = true) ||
+            activity.name.contains("yoga", ignoreCase = true) ||
+            activity.name.contains("pilates", ignoreCase = true) ||
+            activity.name.contains("stretch", ignoreCase = true) ||
+            activity.name.contains("elliptical", ignoreCase = true) ||
+            activity.name.contains("climber", ignoreCase = true) -> Icons.Outlined.FitnessCenter
+    activity.name.contains("heart", ignoreCase = true) -> Icons.Outlined.MonitorHeart
+    activity.category == ActivityCategory.SPORTS -> Icons.Outlined.Flag
+    else -> Icons.Outlined.Assessment
+}
 
 // ============================================================
 // MAIN ACTIVITY REFERENCE SECTION
@@ -59,7 +94,12 @@ fun ActivityReferenceSection(
     ) {
         // Section header
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(stringResource(R.string.txt_text_placeholder_55), fontSize = 22.sp)
+            Icon(
+                imageVector = Icons.Outlined.DirectionsRun,
+                contentDescription = null,
+                tint = FeatureColors.HeartDeep,
+                modifier = Modifier.size(26.dp)
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
@@ -153,7 +193,12 @@ fun ActivityReferenceSection(
                 modifier = Modifier.padding(12.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_54), fontSize = 14.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = null,
+                    tint = HealthColors.Info,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_heart_rate_ranges_are_personal) +
@@ -189,9 +234,10 @@ private fun CategoryFilterChips(
                 onClick = { onCategorySelect(category) },
                 label = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = category.emoji,
-                            fontSize = 13.sp
+                        Icon(
+                            imageVector = categoryIcon(category),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(3.dp))
                         Text(
@@ -243,7 +289,12 @@ private fun CategorySection(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = category.emoji, fontSize = 20.sp)
+                    Icon(
+                        imageVector = categoryIcon(category),
+                        contentDescription = null,
+                        tint = FeatureColors.HeartDeep,
+                        modifier = Modifier.size(22.dp)
+                    )
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
@@ -344,9 +395,11 @@ private fun ActivityCard(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = activity.emoji,
-                        fontSize = 20.sp
+                    Icon(
+                        imageVector = activityIcon(activity),
+                        contentDescription = activity.name,
+                        tint = personalizedActivity.zoneColor,
+                        modifier = Modifier.size(22.dp)
                     )
                 }
 
@@ -375,9 +428,11 @@ private fun ActivityCard(
                 Column(horizontalAlignment = Alignment.End) {
                     // BPM range
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(R.string.txt_text_placeholder_5),
-                            fontSize = 10.sp
+                        Icon(
+                            imageVector = Icons.Outlined.MonitorHeart,
+                            contentDescription = null,
+                            tint = personalizedActivity.zoneColor,
+                            modifier = Modifier.size(12.dp)
                         )
                         Spacer(modifier = Modifier.width(3.dp))
                         Text(
@@ -400,12 +455,21 @@ private fun ActivityCard(
                     Spacer(modifier = Modifier.height(2.dp))
 
                     // Calories
-                    Text(
-                        text = "🔥 ${personalizedActivity.caloriesPer30Min}",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFFFF9800)
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Outlined.LocalFireDepartment,
+                            contentDescription = null,
+                            tint = FeatureColors.CalorieDeep,
+                            modifier = Modifier.size(13.dp)
+                        )
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(
+                            text = personalizedActivity.caloriesPer30Min.toString(),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = FeatureColors.CalorieDeep
+                        )
+                    }
                     Text(
                         text = stringResource(R.string.txt_cal_30m),
                         style = MaterialTheme.typography.labelSmall,
@@ -447,16 +511,16 @@ private fun ActivityCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         DetailChip(
-                            emoji = "❤️",
+                            icon = Icons.Outlined.MonitorHeart,
                             label = "Heart Rate",
                             value = "${personalizedActivity.bpmLow}-${personalizedActivity.bpmHigh} BPM",
                             color = personalizedActivity.zoneColor
                         )
                         DetailChip(
-                            emoji = "🔥",
+                            icon = Icons.Outlined.LocalFireDepartment,
                             label = "Calories",
                             value = "${personalizedActivity.caloriesPer30Min} cal/30min",
-                            color = Color(0xFFFF9800)
+                            color = FeatureColors.CalorieDeep
                         )
                     }
 
@@ -492,7 +556,7 @@ private fun ZoneBadge(text: String, color: Color) {
 
 @Composable
 private fun DetailChip(
-    emoji: String,
+    icon: ImageVector,
     label: String,
     value: String,
     color: Color
@@ -507,7 +571,12 @@ private fun DetailChip(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = emoji, fontSize = 14.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(18.dp)
+            )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = label,
@@ -582,7 +651,12 @@ private fun EmptySearchResult(query: String) {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(stringResource(R.string.txt_text_placeholder_53), fontSize = 32.sp)
+            Icon(
+                imageVector = Icons.Outlined.SearchOff,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(32.dp)
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "No activities found for \"$query\"",
