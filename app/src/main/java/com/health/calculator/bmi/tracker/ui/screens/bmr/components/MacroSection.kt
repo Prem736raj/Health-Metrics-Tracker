@@ -25,15 +25,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import com.health.calculator.bmi.tracker.ui.utils.CascadeAnimatedItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+
+private fun dietIcon(diet: DietApproach): ImageVector = when (diet) {
+    DietApproach.BALANCED -> Icons.Outlined.Assessment
+    DietApproach.LOW_CARB -> Icons.Outlined.Restaurant
+    DietApproach.HIGH_CARB -> Icons.Outlined.LocalDining
+    DietApproach.KETOGENIC -> Icons.Outlined.Restaurant
+    DietApproach.HIGH_PROTEIN -> Icons.Outlined.FitnessCenter
+    DietApproach.CUSTOM -> Icons.Outlined.Settings
+}
+
+private fun macroIcon(label: String): ImageVector = when {
+    label.contains("protein", ignoreCase = true) -> Icons.Outlined.FitnessCenter
+    label.contains("carb", ignoreCase = true) -> Icons.Outlined.LocalDining
+    else -> Icons.Outlined.Restaurant
+}
 
 @Composable
 fun MacroSection(
@@ -84,7 +101,12 @@ fun MacroSection(
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = stringResource(R.string.txt_text_placeholder_30), fontSize = 22.sp)
+                            Icon(
+                                imageVector = Icons.Outlined.Assessment,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(22.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Column {
                                 Text(
@@ -325,12 +347,17 @@ private fun DietChip(
             scaleY = scale
         },
         shadowElevation = if (isSelected) 2.dp else 0.dp
-    ) {
-        Column(
+        ) {
+            Column(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = diet.emoji, fontSize = 18.sp)
+            Icon(
+                imageVector = dietIcon(diet),
+                contentDescription = null,
+                tint = content,
+                modifier = Modifier.size(18.dp)
+            )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = diet.displayName,
@@ -376,6 +403,7 @@ private fun CustomMacroSliders(
 ) {
     val total = proteinPct + carbsPct + fatPct
     val isBalanced = total in 99.5f..100.5f
+    val totalColor = if (isBalanced) HealthColors.Healthy else HealthColors.Caution
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -398,14 +426,13 @@ private fun CustomMacroSliders(
                 )
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = if (isBalanced) Color(0xFF4CAF50).copy(alpha = 0.1f)
-                    else Color(0xFFF44336).copy(alpha = 0.1f)
+                    color = totalColor.copy(alpha = 0.1f)
                 ) {
                     Text(
                         text = "Total: ${total.roundToInt()}%",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = if (isBalanced) Color(0xFF4CAF50) else Color(0xFFF44336),
+                        color = totalColor,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                     )
                 }
@@ -421,7 +448,7 @@ private fun CustomMacroSliders(
             // Protein slider
             MacroSlider(
                 label = "Protein",
-                emoji = "🔵",
+                icon = macroIcon("Protein"),
                 percentage = proteinPct,
                 color = MacroColors.Protein,
                 onValueChange = onProteinChange
@@ -432,7 +459,7 @@ private fun CustomMacroSliders(
             // Carbs slider
             MacroSlider(
                 label = "Carbs",
-                emoji = "🟡",
+                icon = macroIcon("Carbs"),
                 percentage = carbsPct,
                 color = MacroColors.Carbs,
                 onValueChange = onCarbsChange
@@ -443,7 +470,7 @@ private fun CustomMacroSliders(
             // Fat slider
             MacroSlider(
                 label = "Fat",
-                emoji = "🟠",
+                icon = macroIcon("Fat"),
                 percentage = fatPct,
                 color = MacroColors.Fat,
                 onValueChange = onFatChange
@@ -451,12 +478,21 @@ private fun CustomMacroSliders(
 
             if (!isBalanced) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.txt_ratios_should_total_100_adjust),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFFF9800),
-                    fontSize = 10.sp
-                )
+                Row(verticalAlignment = Alignment.Top) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = null,
+                        tint = HealthColors.Caution,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(R.string.txt_ratios_should_total_100_adjust),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = HealthColors.Caution,
+                        fontSize = 10.sp
+                    )
+                }
             }
         }
     }
@@ -504,7 +540,7 @@ private fun CustomMacroPreviewBar(protein: Float, carbs: Float, fat: Float) {
 @Composable
 private fun MacroSlider(
     label: String,
-    emoji: String,
+    icon: ImageVector,
     percentage: Float,
     color: Color,
     onValueChange: (Float) -> Unit
@@ -516,7 +552,12 @@ private fun MacroSlider(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = emoji, fontSize = 14.sp)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = color,
+                    modifier = Modifier.size(16.dp)
+                )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = label,
@@ -581,7 +622,7 @@ private fun MacroChartCard(macroBreakdown: MacroBreakdown) {
                 // Legend
                 Column(modifier = Modifier.weight(1f)) {
                     MacroLegendItem(
-                        emoji = "🔵",
+                        icon = macroIcon("Protein"),
                         label = "Protein",
                         grams = macroBreakdown.proteinGrams,
                         calories = macroBreakdown.proteinCalories,
@@ -590,7 +631,7 @@ private fun MacroChartCard(macroBreakdown: MacroBreakdown) {
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     MacroLegendItem(
-                        emoji = "🟡",
+                        icon = macroIcon("Carbs"),
                         label = "Carbs",
                         grams = macroBreakdown.carbsGrams,
                         calories = macroBreakdown.carbsCalories,
@@ -599,7 +640,7 @@ private fun MacroChartCard(macroBreakdown: MacroBreakdown) {
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     MacroLegendItem(
-                        emoji = "🟠",
+                        icon = macroIcon("Fat"),
                         label = "Fat",
                         grams = macroBreakdown.fatGrams,
                         calories = macroBreakdown.fatCalories,
@@ -720,7 +761,7 @@ private fun MacroDonutChart(
 
 @Composable
 private fun MacroLegendItem(
-    emoji: String,
+    icon: ImageVector,
     label: String,
     grams: Float,
     calories: Float,
@@ -738,6 +779,13 @@ private fun MacroLegendItem(
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = color,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = label,
                     style = MaterialTheme.typography.bodySmall,
@@ -772,7 +820,7 @@ private fun MacroDetailCards(macroBreakdown: MacroBreakdown) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         MacroDetailCard(
-            emoji = "🔵",
+            icon = macroIcon("Protein"),
             label = "Protein",
             grams = macroBreakdown.proteinGrams,
             calories = macroBreakdown.proteinCalories,
@@ -782,7 +830,7 @@ private fun MacroDetailCards(macroBreakdown: MacroBreakdown) {
             modifier = Modifier.weight(1f)
         )
         MacroDetailCard(
-            emoji = "🟡",
+            icon = macroIcon("Carbs"),
             label = "Carbs",
             grams = macroBreakdown.carbsGrams,
             calories = macroBreakdown.carbsCalories,
@@ -792,7 +840,7 @@ private fun MacroDetailCards(macroBreakdown: MacroBreakdown) {
             modifier = Modifier.weight(1f)
         )
         MacroDetailCard(
-            emoji = "🟠",
+            icon = macroIcon("Fat"),
             label = "Fat",
             grams = macroBreakdown.fatGrams,
             calories = macroBreakdown.fatCalories,
@@ -806,7 +854,7 @@ private fun MacroDetailCards(macroBreakdown: MacroBreakdown) {
 
 @Composable
 private fun MacroDetailCard(
-    emoji: String,
+    icon: ImageVector,
     label: String,
     grams: Float,
     calories: Float,
@@ -829,7 +877,12 @@ private fun MacroDetailCard(
             modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = emoji, fontSize = 20.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(20.dp)
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = label,
@@ -887,7 +940,12 @@ private fun PerMealBreakdownCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_29), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.LocalDining,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_per_meal_breakdown),
@@ -973,7 +1031,7 @@ private fun PerMealBreakdownCard(
                             color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                         ) {
                             Text(
-                                text = "🔥 ${macroBreakdown.caloriesPerMeal.roundToInt()} kcal per meal",
+                                text = "${macroBreakdown.caloriesPerMeal.roundToInt()} kcal per meal",
                                 style = MaterialTheme.typography.labelLarge,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
@@ -990,7 +1048,7 @@ private fun PerMealBreakdownCard(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         PerMealMacroItem(
-                            emoji = "🔵",
+                            icon = macroIcon("Protein"),
                             label = "Protein",
                             grams = macroBreakdown.proteinPerMeal,
                             color = MacroColors.Protein
@@ -1002,7 +1060,7 @@ private fun PerMealBreakdownCard(
                                 .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                         )
                         PerMealMacroItem(
-                            emoji = "🟡",
+                            icon = macroIcon("Carbs"),
                             label = "Carbs",
                             grams = macroBreakdown.carbsPerMeal,
                             color = MacroColors.Carbs
@@ -1014,7 +1072,7 @@ private fun PerMealBreakdownCard(
                                 .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                         )
                         PerMealMacroItem(
-                            emoji = "🟠",
+                            icon = macroIcon("Fat"),
                             label = "Fat",
                             grams = macroBreakdown.fatPerMeal,
                             color = MacroColors.Fat
@@ -1053,13 +1111,18 @@ private fun PerMealBreakdownCard(
 
 @Composable
 private fun PerMealMacroItem(
-    emoji: String,
+    icon: ImageVector,
     label: String,
     grams: Float,
     color: Color
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = emoji, fontSize = 16.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier.size(18.dp)
+        )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = "${grams.roundToInt()}g",

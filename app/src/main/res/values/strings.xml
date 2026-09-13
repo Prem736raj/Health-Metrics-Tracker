@@ -477,7 +477,7 @@
 <string name="txt_per_meal_breakdown">Per-Meal Breakdown</string>
 <string name="txt_text_placeholder_29">🍽️</string>
 <string name="txt_kcal_day">kcal/day</string>
-<string name="txt_ratios_should_total_100_adjust">⚠️ Ratios should total 100%. Adjusting one slider auto-balances others.</string>
+<string name="txt_ratios_should_total_100_adjust">Ratios should total 100%. Adjusting one slider auto-balances the others.</string>
 <string name="txt_custom_ratios">🎛️ Custom Ratios</string>
 <string name="txt_diet_approach">Diet Approach</string>
 <string name="txt_macronutrient_breakdown">Macronutrient Breakdown</string>

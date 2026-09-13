@@ -10,6 +10,7 @@ import com.health.calculator.bmi.tracker.data.model.BMRFormula
 import com.health.calculator.bmi.tracker.data.model.BMRChangeInsight
 import com.health.calculator.bmi.tracker.data.model.BMRTrendStats
 import com.health.calculator.bmi.tracker.data.model.BMRAgeCurveData
+import com.health.calculator.bmi.tracker.data.model.MacroBreakdown
 import com.health.calculator.bmi.tracker.data.model.BloodPressureCalculator
 import com.health.calculator.bmi.tracker.data.model.BpCategory
 import com.health.calculator.bmi.tracker.data.model.WaterActivityLevel
@@ -326,5 +327,15 @@ class MedicalCalculatorAccuracyTest {
         assertEquals(1_000f, data.macroIntakeCalories, 0.0001f)
         assertEquals(13f, data.tefPercentOfIntake, 0.0001f)
         assertEquals(0f, TEFData(tdee = 2_000f).tefPercentOfIntake, 0.0001f)
+    }
+
+    @Test
+    fun macroShareTextUsesAccessiblePlainLabels() {
+        val text = MacroBreakdown(totalCalories = 2_000f).toShareText()
+
+        assertTrue(text.contains("Macronutrient Breakdown"))
+        assertTrue(text.contains("Protein:"))
+        assertFalse(text.contains("🥗"))
+        assertFalse(text.contains("🔵"))
     }
 }

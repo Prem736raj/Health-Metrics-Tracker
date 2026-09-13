@@ -1088,6 +1088,28 @@ Updated: 2026-09-13
 
 Updated: 2026-09-13
 
+## Follow-up — Macro planning trust and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** Macro planning now uses stable Material icons for diet
+  presets, macro legends, sliders, detail cards and meal breakdowns instead of
+  emoji markers and isolated raw colors. Ratio feedback uses the shared semantic
+  palette and a readable icon. Preset descriptions and “best for” labels are
+  framed as optional planning patterns rather than weight-loss, blood-sugar or
+  muscle-building promises. Share output uses plain labels for accessibility.
+  Macro percentage balancing, meal-count selection, charts and callbacks remain
+  unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed, including a
+  plain-label share regression. The complete `test`, `lintRelease`,
+  `assembleDebug`, `assembleRelease` and `bundleRelease` gate is run before
+  this slice is committed.
+- **Known limitations:** Connected-device slider/chart rendering, large-font,
+  TalkBack, light/dark theme and route checks remain open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — TEF trust, denominator correctness and visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open

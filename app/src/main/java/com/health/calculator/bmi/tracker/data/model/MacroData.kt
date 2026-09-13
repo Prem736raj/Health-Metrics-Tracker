@@ -32,14 +32,14 @@ data class MacroBreakdown(
 
     fun toShareText(): String {
         return buildString {
-            append("🥗 Macronutrient Breakdown\n")
+            append("Macronutrient Breakdown\n")
             append("━━━━━━━━━━━━━━━━━━━━\n")
             append("Diet: ${dietApproach.displayName}\n")
             append("Total: ${totalCalories.toInt()} kcal/day\n\n")
-            append("🔵 Protein: ${proteinGrams.toInt()}g (${proteinCalories.toInt()} kcal) — ${proteinPercentage.toInt()}%\n")
-            append("🟡 Carbs: ${carbsGrams.toInt()}g (${carbsCalories.toInt()} kcal) — ${carbsPercentage.toInt()}%\n")
-            append("🟠 Fat: ${fatGrams.toInt()}g (${fatCalories.toInt()} kcal) — ${fatPercentage.toInt()}%\n\n")
-            append("🍽️ Per Meal ($mealsPerDay meals/day):\n")
+            append("Protein: ${proteinGrams.toInt()}g (${proteinCalories.toInt()} kcal) — ${proteinPercentage.toInt()}%\n")
+            append("Carbs: ${carbsGrams.toInt()}g (${carbsCalories.toInt()} kcal) — ${carbsPercentage.toInt()}%\n")
+            append("Fat: ${fatGrams.toInt()}g (${fatCalories.toInt()} kcal) — ${fatPercentage.toInt()}%\n\n")
+            append("Per Meal ($mealsPerDay meals/day):\n")
             append("  Protein: ${proteinPerMeal.toInt()}g | Carbs: ${carbsPerMeal.toInt()}g | Fat: ${fatPerMeal.toInt()}g\n")
             append("  Calories: ${caloriesPerMeal.toInt()} kcal per meal")
         }
@@ -61,8 +61,8 @@ enum class DietApproach(
         carbsPercent = 40f,
         proteinPercent = 30f,
         fatPercent = 30f,
-        description = "Well-rounded diet suitable for most people",
-        bestFor = "General health & maintenance"
+        description = "A general-purpose macro split for meal-planning context",
+        bestFor = "Everyday planning"
     ),
     LOW_CARB(
         displayName = "Low Carb",
@@ -70,8 +70,8 @@ enum class DietApproach(
         carbsPercent = 20f,
         proteinPercent = 40f,
         fatPercent = 40f,
-        description = "Reduced carbohydrate intake with higher protein and fat",
-        bestFor = "Weight loss & blood sugar control"
+        description = "A lower-carbohydrate pattern with higher protein and fat",
+        bestFor = "Personal preference or planning"
     ),
     HIGH_CARB(
         displayName = "High Carb",
@@ -79,8 +79,8 @@ enum class DietApproach(
         carbsPercent = 55f,
         proteinPercent = 25f,
         fatPercent = 20f,
-        description = "Carbohydrate-focused for energy-demanding activities",
-        bestFor = "Endurance athletes & high activity"
+        description = "A carbohydrate-focused pattern for higher activity demands",
+        bestFor = "Activity-focused planning"
     ),
     KETOGENIC(
         displayName = "Ketogenic",
@@ -88,8 +88,8 @@ enum class DietApproach(
         carbsPercent = 5f,
         proteinPercent = 25f,
         fatPercent = 70f,
-        description = "Very low carb, high fat to promote ketosis",
-        bestFor = "Rapid fat loss & metabolic shift"
+        description = "A very-low-carbohydrate, higher-fat pattern; suitability varies",
+        bestFor = "Specific goals with professional context"
     ),
     HIGH_PROTEIN(
         displayName = "High Protein",
@@ -97,8 +97,8 @@ enum class DietApproach(
         carbsPercent = 30f,
         proteinPercent = 40f,
         fatPercent = 30f,
-        description = "Elevated protein for muscle building and recovery",
-        bestFor = "Muscle building & strength training"
+        description = "A higher-protein pattern for users who prefer that split",
+        bestFor = "Protein-focused planning"
     ),
     CUSTOM(
         displayName = "Custom",

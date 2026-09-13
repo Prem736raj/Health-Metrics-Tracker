@@ -764,3 +764,23 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device donut/bar rendering, large-font,
   TalkBack, light/dark theme and route checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## Macro planning trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Macro planning now uses stable Material icons for diet presets,
+  macro legends, sliders, detail cards and meal breakdowns instead of emoji
+  markers and isolated raw colors. Ratio feedback uses the shared semantic
+  palette and a readable icon. Preset descriptions and “best for” labels are
+  framed as optional planning patterns rather than weight-loss, blood-sugar or
+  muscle-building promises. Share output uses plain labels for accessibility.
+  Macro percentage balancing, meal-count selection, charts and callbacks remain
+  unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed, including
+  a plain-label share regression. The complete `test`, `lintRelease`,
+  `assembleDebug`, `assembleRelease` and `bundleRelease` gate is run before
+  this slice is committed.
+- **Remaining gates:** Connected-device slider/chart rendering, large-font,
+  TalkBack, light/dark theme and route checks, plus signing/Firebase/Play
+  Console work, remain owner-only.
