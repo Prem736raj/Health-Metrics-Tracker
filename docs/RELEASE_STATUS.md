@@ -673,6 +673,25 @@ These cannot be proven by a Windows unit/build run:
   rendering, TalkBack, large-font, light/dark theme and route checks, plus
   signing/Firebase/Play Console work, remain owner-only.
 
+## BMR trend trust and visual consistency follow-up — 2026-09-13
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BMR trend history now uses shared calculator/health tokens and
+  stable Material vector icons for empty, comparison, statistics and insight
+  states instead of rendered emoji and isolated raw colors. Trend markers use
+  the current surface color for light/dark theme compatibility. Insight copy
+  is observational and non-diagnostic, avoids inferring muscle gain or
+  metabolic health, and invalid previous values no longer produce a
+  divide-by-zero percentage. Chart, history, selection and persistence
+  behavior remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device chart interaction, TalkBack,
+  large-font, light/dark theme and route-rendering checks, plus signing/
+  Firebase/Play Console work, remain owner-only.
+
 ## BMR formula and body-fat input trust/visual consistency follow-up — 2026-09-13
 
 - **Status:** Code-fixable polish complete; device/accessibility validation

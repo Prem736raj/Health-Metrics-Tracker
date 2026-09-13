@@ -36,7 +36,8 @@ data class BMRTrendStats(
     fun getChangeInsight(): BMRChangeInsight {
         if (!hasMultipleReadings) return BMRChangeInsight.NO_DATA
 
-        val absChange = kotlin.math.abs(changeFromPrevious)
+        if (previousBMR <= 0f) return BMRChangeInsight.STABLE
+
         val absPercent = kotlin.math.abs(changeFromPrevious / previousBMR * 100f)
 
         return when {
@@ -65,31 +66,31 @@ enum class BMRChangeInsight(
     STABLE(
         emoji = "✅",
         title = "BMR Stable",
-        message = "Your BMR has remained consistent. This indicates stable body composition and metabolic health. Keep up your current routine!",
+        message = "Your saved BMR estimates are similar across readings. This pattern does not measure body composition or metabolic health.",
         isPositive = true
     ),
     INCREASED_WEIGHT_GAIN(
         emoji = "📈",
         title = "BMR Increased",
-        message = "Your BMR has increased alongside weight gain. This is expected — a larger body requires more energy at rest. If you're strength training, some of this may be muscle mass.",
+        message = "Your BMR estimate increased alongside a higher recorded weight. Changes can reflect the inputs, equation variation or physiology; this is not a muscle measurement.",
         isPositive = true
     ),
     INCREASED_MUSCLE_GAIN(
         emoji = "💪",
-        title = "BMR Increased",
-        message = "Your BMR has increased even without weight gain (or with weight loss). This often indicates improved body composition — possibly more muscle mass. Great work!",
+        title = "BMR Estimate Increased",
+        message = "Your BMR estimate increased while recorded weight was stable or lower. Do not infer muscle gain from this estimate alone.",
         isPositive = true
     ),
     DECREASED_WEIGHT_LOSS(
         emoji = "📉",
-        title = "BMR Decreased",
-        message = "Your BMR has decreased, which is expected with weight loss. To minimize BMR decline, maintain adequate protein intake and include strength training in your routine.",
+        title = "BMR Estimate Decreased",
+        message = "Your BMR estimate decreased alongside lower recorded weight. This direction can occur as inputs change, but it is not a personal prediction of future weight change.",
         isPositive = false
     ),
     DECREASED_CONCERNING(
         emoji = "⚠️",
-        title = "BMR Decreased",
-        message = "Your BMR has decreased without significant weight loss. This could indicate decreased muscle mass or metabolic adaptation. Consider increasing protein intake and adding resistance exercise. If concerned, consult a healthcare provider.",
+        title = "Review This Estimate",
+        message = "Your BMR estimate decreased without recorded weight loss. Check the entries and equation used; discuss a persistent unexpected change with a qualified professional.",
         isPositive = false
     )
 }

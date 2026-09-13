@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ShowChart
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -31,11 +32,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-private val BMRLineColor = Color(0xFF5C6BC0)
-private val TDEELineColor = Color(0xFF26A69A)
+private val BMRLineColor = CalculatorColors.BMR
+private val TDEELineColor = HealthColors.Info
+
+private fun bmrInsightIcon(insight: BMRChangeInsight): ImageVector = when (insight) {
+    BMRChangeInsight.NO_DATA -> Icons.Outlined.ShowChart
+    BMRChangeInsight.STABLE -> Icons.Outlined.TrendingFlat
+    BMRChangeInsight.INCREASED_WEIGHT_GAIN,
+    BMRChangeInsight.INCREASED_MUSCLE_GAIN -> Icons.Outlined.TrendingUp
+    BMRChangeInsight.DECREASED_WEIGHT_LOSS,
+    BMRChangeInsight.DECREASED_CONCERNING -> Icons.Outlined.TrendingDown
+}
 
 @Composable
 fun BMRTrendSection(
@@ -141,7 +153,12 @@ private fun EmptyTrendState() {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.txt_text_placeholder_9), fontSize = 40.sp)
+            Icon(
+                imageVector = Icons.Outlined.ShowChart,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(40.dp)
+            )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = stringResource(R.string.txt_no_bmr_readings_yet),
@@ -194,8 +211,16 @@ private fun SingleReadingState(stats: BMRTrendStats) {
                 containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
             )
         ) {
-            Row(modifier = Modifier.padding(12.dp)) {
-                Text(text = stringResource(R.string.txt_text_placeholder_1), fontSize = 16.sp)
+            Row(
+                modifier = Modifier.padding(12.dp),
+                verticalAlignment = Alignment.Top
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_great_start_save_another_bmr_r),
@@ -257,20 +282,20 @@ private fun PreviousComparisonBadge(stats: BMRTrendStats) {
     val change = stats.changeFromPrevious
     val isUp = change > 0
     val isStable = abs(change) < 5f
-    val emoji = when {
-        isStable -> "➡️"
-        isUp -> "↑"
-        else -> "↓"
-    }
     val color = when {
         isStable -> MaterialTheme.colorScheme.onSurfaceVariant
-        isUp -> Color(0xFF4CAF50)
-        else -> Color(0xFFFF9800)
+        isUp -> HealthColors.Info
+        else -> HealthColors.Caution
+    }
+    val icon = when {
+        isStable -> Icons.Outlined.TrendingFlat
+        isUp -> Icons.Outlined.TrendingUp
+        else -> Icons.Outlined.TrendingDown
     }
     val text = when {
         isStable -> "Stable since last reading"
-        isUp -> "${emoji} Up ${abs(change).toInt()} kcal since last reading"
-        else -> "${emoji} Down ${abs(change).toInt()} kcal since last reading"
+        isUp -> "Up ${abs(change).toInt()} kcal since last reading"
+        else -> "Down ${abs(change).toInt()} kcal since last reading"
     }
 
     Surface(
@@ -285,6 +310,13 @@ private fun PreviousComparisonBadge(stats: BMRTrendStats) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelLarge,
@@ -307,6 +339,7 @@ private fun BMRTDEEGraph(
     val textMeasurer = rememberTextMeasurer()
     val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
     val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val surfaceColor = MaterialTheme.colorScheme.surface
 
     val animProgress = remember { Animatable(0f) }
     LaunchedEffect(points) {
@@ -469,7 +502,7 @@ private fun BMRTDEEGraph(
                 if (isSelected) {
                     drawCircle(BMRLineColor.copy(alpha = 0.2f), dotSize * 2f, Offset(x, bmrY))
                 }
-                drawCircle(Color.White, dotSize, Offset(x, bmrY))
+                drawCircle(surfaceColor, dotSize, Offset(x, bmrY))
                 drawCircle(BMRLineColor, dotSize * 0.7f, Offset(x, bmrY))
 
                 // Vertical guide line when selected
@@ -609,14 +642,14 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
                 label = "Highest",
                 value = "${stats.highestBMR.toInt()}",
                 unit = "kcal",
-                color = Color(0xFF4CAF50),
+                color = HealthColors.Healthy,
                 modifier = Modifier.weight(1f)
             )
             TrendStatCard(
                 label = "Lowest",
                 value = "${stats.lowestBMR.toInt()}",
                 unit = "kcal",
-                color = Color(0xFFFF9800),
+                color = HealthColors.Caution,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -627,8 +660,8 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
         if (stats.totalReadings > 1) {
             val changeColor = when {
                 abs(stats.changeFromFirst) < 5f -> MaterialTheme.colorScheme.onSurfaceVariant
-                stats.changeFromFirst > 0 -> Color(0xFF4CAF50)
-                else -> Color(0xFFFF9800)
+                stats.changeFromFirst > 0 -> HealthColors.Info
+                else -> HealthColors.Caution
             }
             val sign = if (stats.changeFromFirst >= 0) "+" else ""
 
@@ -725,12 +758,13 @@ private fun TrendStatCard(
 @Composable
 private fun InsightCard(stats: BMRTrendStats) {
     val insight = stats.getChangeInsight()
-    val bgColor = if (insight.isPositive)
-        Color(0xFF4CAF50).copy(alpha = 0.06f)
-    else Color(0xFFFF9800).copy(alpha = 0.06f)
-    val borderColor = if (insight.isPositive)
-        Color(0xFF4CAF50).copy(alpha = 0.15f)
-    else Color(0xFFFF9800).copy(alpha = 0.15f)
+    val insightColor = when (insight) {
+        BMRChangeInsight.DECREASED_CONCERNING -> HealthColors.Caution
+        BMRChangeInsight.STABLE -> MaterialTheme.colorScheme.primary
+        else -> HealthColors.Info
+    }
+    val bgColor = insightColor.copy(alpha = 0.06f)
+    val borderColor = insightColor.copy(alpha = 0.15f)
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -740,7 +774,12 @@ private fun InsightCard(stats: BMRTrendStats) {
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = insight.emoji, fontSize = 20.sp)
+                Icon(
+                    imageVector = bmrInsightIcon(insight),
+                    contentDescription = null,
+                    tint = insightColor,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = insight.title,
@@ -769,7 +808,12 @@ private fun InsightCard(stats: BMRTrendStats) {
                         modifier = Modifier.padding(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = stringResource(R.string.txt_text_placeholder_28), fontSize = 14.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.MonitorWeight,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(16.dp)
+                        )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = "Weight changed ${wSign}${String.format(java.util.Locale.getDefault(), "%.1f", stats.weightChange)} kg since last reading",

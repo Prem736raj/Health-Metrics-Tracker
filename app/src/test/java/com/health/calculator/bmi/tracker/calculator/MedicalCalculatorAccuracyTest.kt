@@ -7,6 +7,8 @@ import com.health.calculator.bmi.tracker.data.calculator.BmiReferenceCategory
 import com.health.calculator.bmi.tracker.data.calculator.IdealWeightCalculator
 import com.health.calculator.bmi.tracker.data.model.TEFData
 import com.health.calculator.bmi.tracker.data.model.BMRFormula
+import com.health.calculator.bmi.tracker.data.model.BMRChangeInsight
+import com.health.calculator.bmi.tracker.data.model.BMRTrendStats
 import com.health.calculator.bmi.tracker.data.model.BloodPressureCalculator
 import com.health.calculator.bmi.tracker.data.model.BpCategory
 import com.health.calculator.bmi.tracker.data.model.WaterActivityLevel
@@ -65,6 +67,17 @@ class MedicalCalculatorAccuracyTest {
         assertNull(BMRCalculator.calculate(70f, 175f, 30, true, 75.1f, BMRFormula.CUNNINGHAM))
         assertTrue(BMRValidation.validateInputs(70f, 99.9f, 30, 20f, BMRFormula.MIFFLIN_ST_JEOR).heightError != null)
         assertTrue(BMRValidation.validateInputs(70f, 175f, 30, Float.NaN, BMRFormula.KATCH_MCARDLE).bodyFatError != null)
+    }
+
+    @Test
+    fun bmrTrendWithInvalidPreviousValueDoesNotProduceAnInvalidInsight() {
+        val stats = BMRTrendStats(
+            totalReadings = 2,
+            previousBMR = 0f,
+            changeFromPrevious = -20f
+        )
+
+        assertEquals(BMRChangeInsight.STABLE, stats.getChangeInsight())
     }
 
     @Test

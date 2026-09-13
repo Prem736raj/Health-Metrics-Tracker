@@ -409,6 +409,27 @@ This file is the source of truth for the sequential product-development phases. 
 
 Updated: 2026-09-13
 
+## Follow-up — BMR trend trust and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** BMR trend history now uses shared calculator/health tokens and
+  stable Material vector icons for empty, comparison, statistics and insight
+  states instead of rendered emoji and isolated raw colors. Trend markers use the
+  current surface color so they remain readable in both themes. Insight copy is
+  explicitly observational and non-diagnostic, avoids inferring muscle gain or
+  metabolic health, and flags invalid previous values without producing a
+  divide-by-zero percentage. Existing chart, history, selection and persistence
+  behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device chart interaction, TalkBack,
+  large-font, light/dark theme and route-rendering checks remain open.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-13
+
 ## Follow-up — BMR formula and body-fat input trust/visual consistency
 
 - **Status:** Complete locally; device/accessibility validation remains open
