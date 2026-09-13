@@ -463,7 +463,7 @@
 <string name="txt_text_placeholder_26">=</string>
 <string name="txt_unit_conversion">🔄 Unit Conversion</string>
 <string name="txt_bmr_breakdown">BMR Breakdown</string>
-<string name="txt_text_placeholder_27">⏱️</string>
+<string name="txt_text_placeholder_27">Schedule</string>
 <string name="txt_what_this_means">What This Means</string>
 <string name="txt_text_placeholder_28">⚖️</string>
 <string name="txt_change_from_first_reading">Change from first reading</string>
@@ -485,9 +485,9 @@
 <string name="txt_kcal">kcal</string>
 <string name="txt_snack">Snack</string>
 <string name="txt_tip_these_are_suggested_timing">Tip: These are suggested timings. Adjust based on your schedule and listen to your body\'s hunger cues.</string>
-<string name="txt_meal_schedule">🍽️ Meal Schedule</string>
+<string name="txt_meal_schedule">Meal schedule</string>
 <string name="txt_intermittent_fasting_schedule">Intermittent Fasting Schedule</string>
-<string name="txt_daily_schedule">📅 Daily Schedule</string>
+<string name="txt_daily_schedule">Daily schedule</string>
 <string name="txt_number_of_meals">Number of meals:</string>
 <string name="txt_eating_window">Eating window:</string>
 <string name="txt_first_meal_at">First meal at:</string>
@@ -496,7 +496,7 @@
 <string name="txt_eating_pattern">Eating Pattern</string>
 <string name="txt_plan_when_and_how_often_to_eat">Plan when and how often to eat</string>
 <string name="txt_meal_timing_schedule">Meal Timing &amp; Schedule</string>
-<string name="txt_text_placeholder_31">⏰</string>
+<string name="txt_text_placeholder_31">Schedule</string>
 <string name="txt_minimum_1_200_kcal_day_applied">App planning floor applied; this is not a universal medical minimum.</string>
 <string name="txt_extreme_deficits_are_not_recom">Very low targets need individual professional guidance; this app does not prescribe a diet.</string>
 <string name="txt_weight_change_estimates_assume">Weight-change planning uses an approximate energy conversion and is not a personal prediction. </string>

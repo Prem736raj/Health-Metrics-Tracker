@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
@@ -35,15 +36,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-private val EatingColor = Color(0xFF4CAF50)
-private val FastingColor = Color(0xFFFF9800)
-private val MealDotColor = Color(0xFF2196F3)
-private val SnackDotColor = Color(0xFFAB47BC)
+private val EatingColor = HealthColors.Healthy
+private val FastingColor = HealthColors.Caution
+private val MealDotColor = HealthColors.Info
+private val SnackDotColor = HealthColors.Severe
 
 @Composable
 fun MealTimingSection(
@@ -60,14 +62,12 @@ fun MealTimingSection(
     var customWindowHours by remember { mutableIntStateOf(10) }
     var customMealCount by remember { mutableIntStateOf(3) }
 
-    val effectivePattern = if (selectedPattern == EatingPattern.CUSTOM) {
-        selectedPattern // handled separately
-    } else selectedPattern
-
     val config = MealTimingConfig(
         pattern = selectedPattern,
         eatingWindowStartHour = startHour,
         eatingWindowStartMinute = startMinute,
+        customEatingWindowHours = customWindowHours,
+        customMealCount = customMealCount,
         totalCalories = totalCalories,
         proteinGrams = proteinGrams,
         carbsGrams = carbsGrams,
@@ -93,7 +93,12 @@ fun MealTimingSection(
             Column(modifier = Modifier.padding(20.dp)) {
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_31), fontSize = 22.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Restaurant,
+                        contentDescription = null,
+                        tint = HealthColors.Info,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
@@ -254,7 +259,12 @@ private fun PatternSelector(
                     modifier = Modifier.padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = pattern.emoji, fontSize = 16.sp)
+                    Icon(
+                        imageVector = eatingPatternIcon(pattern),
+                        contentDescription = pattern.displayName,
+                        tint = if (pattern.isIntermittentFasting) FastingColor else MealDotColor,
+                        modifier = Modifier.size(20.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
@@ -276,6 +286,17 @@ private fun PatternSelector(
     }
 }
 
+private fun eatingPatternIcon(pattern: EatingPattern): ImageVector = when (pattern) {
+    EatingPattern.STANDARD -> Icons.Outlined.Restaurant
+    EatingPattern.THREE_MEALS -> Icons.Outlined.LocalDining
+    EatingPattern.FOUR_MEALS -> Icons.Outlined.Restaurant
+    EatingPattern.SIX_SMALL -> Icons.Outlined.ViewAgenda
+    EatingPattern.IF_16_8 -> Icons.Outlined.Schedule
+    EatingPattern.IF_18_6 -> Icons.Outlined.AccessTime
+    EatingPattern.IF_20_4 -> Icons.Outlined.Timer
+    EatingPattern.CUSTOM -> Icons.Outlined.Tune
+}
+
 @Composable
 private fun PatternChip(
     pattern: EatingPattern,
@@ -291,7 +312,7 @@ private fun PatternChip(
         animationSpec = tween(200), label = "chipBg"
     )
     val fg by animateColorAsState(
-        targetValue = if (isSelected) Color.White
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onPrimary
         else MaterialTheme.colorScheme.onSurface,
         animationSpec = tween(200), label = "chipFg"
     )
@@ -307,7 +328,12 @@ private fun PatternChip(
             modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = pattern.emoji, fontSize = 16.sp)
+            Icon(
+                imageVector = eatingPatternIcon(pattern),
+                contentDescription = pattern.displayName,
+                tint = fg,
+                modifier = Modifier.size(18.dp)
+            )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = pattern.shortName,
@@ -439,7 +465,7 @@ private fun EatingWindowControls(
                             text = "$customWindowHours hrs",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = EatingColor
+                            color = HealthColors.Healthy
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         FilledTonalIconButton(
@@ -477,7 +503,7 @@ private fun EatingWindowControls(
                             text = "$customMealCount meals",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = MealDotColor
+                            color = HealthColors.Info
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         FilledTonalIconButton(
@@ -504,11 +530,18 @@ private fun DailyTimeline(
 ) {
     val textMeasurer = rememberTextMeasurer()
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+    val surfaceColor = MaterialTheme.colorScheme.surface
     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
     val primaryColor = MaterialTheme.colorScheme.primary
 
     val animProgress = remember { Animatable(0f) }
-    LaunchedEffect(config.pattern, config.eatingWindowStartHour) {
+    LaunchedEffect(
+        config.pattern,
+        config.eatingWindowStartHour,
+        config.eatingWindowStartMinute,
+        config.effectiveEatingWindowHours,
+        config.effectiveMealCount
+    ) {
         animProgress.snapTo(0f)
         animProgress.animateTo(1f, tween(800, easing = FastOutSlowInEasing))
     }
@@ -540,7 +573,7 @@ private fun DailyTimeline(
 
             // Eating window arc
             val startAngle = (config.eatingWindowStartHour * 60 + config.eatingWindowStartMinute) / (24f * 60f) * 360f - 90f
-            val sweepAngle = config.pattern.eatingWindowHours / 24f * 360f * animProgress.value
+            val sweepAngle = config.effectiveEatingWindowHours / 24f * 360f * animProgress.value
 
             drawArc(
                 color = EatingColor.copy(alpha = 0.3f),
@@ -620,14 +653,14 @@ private fun DailyTimeline(
                 // Glow
                 drawCircle(dotColor.copy(alpha = 0.2f), dotSize * 2f * animProgress.value, Offset(mx, my))
                 // Outer
-                drawCircle(Color.White, dotSize * animProgress.value, Offset(mx, my))
+                drawCircle(surfaceColor, dotSize * animProgress.value, Offset(mx, my))
                 // Inner
                 drawCircle(dotColor, dotSize * 0.7f * animProgress.value, Offset(mx, my))
             }
 
             // Center info
             val centerLabel = textMeasurer.measure(
-                "${config.pattern.eatingWindowHours}h eat",
+                "${config.effectiveEatingWindowHours}h eat",
                 TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold, color = EatingColor)
             )
             drawText(centerLabel, topLeft = Offset(centerX - centerLabel.size.width / 2, centerY - 16.dp.toPx()))
@@ -691,7 +724,12 @@ private fun IFWindowSummary(config: MealTimingConfig) {
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_27), fontSize = 18.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Schedule,
+                    contentDescription = null,
+                    tint = FastingColor,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_intermittent_fasting_schedule),
@@ -710,16 +748,16 @@ private fun IFWindowSummary(config: MealTimingConfig) {
                 IFWindowChip(
                     label = "Eating Window",
                     time = "${formatHour(config.eatingWindowStartHour)} – ${formatHour(config.eatingWindowEndHour)}",
-                    duration = "${config.pattern.eatingWindowHours} hours",
+                    duration = "${config.effectiveEatingWindowHours} hours",
                     color = EatingColor,
-                    emoji = "🍽️"
+                    icon = Icons.Outlined.LocalDining
                 )
                 IFWindowChip(
                     label = "Fasting Window",
                     time = "${formatHour(config.eatingWindowEndHour)} – ${formatHour(config.eatingWindowStartHour)}",
                     duration = "${config.fastingHours} hours",
                     color = FastingColor,
-                    emoji = "🌙"
+                    icon = Icons.Outlined.Schedule
                 )
             }
         }
@@ -732,10 +770,15 @@ private fun IFWindowChip(
     time: String,
     duration: String,
     color: Color,
-    emoji: String
+    icon: ImageVector
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = emoji, fontSize = 20.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = color,
+            modifier = Modifier.size(22.dp)
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = label,
@@ -897,9 +940,9 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    MacroMiniChip("P", "${meal.protein.roundToInt()}g", MacroColors.Protein)
-                    MacroMiniChip("C", "${meal.carbs.roundToInt()}g", MacroColors.Carbs)
-                    MacroMiniChip("F", "${meal.fat.roundToInt()}g", MacroColors.Fat)
+                    MacroMiniChip("P", "${meal.protein.roundToInt()}g", HealthColors.Info)
+                    MacroMiniChip("C", "${meal.carbs.roundToInt()}g", HealthColors.Warning)
+                    MacroMiniChip("F", "${meal.fat.roundToInt()}g", HealthColors.Healthy)
                 }
             }
 

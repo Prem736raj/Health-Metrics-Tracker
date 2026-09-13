@@ -409,6 +409,29 @@ This file is the source of truth for the sequential product-development phases. 
 
 Updated: 2026-09-13
 
+## Follow-up — Meal timing trust, custom schedule correctness and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** Meal-timing pattern and fasting surfaces now use stable
+  Material vector icons and shared semantic colors instead of rendered emoji,
+  raw color literals and a hard-coded white marker. The custom eating-window
+  and meal-count controls now drive the schedule calculation (including
+  clamped safety bounds), so the preview, timeline and fasting summary cannot
+  disagree with the selected values. Meal schedule labels are plain and
+  accessible; macro chips use the shared palette. Existing standard-pattern
+  portions and BMR navigation remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed, including custom
+  window/meal-count boundary, overnight end-time and calorie-total regressions.
+  The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Known limitations:** Connected-device timeline animation, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing,
+  Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-14
+
 ## Follow-up — BMR trend trust and visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open

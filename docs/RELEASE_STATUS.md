@@ -784,3 +784,23 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device slider/chart rendering, large-font,
   TalkBack, light/dark theme and route checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## Meal timing trust, custom schedule correctness and visual consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Meal-timing pattern and fasting surfaces now use stable Material
+  vector icons and shared semantic colors instead of rendered emoji, raw color
+  literals and a hard-coded white marker. The custom eating-window and
+  meal-count controls now drive the schedule calculation, including clamped
+  safety bounds, so the preview, timeline and fasting summary stay in sync.
+  Meal schedule labels are plain and accessible; macro chips use the shared
+  palette. Standard-pattern portions and BMR navigation remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed, including
+  custom window/meal-count boundary, overnight end-time and calorie-total
+  regressions. The complete `test`, `lintRelease`, `assembleDebug`,
+  `assembleRelease` and `bundleRelease` gate is run before this slice is
+  committed.
+- **Remaining gates:** Connected-device timeline animation, TalkBack,
+  large-font, light/dark theme and route checks, plus signing/Firebase/Play
+  Console work, remain owner-only.

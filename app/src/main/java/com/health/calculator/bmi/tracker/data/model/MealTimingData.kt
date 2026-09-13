@@ -5,35 +5,49 @@ data class MealTimingConfig(
     val pattern: EatingPattern = EatingPattern.STANDARD,
     val eatingWindowStartHour: Int = 8,
     val eatingWindowStartMinute: Int = 0,
+    /**
+     * Custom values are used only when [pattern] is [EatingPattern.CUSTOM].
+     * Keeping them on the calculation model prevents the UI controls from
+     * becoming decorative and makes the generated schedule deterministic.
+     */
+    val customEatingWindowHours: Int = EatingPattern.CUSTOM.eatingWindowHours,
+    val customMealCount: Int = EatingPattern.CUSTOM.mealCount,
     val totalCalories: Float = 2000f,
     val proteinGrams: Float = 150f,
     val carbsGrams: Float = 200f,
     val fatGrams: Float = 67f
 ) {
+    val effectiveEatingWindowHours: Int
+        get() = if (pattern == EatingPattern.CUSTOM) {
+            customEatingWindowHours.coerceIn(2, 20)
+        } else {
+            pattern.eatingWindowHours
+        }
+
+    val effectiveMealCount: Int
+        get() = if (pattern == EatingPattern.CUSTOM) {
+            customMealCount.coerceIn(1, 8)
+        } else {
+            pattern.mealCount
+        }
+
     val eatingWindowEndHour: Int
         get() {
-            val endMinutes = (eatingWindowStartHour * 60 + eatingWindowStartMinute + pattern.eatingWindowHours * 60)
+            val endMinutes = (eatingWindowStartHour * 60 + eatingWindowStartMinute + effectiveEatingWindowHours * 60)
             return (endMinutes / 60) % 24
         }
 
     val eatingWindowEndMinute: Int
         get() {
-            val endMinutes = (eatingWindowStartHour * 60 + eatingWindowStartMinute + pattern.eatingWindowHours * 60)
+            val endMinutes = (eatingWindowStartHour * 60 + eatingWindowStartMinute + effectiveEatingWindowHours * 60)
             return endMinutes % 60
         }
 
-    val fastingHours: Int get() = 24 - pattern.eatingWindowHours
+    val fastingHours: Int get() = 24 - effectiveEatingWindowHours
 
     fun getMeals(): List<TimedMealSlot> {
-        val mealCount = pattern.mealCount
+        val mealCount = effectiveMealCount
         val snackCount = pattern.snackCount
-        val totalSlots = mealCount + snackCount
-
-        val mealCaloriePortion = if (snackCount > 0) 0.25f else (1f / mealCount)
-        val snackCaloriePortion = if (snackCount > 0) {
-            val totalMealPortion = mealCaloriePortion * mealCount
-            (1f - totalMealPortion) / snackCount
-        } else 0f
 
         // Recalculate meal portions based on pattern
         val portions = buildList {
@@ -66,7 +80,7 @@ data class MealTimingConfig(
                     add(MealPortion("Meal 6", 0.16f, MealType.MEAL))
                 }
                 EatingPattern.IF_16_8, EatingPattern.IF_18_6, EatingPattern.IF_20_4, EatingPattern.CUSTOM -> {
-                    val meals = pattern.mealCount
+                    val meals = effectiveMealCount
                     val portion = 1f / meals
                     for (i in 1..meals) {
                         add(MealPortion("Meal $i", portion, MealType.MEAL))
@@ -76,7 +90,7 @@ data class MealTimingConfig(
         }
 
         // Calculate meal times
-        val windowMinutes = pattern.eatingWindowHours * 60
+        val windowMinutes = effectiveEatingWindowHours * 60
         val startMinutes = eatingWindowStartHour * 60 + eatingWindowStartMinute
         val slots = mutableListOf<TimedMealSlot>()
 

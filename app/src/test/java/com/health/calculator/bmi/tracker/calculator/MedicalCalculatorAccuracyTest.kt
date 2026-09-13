@@ -11,6 +11,8 @@ import com.health.calculator.bmi.tracker.data.model.BMRChangeInsight
 import com.health.calculator.bmi.tracker.data.model.BMRTrendStats
 import com.health.calculator.bmi.tracker.data.model.BMRAgeCurveData
 import com.health.calculator.bmi.tracker.data.model.MacroBreakdown
+import com.health.calculator.bmi.tracker.data.model.MealTimingConfig
+import com.health.calculator.bmi.tracker.data.model.EatingPattern
 import com.health.calculator.bmi.tracker.data.model.BloodPressureCalculator
 import com.health.calculator.bmi.tracker.data.model.BpCategory
 import com.health.calculator.bmi.tracker.data.model.WaterActivityLevel
@@ -337,5 +339,35 @@ class MedicalCalculatorAccuracyTest {
         assertTrue(text.contains("Protein:"))
         assertFalse(text.contains("🥗"))
         assertFalse(text.contains("🔵"))
+    }
+
+    @Test
+    fun customMealTimingControlsDriveScheduleAndClampBounds() {
+        val config = MealTimingConfig(
+            pattern = EatingPattern.CUSTOM,
+            eatingWindowStartHour = 22,
+            eatingWindowStartMinute = 30,
+            customEatingWindowHours = 4,
+            customMealCount = 4,
+            totalCalories = 1_800f,
+            proteinGrams = 180f,
+            carbsGrams = 180f,
+            fatGrams = 80f
+        )
+
+        assertEquals(4, config.effectiveEatingWindowHours)
+        assertEquals(4, config.effectiveMealCount)
+        assertEquals(2, config.eatingWindowEndHour)
+        assertEquals(30, config.eatingWindowEndMinute)
+        assertEquals(20, config.fastingHours)
+        assertEquals(4, config.getMeals().size)
+        assertEquals("22:30", config.getMeals().first().time24String)
+        assertEquals("02:30", config.getMeals().last().time24String)
+        assertEquals(1_800f, config.getMeals().sumOf { it.calories.toDouble() }.toFloat(), 0.01f)
+
+        val clamped = config.copy(customEatingWindowHours = 99, customMealCount = 0)
+        assertEquals(20, clamped.effectiveEatingWindowHours)
+        assertEquals(1, clamped.effectiveMealCount)
+        assertEquals(1, clamped.getMeals().size)
     }
 }
