@@ -1519,6 +1519,23 @@ Updated: 2026-09-14
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
 
+## Follow-up — BMI edge-case and validation polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** BMI edge-case warnings now use stable vector icons and
+  shared semantic colors instead of emoji and isolated literals. Invalid,
+  non-finite BMI, weight and height values are surfaced rather than silently
+  accepted, and the optional guidance copy no longer points users to emergency
+  terminology for a calculator warning.
+- **Tests:** Added boundary and non-finite-input coverage for the edge-case
+  handler. `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` all passed after the focused compilation/unit test run.
+- **Known limitations:** Edge-case rendering, TalkBack, large-font, light/dark
+  theme and route checks remain open; signing, Firebase and Play Console tasks
+  still require owner access.
+- **Next phase:** Continue auditing remaining calculator educational/result
+  surfaces for user-visible placeholders and inconsistent interaction cues.
+
 ## Follow-up — BMI risk context visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open.

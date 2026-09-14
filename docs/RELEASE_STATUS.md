@@ -1166,3 +1166,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Goal/trend rendering, TalkBack, large-font, light/dark
   theme and route checks, plus signing, Firebase and Play Console work, remain
   owner-only.
+
+## BMI edge-case and validation polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BMI edge-case cards use stable vector icons and shared semantic
+  colors instead of emoji and raw literals. Non-finite or invalid BMI, weight
+  and height values are now rejected visibly; optional guidance avoids emergency
+  terminology for a calculator warning.
+- **Verification:** Added edge-case boundary and non-finite-input tests.
+  Focused compilation/unit tests plus `test`, `lintRelease`, `assembleDebug`,
+  `assembleRelease` and `bundleRelease` all passed.
+- **Remaining gates:** Edge-case rendering, TalkBack, large-font, light/dark
+  theme and route checks, plus signing, Firebase and Play Console work, remain
+  owner-only.

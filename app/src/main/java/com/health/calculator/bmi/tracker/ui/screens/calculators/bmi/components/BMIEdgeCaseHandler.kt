@@ -14,16 +14,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 data class EdgeCaseMessage(
     val title: String,
     val message: String,
-    val emoji: String,
+    val icon: ImageVector,
     val severity: EdgeCaseSeverity,
     val showSeekHelp: Boolean = false
 )
@@ -36,40 +37,46 @@ object BMIEdgeCaseHandler {
 
     fun getEdgeCaseMessage(bmi: Float): EdgeCaseMessage? {
         return when {
+            !bmi.isFinite() || bmi <= 0f -> EdgeCaseMessage(
+                title = "Check your BMI inputs",
+                icon = Icons.Outlined.ErrorOutline,
+                message = "This value is not a usable BMI result. Verify your height and weight units, then try again.",
+                severity = EdgeCaseSeverity.WARNING
+            )
             bmi < 10f -> EdgeCaseMessage(
                 title = "Very low BMI value",
-                emoji = "⚠️",
+                icon = Icons.Outlined.Warning,
                 message = "This value is well outside adult reference categories. BMI cannot identify the cause; consider professional guidance, especially after unintentional change.",
                 severity = EdgeCaseSeverity.CONCERN
             )
             bmi in 10f..12f -> EdgeCaseMessage(
                 title = "Very low BMI value",
-                emoji = "⚠️",
+                icon = Icons.Outlined.Warning,
                 message = "This value is below adult reference categories. BMI cannot identify a cause; discuss persistent concerns or unintentional change with a healthcare professional.",
                 severity = EdgeCaseSeverity.CONCERN
             )
             bmi in 12f..14f -> EdgeCaseMessage(
                 title = "Severely Low BMI",
-                emoji = "⚠️",
+                icon = Icons.Outlined.Warning,
                 message = "This value is below adult reference categories. Consider the trend, nutrition, symptoms, and personal context.",
                 severity = EdgeCaseSeverity.CONCERN,
                 showSeekHelp = false
             )
             bmi in 50f..60f -> EdgeCaseMessage(
                 title = "Extremely High BMI",
-                emoji = "🩺",
+                icon = Icons.Outlined.MonitorWeight,
                 message = "This value is well above adult reference categories. BMI is not a diagnosis; consider individualized, non-judgmental guidance.",
                 severity = EdgeCaseSeverity.CONCERN
             )
             bmi in 60f..80f -> EdgeCaseMessage(
                 title = "Very high BMI value",
-                emoji = "🚨",
+                icon = Icons.Outlined.Warning,
                 message = "This value is well above adult reference categories. BMI cannot identify a cause or determine treatment; consider a routine professional conversation.",
                 severity = EdgeCaseSeverity.CONCERN
             )
             bmi > 80f -> EdgeCaseMessage(
                 title = "Extreme BMI Value",
-                emoji = "⚠️",
+                icon = Icons.Outlined.ReportProblem,
                 message = "This BMI value is unusually extreme. Please verify the units and inputs. If accurate, seek individualized guidance rather than relying on BMI alone.",
                 severity = EdgeCaseSeverity.CONCERN
             )
@@ -79,7 +86,7 @@ object BMIEdgeCaseHandler {
 
     fun validateWeight(weightKg: Float): String? {
         return when {
-            weightKg <= 0f -> "Please enter a valid weight"
+            !weightKg.isFinite() || weightKg <= 0f -> "Please enter a valid weight"
             weightKg < 2f -> "Weight seems too low. Please check your input"
             weightKg > 500f -> "Weight exceeds maximum range. Please verify"
             weightKg < 10f -> "Weight is unusually low. Please verify"
@@ -90,7 +97,7 @@ object BMIEdgeCaseHandler {
 
     fun validateHeight(heightCm: Float): String? {
         return when {
-            heightCm <= 0f -> "Please enter a valid height"
+            !heightCm.isFinite() || heightCm <= 0f -> "Please enter a valid height"
             heightCm < 30f -> "Height seems too low. Please check your input"
             heightCm > 280f -> "Height exceeds maximum range. Please verify"
             heightCm < 50f -> "Height is unusually low. Please verify"
@@ -141,19 +148,19 @@ fun EdgeCaseWarningCard(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = when (edgeCaseMessage.severity) {
-        EdgeCaseSeverity.WARNING -> Color(0xFFFFF3E0)
-        EdgeCaseSeverity.CONCERN -> Color(0xFFFCE4EC)
-        EdgeCaseSeverity.CRITICAL -> Color(0xFFFFEBEE)
+        EdgeCaseSeverity.WARNING -> HealthColors.Warning.copy(alpha = 0.12f)
+        EdgeCaseSeverity.CONCERN -> HealthColors.Caution.copy(alpha = 0.12f)
+        EdgeCaseSeverity.CRITICAL -> HealthColors.Danger.copy(alpha = 0.12f)
     }
     val borderColor = when (edgeCaseMessage.severity) {
-        EdgeCaseSeverity.WARNING -> Color(0xFFFF9800)
-        EdgeCaseSeverity.CONCERN -> Color(0xFFF44336)
-        EdgeCaseSeverity.CRITICAL -> Color(0xFFB71C1C)
+        EdgeCaseSeverity.WARNING -> HealthColors.Warning
+        EdgeCaseSeverity.CONCERN -> HealthColors.Caution
+        EdgeCaseSeverity.CRITICAL -> HealthColors.Danger
     }
     val iconColor = when (edgeCaseMessage.severity) {
-        EdgeCaseSeverity.WARNING -> Color(0xFFE65100)
-        EdgeCaseSeverity.CONCERN -> Color(0xFFC62828)
-        EdgeCaseSeverity.CRITICAL -> Color(0xFFB71C1C)
+        EdgeCaseSeverity.WARNING -> HealthColors.Warning
+        EdgeCaseSeverity.CONCERN -> HealthColors.Caution
+        EdgeCaseSeverity.CRITICAL -> HealthColors.Danger
     }
 
     Card(
@@ -168,9 +175,11 @@ fun EdgeCaseWarningCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = edgeCaseMessage.emoji,
-                    fontSize = 24.sp
+                Icon(
+                    imageVector = edgeCaseMessage.icon,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
@@ -216,7 +225,7 @@ fun EdgeCaseWarningCard(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White.copy(alpha = 0.7f)
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
                     )
                 ) {
                     Row(
@@ -239,7 +248,7 @@ fun EdgeCaseWarningCard(
                             )
                             Text(
                                 text = stringResource(R.string.txt_contact_your_healthcare_provid) +
-                                        "emergency room, or call a health helpline.",
+                                        "qualified health service for advice.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 lineHeight = 16.sp
