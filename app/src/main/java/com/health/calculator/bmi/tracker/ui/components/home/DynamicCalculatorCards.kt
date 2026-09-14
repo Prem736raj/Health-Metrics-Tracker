@@ -14,6 +14,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.HealthAndSafety
+import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +40,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+import com.health.calculator.bmi.tracker.ui.theme.WellnessPalette
 
 // ============================================================
 // BASE CALCULATOR CARD
@@ -36,7 +51,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun DynamicCalculatorCard(
-    emoji: String,
+    icon: ImageVector,
     title: String,
     description: String,
     onClick: () -> Unit,
@@ -81,7 +96,7 @@ fun DynamicCalculatorCard(
                             brush = Brush.verticalGradient(
                                 colors = listOf(
                                     Color.Transparent,
-                                    Color(0xCC000000)
+                                    MaterialTheme.colorScheme.scrim.copy(alpha = 0.8f)
                                 )
                             )
                         )
@@ -110,7 +125,7 @@ fun DynamicCalculatorCard(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                // Top section (Emoji/Progress)
+                // Top section (icon/progress)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -123,7 +138,7 @@ fun DynamicCalculatorCard(
                         if (progressRing != null) {
                             progressRing()
                         } else if (backgroundImageRes == null) {
-                            // Only show emoji box if there is no background image
+                            // Keep the vector icon visible on tonal cards.
                             Box(
                                 modifier = Modifier
                                     .size(48.dp)
@@ -138,7 +153,12 @@ fun DynamicCalculatorCard(
                                     ),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = emoji, fontSize = 22.sp)
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = title,
+                                    tint = accentColor,
+                                    modifier = Modifier.size(24.dp)
+                                )
                             }
                         }
                     }
@@ -150,7 +170,7 @@ fun DynamicCalculatorCard(
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = if (backgroundImageRes != null) Color.White else MaterialTheme.colorScheme.onSurface,
+                        color = if (backgroundImageRes != null) WellnessPalette.OnHero else MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -163,7 +183,7 @@ fun DynamicCalculatorCard(
                         Text(
                             text = description,
                             style = MaterialTheme.typography.bodySmall,
-                            color = if (backgroundImageRes != null) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            color = if (backgroundImageRes != null) WellnessPalette.OnHero.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             lineHeight = 14.sp
@@ -190,17 +210,17 @@ fun BMICalculatorCard(
     val hasData = lastBMI != null
     val categoryColor = remember(lastBMI) {
         when {
-            lastBMI == null -> Color(0xFF2196F3)
-            lastBMI < 18.5f -> Color(0xFFFF9800)
-            lastBMI < 25f -> Color(0xFF4CAF50)
-            lastBMI < 30f -> Color(0xFFFF9800)
-            else -> Color(0xFFF44336)
+            lastBMI == null -> CalculatorColors.BMI
+            lastBMI < 18.5f -> HealthColors.Warning
+            lastBMI < 25f -> HealthColors.Healthy
+            lastBMI < 30f -> HealthColors.Caution
+            else -> HealthColors.Danger
         }
     }
     val needsAttention = lastBMI != null && (lastBMI < 18.5f || lastBMI >= 25f)
 
     DynamicCalculatorCard(
-        emoji = "📊",
+        icon = Icons.Outlined.Calculate,
         title = "BMI Calculator",
         description = "Calculate your Body Mass Index",
         onClick = onClick,
@@ -231,7 +251,7 @@ fun BMICalculatorCard(
                     text = stringResource(R.string.txt_1f).format(lastBMI),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color.White
+                    color = WellnessPalette.OnHero
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 // Category
@@ -239,7 +259,7 @@ fun BMICalculatorCard(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.labelMedium,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = WellnessPalette.OnHero.copy(alpha = 0.8f)
                     )
                 }
             }
@@ -261,20 +281,20 @@ fun BMRCalculatorCard(
     val hasData = lastBMR != null
 
     DynamicCalculatorCard(
-        emoji = "🔥",
+        icon = Icons.Outlined.LocalFireDepartment,
         title = "BMR Calculator",
         description = "Calculate your Basal Metabolic Rate",
         onClick = onClick,
         modifier = modifier,
         hasData = hasData,
-        accentColor = Color(0xFFFF9800),
+        accentColor = CalculatorColors.BMR,
         dataContent = {
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
                     text = stringResource(R.string.txt_d_1).format(lastBMR),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFFFF9800)
+                    color = CalculatorColors.BMR
                 )
                 Text(
                     text = stringResource(R.string.txt_cal_day),
@@ -309,19 +329,19 @@ fun BloodPressureCard(
     val hasData = lastSystolic != null && lastDiastolic != null
     val categoryColor = remember(lastSystolic, lastDiastolic) {
         when {
-            lastSystolic == null || lastDiastolic == null -> Color(0xFFE53935)
-            lastSystolic < 120 && lastDiastolic < 80 -> Color(0xFF4CAF50)
-            lastSystolic < 130 && lastDiastolic < 85 -> Color(0xFF8BC34A)
-            lastSystolic < 140 && lastDiastolic < 90 -> Color(0xFFFFC107)
-            lastSystolic < 160 && lastDiastolic < 100 -> Color(0xFFFF9800)
-            else -> Color(0xFFF44336)
+            lastSystolic == null || lastDiastolic == null -> CalculatorColors.BloodPressure
+            lastSystolic < 120 && lastDiastolic < 80 -> HealthColors.Healthy
+            lastSystolic < 130 && lastDiastolic < 85 -> HealthColors.Good
+            lastSystolic < 140 && lastDiastolic < 90 -> HealthColors.Warning
+            lastSystolic < 160 && lastDiastolic < 100 -> HealthColors.Caution
+            else -> HealthColors.Danger
         }
     }
     val needsAttention = lastSystolic != null && lastDiastolic != null && 
             (lastSystolic >= 140 || lastDiastolic >= 90)
 
     DynamicCalculatorCard(
-        emoji = "💓",
+        icon = Icons.Outlined.MonitorHeart,
         title = "Blood Pressure",
         description = "Check your blood pressure category",
         onClick = onClick,
@@ -344,19 +364,19 @@ fun BloodPressureCard(
                     text = "$lastSystolic/$lastDiastolic",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color.White
+                    color = WellnessPalette.OnHero
                 )
                 Text(
                     text = stringResource(R.string.txt_mmhg),
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color.White.copy(alpha = 0.8f)
+                    color = WellnessPalette.OnHero.copy(alpha = 0.8f)
                 )
             }
             lastCategory?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color.White.copy(alpha = 0.9f),
+                    color = WellnessPalette.OnHero.copy(alpha = 0.9f),
                     fontSize = 11.sp
                 )
             }
@@ -376,19 +396,22 @@ fun WHRCalculatorCard(
     modifier: Modifier = Modifier
 ) {
     val hasData = lastWHR != null
-    val riskColor = remember(lastWHR) {
+    val riskColor = remember(lastWHR, lastCategory) {
         when {
-            lastWHR == null -> Color(0xFF9C27B0)
-            lastWHR < 0.85f -> Color(0xFF4CAF50)
-            lastWHR < 0.90f -> Color(0xFFFFC107)
-            lastWHR < 0.95f -> Color(0xFFFF9800)
-            else -> Color(0xFFF44336)
+            lastCategory.isNullOrBlank() -> CalculatorColors.WaistToHip
+            lastCategory.contains("low", ignoreCase = true) ||
+                lastCategory.contains("normal", ignoreCase = true) -> HealthColors.Healthy
+            lastCategory.contains("high", ignoreCase = true) ||
+                lastCategory.contains("very", ignoreCase = true) -> HealthColors.Danger
+            else -> HealthColors.Warning
         }
     }
-    val needsAttention = lastWHR != null && lastWHR >= 0.90f
+    val needsAttention = lastCategory?.let {
+        it.contains("high", ignoreCase = true) || it.contains("very", ignoreCase = true)
+    } == true
 
     DynamicCalculatorCard(
-        emoji = "📏",
+        icon = Icons.Outlined.Straighten,
         title = "Waist-to-Hip Ratio",
         description = "Assess your body fat distribution",
         onClick = onClick,
@@ -441,17 +464,17 @@ fun WaterIntakeCard(
     val percentage = (progress * 100).toInt()
     
     val progressColor = when {
-        progress >= 1f -> Color(0xFF4CAF50)
-        progress >= 0.7f -> Color(0xFF2196F3)
-        progress >= 0.4f -> Color(0xFF03A9F4)
-        else -> Color(0xFF03A9F4).copy(alpha = 0.6f)
+        progress >= 1f -> HealthColors.Healthy
+        progress >= 0.7f -> HealthColors.Good
+        progress >= 0.4f -> HealthColors.BelowNormal
+        else -> HealthColors.BelowNormal.copy(alpha = 0.7f)
     }
     
     val needsAttention = hasData && progress < 0.5f && 
             java.time.LocalTime.now().hour >= 14 // After 2 PM
 
     DynamicCalculatorCard(
-        emoji = "💧",
+        icon = Icons.Outlined.WaterDrop,
         title = "Water Intake",
         description = "Track your daily hydration",
         onClick = onClick,
@@ -473,19 +496,19 @@ fun WaterIntakeCard(
                     text = "$percentage%",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color.White
+                    color = WellnessPalette.OnHero
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(R.string.txt_of_goal),
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color.White.copy(alpha = 0.8f)
+                    color = WellnessPalette.OnHero.copy(alpha = 0.8f)
                 )
             }
             Text(
                 text = "${currentIntake}ml / ${goalIntake}ml",
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.7f),
+                color = WellnessPalette.OnHero.copy(alpha = 0.7f),
                 fontSize = 11.sp
             )
         }
@@ -524,11 +547,13 @@ private fun BoxScope.WaterProgressRing(
         )
     }
 
-    // Emoji in center
-    Text(
-        text = if (progress >= 1f) "✅" else "💧",
-        fontSize = 18.sp,
-        modifier = Modifier.align(Alignment.Center)
+    Icon(
+        imageVector = if (progress >= 1f) Icons.Outlined.CheckCircle else Icons.Outlined.WaterDrop,
+        contentDescription = if (progress >= 1f) "Water goal reached" else "Water progress",
+        tint = color,
+        modifier = Modifier
+            .size(18.dp)
+            .align(Alignment.Center)
     )
 }
 
@@ -546,24 +571,24 @@ fun MetabolicSyndromeCard(
     val hasData = criteriaMet != null
     val riskColor = remember(criteriaMet) {
         when (criteriaMet) {
-            null -> Color(0xFF9C27B0)
-            0 -> Color(0xFF4CAF50)
-            1, 2 -> Color(0xFFFFC107)
-            else -> Color(0xFFF44336)
+            null -> CalculatorColors.MetabolicSyndrome
+            0 -> HealthColors.Healthy
+            1, 2 -> HealthColors.Warning
+            else -> HealthColors.Danger
         }
     }
     val needsAttention = criteriaMet != null && criteriaMet >= 3
 
     DynamicCalculatorCard(
-        emoji = "🏥",
+        icon = Icons.Outlined.HealthAndSafety,
         title = "Metabolic Syndrome",
-        description = "Assess your metabolic health risk",
+        description = "Review metabolic health markers",
         onClick = onClick,
         modifier = modifier,
         hasData = hasData,
         accentColor = riskColor,
         needsAttention = needsAttention,
-        attentionMessage = if (needsAttention) "Metabolic syndrome present" else null,
+        attentionMessage = if (needsAttention) "Several criteria flagged" else null,
         dataContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
@@ -588,9 +613,9 @@ fun MetabolicSyndromeCard(
             }
             Text(
                 text = when (criteriaMet) {
-                    0 -> "No risk factors"
-                    1, 2 -> "Borderline risk"
-                    else -> "High risk"
+                    0 -> "No criteria flagged"
+                    1, 2 -> "Some criteria flagged"
+                    else -> "Review flagged criteria"
                 },
                 style = MaterialTheme.typography.labelSmall,
                 color = riskColor.copy(alpha = 0.8f),
@@ -613,20 +638,20 @@ fun BSACalculatorCard(
     val hasData = lastBSA != null
 
     DynamicCalculatorCard(
-        emoji = "📐",
+        icon = Icons.Outlined.Person,
         title = "Body Surface Area",
         description = "Calculate your body surface area",
         onClick = onClick,
         modifier = modifier,
         hasData = hasData,
-        accentColor = Color(0xFF607D8B),
+        accentColor = CalculatorColors.BSA,
         dataContent = {
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
                     text = stringResource(R.string.txt_2f).format(lastBSA),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFF607D8B)
+                    color = CalculatorColors.BSA
                 )
                 Text(
                     text = stringResource(R.string.txt_m),
@@ -656,15 +681,15 @@ fun IBWCalculatorCard(
     
     val statusColor = remember(difference) {
         when {
-            difference == null -> Color(0xFF4CAF50)
-            kotlin.math.abs(difference) <= 2f -> Color(0xFF4CAF50)
-            kotlin.math.abs(difference) <= 5f -> Color(0xFFFFC107)
-            else -> Color(0xFFFF9800)
+            difference == null -> CalculatorColors.IdealWeight
+            kotlin.math.abs(difference) <= 2f -> HealthColors.Healthy
+            kotlin.math.abs(difference) <= 5f -> HealthColors.Warning
+            else -> HealthColors.Caution
         }
     }
 
     DynamicCalculatorCard(
-        emoji = "⚖️",
+        icon = Icons.Outlined.MonitorWeight,
         title = "Ideal Body Weight",
         description = "Find your ideal weight range",
         onClick = onClick,
@@ -719,17 +744,17 @@ fun CalorieCalculatorCard(
     val remaining = targetCalories - consumedCalories
     
     val progressColor = when {
-        progress >= 1.2f -> Color(0xFFF44336) // Over by 20%+
-        progress >= 1f -> Color(0xFF4CAF50) // At goal
-        progress >= 0.7f -> Color(0xFF8BC34A) // Close
-        else -> Color(0xFFFF9800) // Under
+        progress >= 1.2f -> HealthColors.Danger // Over by 20%+
+        progress >= 1f -> HealthColors.Healthy // At goal
+        progress >= 0.7f -> HealthColors.Good // Close
+        else -> HealthColors.Caution // Under
     }
     
     val needsAttention = hasData && remaining > 500 && 
             java.time.LocalTime.now().hour >= 18 // After 6 PM
 
     DynamicCalculatorCard(
-        emoji = "🔥",
+        icon = Icons.Outlined.Restaurant,
         title = "Daily Calories",
         description = "Track your daily calorie intake",
         onClick = onClick,
@@ -804,10 +829,13 @@ private fun BoxScope.CalorieProgressRing(
         )
     }
 
-    Text(
-        text = stringResource(R.string.txt_text_placeholder_6),
-        fontSize = 18.sp,
-        modifier = Modifier.align(Alignment.Center)
+    Icon(
+        imageVector = Icons.Outlined.LocalFireDepartment,
+        contentDescription = "Calorie progress",
+        tint = color,
+        modifier = Modifier
+            .size(18.dp)
+            .align(Alignment.Center)
     )
 }
 
@@ -842,25 +870,27 @@ fun HeartRateZonesCard(
     )
 
     DynamicCalculatorCard(
-        emoji = "❤️",
+        icon = Icons.Outlined.FavoriteBorder,
         title = "Heart Rate Zones",
         description = "Optimize your training intensity",
         onClick = onClick,
         modifier = modifier,
         hasData = hasData,
-        accentColor = Color(0xFFE53935),
+        accentColor = CalculatorColors.HeartRateZone,
         progressRing = if (hasData) {
             {
                 Box(
                     modifier = Modifier
                         .size(52.dp)
                         .clip(RoundedCornerShape(14.dp))
-                        .background(Color(0xFFE53935).copy(alpha = 0.1f)),
+                        .background(CalculatorColors.HeartRateZone.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = stringResource(R.string.txt_text_placeholder_5),
-                        fontSize = (22 * heartScale).sp
+                    Icon(
+                        imageVector = Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Heart rate zones",
+                        tint = CalculatorColors.HeartRateZone,
+                        modifier = Modifier.size((22 * heartScale).dp)
                     )
                 }
             }
@@ -871,7 +901,7 @@ fun HeartRateZonesCard(
                     text = "Max: $maxHR",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFFE53935)
+                    color = CalculatorColors.HeartRateZone
                 )
                 Text(
                     text = stringResource(R.string.txt_bpm),

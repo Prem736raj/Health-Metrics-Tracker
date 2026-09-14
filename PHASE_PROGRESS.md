@@ -432,6 +432,28 @@ Updated: 2026-09-13
 
 Updated: 2026-09-14
 
+## Follow-up — Home calculator discovery card consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** Home calculator cards now use reusable vector icons and
+  shared feature/semantic palette tokens instead of per-card emoji and raw
+  color literals. Progress-ring centers are accessible icons, image cards use
+  shared overlay/text tokens, and WHR card status coloring follows the saved
+  category label rather than reclassifying with a fixed threshold. Metabolic
+  card copy now says criteria are flagged/reviewable instead of asserting a
+  diagnosis. Navigation, calculations, progress values and card layout remain
+  unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device card/animation rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing, Firebase
+  and Play Console tasks still require owner access.
+- **Next phase:** Continue the visual audit of remaining deep calculator and
+  share/report surfaces where emoji or stale styling is still visible.
+
+Updated: 2026-09-14
+
 ## Follow-up — Home recommendations visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open

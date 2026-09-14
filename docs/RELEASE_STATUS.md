@@ -913,3 +913,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device swipe/animation and contrast checks,
   TalkBack, large-font, light/dark theme and route checks, plus signing,
   Firebase and Play Console work, remain owner-only.
+
+## Home calculator discovery card consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Home calculator cards now use reusable vector icons and shared
+  feature/semantic palette tokens instead of per-card emoji and raw color
+  literals. Progress-ring centers are accessible icons, image cards use shared
+  overlay/text tokens, and WHR card status coloring follows the saved category
+  label rather than reclassifying with a fixed threshold. Metabolic card copy
+  now says criteria are flagged/reviewable instead of asserting a diagnosis.
+  Navigation, calculations, progress values and layout remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device card/animation rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing, Firebase and
+  Play Console work, remain owner-only.
