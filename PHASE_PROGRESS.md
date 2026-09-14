@@ -1499,6 +1499,23 @@ Updated: 2026-09-14
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
 
+## Follow-up — BMI risk context visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** BMI risk-context status badges, tone cards, expandable
+  sections, risk items, recommendations, action steps and provider notes now
+  render stable vector icons and shared semantic colors. Legacy model emoji
+  fields remain only for persistence compatibility and are not displayed in the
+  screen.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** BMI risk-context rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue auditing BMI trend and goal surfaces for remaining
+  placeholders and inconsistent interaction cues.
+
 ## Follow-up — BMI comparison and range-bar polish
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open.

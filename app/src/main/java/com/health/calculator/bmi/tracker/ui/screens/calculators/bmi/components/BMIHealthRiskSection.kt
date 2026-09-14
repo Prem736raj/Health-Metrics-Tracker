@@ -19,11 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun BMIHealthRiskSection(
@@ -61,9 +63,11 @@ fun BMIHealthRiskSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = healthRiskInfo.categoryIcon,
-                        fontSize = 24.sp
+                    Icon(
+                        imageVector = bmiStatusIcon(healthRiskInfo.categoryIcon),
+                        contentDescription = null,
+                        tint = getRiskAccentColor(healthRiskInfo.riskLevel),
+                        modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
@@ -99,7 +103,7 @@ fun BMIHealthRiskSection(
             if (healthRiskInfo.healthRisks.isNotEmpty()) {
                 ExpandableRiskSection(
                         title = "How to interpret this result",
-                    icon = "⚕️",
+                    icon = Icons.Outlined.MedicalServices,
                     itemCount = healthRiskInfo.healthRisks.size,
                     expanded = expandedRisks,
                     onToggle = { expandedRisks = !expandedRisks },
@@ -119,11 +123,11 @@ fun BMIHealthRiskSection(
             // Recommendations
             ExpandableRiskSection(
                 title = if (isNormal) "Tips to Stay Healthy" else "Recommendations",
-                icon = if (isNormal) "✨" else "💡",
+                icon = if (isNormal) Icons.Outlined.AutoAwesome else Icons.Outlined.Lightbulb,
                 itemCount = healthRiskInfo.recommendations.size,
                 expanded = expandedRecommendations,
                 onToggle = { expandedRecommendations = !expandedRecommendations },
-                accentColor = if (isNormal) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary
+                accentColor = if (isNormal) HealthColors.Healthy else MaterialTheme.colorScheme.primary
             ) {
                 healthRiskInfo.recommendations.forEachIndexed { index, rec ->
                     RecommendationCard(recommendation = rec)
@@ -138,7 +142,7 @@ fun BMIHealthRiskSection(
             // Action Steps
             ExpandableRiskSection(
                 title = if (isNormal) "Keep It Up!" else "Action Steps",
-                icon = "📋",
+                icon = Icons.Outlined.Assignment,
                 itemCount = healthRiskInfo.actionSteps.size,
                 expanded = expandedActions,
                 onToggle = { expandedActions = !expandedActions },
@@ -161,11 +165,11 @@ fun BMIHealthRiskSection(
             // Doctor's Note
             ExpandableRiskSection(
                 title = "Healthcare Provider Note",
-                icon = "🩺",
+                icon = Icons.Outlined.LocalHospital,
                 itemCount = null,
                 expanded = expandedDoctor,
                 onToggle = { expandedDoctor = !expandedDoctor },
-                accentColor = Color(0xFF1976D2)
+                accentColor = HealthColors.Good
             ) {
                 DoctorNoteCard(
                     note = healthRiskInfo.doctorNote,
@@ -184,11 +188,11 @@ fun BMIHealthRiskSection(
 @Composable
 private fun RiskLevelBadge(riskLevel: RiskLevel) {
     val badgeColor = when (riskLevel) {
-        RiskLevel.LOW -> Color(0xFF4CAF50)
-        RiskLevel.MODERATE -> Color(0xFFFFC107)
-        RiskLevel.HIGH -> Color(0xFFFF9800)
-        RiskLevel.VERY_HIGH -> Color(0xFFF44336)
-        RiskLevel.EXTREMELY_HIGH -> Color(0xFFB71C1C)
+        RiskLevel.LOW -> HealthColors.Healthy
+        RiskLevel.MODERATE -> HealthColors.Warning
+        RiskLevel.HIGH -> HealthColors.Caution
+        RiskLevel.VERY_HIGH -> HealthColors.Danger
+        RiskLevel.EXTREMELY_HIGH -> HealthColors.Severe
     }
 
     Surface(
@@ -203,9 +207,11 @@ private fun RiskLevelBadge(riskLevel: RiskLevel) {
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = riskLevel.emoji,
-                fontSize = 12.sp
+            Icon(
+                imageVector = riskLevelIcon(riskLevel),
+                contentDescription = null,
+                tint = badgeColor,
+                modifier = Modifier.size(14.dp)
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
@@ -224,12 +230,12 @@ private fun ToneMessageCard(
     isNormal: Boolean
 ) {
     val backgroundColor = if (isNormal) {
-        Color(0xFF4CAF50).copy(alpha = 0.08f)
+        HealthColors.Healthy.copy(alpha = 0.08f)
     } else {
         MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
     }
     val borderColor = if (isNormal) {
-        Color(0xFF4CAF50).copy(alpha = 0.2f)
+        HealthColors.Healthy.copy(alpha = 0.2f)
     } else {
         MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
     }
@@ -243,10 +249,13 @@ private fun ToneMessageCard(
         Row(
             modifier = Modifier.padding(14.dp)
         ) {
-            Text(
-                text = if (isNormal) "💚" else "💙",
-                fontSize = 20.sp,
-                modifier = Modifier.padding(top = 2.dp)
+            Icon(
+                imageVector = if (isNormal) Icons.Outlined.CheckCircle else Icons.Outlined.Info,
+                contentDescription = null,
+                tint = if (isNormal) HealthColors.Healthy else HealthColors.Good,
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(top = 2.dp)
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
@@ -262,7 +271,7 @@ private fun ToneMessageCard(
 @Composable
 private fun ExpandableRiskSection(
     title: String,
-    icon: String,
+    icon: ImageVector,
     itemCount: Int?,
     expanded: Boolean,
     onToggle: () -> Unit,
@@ -291,7 +300,12 @@ private fun ExpandableRiskSection(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = icon, fontSize = 18.sp)
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = accentColor,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = title,
@@ -362,10 +376,10 @@ private fun ExpandableRiskSection(
 @Composable
 private fun HealthRiskCard(risk: HealthRiskItem) {
     val severityColor = when (risk.severity) {
-        RiskSeverity.MILD -> Color(0xFFFFC107)
-        RiskSeverity.MODERATE -> Color(0xFFFF9800)
-        RiskSeverity.HIGH -> Color(0xFFF44336)
-        RiskSeverity.SEVERE -> Color(0xFFB71C1C)
+        RiskSeverity.MILD -> HealthColors.Warning
+        RiskSeverity.MODERATE -> HealthColors.Caution
+        RiskSeverity.HIGH -> HealthColors.Danger
+        RiskSeverity.SEVERE -> HealthColors.Severe
     }
     val severityLabel = when (risk.severity) {
         RiskSeverity.MILD -> "Mild"
@@ -394,7 +408,12 @@ private fun HealthRiskCard(risk: HealthRiskItem) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(text = risk.icon, fontSize = 20.sp)
+                    Icon(
+                        imageVector = bmiRiskIcon(risk.icon),
+                        contentDescription = null,
+                        tint = severityColor,
+                        modifier = Modifier.size(20.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = risk.title,
@@ -461,7 +480,12 @@ private fun RecommendationCard(recommendation: RecommendationItem) {
                 modifier = Modifier.size(40.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(text = recommendation.icon, fontSize = 20.sp)
+                    Icon(
+                        imageVector = bmiRiskIcon(recommendation.icon),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
             }
             Spacer(modifier = Modifier.width(10.dp))
@@ -490,7 +514,7 @@ private fun ActionStepItem(
     text: String,
     isNormal: Boolean
 ) {
-    val accentColor = if (isNormal) Color(0xFF4CAF50) else MaterialTheme.colorScheme.tertiary
+    val accentColor = if (isNormal) HealthColors.Healthy else MaterialTheme.colorScheme.tertiary
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -527,11 +551,11 @@ private fun DoctorNoteCard(
     riskLevel: RiskLevel
 ) {
     val urgencyColor = when (riskLevel) {
-        RiskLevel.LOW -> Color(0xFF4CAF50)
-        RiskLevel.MODERATE -> Color(0xFF2196F3)
-        RiskLevel.HIGH -> Color(0xFFFF9800)
-        RiskLevel.VERY_HIGH -> Color(0xFFF44336)
-        RiskLevel.EXTREMELY_HIGH -> Color(0xFFB71C1C)
+        RiskLevel.LOW -> HealthColors.Healthy
+        RiskLevel.MODERATE -> HealthColors.Good
+        RiskLevel.HIGH -> HealthColors.Caution
+        RiskLevel.VERY_HIGH -> HealthColors.Danger
+        RiskLevel.EXTREMELY_HIGH -> HealthColors.Severe
     }
 
     Card(
@@ -606,10 +630,33 @@ private fun MedicalDisclaimerCard() {
 @Composable
 private fun getRiskAccentColor(riskLevel: RiskLevel): Color {
     return when (riskLevel) {
-        RiskLevel.LOW -> Color(0xFF4CAF50)
-        RiskLevel.MODERATE -> Color(0xFFFFC107)
-        RiskLevel.HIGH -> Color(0xFFFF9800)
-        RiskLevel.VERY_HIGH -> Color(0xFFF44336)
-        RiskLevel.EXTREMELY_HIGH -> Color(0xFFB71C1C)
+        RiskLevel.LOW -> HealthColors.Healthy
+        RiskLevel.MODERATE -> HealthColors.Warning
+        RiskLevel.HIGH -> HealthColors.Caution
+        RiskLevel.VERY_HIGH -> HealthColors.Danger
+        RiskLevel.EXTREMELY_HIGH -> HealthColors.Severe
     }
+}
+
+private fun bmiStatusIcon(marker: String): ImageVector = when {
+    marker.contains("🟢") -> Icons.Outlined.CheckCircle
+    marker.contains("🟡") -> Icons.Outlined.Info
+    marker.contains("🟠") || marker.contains("🔴") || marker.contains("⚠") -> Icons.Outlined.Warning
+    else -> Icons.Outlined.Info
+}
+
+private fun riskLevelIcon(riskLevel: RiskLevel): ImageVector = when (riskLevel) {
+    RiskLevel.LOW -> Icons.Outlined.CheckCircle
+    RiskLevel.MODERATE -> Icons.Outlined.Info
+    RiskLevel.HIGH, RiskLevel.VERY_HIGH, RiskLevel.EXTREMELY_HIGH -> Icons.Outlined.Warning
+}
+
+private fun bmiRiskIcon(marker: String): ImageVector = when {
+    marker.contains("📏") -> Icons.Outlined.Straighten
+    marker.contains("🥗") -> Icons.Outlined.Restaurant
+    marker.contains("👩") -> Icons.Outlined.Person
+    marker.contains("🧭") -> Icons.Outlined.Info
+    marker.contains("❤️") || marker.contains("💚") || marker.contains("💙") -> Icons.Outlined.FavoriteBorder
+    marker.contains("🩺") || marker.contains("⚕") -> Icons.Outlined.MedicalServices
+    else -> Icons.Outlined.Info
 }

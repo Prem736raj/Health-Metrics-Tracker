@@ -1135,3 +1135,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Metabolic education rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## BMI risk context visual consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BMI risk-context status badges, tone cards, expandable sections,
+  risk items, recommendations, action steps and provider notes render stable
+  vector icons and shared semantic colors. Legacy model emoji fields remain
+  only for persistence compatibility and are not displayed in the screen.
+- **Verification:** Focused compilation/tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** BMI risk-context rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.
