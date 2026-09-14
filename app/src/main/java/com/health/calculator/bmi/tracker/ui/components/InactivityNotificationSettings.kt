@@ -100,7 +100,12 @@ fun InactivityNotificationSettings(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(stringResource(R.string.txt_text_placeholder), style = MaterialTheme.typography.titleMedium)
+                Icon(
+                    Icons.Outlined.Shield,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(stringResource(R.string.txt_streak_freezes), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
@@ -110,21 +115,18 @@ fun InactivityNotificationSettings(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                AssistChip(
-                    onClick = {},
-                    label = {
-                        Text(
-                            "$streakFreezeCount available",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    colors = AssistChipDefaults.assistChipColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
-                        labelColor = MaterialTheme.colorScheme.primary
-                    ),
-                    modifier = Modifier.height(28.dp)
-                )
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+                    contentColor = MaterialTheme.colorScheme.primary
+                ) {
+                    Text(
+                        "$streakFreezeCount available",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))

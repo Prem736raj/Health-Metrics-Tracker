@@ -4,6 +4,7 @@ import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -115,16 +116,27 @@ fun ReminderCard(
             }
             
             if (reminder.isHighPriority) {
-                AssistChip(
-                    onClick = {},
-                    label = { Text(stringResource(R.string.txt_high_priority), style = MaterialTheme.typography.labelSmall) },
-                    leadingIcon = { Icon(Icons.Default.Notifications, null, modifier = Modifier.size(14.dp)) },
-                    colors = AssistChipDefaults.assistChipColors(
-                        labelColor = MaterialTheme.colorScheme.error,
-                        leadingIconContentColor = MaterialTheme.colorScheme.error
-                    ),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.error)
-                )
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Notifications,
+                            contentDescription = null,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Text(
+                            stringResource(R.string.txt_high_priority),
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+                }
             }
         }
     }

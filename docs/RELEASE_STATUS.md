@@ -995,3 +995,17 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Health Connect denial/revocation, connected-device
   rendering, TalkBack, large-font, theme and route checks, plus signing,
   Firebase and Play Console work, remain owner-only.
+
+## Notification status affordance clarity — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Changes:** High-priority reminder and streak-freeze values are now visibly
+  non-interactive status surfaces instead of no-op chips, and the freeze marker
+  uses a stable shield icon. Notification toggle, edit/delete and scheduling
+  behavior are unchanged.
+- **Verification:** Focused compilation/tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Notification permission/OS rendering, TalkBack,
+  large-font, theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.

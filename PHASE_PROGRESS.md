@@ -1381,3 +1381,20 @@ Updated: 2026-09-14
   remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue the route and empty-state audit for any remaining
   misleading placeholders or blank-result states.
+
+## Follow-up — Notification status affordance clarity
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** High-priority reminder status and streak-freeze availability
+  are now non-interactive status surfaces, so they no longer look like buttons
+  that do nothing. The streak-freeze marker uses a stable shield icon instead
+  of an emoji placeholder. Reminder toggles, editing, deletion and scheduling
+  behavior remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** Notification permission/OS rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing, Firebase
+  and Play Console tasks still require owner access.
+- **Next phase:** Continue the route and empty-state audit for any remaining
+  misleading placeholders or blank-result states.
