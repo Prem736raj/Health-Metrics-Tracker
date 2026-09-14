@@ -1009,3 +1009,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Notification permission/OS rendering, TalkBack,
   large-font, theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## Data management visual and trust polish — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Data Management cleanup actions, storage-ring segments and
+  integrity states now use shared semantic/theme tokens. Calculator cleanup
+  rows and the full-reset warning list use stable vector icons and plain labels
+  instead of device-dependent emoji. Deletion safeguards and data operations
+  are unchanged.
+- **Verification:** Focused compilation/tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Destructive-flow rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.

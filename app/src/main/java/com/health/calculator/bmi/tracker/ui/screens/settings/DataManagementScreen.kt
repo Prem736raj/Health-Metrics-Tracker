@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.health.calculator.bmi.tracker.data.management.*
 import com.health.calculator.bmi.tracker.data.model.CalculatorType
+import com.health.calculator.bmi.tracker.ui.components.history.calculatorTypeIcon
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -148,7 +150,7 @@ fun DataManagementScreen(
             item(key = "cleanup_age") {
                 ActionCard(
                     icon = Icons.Default.DateRange,
-                    iconColor = Color(0xFFFF9800),
+                    iconColor = HealthColors.Warning,
                     title = "Clear Old Data",
                     subtitle = "Remove entries older than a specified period",
                     onClick = { viewModel.showCleanupByAge() }
@@ -158,7 +160,7 @@ fun DataManagementScreen(
             item(key = "cleanup_calculator") {
                 ActionCard(
                     icon = Icons.Default.Calculate,
-                    iconColor = Color(0xFF2196F3),
+                    iconColor = HealthColors.Info,
                     title = "Clear by Calculator",
                     subtitle = "Remove history for specific calculators only",
                     onClick = { viewModel.showCleanupByCalculator() }
@@ -168,7 +170,7 @@ fun DataManagementScreen(
             item(key = "cleanup_cache") {
                 ActionCard(
                     icon = Icons.Default.CleaningServices,
-                    iconColor = Color(0xFF4CAF50),
+                    iconColor = HealthColors.Healthy,
                     title = "Clear Cache",
                     subtitle = "Remove temporary files and cached data (${uiState.storageInfo.cacheFormatted})",
                     onClick = { viewModel.clearCache() }
@@ -178,7 +180,7 @@ fun DataManagementScreen(
             item(key = "cleanup_exports") {
                 ActionCard(
                     icon = Icons.Default.FilePresent,
-                    iconColor = Color(0xFF9C27B0),
+                    iconColor = MaterialTheme.colorScheme.tertiary,
                     title = "Clear Exports",
                     subtitle = "Remove exported PDF, CSV, and JSON files (${uiState.storageInfo.exportsFormatted})",
                     onClick = { viewModel.clearExports() }
@@ -286,12 +288,13 @@ private fun StorageCard(storageInfo: StorageInfo, isLoading: Boolean) {
             } else {
                 // Storage ring
                 val segments = listOf(
-                    Triple("History", storageInfo.historyBytes, Color(0xFF2196F3)),
-                    Triple("Cache", storageInfo.cacheBytes, Color(0xFFFF9800)),
-                    Triple("Settings", storageInfo.settingsBytes, Color(0xFF4CAF50)),
-                    Triple("Exports", storageInfo.exportsBytes, Color(0xFF9C27B0)),
-                    Triple("Legacy files", storageInfo.backupsBytes, Color(0xFFF44336))
+                    Triple("History", storageInfo.historyBytes, HealthColors.Info),
+                    Triple("Cache", storageInfo.cacheBytes, HealthColors.Warning),
+                    Triple("Settings", storageInfo.settingsBytes, HealthColors.Healthy),
+                    Triple("Exports", storageInfo.exportsBytes, MaterialTheme.colorScheme.tertiary),
+                    Triple("Legacy files", storageInfo.backupsBytes, MaterialTheme.colorScheme.error)
                 ).filter { it.second > 0 }
+                val ringBackground = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
 
                 Box(
                     modifier = Modifier
@@ -303,7 +306,7 @@ private fun StorageCard(storageInfo: StorageInfo, isLoading: Boolean) {
 
                             // Background ring
                             drawCircle(
-                                color = Color.LightGray.copy(alpha = 0.2f),
+                                color = ringBackground,
                                 radius = radius,
                                 style = Stroke(width = strokeWidth)
                             )
@@ -444,7 +447,7 @@ private fun IntegrityCard(
                 Icon(
                     Icons.Default.VerifiedUser,
                     null,
-                    tint = if (report.isComplete && report.isHealthy) Color(0xFF4CAF50)
+                    tint = if (report.isComplete && report.isHealthy) HealthColors.Healthy
                     else MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
@@ -463,8 +466,8 @@ private fun IntegrityCard(
             } else if (report.isComplete) {
                 Surface(
                     shape = RoundedCornerShape(10.dp),
-                    color = if (report.isHealthy) Color(0xFF4CAF50).copy(alpha = 0.08f)
-                    else Color(0xFFF44336).copy(alpha = 0.08f)
+                    color = if (report.isHealthy) HealthColors.Healthy.copy(alpha = 0.10f)
+                    else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f)
                 ) {
                     Row(
                         modifier = Modifier
@@ -475,7 +478,7 @@ private fun IntegrityCard(
                         Icon(
                             if (report.isHealthy) Icons.Default.CheckCircle else Icons.Default.Error,
                             null,
-                            tint = if (report.isHealthy) Color(0xFF4CAF50) else Color(0xFFF44336),
+                            tint = if (report.isHealthy) HealthColors.Healthy else MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(Modifier.width(10.dp))
@@ -498,13 +501,13 @@ private fun IntegrityCard(
                     Spacer(Modifier.height(8.dp))
 
                     if (report.corruptedEntries > 0) {
-                        IssueRow("Corrupted entries", report.corruptedEntries, Color(0xFFF44336))
+                        IssueRow("Corrupted entries", report.corruptedEntries, MaterialTheme.colorScheme.error)
                     }
                     if (report.duplicateEntries > 0) {
-                        IssueRow("Duplicate entries", report.duplicateEntries, Color(0xFFFF9800))
+                        IssueRow("Duplicate entries", report.duplicateEntries, HealthColors.Warning)
                     }
                     if (report.orphanedEntries > 0) {
-                        IssueRow("Orphaned entries", report.orphanedEntries, Color(0xFF9E9E9E))
+                        IssueRow("Orphaned entries", report.orphanedEntries, MaterialTheme.colorScheme.outline)
                     }
 
                     if (report.issuesFixed > 0) {
@@ -512,7 +515,7 @@ private fun IntegrityCard(
                         Text(
                             "✓ ${report.issuesFixed} issues fixed",
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF4CAF50),
+                            color = HealthColors.Healthy,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -522,7 +525,7 @@ private fun IntegrityCard(
                     Button(
                         onClick = onFix,
                         shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
+                        colors = ButtonDefaults.buttonColors(containerColor = HealthColors.Warning),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(Icons.Default.Build, null, Modifier.size(18.dp))
@@ -616,9 +619,9 @@ private fun CleanupByAgeDialog(
                     Surface(
                         shape = RoundedCornerShape(10.dp),
                         color = if (p.entriesAffected > 0)
-                            Color(0xFFFF9800).copy(alpha = 0.1f)
+                            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f)
                         else
-                            Color(0xFF4CAF50).copy(alpha = 0.1f)
+                            HealthColors.Healthy.copy(alpha = 0.10f)
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
@@ -658,7 +661,7 @@ private fun CleanupByAgeDialog(
                 onClick = onConfirm,
                 enabled = selectedAge != null && (preview?.entriesAffected ?: 0) > 0 && !isClearing,
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) { Text(stringResource(R.string.txt_delete)) }
         },
         dismissButton = {
@@ -705,9 +708,13 @@ private fun CleanupByCalculatorDialog(
                                     onCheckedChange = { onToggleType(type) },
                                     enabled = !isClearing
                                 )
-                                Spacer(Modifier.width(6.dp))
-                                Text(type.emoji)
-                                Spacer(Modifier.width(6.dp))
+                                Icon(
+                                    imageVector = calculatorTypeIcon(type),
+                                    contentDescription = type.displayName,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
                                 Text(type.displayName, style = MaterialTheme.typography.bodySmall)
                             }
                         }
@@ -725,7 +732,7 @@ private fun CleanupByCalculatorDialog(
                 onClick = onConfirm,
                 enabled = selectedTypes.isNotEmpty() && !isClearing,
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) { Text(stringResource(R.string.txt_delete_selected)) }
         },
         dismissButton = {
@@ -773,18 +780,26 @@ private fun DeleteEverythingDialog(
                         Text(stringResource(R.string.txt_this_will_permanently_delete))
                         Spacer(Modifier.height(8.dp))
                         listOf(
-                            "📊 All calculation history",
-                            "👤 Your profile data",
-                            "⚙️ All settings and preferences",
-                            "🏆 All achievements and streaks",
-                            "💾 Legacy local backup files (if present)",
-                            "📁 All exported files"
-                        ).forEach { item ->
-                            Text(
-                                item,
-                                style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier.padding(vertical = 2.dp)
-                            )
+                            Icons.Default.History to "All calculation history",
+                            Icons.Default.Person to "Your profile data",
+                            Icons.Default.Settings to "All settings and preferences",
+                            Icons.Default.Star to "All achievements and streaks",
+                            Icons.Default.Save to "Legacy local backup files (if present)",
+                            Icons.Default.Folder to "All exported files"
+                        ).forEach { (icon, label) ->
+                            Row(
+                                modifier = Modifier.padding(vertical = 3.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(label, style = MaterialTheme.typography.bodySmall)
+                            }
                         }
                         Spacer(Modifier.height(8.dp))
                         Text(

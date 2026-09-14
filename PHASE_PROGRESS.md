@@ -1398,3 +1398,20 @@ Updated: 2026-09-14
   and Play Console tasks still require owner access.
 - **Next phase:** Continue the route and empty-state audit for any remaining
   misleading placeholders or blank-result states.
+
+## Follow-up — Data management visual and trust polish
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Data Management cleanup actions, storage segments and
+  integrity states now use the shared semantic/theme palette instead of legacy
+  hard-coded colors. Calculator cleanup rows and the full-reset warning list
+  now use stable vector icons and plain labels, removing device-dependent emoji
+  rendering while preserving the existing deletion safeguards and data flows.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** Destructive-flow rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue the deep calculator and empty-state audit for
+  remaining legacy visual placeholders or misleading interactions.
