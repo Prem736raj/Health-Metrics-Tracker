@@ -856,14 +856,14 @@ private fun GenderSelectionSection(
         ) {
             GenderOption(
                 label = "Male",
-                emoji = "👨",
+                icon = Icons.Outlined.Male,
                 isSelected = selectedGender == Gender.MALE,
                 onClick = { onGenderSelected(Gender.MALE) },
                 modifier = Modifier.weight(1f)
             )
             GenderOption(
                 label = "Female",
-                emoji = "👩",
+                icon = Icons.Outlined.Female,
                 isSelected = selectedGender == Gender.FEMALE,
                 onClick = { onGenderSelected(Gender.FEMALE) },
                 modifier = Modifier.weight(1f)
@@ -875,7 +875,7 @@ private fun GenderSelectionSection(
 @Composable
 private fun GenderOption(
     label: String,
-    emoji: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -917,7 +917,13 @@ private fun GenderOption(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Text(emoji, fontSize = 28.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (isSelected) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(28.dp)
+            )
             Text(
                 label,
                 style = MaterialTheme.typography.bodyMedium,

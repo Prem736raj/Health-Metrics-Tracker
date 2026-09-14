@@ -1433,3 +1433,18 @@ Updated: 2026-09-14
   still require owner access.
 - **Next phase:** Continue the deep calculator audit for remaining UI-only
   emoji placeholders and legacy visual treatments.
+
+## Follow-up — WHR input accessibility polish
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Waist-to-hip ratio gender choices now use stable Material
+  vector icons with selected-state tint instead of device-dependent emoji. The
+  existing gender values, validation, calculations and navigation are unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** WHR selector rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue the deep calculator audit for result-state
+  placeholders and misleading UI affordances.
