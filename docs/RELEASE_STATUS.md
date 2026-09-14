@@ -980,3 +980,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Chooser/file-opening behavior, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## Health Connections and Insights affordance clarity — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Changes:** Health Connections reference fields no longer look tappable when
+  they have no action, and connection cards use stable vector icons instead of
+  legacy emoji. The Insights Trends copy now accurately describes its weight
+  trend shortcut and points users to Track for other logs. Health Connect
+  permission/sync behavior is unchanged.
+- **Verification:** Focused compilation/tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Health Connect denial/revocation, connected-device
+  rendering, TalkBack, large-font, theme and route checks, plus signing,
+  Firebase and Play Console work, remain owner-only.

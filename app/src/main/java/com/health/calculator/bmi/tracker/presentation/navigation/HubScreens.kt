@@ -187,7 +187,7 @@ fun InsightsHubScreen(
                 }
             }
             item { HubActionCard("Weekly wellness summary", "Compare your check-ins with the previous week", Icons.Outlined.Assessment, onOpenWeeklyReport, MaterialTheme.colorScheme.primary) }
-            item { HubActionCard("Trends", "See weight, hydration and blood-pressure history", Icons.Outlined.Timeline, onOpenTrends, HealthColors.Good) }
+            item { HubActionCard("Trends", "Review your weight trend; use Track for water and blood pressure logs", Icons.Outlined.Timeline, onOpenTrends, HealthColors.Good) }
             item { HubActionCard("AI Wellness Assistant", "Ask general wellness questions with optional context", Icons.Outlined.AutoAwesome, onOpenAssistant, MaterialTheme.colorScheme.tertiary) }
             item { HubActionCard("Milestones", "Celebrate consistent, non-competitive progress", Icons.Outlined.Flag, onOpenAchievements, HealthColors.Healthy) }
             item { HubActionCard("Learn", "Read practical, evidence-informed explainers", Icons.Outlined.ShowChart, onOpenArticles, HealthColors.Info) }

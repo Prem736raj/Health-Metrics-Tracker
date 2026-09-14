@@ -1363,3 +1363,21 @@ Updated: 2026-09-14
   signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue the deep tracking and retention audit for code-fixable
   gaps without expanding sensitive analytics or health-data access.
+
+## Follow-up — Health Connections and Insights affordance clarity
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Health Connections calculator fields are now rendered as
+  non-interactive reference labels instead of no-op suggestion chips, and the
+  connection header uses stable vector icons rather than legacy emoji markers.
+  The Insights Trends description now accurately explains that its shortcut
+  opens the weight trend, while water and blood-pressure logs remain available
+  from Track. Health Connect permission and sync behavior are unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** Connected-device Health Connect permission denial,
+  icon/label rendering, TalkBack, large-font, light/dark theme and route checks
+  remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue the route and empty-state audit for any remaining
+  misleading placeholders or blank-result states.

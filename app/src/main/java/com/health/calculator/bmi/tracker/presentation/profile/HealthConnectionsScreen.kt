@@ -14,12 +14,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Assessment
 import androidx.compose.material.icons.outlined.DirectionsWalk
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.Shield
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -32,7 +35,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.HealthConnection
 import com.health.calculator.bmi.tracker.data.model.HealthConnectionMap
 import com.health.calculator.bmi.tracker.data.healthconnect.HealthConnectFeature
@@ -367,7 +369,12 @@ fun ConnectionCard(
                         .background(MaterialTheme.colorScheme.secondaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(connection.icon, fontSize = 20.sp)
+                    Icon(
+                        imageVector = connectionIcon(connection),
+                        contentDescription = connection.calculatorName,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(22.dp)
+                    )
                 }
                 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -434,16 +441,31 @@ fun InputSection(title: String, fields: List<String>, color: Color, isOutput: Bo
             crossAxisSpacing = 4.dp
         ) {
             fields.forEach { field ->
-                SuggestionChip(
-                    onClick = { },
-                    label = { Text(field, style = androidx.compose.ui.text.TextStyle(fontSize = 10.sp)) },
-                    colors = SuggestionChipDefaults.suggestionChipColors(
-                        containerColor = color.copy(alpha = 0.1f),
-                        labelColor = color
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = color.copy(alpha = 0.1f),
+                    contentColor = color
+                ) {
+                    Text(
+                        text = field,
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                     )
-                )
+                }
             }
         }
+    }
+}
+
+private fun connectionIcon(connection: HealthConnection): androidx.compose.ui.graphics.vector.ImageVector {
+    val name = connection.calculatorName.lowercase()
+    return when {
+        "blood" in name || "pressure" in name -> Icons.Outlined.MonitorHeart
+        "water" in name || "hydration" in name -> Icons.Outlined.WaterDrop
+        "weight" in name -> Icons.Outlined.MonitorWeight
+        "step" in name || "exercise" in name -> Icons.Outlined.DirectionsWalk
+        "bmi" in name || "body" in name -> Icons.Outlined.Assessment
+        else -> Icons.Outlined.Info
     }
 }
 
