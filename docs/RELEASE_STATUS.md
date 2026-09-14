@@ -880,3 +880,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing/Firebase/Play Console work,
   remain owner-only.
+
+## Home wellness overview visual consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The home wellness overview now uses vector icons for its
+  header, score categories, quick stats, empty state and last-activity row
+  instead of placeholder emoji. Health-score categories and quick-stat accents
+  now draw from the shared semantic/feature palette, including a theme-aware
+  no-data ring. Score methodology, metric selection, click targets and
+  navigation remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device score-ring and large-font rendering,
+  TalkBack, light/dark theme and route checks, plus signing/Firebase/Play
+  Console work, remain owner-only.

@@ -1,6 +1,9 @@
 package com.health.calculator.bmi.tracker.util
 
 import androidx.compose.ui.graphics.Color
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
@@ -41,12 +44,12 @@ enum class HealthScoreCategory(
     val color: Color,
     val description: String
 ) {
-    EXCELLENT("Great momentum", "🌟", Color(0xFF2E7D6F), "Most of your selected metrics are being recorded."),
-    GOOD("On track", "👍", Color(0xFF2F6B8A), "You have a useful base of recent wellness data."),
-    FAIR("Building consistency", "📊", Color(0xFFA66300), "A few more check-ins can make your trends easier to understand."),
-    NEEDS_ATTENTION("Getting started", "🌱", Color(0xFFB45309), "Choose one small metric to record today."),
-    CONCERNING("Limited data", "📝", Color(0xFFBA1A1A), "This reflects missing or lightly logged data, not your health."),
-    INSUFFICIENT_DATA("Add a check-in", "📝", Color(0xFF63736F), "Record at least two metrics to see a useful consistency summary.")
+    EXCELLENT("Great momentum", "🌟", HealthColors.Healthy, "Most of your selected metrics are being recorded."),
+    GOOD("On track", "👍", HealthColors.Good, "You have a useful base of recent wellness data."),
+    FAIR("Building consistency", "📊", HealthColors.Warning, "A few more check-ins can make your trends easier to understand."),
+    NEEDS_ATTENTION("Getting started", "🌱", HealthColors.Caution, "Choose one small metric to record today."),
+    CONCERNING("Limited data", "📝", HealthColors.Danger, "This reflects missing or lightly logged data, not your health."),
+    INSUFFICIENT_DATA("Add a check-in", "📝", HealthColors.Info, "Record at least two metrics to see a useful consistency summary.")
 }
 
 data class HealthMetricsSnapshot(
@@ -157,28 +160,28 @@ object HealthScoreCalculator {
                 "Weight",
                 "%.1f kg".format(it),
                 "latest log",
-                Color(0xFF2E7D6F),
+                FeatureColors.WeightStart,
                 timestamp = metrics.latestWeightTimestamp,
                 calculatorRoute = "weight_tracking"
             )
         }
         metrics.bmi?.let {
-            stats += QuickStat("bmi", "📊", "BMI", "%.1f".format(it), metrics.bmiCategory, Color(0xFF4F6BFF), timestamp = metrics.bmiTimestamp, calculatorRoute = "bmi_calculator")
+            stats += QuickStat("bmi", "📊", "BMI", "%.1f".format(it), metrics.bmiCategory, CalculatorColors.BMI, timestamp = metrics.bmiTimestamp, calculatorRoute = "bmi_calculator")
         }
         if (metrics.systolicBP != null && metrics.diastolicBP != null) {
-            stats += QuickStat("bp", "💓", "Blood Pressure", "${metrics.systolicBP}/${metrics.diastolicBP}", metrics.bpCategory, Color(0xFFE06B8B), timestamp = metrics.bpTimestamp, calculatorRoute = "blood_pressure_checker")
+            stats += QuickStat("bp", "💓", "Blood Pressure", "${metrics.systolicBP}/${metrics.diastolicBP}", metrics.bpCategory, CalculatorColors.BloodPressure, timestamp = metrics.bpTimestamp, calculatorRoute = "blood_pressure_checker")
         }
         if (metrics.waterGoalToday > 0) {
             val progress = (metrics.waterIntakeToday.toFloat() / metrics.waterGoalToday).coerceIn(0f, 1f)
-            stats += QuickStat("water", "💧", "Water", "${metrics.waterIntakeToday}ml", "/${metrics.waterGoalToday}ml", Color(0xFF3C9DD9), progress, calculatorRoute = "water_intake_calculator")
+            stats += QuickStat("water", "💧", "Water", "${metrics.waterIntakeToday}ml", "/${metrics.waterGoalToday}ml", CalculatorColors.WaterIntake, progress, calculatorRoute = "water_intake_calculator")
         }
         if (metrics.calorieTargetToday > 0) {
             val progress = (metrics.caloriesConsumedToday.toFloat() / metrics.calorieTargetToday).coerceIn(0f, 1f)
-            stats += QuickStat("calories", "🔥", "Calories", "${metrics.caloriesConsumedToday}", "/${metrics.calorieTargetToday}", Color(0xFFE28B42), progress, calculatorRoute = "calorie_calculator")
+            stats += QuickStat("calories", "🔥", "Calories", "${metrics.caloriesConsumedToday}", "/${metrics.calorieTargetToday}", CalculatorColors.DailyCalorie, progress, calculatorRoute = "calorie_calculator")
         }
         if (metrics.stepsToday != null && stats.size < 4) {
             val progress = (metrics.stepsToday.toFloat() / 10000f).coerceIn(0f, 1f)
-            stats += QuickStat("steps", "👟", "Steps", metrics.stepsToday.toString(), "/10000", Color(0xFF4E9F70), progress, calculatorRoute = "home")
+            stats += QuickStat("steps", "👟", "Steps", metrics.stepsToday.toString(), "/10000", FeatureColors.StepsStart, progress, calculatorRoute = "home")
         }
         return stats.take(4)
     }

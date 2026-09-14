@@ -15,6 +15,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Assessment
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.DirectionsWalk
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Flag
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.Timeline
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -69,7 +85,12 @@ fun HealthOverviewSection(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.txt_text_placeholder_12), fontSize = 22.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.AutoAwesome,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = stringResource(R.string.txt_my_health_summary),
@@ -153,6 +174,7 @@ private fun HealthScoreCircle(
     )
 
     val hasData = category != HealthScoreCategory.INSUFFICIENT_DATA
+    val mutedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.15f)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -189,7 +211,7 @@ private fun HealthScoreCircle(
                 // Background arc
                 drawArc(
                     color = if (hasData) category.color.copy(alpha = 0.1f)
-                    else Color(0xFF9E9E9E).copy(alpha = 0.1f),
+                    else mutedTrackColor,
                     startAngle = 135f,
                     sweepAngle = 270f,
                     useCenter = false,
@@ -231,7 +253,7 @@ private fun HealthScoreCircle(
                         text = stringResource(R.string.txt_text_placeholder_11),
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.ExtraBold,
-                        color = Color(0xFF9E9E9E)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -245,9 +267,11 @@ private fun HealthScoreCircle(
             verticalArrangement = Arrangement.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = category.emoji,
-                    fontSize = 24.sp
+                Icon(
+                    imageVector = healthScoreCategoryIcon(category),
+                    contentDescription = category.label,
+                    tint = category.color,
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
@@ -278,7 +302,12 @@ private fun HealthScoreCircle(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_10), fontSize = 12.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Assessment,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(16.dp)
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "$availableMetrics of $totalMetrics metrics tracked",
@@ -359,9 +388,11 @@ private fun QuickStatCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            Text(
-                text = stat.emoji,
-                fontSize = 18.sp
+            Icon(
+                imageVector = quickStatIcon(stat),
+                contentDescription = stat.label,
+                tint = stat.color,
+                modifier = Modifier.size(18.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -445,7 +476,12 @@ private fun EmptyStatsPrompt() {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(R.string.txt_text_placeholder_9), fontSize = 24.sp)
+            Icon(
+                imageVector = Icons.Outlined.Timeline,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
@@ -491,13 +527,15 @@ private fun LastActivityRow(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = stringResource(R.string.txt_text_placeholder_8),
-                    fontSize = 14.sp
+                Icon(
+                    imageVector = lastActivityIcon(activity),
+                    contentDescription = "Last activity: ${activity.calculatorName}",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Last: ${activity.emoji} ${activity.calculatorName} • $timeAgo",
+                    text = "Last: ${activity.calculatorName} • $timeAgo",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -519,4 +557,34 @@ private fun LastActivityRow(
             }
         }
     }
+}
+
+private fun healthScoreCategoryIcon(category: HealthScoreCategory) = when (category) {
+    HealthScoreCategory.EXCELLENT -> Icons.Outlined.AutoAwesome
+    HealthScoreCategory.GOOD -> Icons.Outlined.Timeline
+    HealthScoreCategory.FAIR -> Icons.Outlined.Assessment
+    HealthScoreCategory.NEEDS_ATTENTION -> Icons.Outlined.Flag
+    HealthScoreCategory.CONCERNING -> Icons.Outlined.Info
+    HealthScoreCategory.INSUFFICIENT_DATA -> Icons.Outlined.Add
+}
+
+private fun quickStatIcon(stat: QuickStat) = when (stat.id.lowercase()) {
+    "weight" -> Icons.Outlined.MonitorWeight
+    "bmi" -> Icons.Outlined.Calculate
+    "bp" -> Icons.Outlined.MonitorHeart
+    "water" -> Icons.Outlined.WaterDrop
+    "calories" -> Icons.Outlined.LocalFireDepartment
+    "steps" -> Icons.Outlined.DirectionsWalk
+    else -> Icons.Outlined.Assessment
+}
+
+private fun lastActivityIcon(activity: LastActivity) = when {
+    activity.calculatorName.contains("weight", ignoreCase = true) -> Icons.Outlined.MonitorWeight
+    activity.calculatorName.contains("bmi", ignoreCase = true) -> Icons.Outlined.Calculate
+    activity.calculatorName.contains("blood", ignoreCase = true) -> Icons.Outlined.MonitorHeart
+    activity.calculatorName.contains("waist", ignoreCase = true) -> Icons.Outlined.Straighten
+    activity.calculatorName.contains("heart", ignoreCase = true) -> Icons.Outlined.FavoriteBorder
+    activity.calculatorName.contains("calorie", ignoreCase = true) -> Icons.Outlined.Restaurant
+    activity.calculatorName.contains("water", ignoreCase = true) -> Icons.Outlined.WaterDrop
+    else -> Icons.Outlined.History
 }

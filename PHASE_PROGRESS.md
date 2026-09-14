@@ -432,6 +432,26 @@ Updated: 2026-09-13
 
 Updated: 2026-09-14
 
+## Follow-up — Home wellness overview visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** The home wellness overview now uses vector icons for its
+  header, score categories, quick stats, empty state and last-activity row
+  instead of placeholder emoji. Health-score categories and quick-stat accents
+  now draw from the shared semantic/feature palette, including a theme-aware
+  no-data ring. Existing score methodology, metric selection, click targets
+  and navigation remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device score-ring and large-font rendering,
+  TalkBack, light/dark theme and route checks remain open; signing, Firebase
+  and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing home recommendations and calculator
+  discovery cards for remaining legacy styling and misleading status color.
+
+Updated: 2026-09-14
+
 ## Follow-up — History and quick-action visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open
