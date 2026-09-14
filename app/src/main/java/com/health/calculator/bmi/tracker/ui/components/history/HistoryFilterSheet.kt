@@ -170,13 +170,17 @@ fun HistoryFilterSheet(
                         },
                         label = {
                             Text(
-                                "${type.emoji} ${type.shortName}",
+                                type.shortName,
                                 style = MaterialTheme.typography.labelMedium
                             )
                         },
-                        leadingIcon = if (isSelected) {
-                            { Icon(Icons.Default.Check, null, Modifier.size(16.dp)) }
-                        } else null
+                        leadingIcon = {
+                            Icon(
+                                imageVector = if (isSelected) Icons.Default.Check else calculatorTypeIcon(type),
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
                     )
                 }
             }
@@ -402,7 +406,10 @@ fun ActiveFilterChips(
                 InputChip(
                     selected = true,
                     onClick = { onRemoveTypeFilter(type) },
-                    label = { Text("${type.emoji} ${type.shortName}", style = MaterialTheme.typography.labelSmall) },
+                    label = { Text(type.shortName, style = MaterialTheme.typography.labelSmall) },
+                    leadingIcon = {
+                        Icon(calculatorTypeIcon(type), contentDescription = null, modifier = Modifier.size(14.dp))
+                    },
                     trailingIcon = {
                         Icon(Icons.Default.Close, "Remove", Modifier.size(14.dp))
                     }

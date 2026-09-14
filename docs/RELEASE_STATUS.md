@@ -861,3 +861,22 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device graph/tap rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## History and quick-action visual consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** History entries and filter chips now use a shared
+  calculator-to-vector-icon mapping, with plain labels that remain readable
+  across fonts and platforms. History category indicators use the shared
+  semantic palette rather than legacy raw color literals. Home quick actions
+  now render the vector icon already supplied by each action, with an
+  accessible content description, instead of a second emoji representation.
+  Tap, long-press, selection, filtering and navigation behavior remain
+  unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing/Firebase/Play Console work,
+  remain owner-only.

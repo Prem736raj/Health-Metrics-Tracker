@@ -432,6 +432,28 @@ Updated: 2026-09-13
 
 Updated: 2026-09-14
 
+## Follow-up — History and quick-action visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** History entries and filter chips now use a shared
+  calculator-to-vector-icon mapping, with plain labels that remain readable
+  across fonts and platforms. History category indicators use the shared
+  semantic palette rather than legacy raw color literals. Home quick actions
+  now render the vector icon already supplied by each action, with an
+  accessible content description, instead of a second emoji representation.
+  Tap, long-press, selection, filtering and navigation behavior remain
+  unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue auditing the remaining home recommendation and
+  calculator discovery surfaces for visible legacy styling.
+
+Updated: 2026-09-14
+
 ## Follow-up — Weight goal progress/trend trust and visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open

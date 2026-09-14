@@ -18,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.model.CategoryColor
 import com.health.calculator.bmi.tracker.data.model.HistoryDisplayEntry
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -43,12 +43,12 @@ fun HistoryEntryCard(
     val haptic = LocalHapticFeedback.current
 
     val categoryIndicatorColor = when (entry.categoryColor) {
-        CategoryColor.GREEN -> Color(0xFF4CAF50)
-        CategoryColor.YELLOW -> Color(0xFFFFC107)
-        CategoryColor.ORANGE -> Color(0xFFFF9800)
-        CategoryColor.RED -> Color(0xFFF44336)
-        CategoryColor.BLUE -> Color(0xFF2196F3)
-        CategoryColor.GRAY -> Color(0xFF9E9E9E)
+        CategoryColor.GREEN -> HealthColors.Healthy
+        CategoryColor.YELLOW -> HealthColors.Warning
+        CategoryColor.ORANGE -> HealthColors.Caution
+        CategoryColor.RED -> HealthColors.Danger
+        CategoryColor.BLUE -> HealthColors.Info
+        CategoryColor.GRAY -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Card(
@@ -116,9 +116,11 @@ fun HistoryEntryCard(
                         .background(categoryIndicatorColor.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = entry.calculatorType.emoji,
-                        style = MaterialTheme.typography.titleMedium
+                    Icon(
+                        imageVector = calculatorTypeIcon(entry.calculatorType),
+                        contentDescription = entry.calculatorType.displayName,
+                        tint = categoryIndicatorColor,
+                        modifier = Modifier.size(24.dp)
                     )
                 }
 
