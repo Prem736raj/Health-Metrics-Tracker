@@ -13,6 +13,7 @@ import com.health.calculator.bmi.tracker.data.model.BMRAgeCurveData
 import com.health.calculator.bmi.tracker.data.model.MacroBreakdown
 import com.health.calculator.bmi.tracker.data.model.MealTimingConfig
 import com.health.calculator.bmi.tracker.data.model.EatingPattern
+import com.health.calculator.bmi.tracker.data.model.WeightGoalProgress
 import com.health.calculator.bmi.tracker.data.model.BloodPressureCalculator
 import com.health.calculator.bmi.tracker.data.model.BpCategory
 import com.health.calculator.bmi.tracker.data.model.WaterActivityLevel
@@ -393,5 +394,25 @@ class MedicalCalculatorAccuracyTest {
         val descriptions = MacroCalculatorUseCase().dietPresets.map { it.description.lowercase() }
 
         assertTrue(descriptions.none { "weight loss" in it || "muscle building" in it })
+    }
+
+    @Test
+    fun weightGoalPresentationClampsProgressAndLabelsMaintenance() {
+        val progress = WeightGoalProgress(
+            currentWeight = 70.0,
+            goalWeight = 70.0,
+            startingWeight = 70.0,
+            totalToLoseOrGain = 0.0,
+            remainingToGoal = 0.0,
+            percentageComplete = Float.NaN,
+            isGainingGoal = false,
+            estimatedDaysRemaining = null,
+            estimatedCompletionDate = null,
+            isGoalReached = true,
+            averageWeeklyChange = null
+        )
+
+        assertEquals(1f, progress.safePercentageComplete, 0.0001f)
+        assertEquals("maintain", progress.directionLabel)
     }
 }

@@ -841,3 +841,23 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device education rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## Weight goal progress/trend trust and visual consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Weight goal progress now clamps malformed or restored
+  percentages before drawing and uses shared semantic colors for progress and
+  goal states. Equal-to-start goals are treated as maintenance goals with a
+  small 0.1 kg tolerance instead of appearing complete accidentally. Trend
+  segments use shared toward/away-goal colors, while goal completion and
+  estimated dates use accessible Material icons and approximate wording rather
+  than emoji. Logging, filtering, tapping and navigation behavior remain
+  unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed, including
+  maintenance-goal and non-finite-progress coverage. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  is run before this slice is committed.
+- **Remaining gates:** Connected-device graph/tap rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing/Firebase/Play
+  Console work, remain owner-only.

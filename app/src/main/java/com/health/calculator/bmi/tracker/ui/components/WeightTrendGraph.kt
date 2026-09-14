@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.WeightEntry
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,6 +63,9 @@ fun WeightTrendGraph(
     val goalColor = MaterialTheme.colorScheme.tertiary
     val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
     val dotColor = MaterialTheme.colorScheme.primary
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val towardGoalColor = HealthColors.Healthy
+    val awayFromGoalColor = HealthColors.Caution
 
     val textMeasurer = rememberTextMeasurer()
     val labelStyle = TextStyle(
@@ -199,7 +203,7 @@ fun WeightTrendGraph(
                         } ?: true
 
                         drawLine(
-                            color = if (isTowardGoal) Color(0xFF4CAF50) else Color(0xFFF44336),
+                            color = if (isTowardGoal) towardGoalColor else awayFromGoalColor,
                             start = points[i],
                             end = points[i + 1],
                             strokeWidth = 3f,
@@ -213,7 +217,7 @@ fun WeightTrendGraph(
                         val radius = if (isSelected) 8f else 5f
 
                         drawCircle(
-                            color = Color.White,
+                            color = surfaceColor,
                             radius = radius + 2f,
                             center = points[i]
                         )

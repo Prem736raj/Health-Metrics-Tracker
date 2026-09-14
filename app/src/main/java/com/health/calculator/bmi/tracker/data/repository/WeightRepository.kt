@@ -113,20 +113,23 @@ class WeightRepository @Inject constructor(private val weightDao: WeightDao) {
             val sorted = allWeights.sortedBy { it.dateMillis }
             val first = sorted.first()
             val isGaining = goalWeightKg > first.weightKg
+            val isMaintaining = kotlin.math.abs(goalWeightKg - first.weightKg) <= 0.1
 
             val totalToChange = kotlin.math.abs(goalWeightKg - first.weightKg)
             val remaining = kotlin.math.abs(goalWeightKg - latest.weightKg)
             val weeklyChange = calculateAverageWeeklyChange(sorted)
-            val isReached = if (isGaining) {
-                latest.weightKg >= goalWeightKg
-            } else {
-                latest.weightKg <= goalWeightKg
+            val isReached = when {
+                isMaintaining -> remaining <= 0.1
+                isGaining -> latest.weightKg >= goalWeightKg
+                else -> latest.weightKg <= goalWeightKg
             }
-            val progress = if (totalToChange > 0 && !isReached) {
-                ((totalToChange - remaining) / totalToChange).coerceIn(0.0, 1.0)
-            } else 1.0
+            val progress = when {
+                totalToChange <= 0.1 -> if (isReached) 1.0 else 0.0
+                !isReached -> ((totalToChange - remaining) / totalToChange).coerceIn(0.0, 1.0)
+                else -> 1.0
+            }
 
-            val trendSupportsGoal = weeklyChange != null &&
+            val trendSupportsGoal = !isMaintaining && weeklyChange != null &&
                 ((isGaining && weeklyChange > 0.0) || (!isGaining && weeklyChange < 0.0))
             val estimatedDays = if (!isReached && trendSupportsGoal && weeklyChange != 0.0) {
                 val weeksRemaining = remaining / kotlin.math.abs(weeklyChange)

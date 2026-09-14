@@ -432,6 +432,30 @@ Updated: 2026-09-13
 
 Updated: 2026-09-14
 
+## Follow-up — Weight goal progress/trend trust and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** Weight goal progress now clamps malformed or restored
+  percentages before drawing and uses shared semantic colors for progress and
+  goal states. Equal-to-start goals are treated as maintenance goals with a
+  small 0.1 kg tolerance instead of appearing complete accidentally. Trend
+  segments use shared toward/away-goal colors, while goal completion and
+  estimated dates use accessible Material icons and approximate wording rather
+  than emoji. Existing logging, filtering, tapping and navigation behavior
+  remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed, including
+  maintenance-goal and non-finite-progress coverage. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  is run before this slice is committed.
+- **Known limitations:** Connected-device graph/tap rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing, Firebase
+  and Play Console tasks still require owner access.
+- **Next phase:** Continue the deep audit of remaining history and home
+  surfaces only where it improves truthful interpretation, accessibility or
+  reliability.
+
+Updated: 2026-09-14
+
 ## Follow-up — BMR trend trust and visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open

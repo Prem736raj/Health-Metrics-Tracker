@@ -6,15 +6,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.model.WeightGoalProgress
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,17 +28,18 @@ fun WeightGoalProgressCard(
     val unit = if (useMetric) "kg" else "lbs"
     val multiplier = if (useMetric) 1.0 else 2.20462
 
+    val completion = progress.safePercentageComplete
     val animatedProgress by animateFloatAsState(
-        targetValue = progress.percentageComplete.coerceIn(0f, 1f),
+        targetValue = completion,
         animationSpec = tween(durationMillis = 1000, easing = EaseOutCubic),
         label = "goal_progress"
     )
 
     val progressColor = when {
-        progress.isGoalReached -> Color(0xFF4CAF50)
-        progress.percentageComplete >= 0.75f -> Color(0xFF2196F3)
-        progress.percentageComplete >= 0.5f -> Color(0xFF00BCD4)
-        progress.percentageComplete >= 0.25f -> Color(0xFFFFC107)
+        progress.isGoalReached -> HealthColors.Healthy
+        completion >= 0.75f -> HealthColors.Info
+        completion >= 0.5f -> HealthColors.BelowNormal
+        completion >= 0.25f -> HealthColors.Warning
         else -> MaterialTheme.colorScheme.primary
     }
 
@@ -46,7 +48,7 @@ fun WeightGoalProgressCard(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (progress.isGoalReached)
-                Color(0xFF4CAF50).copy(alpha = 0.1f)
+                HealthColors.Healthy.copy(alpha = 0.1f)
             else MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -58,18 +60,18 @@ fun WeightGoalProgressCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (progress.isGoalReached) "🎉 Goal Reached!" else "Goal Progress",
+                    text = if (progress.isGoalReached) "Goal reached" else "Goal progress",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (progress.isGoalReached) Color(0xFF4CAF50)
+                    color = if (progress.isGoalReached) HealthColors.Healthy
                     else MaterialTheme.colorScheme.onSurface
                 )
 
                 if (progress.isGoalReached) {
                     Icon(
                         imageVector = Icons.Default.EmojiEvents,
-                        contentDescription = "Trophy",
-                        tint = Color(0xFFFFD700),
+                        contentDescription = "Goal reached",
+                        tint = HealthColors.Warning,
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -102,7 +104,7 @@ fun WeightGoalProgressCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${(progress.percentageComplete * 100).toInt()}% complete",
+                    text = "${(completion * 100).toInt()}% complete",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = progressColor
@@ -151,11 +153,20 @@ fun WeightGoalProgressCard(
                 val daysLeft = progress.estimatedDaysRemaining ?: 0
                 val weeksLeft = daysLeft / 7
 
-                Text(
-                    text = "📅 Estimated completion: ${sdf.format(Date(progress.estimatedCompletionDate))}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Outlined.CalendarMonth,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "Approximate completion: ${sdf.format(Date(progress.estimatedCompletionDate))}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
                 Text(
                     text = "~${if (weeksLeft > 0) "$weeksLeft weeks" else "$daysLeft days"} at current pace",
                     style = MaterialTheme.typography.bodySmall,
@@ -167,9 +178,9 @@ fun WeightGoalProgressCard(
             // Milestone celebrations
             if (!progress.isGoalReached) {
                 val nextMilestone = when {
-                    progress.percentageComplete < 0.25f -> 25
-                    progress.percentageComplete < 0.50f -> 50
-                    progress.percentageComplete < 0.75f -> 75
+                    completion < 0.25f -> 25
+                    completion < 0.50f -> 50
+                    completion < 0.75f -> 75
                     else -> 100
                 }
                 Spacer(modifier = Modifier.height(4.dp))
