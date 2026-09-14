@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun IBWEducationalContent() {
@@ -49,7 +51,7 @@ fun IBWEducationalContent() {
         // 1. What is IBW?
         EducationalExpandableCard(
             icon = Icons.Default.HelpOutline,
-            iconColor = Color(0xFF2196F3),
+            iconColor = HealthColors.Info,
             title = "What is Ideal Body Weight?",
             content = {
                 WhatIsIBWContent()
@@ -59,7 +61,7 @@ fun IBWEducationalContent() {
         // 2. Why Different Results?
         EducationalExpandableCard(
             icon = Icons.Default.Calculate,
-            iconColor = Color(0xFF9C27B0),
+            iconColor = MaterialTheme.colorScheme.tertiary,
             title = "Why Do Formulas Give Different Results?",
             content = {
                 WhyDifferentResultsContent()
@@ -69,7 +71,7 @@ fun IBWEducationalContent() {
         // 3. Ideal vs Healthy Weight
         EducationalExpandableCard(
             icon = Icons.Default.Balance,
-            iconColor = Color(0xFF4CAF50),
+            iconColor = HealthColors.Healthy,
             title = "Ideal Weight vs Healthy Weight",
             content = {
                 IdealVsHealthyContent()
@@ -79,7 +81,7 @@ fun IBWEducationalContent() {
         // 4. Frame Size and Body Type
         EducationalExpandableCard(
             icon = Icons.Default.Accessibility,
-            iconColor = Color(0xFFFF9800),
+            iconColor = HealthColors.Warning,
             title = "Frame Size and Body Type",
             content = {
                 FrameSizeContent()
@@ -172,37 +174,42 @@ private fun WhatIsIBWContent() {
         )
 
         KeyPointCard(
-            emoji = "📋",
+            icon = Icons.Outlined.Assignment,
             title = "An Estimate, Not a Rule",
             text = "IBW formulas provide a rough estimate based on height and gender. They don't account for muscle mass, bone density, body composition, or ethnic differences. Think of it as a starting point, not a destination."
         )
 
         KeyPointCard(
-            emoji = "💊",
+            icon = Icons.Outlined.Medication,
             title = "Medical Origins",
             text = "The most common formula (Devine, 1974) was created for calculating drug dosages in hospitals, not for setting personal weight goals. It was never intended to define what everyone should weigh."
         )
 
         KeyPointCard(
-            emoji = "⚖️",
+            icon = Icons.Outlined.Straighten,
             title = "Not the Only Measure",
             text = "IBW should never be the sole measure of your health. Fitness level, blood pressure, cholesterol, blood sugar, mental health, and overall well-being are far more important indicators."
         )
 
         Surface(
             shape = RoundedCornerShape(8.dp),
-            color = Color(0xFF2196F3).copy(alpha = 0.08f)
+            color = HealthColors.Info.copy(alpha = 0.08f)
         ) {
             Row(
                 modifier = Modifier.padding(10.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 14.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = HealthColors.Info,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(R.string.txt_a_muscular_person_may_weigh_si),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF2196F3).copy(alpha = 0.9f),
+                    color = HealthColors.Info.copy(alpha = 0.9f),
                     fontSize = 12.sp
                 )
             }
@@ -255,18 +262,23 @@ private fun WhyDifferentResultsContent() {
 
         Surface(
             shape = RoundedCornerShape(8.dp),
-            color = Color(0xFF9C27B0).copy(alpha = 0.08f)
+            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.08f)
         ) {
             Row(
                 modifier = Modifier.padding(10.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_32), fontSize = 14.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Flag,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(R.string.txt_recommendation_focus_on_the_bm),
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = Color(0xFF9C27B0).copy(alpha = 0.9f),
+                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f),
                     fontSize = 12.sp
                 )
             }
@@ -289,8 +301,8 @@ private fun IdealVsHealthyContent() {
             ComparisonCard(
                 modifier = Modifier.weight(1f),
                 title = "Ideal Weight",
-                emoji = "📍",
-                color = Color(0xFFFF9800),
+                icon = Icons.Outlined.Flag,
+                color = HealthColors.Warning,
                 points = listOf(
                     "A single number",
                     "From a formula",
@@ -302,8 +314,8 @@ private fun IdealVsHealthyContent() {
             ComparisonCard(
                 modifier = Modifier.weight(1f),
                 title = "Healthy Weight",
-                emoji = "🎯",
-                color = Color(0xFF4CAF50),
+                icon = Icons.Outlined.CheckCircle,
+                color = HealthColors.Healthy,
                 points = listOf(
                     "A weight RANGE",
                     "From medical evidence",
@@ -315,13 +327,13 @@ private fun IdealVsHealthyContent() {
         }
 
         KeyPointCard(
-            emoji = "✅",
+            icon = Icons.Outlined.CheckCircle,
             title = "What Matters More Than the Number",
             text = "• Can you perform daily activities with energy?\n• Are your blood markers (BP, cholesterol, glucose) healthy?\n• Do you feel strong and capable?\n• Is your mental health positive?\n• Can you sustain your current lifestyle?\n\nIf you answer yes to these, your weight is likely healthy — regardless of what any formula says."
         )
 
         KeyPointCard(
-            emoji = "📊",
+            icon = Icons.Outlined.Assessment,
             title = "The Range Approach",
             text = "Being anywhere within the BMI 18.5-24.9 range for your height is considered healthy. That's a range of about 15-20 kg for most adults. Aim for a weight within this range that feels sustainable and energetic for you."
         )
@@ -336,7 +348,7 @@ private fun FrameSizeContent() {
         )
 
         KeyPointCard(
-            emoji = "🦴",
+            icon = Icons.Outlined.Accessibility,
             title = "What is Frame Size?",
             text = "Frame size refers to your bone structure — the width and thickness of your bones. People with larger frames naturally weigh more because bone is heavy, dense tissue."
         )
@@ -344,45 +356,50 @@ private fun FrameSizeContent() {
         // Frame size descriptions
         FrameTypeItem(
             type = "Small Frame",
-            emoji = "🔹",
+            icon = Icons.Outlined.Person,
             description = "Narrower shoulders, smaller wrist circumference, lighter bone structure. May naturally weigh 10% less than medium-frame reference values.",
             wristGuide = "Wrist feels delicate, thumb and middle finger overlap when wrapped around"
         )
 
         FrameTypeItem(
             type = "Medium Frame",
-            emoji = "🔶",
+            icon = Icons.Outlined.Accessibility,
             description = "Average bone structure. Most IBW formulas are calibrated for medium-frame individuals. The \"standard\" reference.",
             wristGuide = "Thumb and middle finger just touch when wrapped around wrist"
         )
 
         FrameTypeItem(
             type = "Large Frame",
-            emoji = "🔷",
+            icon = Icons.Outlined.Person,
             description = "Broader shoulders, wider wrist, denser bone structure. May naturally weigh 10% more than medium-frame reference values.",
             wristGuide = "Thumb and middle finger don't meet when wrapped around wrist"
         )
 
         KeyPointCard(
-            emoji = "🧬",
+            icon = Icons.Outlined.Science,
             title = "Body Type Theory (Somatotypes)",
             text = "While not strictly scientific, three general body types are often discussed:\n\n• Ectomorph: Naturally lean, long limbs, fast metabolism\n• Mesomorph: Athletic build, gains muscle easily\n• Endomorph: Wider build, gains weight more easily\n\nMost people are a combination of these types."
         )
 
         Surface(
             shape = RoundedCornerShape(8.dp),
-            color = Color(0xFFFF9800).copy(alpha = 0.08f)
+            color = HealthColors.Warning.copy(alpha = 0.08f)
         ) {
             Row(
                 modifier = Modifier.padding(10.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 14.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = HealthColors.Warning,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(R.string.txt_remember_frame_size_explains_w),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFFF9800).copy(alpha = 0.9f),
+                    color = HealthColors.Warning.copy(alpha = 0.9f),
                     fontSize = 12.sp
                 )
             }
@@ -402,7 +419,7 @@ private fun EducationalParagraph(text: String) {
 
 @Composable
 private fun KeyPointCard(
-    emoji: String,
+    icon: ImageVector,
     title: String,
     text: String
 ) {
@@ -412,7 +429,12 @@ private fun KeyPointCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(emoji, fontSize = 18.sp)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = title,
@@ -484,7 +506,7 @@ private fun FormulaHistoryItem(
 private fun ComparisonCard(
     modifier: Modifier = Modifier,
     title: String,
-    emoji: String,
+    icon: ImageVector,
     color: Color,
     points: List<String>
 ) {
@@ -497,7 +519,12 @@ private fun ComparisonCard(
             modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(emoji, fontSize = 24.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(24.dp)
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = title,
@@ -534,7 +561,7 @@ private fun ComparisonCard(
 @Composable
 private fun FrameTypeItem(
     type: String,
-    emoji: String,
+    icon: ImageVector,
     description: String,
     wristGuide: String
 ) {
@@ -548,7 +575,12 @@ private fun FrameTypeItem(
                 .padding(12.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(emoji, fontSize = 16.sp)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = type,
@@ -590,7 +622,7 @@ private fun MedicalDisclaimerCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF44336).copy(alpha = 0.06f)
+            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f)
         )
     ) {
         Row(
@@ -600,7 +632,7 @@ private fun MedicalDisclaimerCard() {
             Icon(
                 Icons.Default.MedicalInformation,
                 contentDescription = null,
-                tint = Color(0xFFF44336).copy(alpha = 0.7f),
+                tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -608,13 +640,13 @@ private fun MedicalDisclaimerCard() {
                 Text(
                     text = stringResource(R.string.txt_medical_disclaimer),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = Color(0xFFF44336).copy(alpha = 0.8f)
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f)
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = stringResource(R.string.txt_this_information_is_for_educat_1),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFF44336).copy(alpha = 0.7f),
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
                     fontSize = 11.sp,
                     lineHeight = 16.sp
                 )

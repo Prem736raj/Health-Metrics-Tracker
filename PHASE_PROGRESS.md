@@ -1482,3 +1482,19 @@ Updated: 2026-09-14
   Console tasks still require owner access.
 - **Next phase:** Continue auditing calculator educational and result states
   for remaining legacy emoji and inconsistent affordances.
+
+## Follow-up — IBW education visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Ideal Body Weight education cards, comparison panels,
+  frame-size guidance and disclaimer callouts now use stable vector icons and
+  shared semantic/theme colors instead of emoji and legacy color literals.
+  Educational copy, formulas and navigation are unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** IBW education rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining calculator educational/result
+  surfaces for user-visible placeholders and inconsistent interaction cues.
