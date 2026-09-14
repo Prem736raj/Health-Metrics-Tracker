@@ -8,6 +8,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -19,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +55,7 @@ fun MetabolicSyndromeEducationScreen(
 
         // Section 1: What is Metabolic Syndrome
         EducationSection(
-            icon = "🫀",
+            icon = Icons.Outlined.MonitorHeart,
             title = "What is Metabolic Syndrome?",
             accentColor = HealthRed
         ) {
@@ -63,7 +66,7 @@ fun MetabolicSyndromeEducationScreen(
 
         // Section 2: The 5 Risk Factors
         EducationSection(
-            icon = "🔬",
+            icon = Icons.Outlined.Science,
             title = "The 5 Risk Factors Explained",
             accentColor = HealthOrange
         ) {
@@ -74,7 +77,7 @@ fun MetabolicSyndromeEducationScreen(
 
         // Section 3: Who is at Risk
         EducationSection(
-            icon = "👥",
+            icon = Icons.Outlined.Groups,
             title = "Who is at Risk?",
             accentColor = HealthYellow
         ) {
@@ -85,7 +88,7 @@ fun MetabolicSyndromeEducationScreen(
 
         // Section 4: Prevention and Treatment
         EducationSection(
-            icon = "💪",
+            icon = Icons.Outlined.DirectionsRun,
             title = "Prevention and Treatment",
             accentColor = HealthGreen
         ) {
@@ -96,7 +99,7 @@ fun MetabolicSyndromeEducationScreen(
 
         // Section 5: Understanding Blood Work
         EducationSection(
-            icon = "📋",
+            icon = Icons.Outlined.Assignment,
             title = "Understanding Your Blood Work",
             accentColor = HealthBlue
         ) {
@@ -114,7 +117,7 @@ fun MetabolicSyndromeEducationScreen(
 
 @Composable
 private fun EducationSection(
-    icon: String,
+    icon: ImageVector,
     title: String,
     accentColor: Color,
     content: @Composable ColumnScope.() -> Unit
@@ -150,7 +153,12 @@ private fun EducationSection(
                         .background(accentColor.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(icon, fontSize = 22.sp)
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = accentColor,
+                        modifier = Modifier.size(22.dp)
+                    )
                 }
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -205,9 +213,9 @@ private fun WhatIsMetabolicSyndromeContent() {
         Spacer(modifier = Modifier.height(12.dp))
 
         StatHighlightCard(
-            emoji = "🌍",
-            stat = "1 in 4",
-            description = "adults worldwide are affected by metabolic syndrome, making it one of the most common health conditions globally."
+            icon = Icons.Outlined.Assessment,
+            stat = "Common",
+            description = "Prevalence estimates vary by population and definition. A professional uses repeat measurements and local guidance to interpret the pattern."
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -267,8 +275,8 @@ private fun FiveRiskFactorsContent() {
         RiskFactorDetailCard(
             number = "1",
             name = "Central Obesity (Large Waistline)",
-            icon = "📏",
-            threshold = "Men: > 102 cm (40 in) | Women: > 88 cm (35 in)",
+            icon = Icons.Outlined.Straighten,
+            threshold = "Example ATP III: men > 102 cm (40 in), women > 88 cm (35 in). IDF uses ethnicity-specific references (South Asian: 90/80 cm).",
             color = HealthRed,
             explanation = "Waist circumference is a practical body-size measure used in some screening definitions; it cannot show visceral fat.",
             whyItMatters = "Use the measurement consistently and discuss a persistent pattern with a professional."
@@ -280,10 +288,10 @@ private fun FiveRiskFactorsContent() {
         RiskFactorDetailCard(
             number = "2",
             name = "Elevated Triglycerides",
-            icon = "🩸",
+            icon = Icons.Outlined.Science,
             threshold = "≥ 150 mg/dL (1.7 mmol/L)",
             color = HealthOrange,
-            explanation = "Triglycerides are the most common type of fat in your body. When elevated, they contribute to atherosclerosis (hardening and narrowing of arteries). High triglycerides often accompany low HDL cholesterol — a dangerous combination.",
+            explanation = "Triglycerides are a common type of fat in the blood. Higher values can be associated with cardiovascular risk, but fasting status, medicines and the wider lipid panel matter.",
             whyItMatters = "Triglycerides are one laboratory marker; fasting status, medicines and the wider lipid panel matter."
         )
 
@@ -293,11 +301,11 @@ private fun FiveRiskFactorsContent() {
         RiskFactorDetailCard(
             number = "3",
             name = "Reduced HDL Cholesterol",
-            icon = "💛",
+            icon = Icons.Outlined.FavoriteBorder,
             threshold = "Men: < 40 mg/dL | Women: < 50 mg/dL",
             color = HealthYellow,
-            explanation = "HDL (high-density lipoprotein) is your \"good\" cholesterol. It acts like a cleanup crew, removing excess cholesterol from your bloodstream and artery walls and transporting it back to the liver for disposal. Low HDL means less protection.",
-            whyItMatters = "Without adequate HDL, cholesterol accumulates in your arteries, forming plaques that can rupture and cause heart attacks or strokes. HDL also has anti-inflammatory and antioxidant properties that protect blood vessels."
+            explanation = "HDL (high-density lipoprotein) is one part of the cholesterol panel. Lower values can be associated with higher cardiovascular risk, but HDL alone does not predict an individual's outcome.",
+            whyItMatters = "Interpret HDL with LDL, triglycerides, blood pressure, family history and other context. A healthcare professional can explain what the complete panel means for you."
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -306,7 +314,7 @@ private fun FiveRiskFactorsContent() {
         RiskFactorDetailCard(
             number = "4",
             name = "Elevated Blood Pressure",
-            icon = "❤️",
+            icon = Icons.Outlined.MonitorHeart,
             threshold = "Systolic ≥ 130 OR Diastolic ≥ 85 mmHg",
             color = HealthRed,
             explanation = "Blood pressure is a measurement that varies with technique, timing and context. Repeated readings are more useful than one value.",
@@ -319,7 +327,7 @@ private fun FiveRiskFactorsContent() {
         RiskFactorDetailCard(
             number = "5",
             name = "Elevated Fasting Glucose",
-            icon = "🍯",
+            icon = Icons.Outlined.Assessment,
             threshold = "≥ 100 mg/dL (5.6 mmol/L)",
             color = HealthOrange,
             explanation = "Fasting blood glucose is a laboratory measurement whose interpretation depends on the lab, fasting status, medicines and repeat testing.",
@@ -362,22 +370,22 @@ private fun WhoIsAtRiskContent() {
         )
 
         RiskFactorItem(
-            emoji = "🎂",
+            icon = Icons.Outlined.Cake,
             title = "Age",
             description = "Age can be associated with different measurement patterns, but people of any adult age can have varied results."
         )
         RiskFactorItem(
-            emoji = "👨👩👧",
+            icon = Icons.Outlined.Groups,
             title = "Family History",
             description = "Family history can be useful context to share with a professional; it does not predict an individual's result."
         )
         RiskFactorItem(
-            emoji = "🌍",
+            icon = Icons.Outlined.Public,
             title = "Ethnicity",
             description = "South Asian, Hispanic, African American, and Native American populations have higher rates. Different ethnic groups may need lower waist cutoffs."
         )
         RiskFactorItem(
-            emoji = "♀️",
+            icon = Icons.Outlined.Person,
             title = "Gender-Specific Risks",
             description = "Life stage and conditions such as PCOS can be relevant context; only a professional can assess personal risk."
         )
@@ -400,39 +408,39 @@ private fun WhoIsAtRiskContent() {
         )
 
         RiskFactorItem(
-            emoji = "⚖️",
+            icon = Icons.Outlined.MonitorWeight,
             title = "Obesity (especially central obesity)",
             description = "Body-size measures are one part of metabolic health. Sustainable habits can support wellbeing without promising a specific risk change."
         )
         RiskFactorItem(
-            emoji = "🛋️",
+            icon = Icons.Outlined.EventSeat,
             title = "Sedentary Lifestyle",
-            description = "Physical inactivity is independently linked to all 5 criteria. Sitting for prolonged periods impairs glucose metabolism even in otherwise active people."
+            description = "Lower activity is associated with several metabolic markers. Breaking up long periods of sitting where practical can support overall wellbeing."
         )
         RiskFactorItem(
-            emoji = "🍔",
+            icon = Icons.Outlined.Restaurant,
             title = "Unhealthy Diet",
             description = "Food patterns vary by culture and access. A varied, adequately nourishing pattern is a reasonable general goal."
         )
         RiskFactorItem(
-            emoji = "😴",
+            icon = Icons.Outlined.Schedule,
             title = "Poor Sleep & Sleep Apnea",
             description = "Sleep quality and duration can affect wellbeing; persistent sleep concerns deserve professional discussion."
         )
         RiskFactorItem(
-            emoji = "😰",
+            icon = Icons.Outlined.FavoriteBorder,
             title = "Chronic Stress",
-            description = "Prolonged stress raises cortisol, which promotes abdominal fat storage, raises blood sugar, and increases blood pressure."
+            description = "Stress can affect sleep, appetite and how measurements vary. Support and professional care may help when stress feels persistent or hard to manage."
         )
         RiskFactorItem(
-            emoji = "🚬",
+            icon = Icons.Outlined.Warning,
             title = "Smoking",
-            description = "Smoking worsens insulin resistance, raises triglycerides, lowers HDL, and increases central fat distribution. Quitting can rapidly improve metabolic markers."
+            description = "Smoking is associated with less favorable cardiometabolic markers. Quitting supports overall health, and a professional can help you choose support."
         )
         RiskFactorItem(
-            emoji = "🍺",
+            icon = Icons.Outlined.Warning,
             title = "Excessive Alcohol",
-            description = "Heavy drinking raises triglycerides, blood pressure, and contributes to weight gain. Moderate consumption may have neutral or slightly positive effects."
+            description = "Alcohol can affect triglycerides, blood pressure, sleep and weight. Lower intake is safer for many people; ask a professional if you want personalised guidance."
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -456,23 +464,23 @@ private fun PreventionTreatmentContent() {
         Spacer(modifier = Modifier.height(14.dp))
 
         StatHighlightCard(
-            emoji = "💡",
+            icon = Icons.Outlined.Lightbulb,
             stat = "5-10%",
-            description = "weight loss can improve ALL metabolic syndrome factors — reducing waist, lowering triglycerides, raising HDL, reducing blood pressure, and improving blood sugar."
+            description = "A modest weight change may improve some metabolic measurements for some people. Responses vary, and weight is only one part of metabolic health."
         )
 
         Spacer(modifier = Modifier.height(14.dp))
 
         // Weight Loss
         TreatmentCard(
-            icon = "⚖️",
+            icon = Icons.Outlined.MonitorWeight,
             title = "Weight Management",
             color = HealthGreen,
             points = listOf(
                 "Aim for gradual, sustainable weight loss of 0.5-1 kg per week",
-                "Even 5-7% of body weight loss significantly improves all markers",
-                "Focus on losing visceral (belly) fat specifically through exercise and diet",
-                "Avoid crash diets — they worsen metabolic health long-term",
+                "A 5-7% change may improve some markers for some people; discuss a safe target with a professional",
+                "Focus on sustainable habits rather than trying to target a specific type of body fat",
+                "Avoid crash diets — they can be difficult to sustain and may affect wellbeing",
                 "Set realistic goals and celebrate small victories"
             )
         )
@@ -481,13 +489,13 @@ private fun PreventionTreatmentContent() {
 
         // Exercise
         TreatmentCard(
-            icon = "🏃",
+            icon = Icons.Outlined.DirectionsRun,
             title = "Physical Activity",
             color = HealthBlue,
             points = listOf(
                 "Aim for at least 150 minutes of moderate aerobic activity per week",
                 "Include resistance/strength training 2-3 times per week",
-                "Even 10-minute walking sessions after meals significantly reduce blood sugar spikes",
+                "Short walking sessions after meals may support glucose management for some people",
                 "Reduce prolonged sitting — stand or walk every 30-60 minutes",
                 "Any movement is better than none — start small and build gradually",
                 "Activities like brisk walking, cycling, swimming, and dancing are excellent"
@@ -498,13 +506,13 @@ private fun PreventionTreatmentContent() {
 
         // Diet
         TreatmentCard(
-            icon = "🥗",
+            icon = Icons.Outlined.Restaurant,
             title = "Dietary Changes",
             color = HealthTeal,
             points = listOf(
                 "A Mediterranean-style pattern can be a flexible option: plants, whole grains, varied protein and unsaturated fats",
                 "DASH diet: Designed for blood pressure, also improves other markers",
-                "Reduce refined carbohydrates and added sugars significantly",
+                "Consider moderating refined carbohydrates and added sugars within your overall eating pattern",
                 "Increase fiber intake to 25-30g daily from vegetables, legumes, and whole grains",
                 "Eat fatty fish 2-3x per week for omega-3 fatty acids",
                 "Notice sodium in food labels; an appropriate target depends on personal context",
@@ -516,15 +524,15 @@ private fun PreventionTreatmentContent() {
 
         // Lifestyle
         TreatmentCard(
-            icon = "🧘",
+            icon = Icons.Outlined.FavoriteBorder,
             title = "Lifestyle Modifications",
             color = HealthYellow,
             points = listOf(
-                "Quit smoking — improvements in metabolic markers begin within weeks",
+                "If you smoke, quitting supports overall health; a professional can help with a plan",
                 "Manage stress through meditation, deep breathing, yoga, or therapy",
                 "Prioritize 7-9 hours of quality sleep per night",
                 "Get screened for sleep apnea if you snore or feel chronically tired",
-                "Limit alcohol to moderate levels (1 drink/day women, 2 men)",
+                "If you drink alcohol, lower intake is safer for many people; individual guidance may differ",
                 "Build a support system — friends, family, or health communities"
             )
         )
@@ -533,7 +541,7 @@ private fun PreventionTreatmentContent() {
 
         // Medication
         TreatmentCard(
-            icon = "💊",
+            icon = Icons.Outlined.Medication,
             title = "Discuss treatment with a professional",
             color = HealthOrange,
             points = listOf(
@@ -560,15 +568,15 @@ private fun PreventionTreatmentContent() {
 private fun BloodWorkGuideContent() {
     Column {
         InfoParagraph(
-            text = "Understanding your blood test results empowers you to have meaningful conversations with your doctor and track your progress. Here's a guide to the key values related to metabolic syndrome."
+            text = "Understanding blood test results can help you have meaningful conversations with a healthcare professional. Ranges and fasting requirements vary by lab and personal context, so use this as general education only."
         )
 
         Spacer(modifier = Modifier.height(14.dp))
 
         // Preparation
         KeyPointCard(
-            title = "📌 Before Your Blood Test",
-            content = "• Fast for 8-12 hours before the test (water is okay)\n• Avoid alcohol for 24 hours before\n• Inform your doctor about all medications\n• Try to get tested at the same lab for consistency\n• Morning appointments tend to give the most accurate fasting results"
+            title = "Before Your Blood Test",
+            content = "• Follow the lab's instructions; not every test requires fasting\n• Ask whether water, medicines or supplements should be changed\n• Tell the ordering professional about medicines and relevant conditions\n• Use the same lab when practical if you are comparing trends\n• Ask how and when a result should be repeated"
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -585,9 +593,9 @@ private fun BloodWorkGuideContent() {
             name = "Fasting Blood Glucose",
             normalRange = "70-99 mg/dL (3.9-5.5 mmol/L)",
             preDiabetic = "100-125 mg/dL (5.6-6.9 mmol/L)",
-            diabetic = "≥ 126 mg/dL (≥ 7.0 mmol/L)",
+            diabetic = "≥ 126 mg/dL (≥ 7.0 mmol/L; requires confirmation)",
             whatItMeasures = "The amount of sugar in your blood after fasting. Reflects how well your body manages blood sugar overnight.",
-            icon = "🍯"
+            icon = Icons.Outlined.Assessment
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -596,9 +604,9 @@ private fun BloodWorkGuideContent() {
             name = "Triglycerides",
             normalRange = "< 150 mg/dL (< 1.7 mmol/L)",
             preDiabetic = "150-199 mg/dL (borderline high)",
-            diabetic = "≥ 200 mg/dL (high) | ≥ 500 mg/dL (very high)",
+            diabetic = "≥ 200 mg/dL (higher reference) | ≥ 500 mg/dL (very high)",
             whatItMeasures = "The most common type of fat in your blood. Affected by diet, exercise, and alcohol. Can vary significantly day to day.",
-            icon = "🩸"
+            icon = Icons.Outlined.Science
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -607,9 +615,9 @@ private fun BloodWorkGuideContent() {
             name = "HDL Cholesterol",
             normalRange = "Men: ≥ 40 mg/dL | Women: ≥ 50 mg/dL",
             preDiabetic = "Optimal: ≥ 60 mg/dL (protective)",
-            diabetic = "Men: < 40 mg/dL | Women: < 50 mg/dL (low)",
+            diabetic = "Men: < 40 mg/dL | Women: < 50 mg/dL (lower reference)",
             whatItMeasures = "\"Good\" cholesterol that removes harmful cholesterol from arteries. Higher is better — one of the few values where MORE is good.",
-            icon = "💛"
+            icon = Icons.Outlined.FavoriteBorder
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -618,9 +626,9 @@ private fun BloodWorkGuideContent() {
             name = "HbA1c (Hemoglobin A1c)",
             normalRange = "< 5.7%",
             preDiabetic = "5.7-6.4% (pre-diabetes)",
-            diabetic = "≥ 6.5% (diabetes)",
+            diabetic = "≥ 6.5% (requires confirmation)",
             whatItMeasures = "Reflects your average blood sugar over the past 2-3 months. More reliable than a single fasting glucose test. Ask your doctor about this test.",
-            icon = "📊"
+            icon = Icons.Outlined.Assessment
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -636,29 +644,29 @@ private fun BloodWorkGuideContent() {
         RetestScheduleCard(
             items = listOf(
                 RetestItem(
-                    condition = "All values normal",
-                    frequency = "Every 1-2 years",
-                    icon = "✅"
+                    condition = "No follow-up advised",
+                    frequency = "Follow your lab/clinician plan",
+                    icon = Icons.Outlined.CheckCircle
                 ),
                 RetestItem(
-                    condition = "1-2 criteria abnormal",
-                    frequency = "Every 3-6 months",
-                    icon = "⚠️"
+                    condition = "A result needs follow-up",
+                    frequency = "Timing depends on the result",
+                    icon = Icons.Outlined.Warning
                 ),
                 RetestItem(
-                    condition = "Metabolic syndrome (3+ criteria)",
-                    frequency = "Every 3 months initially",
-                    icon = "🔴"
+                    condition = "Several screening markers",
+                    frequency = "Ask a professional about timing",
+                    icon = Icons.Outlined.Warning
                 ),
                 RetestItem(
-                    condition = "After starting new medication",
-                    frequency = "After 6-8 weeks",
-                    icon = "💊"
+                    condition = "After a treatment change",
+                    frequency = "Use the prescriber's plan",
+                    icon = Icons.Outlined.Medication
                 ),
                 RetestItem(
-                    condition = "After significant lifestyle change",
-                    frequency = "After 3 months",
-                    icon = "🏃"
+                    condition = "After a lifestyle change",
+                    frequency = "Review timing with a professional",
+                    icon = Icons.Outlined.DirectionsRun
                 )
             )
         )
@@ -685,7 +693,7 @@ private fun InfoParagraph(text: String) {
 }
 
 @Composable
-private fun StatHighlightCard(emoji: String, stat: String, description: String) {
+private fun StatHighlightCard(icon: ImageVector, stat: String, description: String) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
@@ -697,9 +705,14 @@ private fun StatHighlightCard(emoji: String, stat: String, description: String) 
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(emoji, fontSize = 28.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp)
+            )
             Spacer(modifier = Modifier.width(12.dp))
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stat,
                     style = MaterialTheme.typography.headlineSmall,
@@ -720,7 +733,9 @@ private fun StatHighlightCard(emoji: String, stat: String, description: String) 
 @Composable
 private fun AlsoKnownAsChips(names: List<String>) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         names.forEach { name ->
@@ -797,7 +812,7 @@ private data class StatItem(val value: String, val label: String)
 private fun RiskFactorDetailCard(
     number: String,
     name: String,
-    icon: String,
+    icon: ImageVector,
     threshold: String,
     color: Color,
     explanation: String,
@@ -827,12 +842,21 @@ private fun RiskFactorDetailCard(
                     }
                 }
                 Spacer(modifier = Modifier.width(10.dp))
-                Column {
-                    Text(
-                        text = "$icon $name",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold
-                    )
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = color,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = name,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     Text(
                         text = threshold,
                         style = MaterialTheme.typography.labelSmall,
@@ -878,15 +902,22 @@ private fun RiskFactorDetailCard(
 }
 
 @Composable
-private fun RiskFactorItem(emoji: String, title: String, description: String) {
+private fun RiskFactorItem(icon: ImageVector, title: String, description: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp),
         verticalAlignment = Alignment.Top
     ) {
-        Text(emoji, fontSize = 20.sp, modifier = Modifier.width(30.dp))
-        Column {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .width(30.dp)
+                .size(20.dp)
+        )
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
@@ -904,7 +935,7 @@ private fun RiskFactorItem(emoji: String, title: String, description: String) {
 
 @Composable
 private fun TreatmentCard(
-    icon: String,
+    icon: ImageVector,
     title: String,
     color: Color,
     points: List<String>
@@ -918,7 +949,12 @@ private fun TreatmentCard(
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(icon, fontSize = 22.sp)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = color,
+                    modifier = Modifier.size(22.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = title,
@@ -962,7 +998,7 @@ private fun BloodValueCard(
     preDiabetic: String,
     diabetic: String,
     whatItMeasures: String,
-    icon: String
+    icon: ImageVector
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -973,7 +1009,12 @@ private fun BloodValueCard(
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(icon, fontSize = 20.sp)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = name,
@@ -994,9 +1035,9 @@ private fun BloodValueCard(
             Spacer(modifier = Modifier.height(10.dp))
 
             // Value ranges
-            ValueRangeRow(label = "Normal", value = normalRange, color = HealthGreen)
-            ValueRangeRow(label = "Borderline", value = preDiabetic, color = HealthOrange)
-            ValueRangeRow(label = "Abnormal", value = diabetic, color = HealthRed)
+            ValueRangeRow(label = "Reference", value = normalRange, color = HealthGreen)
+            ValueRangeRow(label = "Context", value = preDiabetic, color = HealthOrange)
+            ValueRangeRow(label = "Discuss", value = diabetic, color = HealthRed)
         }
     }
 }
@@ -1034,7 +1075,7 @@ private fun ValueRangeRow(label: String, value: String, color: Color) {
 data class RetestItem(
     val condition: String,
     val frequency: String,
-    val icon: String
+    val icon: ImageVector
 )
 
 @Composable
@@ -1054,7 +1095,14 @@ private fun RetestScheduleCard(items: List<RetestItem>) {
                         .padding(vertical = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(item.icon, fontSize = 16.sp, modifier = Modifier.width(24.dp))
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .width(24.dp)
+                            .size(16.dp)
+                    )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = item.condition,

@@ -1498,3 +1498,22 @@ Updated: 2026-09-14
   Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
+
+## Follow-up — Metabolic syndrome education trust polish
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Metabolic syndrome education sections, risk-factor cards,
+  treatment cards, blood-work cards and retest guidance now use stable vector
+  icons instead of emoji. Explanations were softened to evidence-aware
+  informational wording, prevalence was framed as definition-dependent, South
+  Asian waist references are shown alongside the ATP III example, and blood-test
+  preparation/retest timing now defers to the ordering lab or professional.
+  Chip rows scroll safely on narrow screens.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** Metabolic education rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining calculator educational/result
+  surfaces for user-visible placeholders and inconsistent interaction cues.

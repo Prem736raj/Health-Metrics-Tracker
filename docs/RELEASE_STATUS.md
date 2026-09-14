@@ -1100,3 +1100,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** IBW education rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## Metabolic syndrome education trust polish — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Metabolic syndrome education, risk-factor, treatment, blood-work
+  and retest surfaces use stable vector icons instead of emoji. Explanations
+  now avoid universal causal or diagnostic claims; prevalence is framed as
+  definition-dependent, South Asian waist references are shown with the ATP III
+  example, and blood-test preparation/retest timing defers to lab or clinician
+  instructions. Long chips scroll safely on narrow screens.
+- **Verification:** Focused compilation/tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Metabolic education rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.
