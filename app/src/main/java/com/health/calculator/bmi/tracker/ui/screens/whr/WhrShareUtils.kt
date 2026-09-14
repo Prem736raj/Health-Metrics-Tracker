@@ -13,12 +13,12 @@ object WhrShareUtils {
 
     fun buildShareText(result: WhrResult): String {
         return buildString {
-            appendLine("📐 Waist-to-Hip Ratio Result")
+            appendLine("Waist-to-Hip Ratio Result")
             appendLine("━━━━━━━━━━━━━━━━━━━━━━")
             appendLine("WHR: ${String.format("%.2f", result.whr)} — ${result.whrCategory.label} (reference context)")
             appendLine("Waist: ${String.format("%.1f", result.waistCm)} cm")
             appendLine("Hip: ${String.format("%.1f", result.hipCm)} cm")
-            appendLine("Body Shape: ${result.bodyShape.emoji} ${result.bodyShape.label}")
+            appendLine("Body Shape: ${result.bodyShape.label}")
             appendLine("Waist Risk: ${result.waistRiskLevel.label}")
             result.whtr?.let {
                 appendLine("WHtR: ${String.format("%.2f", it)} — ${if (result.whtrAtRisk == true) "At Risk" else "Normal"}")
@@ -35,30 +35,30 @@ object WhrShareUtils {
 
     fun buildDetailedShareText(result: WhrResult): String {
         return buildString {
-            appendLine("📐 WHR Health Assessment Report")
+            appendLine("WHR Report")
             appendLine("══════════════════════════════")
             appendLine()
-            appendLine("📊 Waist-to-Hip Ratio")
+            appendLine("Waist-to-Hip Ratio")
             appendLine("   Value: ${String.format("%.2f", result.whr)}")
             appendLine("   Category: ${result.whrCategory.label} (reference context)")
             appendLine("   Gender: ${if (result.gender == Gender.FEMALE) "Female" else "Male"}")
             appendLine("   Age: ${result.age} years")
             appendLine()
-            appendLine("📏 Measurements")
+            appendLine("Measurements")
             appendLine("   Waist: ${String.format("%.1f", result.waistCm)} cm")
             appendLine("   Hip: ${String.format("%.1f", result.hipCm)} cm")
             appendLine()
-            appendLine("🏥 Waist Circumference Risk")
+            appendLine("Waist Circumference Reference")
             appendLine("   Status: ${result.waistRiskLevel.label}")
             appendLine("   Population reference: ${String.format("%.0f", result.waistThresholdIncreased)} cm")
             appendLine()
             result.whtr?.let {
-                appendLine("📐 Waist-to-Height Ratio")
+                appendLine("Waist-to-Height Ratio")
                 appendLine("   Value: ${String.format("%.2f", it)}")
-                appendLine("   Status: ${if (result.whtrAtRisk == true) "At Risk (>0.5)" else "Normal (<0.5)"}")
+                appendLine("   Reference flag: ${if (result.whtrAtRisk == true) "At or above 0.5" else "Below 0.5"}")
                 appendLine()
             }
-            appendLine("🧍 Body Shape: ${result.bodyShape.emoji} ${result.bodyShape.label}")
+            appendLine("Body Shape: ${result.bodyShape.label}")
             appendLine()
             appendLine("══════════════════════════════")
             appendLine("Calculated on ${SimpleDateFormat("MMM d, yyyy 'at' h:mm a", Locale.getDefault()).format(Date())}")

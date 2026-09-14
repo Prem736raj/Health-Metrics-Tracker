@@ -964,3 +964,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## Share/export accessibility and visual consistency — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Changes:** BMR, WHR, BP, weekly-report and hydration share outputs now use
+  plain labels instead of emoji markers while retaining measurements and the
+  informational disclosure footer. WHR waist-to-height output is framed as a
+  reference flag. BP share buttons use theme tokens, report toggles use stable
+  icons and full touch targets, and invalid BMR meal counts are clamped.
+- **Verification:** Added share accessibility/disclosure coverage and a
+  zero-meal formatter regression. Focused compilation/tests and the complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed.
+- **Remaining gates:** Chooser/file-opening behavior, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.

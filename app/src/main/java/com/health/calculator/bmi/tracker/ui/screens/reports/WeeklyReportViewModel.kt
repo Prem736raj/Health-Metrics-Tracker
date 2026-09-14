@@ -206,32 +206,32 @@ class WeeklyReportViewModel @Inject constructor(
 
     private fun buildShareText(report: WeeklyReport, state: WeeklyReportUiState): String {
         val lines = mutableListOf<String>()
-        lines.add("\uD83D\uDCCA My Weekly Wellness Summary")
+        lines.add("My Weekly Wellness Summary")
         lines.add("━━━━━━━━━━━━━━━━━━━━")
         lines.add(WellnessEngagementPolicy.weeklyRhythmLabel(report.overallGrade))
         lines.add("")
 
         if (state.shareIncludeScore && report.healthScoreEnd >= 0) {
-            lines.add("\uD83C\uDFC6 Wellness Score: ${report.healthScoreEnd}/100 (${if (report.healthScoreChange >= 0) "+" else ""}${report.healthScoreChange})")
+            lines.add("Wellness Score: ${report.healthScoreEnd}/100 (${if (report.healthScoreChange >= 0) "+" else ""}${report.healthScoreChange})")
         }
         if (state.shareIncludeWeight && report.weightEntryCount > 0) {
             val change = report.weightChange?.let { String.format("%.1f", it) } ?: "0"
-            lines.add("⚖️ Weight: ${report.weightEnd?.let { String.format("%.1f kg", it) } ?: "—"} (${change}kg)")
+            lines.add("Weight: ${report.weightEnd?.let { String.format("%.1f kg", it) } ?: "—"} (${change}kg)")
         }
         if (state.shareIncludeBmi && report.bmiReadingCount > 0) {
-            lines.add("\uD83D\uDCCA BMI: ${report.avgBmi?.let { String.format("%.1f", it) } ?: "—"}")
+            lines.add("BMI: ${report.avgBmi?.let { String.format("%.1f", it) } ?: "—"}")
         }
         if (state.shareIncludeBp && report.bpReadingCount > 0) {
-            lines.add("❤️ BP: ${report.avgSystolic?.toInt() ?: 0}/${report.avgDiastolic?.toInt() ?: 0} mmHg")
+            lines.add("Blood Pressure: ${report.avgSystolic?.toInt() ?: 0}/${report.avgDiastolic?.toInt() ?: 0} mmHg")
         }
         if (state.shareIncludeWater && report.waterDaysTracked > 0) {
-            lines.add("\uD83D\uDCA7 Water: ${report.waterDaysGoalMet}/7 days goal met")
+            lines.add("Water: ${report.waterDaysGoalMet}/7 days goal met")
         }
         if (state.shareIncludeCalories && report.calorieDaysLogged > 0) {
-            lines.add("\uD83C\uDF7D️ Avg Calories: ${report.avgCaloriesConsumed}/day")
+            lines.add("Average Calories: ${report.avgCaloriesConsumed}/day")
         }
         if (state.shareIncludeExercise && report.exerciseMinutes > 0) {
-            lines.add("\uD83C\uDFC3 Exercise: ${report.exerciseMinutes} min")
+            lines.add("Exercise: ${report.exerciseMinutes} min")
         }
 
         lines.add("")

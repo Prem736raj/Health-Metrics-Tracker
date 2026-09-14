@@ -17,7 +17,6 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -70,9 +69,9 @@ fun BpShareButtons(
                     },
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(10.dp),
-                    border = BorderStroke(1.dp, Color(0xFF7B1FA2).copy(alpha = 0.3f)),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFF7B1FA2)
+                        contentColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Icon(
@@ -96,16 +95,16 @@ fun BpShareButtons(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(10.dp),
                     enabled = !isCreatingImage,
-                    border = BorderStroke(1.dp, Color(0xFFFF6F00).copy(alpha = 0.3f)),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFFFF6F00)
+                        contentColor = MaterialTheme.colorScheme.secondary
                     )
                 ) {
                     if (isCreatingImage) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(14.dp),
                             strokeWidth = 2.dp,
-                            color = Color(0xFFFF6F00)
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     } else {
                         Icon(
@@ -123,9 +122,9 @@ fun BpShareButtons(
                     onClick = onNavigateToExport,
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(10.dp),
-                    border = BorderStroke(1.dp, Color(0xFF1E88E5).copy(alpha = 0.3f)),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.3f)),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFF1E88E5)
+                        contentColor = MaterialTheme.colorScheme.tertiary
                     )
                 ) {
                     Icon(
@@ -143,23 +142,20 @@ fun BpShareButtons(
 
 private fun shareReadingAsText(@ApplicationContext context: Context, reading: BloodPressureReading) {
     val exportManager = BpExportManager(context)
+    exportManager.shareText(buildBloodPressureShareText(reading))
+}
 
-    val categoryDisplay = reading.category.displayName
+internal fun buildBloodPressureShareText(reading: BloodPressureReading): String {
     val sb = StringBuilder()
-    sb.appendLine("🩺 Blood Pressure Reading")
+    sb.appendLine("Blood Pressure Reading")
     sb.appendLine("━━━━━━━━━━━━━━━━━━━━━━")
-    sb.appendLine("📊 ${reading.systolic}/${reading.diastolic} mmHg")
-    sb.appendLine("📋 Category: $categoryDisplay (reference context)")
-
-    reading.pulse?.let {
-        sb.appendLine("❤️ Pulse: $it BPM")
-    }
-
-    sb.appendLine("📅 ${reading.formattedDateTime}")
+    sb.appendLine("Reading: ${reading.systolic}/${reading.diastolic} mmHg")
+    sb.appendLine("Category: ${reading.category.displayName} (reference context)")
+    reading.pulse?.let { sb.appendLine("Pulse: $it BPM") }
+    sb.appendLine("Recorded: ${reading.formattedDateTime}")
     sb.appendLine("━━━━━━━━━━━━━━━━━━━━━━")
     sb.append(ExportDisclosurePolicy.shareFooter())
-
-    exportManager.shareText(sb.toString())
+    return sb.toString()
 }
 
 private suspend fun shareReadingAsImage(@ApplicationContext context: Context, reading: BloodPressureReading) {

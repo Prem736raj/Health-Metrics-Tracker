@@ -7,10 +7,17 @@ import com.health.calculator.bmi.tracker.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Assessment
+import androidx.compose.material.icons.outlined.DirectionsWalk
+import androidx.compose.material.icons.outlined.FitnessCenter
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -41,13 +48,13 @@ fun ReportShareDialog(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
-                ShareToggle("\uD83C\uDFC6 Wellness Score", includeScore) { onToggleSection("score", it) }
-                ShareToggle("⚖️ Weight", includeWeight) { onToggleSection("weight", it) }
-                ShareToggle("\uD83D\uDCCA BMI", includeBmi) { onToggleSection("bmi", it) }
-                ShareToggle("❤️ Blood Pressure", includeBp) { onToggleSection("bp", it) }
-                ShareToggle("\uD83D\uDCA7 Water Intake", includeWater) { onToggleSection("water", it) }
-                ShareToggle("\uD83C\uDF7D️ Calories", includeCalories) { onToggleSection("calories", it) }
-                ShareToggle("\uD83C\uDFC3 Exercise", includeExercise) { onToggleSection("exercise", it) }
+                ShareToggle(Icons.Outlined.Assessment, stringResource(R.string.txt_overall_health_score), includeScore) { onToggleSection("score", it) }
+                ShareToggle(Icons.Outlined.MonitorWeight, stringResource(R.string.txt_weight), includeWeight) { onToggleSection("weight", it) }
+                ShareToggle(Icons.Outlined.Assessment, stringResource(R.string.txt_bmi), includeBmi) { onToggleSection("bmi", it) }
+                ShareToggle(Icons.Outlined.MonitorHeart, stringResource(R.string.txt_blood_pressure), includeBp) { onToggleSection("bp", it) }
+                ShareToggle(Icons.Outlined.WaterDrop, stringResource(R.string.txt_daily_water_intake), includeWater) { onToggleSection("water", it) }
+                ShareToggle(Icons.Outlined.Assessment, stringResource(R.string.txt_calories), includeCalories) { onToggleSection("calories", it) }
+                ShareToggle(Icons.Outlined.DirectionsWalk, stringResource(R.string.txt_exercise), includeExercise) { onToggleSection("exercise", it) }
             }
         },
         confirmButton = {
@@ -62,13 +69,20 @@ fun ReportShareDialog(
 }
 
 @Composable
-private fun ShareToggle(label: String, checked: Boolean, onToggle: (Boolean) -> Unit) {
+private fun ShareToggle(icon: ImageVector, label: String, checked: Boolean, onToggle: (Boolean) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label, style = MaterialTheme.typography.bodyMedium)
-        Switch(checked = checked, onCheckedChange = onToggle, modifier = Modifier.height(28.dp))
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+        }
+        Switch(checked = checked, onCheckedChange = onToggle)
     }
 }

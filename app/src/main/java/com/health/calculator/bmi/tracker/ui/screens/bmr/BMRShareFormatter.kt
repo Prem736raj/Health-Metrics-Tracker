@@ -15,13 +15,14 @@ object BMRShareFormatter {
     ): String {
         val tdee = resultData.primaryBMR * activityLevel.multiplier
         val activityCals = tdee - resultData.primaryBMR
+        val safeMealCount = mealCount.coerceAtLeast(1)
 
         return buildString {
-            append("🔥 BMR & TDEE Results\n")
+            append("BMR & TDEE Results\n")
             append("━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
 
             // BMR
-            append("📊 Basal Metabolic Rate (BMR)\n")
+            append("Basal Metabolic Rate (BMR)\n")
             append("   ${resultData.primaryBMR.toInt()} kcal/day")
             append(" (${resultData.bmrInKJ.toInt()} kJ/day)\n")
             append("   Formula: ${resultData.selectedFormula.displayName}\n")
@@ -37,7 +38,7 @@ object BMRShareFormatter {
 
             // TEF
             if (tefData != null) {
-                append("🌡️ Thermic Effect of Food (TEF)\n")
+                append("Thermic Effect of Food (TEF)\n")
                 append("   Illustrative estimate: ${tefData.totalTEF.toInt()} kcal/day")
                 append(" (~${tefData.tefPercentOfIntake.toInt()}% of the estimate)\n")
                 append("   TEF is already reflected in activity-multiplier TDEE; it is not added again.\n\n")
@@ -45,29 +46,29 @@ object BMRShareFormatter {
 
             // Macros
             if (macroBreakdown != null) {
-                append("🥗 Macronutrient Breakdown")
+                append("Macronutrient Breakdown")
                 append(" (${macroBreakdown.dietApproach.displayName})\n")
-                append("   🔵 Protein: ${macroBreakdown.proteinGrams.toInt()}g")
+                append("   Protein: ${macroBreakdown.proteinGrams.toInt()}g")
                 append(" (${macroBreakdown.proteinCalories.toInt()} kcal)")
                 append(" — ${macroBreakdown.proteinPercentage.toInt()}%\n")
-                append("   🟡 Carbs: ${macroBreakdown.carbsGrams.toInt()}g")
+                append("   Carbs: ${macroBreakdown.carbsGrams.toInt()}g")
                 append(" (${macroBreakdown.carbsCalories.toInt()} kcal)")
                 append(" — ${macroBreakdown.carbsPercentage.toInt()}%\n")
-                append("   🟠 Fat: ${macroBreakdown.fatGrams.toInt()}g")
+                append("   Fat: ${macroBreakdown.fatGrams.toInt()}g")
                 append(" (${macroBreakdown.fatCalories.toInt()} kcal)")
                 append(" — ${macroBreakdown.fatPercentage.toInt()}%\n\n")
 
                 // Per meal
-                append("🍽️ Per Meal ($mealCount meals/day)\n")
-                append("   ${(macroBreakdown.totalCalories / mealCount).toInt()} kcal |")
-                append(" P: ${(macroBreakdown.proteinGrams / mealCount).toInt()}g |")
-                append(" C: ${(macroBreakdown.carbsGrams / mealCount).toInt()}g |")
-                append(" F: ${(macroBreakdown.fatGrams / mealCount).toInt()}g\n\n")
+                append("Per Meal ($safeMealCount meals/day)\n")
+                append("   ${(macroBreakdown.totalCalories / safeMealCount).toInt()} kcal |")
+                append(" P: ${(macroBreakdown.proteinGrams / safeMealCount).toInt()}g |")
+                append(" C: ${(macroBreakdown.carbsGrams / safeMealCount).toInt()}g |")
+                append(" F: ${(macroBreakdown.fatGrams / safeMealCount).toInt()}g\n\n")
             }
 
             // Formula comparison
             if (resultData.allFormulaResults.size > 1) {
-                append("📐 Formula Comparison:\n")
+                append("Formula Comparison:\n")
                 resultData.allFormulaResults.entries
                     .sortedByDescending { it.value }
                     .forEach { (formula, value) ->
@@ -78,7 +79,7 @@ object BMRShareFormatter {
             }
 
             // Input data
-            append("📋 Input Data:\n")
+            append("Input Data:\n")
             append("   Weight: ${String.format("%.1f", resultData.weightKg)} kg\n")
             append("   Height: ${String.format("%.0f", resultData.heightCm)} cm\n")
             append("   Age: ${resultData.age} | Gender: ${if (resultData.isMale) "Male" else "Female"}\n")
@@ -98,10 +99,10 @@ object BMRShareFormatter {
         activityLevel: String
     ): String {
         return buildString {
-            append("🔥 My BMR: ${bmr.toInt()} kcal/day\n")
-            append("⚡ My TDEE: ${tdee.toInt()} kcal/day\n")
-            append("📐 Formula: $formulaName\n")
-            append("🏃 Activity: $activityLevel\n")
+            append("My BMR: ${bmr.toInt()} kcal/day\n")
+            append("My TDEE: ${tdee.toInt()} kcal/day\n")
+            append("Formula: $formulaName\n")
+            append("Activity: $activityLevel\n")
             append("\n")
             append(ExportDisclosurePolicy.shareFooter())
         }

@@ -1344,3 +1344,22 @@ Updated: 2026-09-14
   and Play Console tasks still require owner access.
 - **Next phase:** Continue the deep tracking and history audit for code-fixable
   gaps that improve reliability, accessibility or retention.
+
+## Follow-up — Share/export accessibility and visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** BMR, WHR, blood-pressure, weekly-report and hydration
+  share text now use plain labels instead of emoji markers, preserving the
+  selected measurements and the shared wellness disclosure footer. WHR
+  waist-to-height wording is explicitly a reference flag rather than a normal/
+  risk diagnosis. BP share actions now use theme tokens, and report toggles
+  use stable icons with 48 dp touch targets. Invalid BMR meal counts are
+  clamped before per-meal formatting.
+- **Tests:** Added share-output accessibility/disclosure tests and a zero-meal
+  formatter regression. The complete `test`, `lintRelease`, `assembleDebug`,
+  `assembleRelease` and `bundleRelease` gate passed before this slice is committed.
+- **Known limitations:** Actual target-app chooser behavior, exported-file
+  opening, TalkBack, large-font, light/dark theme and route checks remain open;
+  signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue the deep tracking and retention audit for code-fixable
+  gaps without expanding sensitive analytics or health-data access.

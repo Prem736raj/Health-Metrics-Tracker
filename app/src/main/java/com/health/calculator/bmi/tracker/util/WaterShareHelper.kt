@@ -26,21 +26,21 @@ object WaterShareHelper {
         val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
 
         val text = buildString {
-            appendLine("💧 Water Intake Achievement 💧")
+            appendLine("Water Intake Achievement")
             appendLine("━━━━━━━━━━━━━━━━━━━━━━━")
             appendLine()
-            appendLine("📅 ${dateFormat.format(Date())}")
+            appendLine("Date: ${dateFormat.format(Date())}")
             appendLine()
-            appendLine("💦 Today's Intake: ${String.format("%.1f", currentL)}L / ${String.format("%.1f", goalL)}L")
-            appendLine("📊 Progress: ${percentage.toInt()}%")
+            appendLine("Today's Intake: ${String.format("%.1f", currentL)}L / ${String.format("%.1f", goalL)}L")
+            appendLine("Progress: ${percentage.toInt()}%")
 
             if (percentage >= 100) {
-                appendLine("🎉 Goal Achieved!")
+                appendLine("Goal achieved")
             }
 
             if (streakDays > 0) {
                 appendLine()
-                appendLine("🔥 Current Streak: $streakDays day${if (streakDays > 1) "s" else ""}!")
+                appendLine("Current streak: $streakDays day${if (streakDays > 1) "s" else ""}")
             }
 
             appendLine()
@@ -49,11 +49,11 @@ object WaterShareHelper {
 
             // Motivational message based on progress
             val message = when {
-                percentage >= 150 -> "Going above and beyond! 💪"
-                percentage >= 100 -> "Crushed the goal today! 🏆"
-                percentage >= 75 -> "Almost there, keep going! 👍"
-                percentage >= 50 -> "Halfway done! ⚡"
-                else -> "Every drop counts! 💧"
+                percentage >= 150 -> "Going above and beyond!"
+                percentage >= 100 -> "Goal complete for today."
+                percentage >= 75 -> "Almost there, keep going."
+                percentage >= 50 -> "More than halfway there."
+                else -> "Every entry helps build awareness."
             }
             appendLine(message)
 
@@ -83,9 +83,9 @@ object WaterShareHelper {
     ) {
         val message = buildString {
             append(if (streakDays > 0) {
-                "I drank ${String.format("%.1f", currentL)} liters of water today! Day $streakDays streak! 💧🔥"
+                "I drank ${String.format("%.1f", currentL)} liters of water today. Day $streakDays streak."
             } else {
-                "I drank ${String.format("%.1f", currentL)} liters of water today! 💧"
+                "I drank ${String.format("%.1f", currentL)} liters of water today."
             })
             append("\n\n")
             append(ExportDisclosurePolicy.shareFooter())
@@ -108,13 +108,13 @@ object WaterShareHelper {
         val currentL = currentMl / 1000f
         val summary = if (currentMl >= goalMl) {
             if (streakDays > 0) {
-                "🎉 I hit my water goal today! ${String.format("%.1f", currentL)}L ✓ | Day $streakDays streak 🔥 #Hydration #HealthCalculator"
+                "I hit my water goal today: ${String.format("%.1f", currentL)}L ✓ | Day $streakDays streak. #Hydration #HealthCalculator"
             } else {
-                "🎉 I hit my water goal today! ${String.format("%.1f", currentL)}L ✓ #Hydration #HealthCalculator"
+                "I hit my water goal today: ${String.format("%.1f", currentL)}L ✓ #Hydration #HealthCalculator"
             }
         } else {
             val percentage = if (goalMl > 0) (currentMl.toFloat() / goalMl * 100).toInt() else 0
-            "💧 Hydration progress: ${String.format("%.1f", currentL)}L ($percentage%) - staying healthy! #HealthCalculator"
+            "Hydration progress: ${String.format("%.1f", currentL)}L ($percentage%). #HealthCalculator"
         }
         return ExportDisclosurePolicy.appendToShareText(summary)
     }
