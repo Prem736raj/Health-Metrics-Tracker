@@ -1499,6 +1499,26 @@ Updated: 2026-09-14
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
 
+## Follow-up — BMI trend and goal safety polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** BMI trend empty-state chips and chart categories now use
+  stable vector icons and shared semantic/chart tokens. The BMI goal editor
+  replaced motivational, timeline, direction and celebration emoji with
+  accessible vector icons, scales rates correctly for kg/lb units, and explains
+  that BMI targets outside the adult reference range need personal context.
+  Save is disabled for malformed or out-of-bounds target weights, stored goal
+  values are guarded in the ViewModel, and invalid/non-finite formula inputs
+  return a safe zero result.
+- **Tests:** Added BMIGoalData formula, boundary and invalid-input tests.
+  Focused Kotlin compilation/unit tests and the complete `test`, `lintRelease`,
+  `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Known limitations:** Goal/trend rendering, TalkBack, large-font, light/dark
+  theme and route checks remain open; signing, Firebase and Play Console tasks
+  still require owner access.
+- **Next phase:** Continue auditing remaining calculator educational/result
+  surfaces for user-visible placeholders and inconsistent interaction cues.
+
 ## Follow-up — BMI risk context visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open.

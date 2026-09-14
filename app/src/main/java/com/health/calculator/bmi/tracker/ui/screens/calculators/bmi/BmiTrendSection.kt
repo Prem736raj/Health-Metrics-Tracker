@@ -41,7 +41,9 @@ import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.Timeline
+import androidx.compose.material.icons.outlined.TrendingUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -71,7 +73,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -83,19 +84,19 @@ import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-import kotlin.math.roundToInt
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.ChartColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
 
-private val TrendAccent = Color(0xFF1E88E5)
-private val GraphLineColor = Color(0xFF1E88E5)
-private val GraphDotColor = Color(0xFF1E88E5)
+private val TrendAccent = CalculatorColors.BMI
+private val GraphLineColor = ChartColors.Primary
 
-private val ZoneSevereThin = Color(0xFFE53935)
-private val ZoneUnderweight = Color(0xFFFF9800)
-private val ZoneNormal = Color(0xFF43A047)
-private val ZoneOverweight = Color(0xFFFFC107)
-private val ZoneObese = Color(0xFFE53935)
+private val ZoneUnderweight = HealthColors.Caution
+private val ZoneNormal = HealthColors.Healthy
+private val ZoneOverweight = HealthColors.Warning
+private val ZoneObese = HealthColors.Danger
 
 /**
  * Complete BMI trend visualization section with line graph and statistics.
@@ -307,18 +308,33 @@ private fun NotEnoughDataCard(readingsCount: Int) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("📊 Track weekly", "📈 See trends", "🎯 Set goals").forEach { label ->
+                listOf(
+                    Icons.Outlined.Timeline to "Track weekly",
+                    Icons.Outlined.TrendingUp to "See trends",
+                    Icons.Outlined.Flag to "Set goals"
+                ).forEach { (icon, label) ->
                     Surface(
                         shape = RoundedCornerShape(10.dp),
                         color = TrendAccent.copy(alpha = 0.06f),
                         border = androidx.compose.foundation.BorderStroke(0.5.dp, TrendAccent.copy(alpha = 0.15f))
                     ) {
-                        Text(
-                            label,
-                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-                            color = TrendAccent.copy(alpha = 0.7f),
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-                        )
+                        Row(
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = TrendAccent.copy(alpha = 0.7f),
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                label,
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+                                color = TrendAccent.copy(alpha = 0.7f)
+                            )
+                        }
                     }
                 }
             }
@@ -336,9 +352,9 @@ private fun ComparisonCard(stats: BmiTrendStats) {
     val isFlat = !isUp && !isDown
 
     val changeColor = when {
-        isFlat -> Color(0xFF43A047)
-        abs(change) < 1.0 -> Color(0xFFFFC107)
-        else -> if (stats.currentCategory == BmiCategory.NORMAL) Color(0xFF43A047) else Color(0xFFFF9800)
+        isFlat -> HealthColors.Healthy
+        abs(change) < 1.0 -> HealthColors.Warning
+        else -> if (stats.currentCategory == BmiCategory.NORMAL) HealthColors.Healthy else HealthColors.Caution
     }
 
     val changeIcon = when {
@@ -400,7 +416,7 @@ private fun ComparisonCard(stats: BmiTrendStats) {
                 Text(
                     text = String.format("%.1f", stats.currentBmi),
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    color = Color(stats.currentCategory.colorHex)
+                    color = bmiCategoryColor(stats.currentCategory)
                 )
                 Text(
                     stringResource(R.string.txt_current),
@@ -436,8 +452,6 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
         dotScale.animateTo(1f, tween(500, easing = FastOutSlowInEasing))
     }
 
-    val density = LocalDensity.current
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -460,7 +474,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
 
                 // Legend
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    LegendDot(Color(0xFF43A047), "Normal")
+                    LegendDot(HealthColors.Healthy, "Reference")
                 }
             }
 
@@ -629,7 +643,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                         points.forEachIndexed { index, point ->
                             val x = indexToX(index)
                             val y = bmiToY(point.bmiValue)
-                            val catColor = Color(point.category.colorHex)
+                            val catColor = bmiCategoryColor(point.category)
                             val isSelected = selectedPoint?.id == point.id
                             val dotRadius = if (isSelected) 7.dp.toPx() else 5.dp.toPx()
 
@@ -716,7 +730,7 @@ private fun ZoneLegend(color: Color, label: String) {
 
 @Composable
 private fun PointTooltip(point: BmiTrendPoint, onDismiss: () -> Unit) {
-    val catColor = Color(point.category.colorHex)
+    val catColor = bmiCategoryColor(point.category)
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = catColor.copy(alpha = 0.06f),
@@ -779,22 +793,22 @@ private fun StatisticsCard(stats: BmiTrendStats) {
                 StatItem(
                     label = "Current",
                     value = String.format("%.1f", stats.currentBmi),
-                    color = Color(stats.currentCategory.colorHex)
+                    color = bmiCategoryColor(stats.currentCategory)
                 )
                 StatItem(
                     label = "Average",
                     value = String.format("%.1f", stats.averageBmi),
-                    color = Color(BmiCategory.fromBmi(stats.averageBmi).colorHex)
+                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.averageBmi))
                 )
                 StatItem(
                     label = "Lowest",
                     value = String.format("%.1f", stats.lowestBmi),
-                    color = Color(BmiCategory.fromBmi(stats.lowestBmi).colorHex)
+                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.lowestBmi))
                 )
                 StatItem(
                     label = "Highest",
                     value = String.format("%.1f", stats.highestBmi),
-                    color = Color(BmiCategory.fromBmi(stats.highestBmi).colorHex)
+                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.highestBmi))
                 )
             }
 
@@ -807,9 +821,9 @@ private fun StatisticsCard(stats: BmiTrendStats) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    "📊 ${stats.totalReadings} total readings",
+                    "${stats.totalReadings} total readings",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                 )
             }
         }
@@ -845,6 +859,7 @@ private fun formatFullDate(timestamp: Long): String {
 
 private fun formatTimeSince(timestamp: Long): String {
     val diff = System.currentTimeMillis() - timestamp
+    if (diff <= 0L) return "Just now"
     val days = TimeUnit.MILLISECONDS.toDays(diff)
     return when {
         days == 0L -> "Today"
@@ -854,4 +869,15 @@ private fun formatTimeSince(timestamp: Long): String {
         days < 365 -> "${days / 30} month${if (days / 30 > 1) "s" else ""} ago"
         else -> "${days / 365} year${if (days / 365 > 1) "s" else ""} ago"
     }
+}
+
+private fun bmiCategoryColor(category: BmiCategory): Color = when (category) {
+    BmiCategory.SEVERE_THINNESS,
+    BmiCategory.OBESE_CLASS_II,
+    BmiCategory.OBESE_CLASS_III -> HealthColors.Severe
+    BmiCategory.MODERATE_THINNESS,
+    BmiCategory.OBESE_CLASS_I -> HealthColors.Caution
+    BmiCategory.MILD_THINNESS,
+    BmiCategory.OVERWEIGHT -> HealthColors.Warning
+    BmiCategory.NORMAL -> HealthColors.Healthy
 }

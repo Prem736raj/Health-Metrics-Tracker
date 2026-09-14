@@ -655,16 +655,27 @@ class BmiViewModel @Inject constructor(
     fun setGoal(targetBMI: Float, targetWeight: Float) {
         viewModelScope.launch {
             val currentState = _uiState.value.bmiResult ?: return@launch
+            val currentWeight = currentState.inputWeightKg.toFloat()
+            val heightCm = currentState.inputHeightCm.toFloat()
+            // Keep malformed or impossible values out of DataStore even if a
+            // caller bypasses the goal editor's disabled Save button.
+            if (!targetBMI.isFinite() || targetBMI <= 0f ||
+                !BMIGoalData.isValidTargetWeightKg(targetWeight) ||
+                !BMIGoalData.isValidTargetWeightKg(currentWeight) ||
+                !heightCm.isFinite() || heightCm <= 0f
+            ) {
+                return@launch
+            }
             val goalData = BMIGoalData(
                 targetBMI = targetBMI,
                 targetWeight = targetWeight,
                 currentBMI = currentState.bmiValue.toFloat(),
-                currentWeight = currentState.inputWeightKg.toFloat(),
-                heightCm = currentState.inputHeightCm.toFloat(),
+                currentWeight = currentWeight,
+                heightCm = heightCm,
                 isGoalSet = true,
                 goalSetDateMillis = System.currentTimeMillis(),
                 startingBMI = currentState.bmiValue.toFloat(),
-                startingWeight = currentState.inputWeightKg.toFloat()
+                startingWeight = currentWeight
             )
             bmiGoalPreferences.saveGoal(goalData)
             _goalSaveSuccess.value = true

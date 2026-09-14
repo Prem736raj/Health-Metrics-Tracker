@@ -1150,3 +1150,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** BMI risk-context rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## BMI trend and goal safety polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BMI trend chips and category colors use stable vector icons and
+  shared chart/semantic tokens. The BMI goal editor replaces emoji with vector
+  icons, shows context when a target is outside the adult reference range,
+  converts timeline rates for kg/lb units, and disables invalid target saves.
+  ViewModel and formula guardrails prevent malformed or non-finite goal data.
+- **Verification:** Added BMIGoalData formula/boundary tests. Focused
+  compilation/unit tests and the complete `test`, `lintRelease`,
+  `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Remaining gates:** Goal/trend rendering, TalkBack, large-font, light/dark
+  theme and route checks, plus signing, Firebase and Play Console work, remain
+  owner-only.

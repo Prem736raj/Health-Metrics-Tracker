@@ -7,9 +7,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -20,20 +18,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.BMIGoalData
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -145,7 +142,10 @@ private fun GoalSetterView(
 ) {
     val defaultTargetBMI = BMIGoalData.NORMAL_BMI_MID
     var targetBMI by remember {
-        mutableFloatStateOf(existingGoal?.targetBMI ?: defaultTargetBMI)
+        mutableFloatStateOf(
+            (existingGoal?.targetBMI ?: defaultTargetBMI)
+                .coerceIn(BMIGoalData.MIN_TARGET_BMI, BMIGoalData.MAX_TARGET_BMI)
+        )
     }
     var useWeightMode by remember { mutableStateOf(false) }
     var targetWeightText by remember {
@@ -158,10 +158,23 @@ private fun GoalSetterView(
     }
 
     val calculatedTargetWeight = BMIGoalData.calculateTargetWeight(targetBMI, heightCm)
+    val typedTargetWeightKg = targetWeightText.toFloatOrNull()?.let {
+        if (isUnitKg) it else it / 2.20462f
+    }
+    val typedTargetWeightIsValid = typedTargetWeightKg?.let(BMIGoalData::isValidTargetWeightKg) == true
+    val correspondingTargetBmi = typedTargetWeightKg?.takeIf { it > 0f }?.let {
+        BMIGoalData.calculateBMIFromWeight(it, heightCm)
+    }
+    val correspondingTargetBmiIsValid = correspondingTargetBmi?.let { it.isFinite() && it > 0f } == true
+    val targetBmiIsOutsideReference = targetBMI !in BMIGoalData.NORMAL_BMI_LOW..BMIGoalData.NORMAL_BMI_HIGH
+    val canSave = if (useWeightMode) {
+        typedTargetWeightIsValid && correspondingTargetBmiIsValid
+    } else {
+        BMIGoalData.isValidTargetBmi(targetBMI) &&
+            BMIGoalData.isValidTargetWeightKg(calculatedTargetWeight)
+    }
     val weightChange = if (useWeightMode) {
-        val tw = targetWeightText.toFloatOrNull()?.let {
-            if (isUnitKg) it else it / 2.20462f
-        } ?: currentWeight
+        val tw = typedTargetWeightKg ?: currentWeight
         tw - currentWeight
     } else {
         calculatedTargetWeight - currentWeight
@@ -183,9 +196,11 @@ private fun GoalSetterView(
                 modifier = Modifier.padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.txt_text_placeholder_48),
-                    fontSize = 24.sp
+                Icon(
+                    imageVector = Icons.Outlined.Flag,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
@@ -268,7 +283,7 @@ private fun GoalSetterView(
             Slider(
                 value = targetBMI,
                 onValueChange = { targetBMI = (it * 10).roundToInt() / 10f },
-                valueRange = 16f..35f,
+                valueRange = BMIGoalData.MIN_TARGET_BMI..BMIGoalData.MAX_TARGET_BMI,
                 steps = 189,
                 colors = SliderDefaults.colors(
                     thumbColor = getBMIColor(targetBMI),
@@ -283,8 +298,14 @@ private fun GoalSetterView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(stringResource(R.string.txt_16_0), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(stringResource(R.string.txt_normal_18_5_24_9), style = MaterialTheme.typography.bodySmall, color = healthyGreen, fontWeight = FontWeight.Medium)
+                Text(stringResource(R.string.txt_normal_18_5_24_9), style = MaterialTheme.typography.bodySmall, color = HealthColors.Healthy, fontWeight = FontWeight.Medium)
                 Text(stringResource(R.string.txt_35_0), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            if (targetBmiIsOutsideReference) {
+                GoalContextNote(
+                    text = "This target is outside the adult reference range. BMI is a screening measure; personal context matters."
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -326,16 +347,20 @@ private fun GoalSetterView(
                 label = { Text("Target Weight ($weightUnit)") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 singleLine = true,
+                isError = targetWeightText.isNotBlank() && !typedTargetWeightIsValid,
+                supportingText = if (targetWeightText.isNotBlank() && !typedTargetWeightIsValid) {
+                    {
+                        val minDisplay = if (isUnitKg) 2f else 2f * 2.20462f
+                        val maxDisplay = if (isUnitKg) 500f else 500f * 2.20462f
+                        Text("Enter a value from ${String.format("%.1f", minDisplay)} to ${String.format("%.0f", maxDisplay)} $weightUnit.")
+                    }
+                } else null,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)
             )
 
-            val targetWeightKg = targetWeightText.toFloatOrNull()?.let {
-                if (isUnitKg) it else it / 2.20462f
-            }
-
-            if (targetWeightKg != null && targetWeightKg > 0 && heightCm > 0) {
-                val correspondingBMI = BMIGoalData.calculateBMIFromWeight(targetWeightKg, heightCm)
+            if (typedTargetWeightKg != null && typedTargetWeightIsValid && heightCm > 0) {
+                val correspondingBMI = correspondingTargetBmi ?: 0f
                 Spacer(modifier = Modifier.height(8.dp))
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -363,6 +388,11 @@ private fun GoalSetterView(
                         )
                     }
                 }
+                if (correspondingBMI !in BMIGoalData.NORMAL_BMI_LOW..BMIGoalData.NORMAL_BMI_HIGH) {
+                    GoalContextNote(
+                        text = "This target is outside the adult reference range. Consider your broader health context before saving."
+                    )
+                }
             }
         }
 
@@ -371,17 +401,10 @@ private fun GoalSetterView(
         // Weight change needed
         if (absChange > 0.1f) {
             WeightChangeCard(
-                weightChange = weightChange,
                 isLoss = isLoss,
                 absChange = absChange,
                 isUnitKg = isUnitKg,
-                heightCm = heightCm,
-                targetBMI = if (useWeightMode) {
-                    targetWeightText.toFloatOrNull()?.let {
-                        val kg = if (isUnitKg) it else it / 2.20462f
-                        BMIGoalData.calculateBMIFromWeight(kg, heightCm)
-                    } ?: targetBMI
-                } else targetBMI
+                targetBMI = if (useWeightMode) correspondingTargetBmi ?: targetBMI else targetBMI
             )
         }
 
@@ -391,7 +414,8 @@ private fun GoalSetterView(
         if (absChange > 0.1f) {
             TimelineEstimateCard(
                 absChange = absChange,
-                isLoss = isLoss
+                isLoss = isLoss,
+                isUnitKg = isUnitKg
             )
         }
 
@@ -412,13 +436,12 @@ private fun GoalSetterView(
                 }
             }
             Button(
+                enabled = canSave,
                 onClick = {
                     val finalTargetBMI: Float
                     val finalTargetWeight: Float
                     if (useWeightMode) {
-                        val twKg = targetWeightText.toFloatOrNull()?.let {
-                            if (isUnitKg) it else it / 2.20462f
-                        } ?: return@Button
+                        val twKg = typedTargetWeightKg ?: return@Button
                         finalTargetWeight = twKg
                         finalTargetBMI = BMIGoalData.calculateBMIFromWeight(twKg, heightCm)
                     } else {
@@ -450,15 +473,13 @@ private fun GoalSetterView(
 
 @Composable
 private fun WeightChangeCard(
-    weightChange: Float,
     isLoss: Boolean,
     absChange: Float,
     isUnitKg: Boolean,
-    heightCm: Float,
     targetBMI: Float
 ) {
-    val accentColor = if (isLoss) Color(0xFF2196F3) else Color(0xFF4CAF50)
-    val emoji = if (isLoss) "📉" else "📈"
+    val accentColor = if (isLoss) HealthColors.Good else HealthColors.Healthy
+    val directionIcon = if (isLoss) Icons.Outlined.TrendingDown else Icons.Outlined.TrendingUp
     val action = if (isLoss) "Lose" else "Gain"
     val displayWeight = if (isUnitKg) absChange else absChange * 2.20462f
     val unit = if (isUnitKg) "kg" else "lbs"
@@ -472,7 +493,12 @@ private fun WeightChangeCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = emoji, fontSize = 20.sp)
+                Icon(
+                    imageVector = directionIcon,
+                    contentDescription = null,
+                    tint = accentColor,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "$action ${String.format("%.1f", displayWeight)} $unit to reach BMI ${String.format("%.1f", targetBMI)}",
@@ -488,7 +514,8 @@ private fun WeightChangeCard(
 @Composable
 private fun TimelineEstimateCard(
     absChange: Float,
-    isLoss: Boolean
+    isLoss: Boolean,
+    isUnitKg: Boolean
 ) {
     val rateMin = if (isLoss) 0.5f else 0.25f
     val rateMax = if (isLoss) 1.0f else 0.5f
@@ -497,6 +524,8 @@ private fun TimelineEstimateCard(
 
     val timeMinText = formatWeeksToReadable(weeksMin)
     val timeMaxText = formatWeeksToReadable(weeksMax)
+    val rateMultiplier = if (isUnitKg) 1f else 2.20462f
+    val rateUnit = if (isUnitKg) "kg/week" else "lb/week"
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -507,7 +536,12 @@ private fun TimelineEstimateCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.txt_text_placeholder_47), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.CalendarMonth,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_estimated_timeline),
@@ -525,7 +559,7 @@ private fun TimelineEstimateCard(
                 TimelineItem(
                     label = "Faster pace",
                     time = timeMinText,
-                    rate = "${String.format("%.1f", rateMax)} kg/week",
+                    rate = "${String.format("%.1f", rateMax * rateMultiplier)} $rateUnit",
                     color = MaterialTheme.colorScheme.primary
                 )
                 Box(
@@ -537,7 +571,7 @@ private fun TimelineEstimateCard(
                 TimelineItem(
                     label = "Steady pace",
                     time = timeMaxText,
-                    rate = "${String.format("%.2f", rateMin)} kg/week",
+                    rate = "${String.format("%.2f", rateMin * rateMultiplier)} $rateUnit",
                     color = MaterialTheme.colorScheme.tertiary
                 )
             }
@@ -556,8 +590,13 @@ private fun TimelineEstimateCard(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = if (isLoss) "Safe weight loss rate: 0.5-1 kg per week"
-                    else "Safe weight gain rate: 0.25-0.5 kg per week",
+                    text = if (isUnitKg) {
+                        if (isLoss) "Common reference pace: 0.5–1 kg per week"
+                        else "Common reference pace: 0.25–0.5 kg per week"
+                    } else {
+                        if (isLoss) "Common reference pace: 1.1–2.2 lb per week"
+                        else "Common reference pace: 0.6–1.1 lb per week"
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -635,7 +674,7 @@ fun GoalProgressView(
 
     Column {
         if (updatedGoal.isGoalReached) {
-            // 🎉 Celebration!
+            // Goal reached state gets a restrained vector celebration.
             GoalReachedCelebration()
         } else {
             // Progress display
@@ -751,12 +790,11 @@ private fun ProgressCircle(
     currentBMI: Float,
     targetBMI: Float
 ) {
-    val primaryColor = MaterialTheme.colorScheme.primary
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
     val progressColor = when {
-        progress >= 75f -> healthyGreen
-        progress >= 50f -> Color(0xFF2196F3)
-        progress >= 25f -> Color(0xFFFFA726)
+        progress >= 75f -> HealthColors.Healthy
+        progress >= 50f -> HealthColors.Good
+        progress >= 25f -> HealthColors.Warning
         else -> MaterialTheme.colorScheme.primary
     }
 
@@ -924,11 +962,11 @@ private fun GoalReachedCelebration() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = healthyGreen.copy(alpha = 0.15f)
+            containerColor = HealthColors.Healthy.copy(alpha = 0.15f)
         ),
         border = androidx.compose.foundation.BorderStroke(
             width = 2.dp,
-            color = healthyGreen.copy(alpha = 0.5f)
+            color = HealthColors.Healthy.copy(alpha = 0.5f)
         )
     ) {
         Column(
@@ -937,16 +975,23 @@ private fun GoalReachedCelebration() {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = stringResource(R.string.txt_text_placeholder_46),
-                fontSize = (32 * scale).sp
+            Icon(
+                imageVector = Icons.Outlined.EmojiEvents,
+                contentDescription = "Goal reached",
+                tint = HealthColors.Healthy,
+                modifier = Modifier
+                    .size(40.dp)
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                    }
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = stringResource(R.string.txt_congratulations),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = healthyGreen
+                color = HealthColors.Healthy
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -968,29 +1013,54 @@ private fun GoalReachedCelebration() {
 
 private fun getMotivationalMessage(progress: Float): String {
     return when {
-        progress >= 90f -> "Almost there! You're doing incredible! 🔥"
-        progress >= 75f -> "Fantastic progress! Keep up the amazing work! 💪"
-        progress >= 50f -> "Halfway there! You're crushing it! ⭐"
-        progress >= 25f -> "Great start! Consistency is key! 🌟"
-        progress >= 10f -> "You're on your way! Every small step counts! 🚶"
-        progress > 0f -> "The journey has begun! Stay committed! 💫"
-        else -> "Track regularly to see your progress! 📊"
+        progress >= 90f -> "Almost there. Keep a pace that feels sustainable."
+        progress >= 75f -> "Fantastic progress. Keep building the habit."
+        progress >= 50f -> "Halfway there. Consistency matters more than perfection."
+        progress >= 25f -> "Great start. Keep checking in when it helps."
+        progress >= 10f -> "You're on your way. Small steps add up."
+        progress > 0f -> "The journey has begun. Keep it manageable."
+        else -> "Track regularly to see your progress over time."
+    }
+}
+
+private fun getBMIColor(bmi: Float): Color {
+    return when {
+        !bmi.isFinite() || bmi < 16f -> HealthColors.Severe
+        bmi < 17f -> HealthColors.Caution
+        bmi < 18.5f -> HealthColors.Warning
+        bmi < 25f -> HealthColors.Healthy
+        bmi < 30f -> HealthColors.Warning
+        bmi < 35f -> HealthColors.Caution
+        bmi < 40f -> HealthColors.Danger
+        else -> HealthColors.Severe
     }
 }
 
 @Composable
-private fun getBMIColor(bmi: Float): Color {
-    return when {
-        bmi < 16f -> Color(0xFFB71C1C)
-        bmi < 17f -> Color(0xFFD32F2F)
-        bmi < 18.5f -> Color(0xFFFF9800)
-        bmi < 25f -> healthyGreen
-        bmi < 30f -> Color(0xFFFFC107)
-        bmi < 35f -> Color(0xFFFF9800)
-        bmi < 40f -> Color(0xFFD32F2F)
-        else -> Color(0xFFB71C1C)
+private fun GoalContextNote(text: String) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+        color = HealthColors.Warning.copy(alpha = 0.12f),
+        shape = RoundedCornerShape(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Info,
+                contentDescription = null,
+                tint = HealthColors.Warning,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
-
-// Reference the app's existing healthy green
-private val healthyGreen = Color(0xFF4CAF50)

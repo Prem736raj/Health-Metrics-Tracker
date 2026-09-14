@@ -67,14 +67,33 @@ data class BMIGoalData(
         const val NORMAL_BMI_HIGH = 24.9f
         const val NORMAL_BMI_MID = 21.7f
 
+        /**
+         * Input-sanity limits for the goal editor. These limits are not
+         * recommendations for a target body size; the UI explains when a
+         * target falls outside the adult reference range.
+         */
+        const val MIN_TARGET_BMI = 16f
+        const val MAX_TARGET_BMI = 35f
+        const val MIN_TARGET_WEIGHT_KG = 2f
+        const val MAX_TARGET_WEIGHT_KG = 500f
+
+        fun isValidTargetBmi(targetBMI: Float): Boolean =
+            targetBMI.isFinite() && targetBMI in MIN_TARGET_BMI..MAX_TARGET_BMI
+
+        fun isValidTargetWeightKg(weightKg: Float): Boolean =
+            weightKg.isFinite() && weightKg in MIN_TARGET_WEIGHT_KG..MAX_TARGET_WEIGHT_KG
+
         fun calculateTargetWeight(targetBMI: Float, heightCm: Float): Float {
+            if (!targetBMI.isFinite() || !heightCm.isFinite() || targetBMI <= 0f || heightCm <= 0f) {
+                return 0f
+            }
             val heightM = heightCm / 100f
             return targetBMI * heightM * heightM
         }
 
         fun calculateBMIFromWeight(weightKg: Float, heightCm: Float): Float {
             val heightM = heightCm / 100f
-            if (heightM <= 0) return 0f
+            if (!weightKg.isFinite() || !heightCm.isFinite() || weightKg <= 0f || heightM <= 0f) return 0f
             return weightKg / (heightM * heightM)
         }
     }
