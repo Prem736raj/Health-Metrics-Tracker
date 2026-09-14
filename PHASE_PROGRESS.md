@@ -1448,3 +1448,20 @@ Updated: 2026-09-14
   Console tasks still require owner access.
 - **Next phase:** Continue the deep calculator audit for result-state
   placeholders and misleading UI affordances.
+
+## Follow-up — BMI result visual polish
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** The BMI result card now uses a stable vector status icon
+  instead of category emoji. Saved-state, weight-range, advice, share and
+  guidance surfaces now use shared semantic/theme colors, and the professional
+  guidance note has an explicit icon for clearer scanning. BMI calculations,
+  thresholds and disclosures are unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** BMI result/gauge rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue the deep calculator audit for remaining result and
+  educational placeholders that affect user trust or accessibility.

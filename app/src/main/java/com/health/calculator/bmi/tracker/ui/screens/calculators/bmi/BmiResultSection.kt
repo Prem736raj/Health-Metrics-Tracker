@@ -42,8 +42,11 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MedicalServices
 import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -75,9 +78,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.WeightUnit
 import com.health.calculator.bmi.tracker.data.model.kgToLbs
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlinx.coroutines.delay
 
-private val BmiAccent = Color(0xFF1E88E5)
+private val BmiAccent = HealthColors.Info
 
 @Composable
 fun BmiResultSection(
@@ -240,7 +244,7 @@ private fun SavedToHistoryBanner() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF43A047).copy(alpha = 0.06f)
+            containerColor = HealthColors.Healthy.copy(alpha = 0.08f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -254,13 +258,13 @@ private fun SavedToHistoryBanner() {
                 modifier = Modifier
                     .size(24.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF43A047).copy(alpha = 0.12f)),
+                    .background(HealthColors.Healthy.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Filled.BookmarkAdded,
                     contentDescription = null,
-                    tint = Color(0xFF43A047),
+                    tint = HealthColors.Healthy,
                     modifier = Modifier.size(14.dp)
                 )
             }
@@ -271,7 +275,7 @@ private fun SavedToHistoryBanner() {
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    color = Color(0xFF43A047)
+                    color = HealthColors.Healthy
                 )
                 Text(
                     text = stringResource(R.string.txt_view_all_calculations_in_the_h),
@@ -316,10 +320,10 @@ private fun ActionButtonsSection(
                     .height(50.dp),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = Color(0xFF7B1FA2)
+                    contentColor = MaterialTheme.colorScheme.tertiary
                 ),
                 border = androidx.compose.foundation.BorderStroke(
-                    1.dp, Color(0xFF7B1FA2).copy(alpha = 0.3f)
+                    1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.3f)
                 )
             ) {
                 Icon(
@@ -413,7 +417,16 @@ private fun BmiNumberCard(
                 .padding(28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = result.category.emoji, fontSize = 36.sp)
+            Icon(
+                imageVector = if (result.category == BmiCategory.NORMAL) {
+                    Icons.Outlined.CheckCircle
+                } else {
+                    Icons.Outlined.Warning
+                },
+                contentDescription = null,
+                tint = categoryColor,
+                modifier = Modifier.size(40.dp)
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(R.string.txt_your_bmi),
@@ -511,10 +524,10 @@ private fun HealthDetailsCard(
             val unitLabel = result.displayWeightUnit.displayName
 
             DetailRow(
-                icon = { Icon(Icons.Outlined.MonitorWeight, null, tint = Color(0xFF43A047), modifier = Modifier.size(18.dp)) },
+                icon = { Icon(Icons.Outlined.MonitorWeight, null, tint = HealthColors.Healthy, modifier = Modifier.size(18.dp)) },
                 label = "Healthy Weight Range",
                 value = "$minDisplay – $maxDisplay $unitLabel",
-                valueColor = Color(0xFF43A047)
+                valueColor = HealthColors.Healthy
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -553,7 +566,7 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF43A047).copy(alpha = 0.06f)),
+            colors = CardDefaults.cardColors(containerColor = HealthColors.Healthy.copy(alpha = 0.08f)),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Row(modifier = Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -561,22 +574,22 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFF43A047).copy(alpha = 0.1f))
-                        .border(1.dp, Color(0xFF43A047).copy(alpha = 0.2f), CircleShape),
+                        .background(HealthColors.Healthy.copy(alpha = 0.1f))
+                        .border(1.dp, HealthColors.Healthy.copy(alpha = 0.2f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Filled.Check, null, tint = Color(0xFF43A047), modifier = Modifier.size(24.dp))
+                    Icon(Icons.Filled.Check, null, tint = HealthColors.Healthy, modifier = Modifier.size(24.dp))
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(stringResource(R.string.txt_great_job), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = Color(0xFF43A047))
+                    Text(stringResource(R.string.txt_great_job), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = HealthColors.Healthy)
                     Text(stringResource(R.string.txt_your_bmi_is_in_the_healthy_nor), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), lineHeight = 18.sp)
                 }
             }
         }
     } else {
         val isGain = result.weightAdvice == WeightAdvice.GAIN
-        val adviceColor = if (isGain) Color(0xFF1E88E5) else Color(0xFFFF9800)
+        val adviceColor = if (isGain) HealthColors.Info else HealthColors.Warning
         val adviceIcon = if (isGain) Icons.Filled.TrendingUp else Icons.Filled.TrendingDown
         val adviceVerb = if (isGain) "gain" else "lose"
         val diffDisplay = formatWeight(result.weightDifferenceKg, result.displayWeightUnit)
@@ -615,11 +628,27 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     }
                     Column(horizontalAlignment = Alignment.End) {
                         Text(stringResource(R.string.txt_target_weight), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text("~$targetDisplay $unitLabel", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = Color(0xFF43A047))
+                        Text("~$targetDisplay $unitLabel", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = HealthColors.Healthy)
                     }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                Text("⚕️ Please consult a healthcare professional before starting any weight ${if (isGain) "gain" else "loss"} program. Gradual changes are safest.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), lineHeight = 18.sp)
+                Row(verticalAlignment = Alignment.Top) {
+                    Icon(
+                        imageVector = Icons.Outlined.MedicalServices,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        modifier = Modifier
+                            .size(16.dp)
+                            .padding(top = 2.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        "Please consult a healthcare professional before starting any weight ${if (isGain) "gain" else "loss"} program. Gradual changes are safest.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        lineHeight = 18.sp
+                    )
+                }
             }
         }
     }
