@@ -187,7 +187,7 @@ private fun DrugDosageSection(bsa: Float) {
 
     MedicalApplicationCard(
         number = "1",
-        emoji = "💊",
+        icon = Icons.Outlined.Medication,
         title = "Drug Dosage Calculation",
         subtitle = "How BSA helps determine medication amounts",
         accentColor = HealthRed,
@@ -385,7 +385,7 @@ private fun BurnAssessmentSection(bsa: Float) {
 
     MedicalApplicationCard(
         number = "2",
-        emoji = "🔥",
+        icon = Icons.Outlined.LocalFireDepartment,
         title = "Burn Assessment Reference",
         subtitle = "Rule of Nines for burn area estimation",
         accentColor = HealthOrange,
@@ -421,14 +421,14 @@ private fun BurnAssessmentSection(bsa: Float) {
             Spacer(modifier = Modifier.height(8.dp))
 
             val bodyParts = listOf(
-                Triple("🧑 Head & Neck", "9%", 0.09f),
-                Triple("💪 Right Arm", "9%", 0.09f),
-                Triple("💪 Left Arm", "9%", 0.09f),
-                Triple("👕 Front Torso (Chest & Abdomen)", "18%", 0.18f),
-                Triple("🔙 Back Torso", "18%", 0.18f),
-                Triple("🦵 Right Leg", "18%", 0.18f),
-                Triple("🦵 Left Leg", "18%", 0.18f),
-                Triple("🩲 Groin / Perineum", "1%", 0.01f)
+                Triple("Head & Neck", "9%", 0.09f),
+                Triple("Right Arm", "9%", 0.09f),
+                Triple("Left Arm", "9%", 0.09f),
+                Triple("Front Torso (Chest & Abdomen)", "18%", 0.18f),
+                Triple("Back Torso", "18%", 0.18f),
+                Triple("Right Leg", "18%", 0.18f),
+                Triple("Left Leg", "18%", 0.18f),
+                Triple("Groin / Perineum", "1%", 0.01f)
             )
 
             Card(
@@ -765,7 +765,7 @@ private fun RenalFunctionSection(bsa: Float) {
 
     MedicalApplicationCard(
         number = "3",
-        emoji = "🫘",
+        icon = Icons.Outlined.HealthAndSafety,
         title = "Renal Function (GFR)",
         subtitle = "How BSA relates to kidney function assessment",
         accentColor = HealthTeal,
@@ -928,7 +928,7 @@ private fun CardiacIndexSection(bsa: Float) {
 
     MedicalApplicationCard(
         number = "4",
-        emoji = "❤️",
+        icon = Icons.Outlined.MonitorHeart,
         title = "Cardiac Index",
         subtitle = "Heart output normalized to body size",
         accentColor = HealthRed,
@@ -1094,7 +1094,7 @@ private fun CIRangeItem(label: String, range: String, color: Color, description:
 @Composable
 private fun MedicalApplicationCard(
     number: String,
-    emoji: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     title: String,
     subtitle: String,
     accentColor: Color,
@@ -1125,7 +1125,12 @@ private fun MedicalApplicationCard(
                     modifier = Modifier.size(36.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        Text(emoji, fontSize = 18.sp)
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = accentColor,
+                            modifier = Modifier.size(20.dp)
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.width(10.dp))

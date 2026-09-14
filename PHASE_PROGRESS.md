@@ -1465,3 +1465,20 @@ Updated: 2026-09-14
   Console tasks still require owner access.
 - **Next phase:** Continue the deep calculator audit for remaining result and
   educational placeholders that affect user trust or accessibility.
+
+## Follow-up — BSA medical education icon polish
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** BSA medical-application sections now use stable vector
+  icons for medication, burn, renal and cardiac topics. The Rule of Nines
+  table uses plain body-region labels instead of emoji, preserving the
+  educational percentages and calculations while improving readability across
+  fonts and devices.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** BSA education rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue auditing calculator educational and result states
+  for remaining legacy emoji and inconsistent affordances.
