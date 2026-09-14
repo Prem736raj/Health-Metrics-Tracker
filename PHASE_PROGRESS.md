@@ -1326,3 +1326,21 @@ Updated: 2026-09-13
   truthful interpretation, accessibility or reliability.
 
 Updated: 2026-09-14
+
+## Follow-up — Calorie history day details
+
+- **Status:** Code-fixable interaction complete; device/accessibility validation remains open.
+- **Major changes:** Calendar days with logged food now open a read-only day
+  details dialog showing the selected date, total calories versus the saved
+  target, macro totals and each logged food entry. Duplicate current/history
+  snapshots are resolved deterministically in the analytics use case, preferring
+  populated and most recently logged data. The navigation graph no longer wires
+  an empty tap callback. No data is edited or removed by this interaction.
+- **Tests:** Added selection tests for matching dates, duplicate snapshots and
+  unknown dates. The complete `test`, `lintRelease`, `assembleDebug`,
+  `assembleRelease` and `bundleRelease` gate is run before this slice is committed.
+- **Known limitations:** Connected-device dialog/calendar rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing, Firebase
+  and Play Console tasks still require owner access.
+- **Next phase:** Continue the deep tracking and history audit for code-fixable
+  gaps that improve reliability, accessibility or retention.

@@ -949,3 +949,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device ring/contrast rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing, Firebase and
   Play Console work, remain owner-only.
+
+## Calorie history day details — 2026-09-14
+
+- **Status:** Code-fixable interaction complete; device/accessibility validation remains open.
+- **Changes:** Tapping a logged calendar day now opens a read-only detail dialog
+  with date, total calories, target comparison, macros and logged foods.
+  Duplicate current/history snapshots resolve to populated, most recently
+  logged data. The previous no-op navigation callback was removed.
+- **Verification:** Added unit coverage for date selection and duplicate
+  resolution. Focused compilation/tests and the complete `test`, `lintRelease`,
+  `assembleDebug`, `assembleRelease` and `bundleRelease` gate are required before
+  commit.
+- **Remaining gates:** Connected-device rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.

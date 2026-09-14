@@ -10,6 +10,23 @@ class CalorieHistoryAnalyticsUseCase {
     private val monthFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
     private val dayFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
 
+    /**
+     * Returns the best available log for a calendar date.
+     *
+     * The current-day log and archived history can briefly contain the same
+     * date during a day rollover. Prefer a populated log and, when both are
+     * populated, the one with the most recently logged entry so a history tap
+     * always opens the most useful snapshot.
+     */
+    fun findLogForDate(logs: List<DailyFoodLog>, date: String): DailyFoodLog? {
+        return logs
+            .filter { it.date == date }
+            .maxWithOrNull(
+                compareBy<DailyFoodLog> { it.entries.isNotEmpty() }
+                    .thenBy { log -> log.entries.maxOfOrNull { it.timestamp } ?: Long.MIN_VALUE }
+            )
+    }
+
     fun computeStats(
         logs: List<DailyFoodLog>,
         targetCalories: Double,

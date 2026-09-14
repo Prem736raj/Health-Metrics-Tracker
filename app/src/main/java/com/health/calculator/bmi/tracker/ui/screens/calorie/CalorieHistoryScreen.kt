@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
 import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +52,7 @@ fun CalorieHistoryScreen(
     var selectedTrendDays by remember { mutableIntStateOf(30) }
     var calendarYear by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
     var calendarMonth by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
+    var selectedDate by rememberSaveable { mutableStateOf<String?>(null) }
     val analytics = remember { com.health.calculator.bmi.tracker.domain.usecase.CalorieHistoryAnalyticsUseCase() }
 
     val calendarData by remember(logs, calendarYear, calendarMonth) {
@@ -106,7 +109,10 @@ fun CalorieHistoryScreen(
                     if (calendarMonth == 11) { calendarYear++; calendarMonth = 0 }
                     else calendarMonth++
                 },
-                onDayTapped = onDayTapped
+                onDayTapped = { date ->
+                    selectedDate = date
+                    onDayTapped(date)
+                }
             )
 
             // Trend Graph
@@ -133,6 +139,184 @@ fun CalorieHistoryScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
         }
+    }
+
+    selectedDate?.let { date ->
+        CalorieDayDetailsDialog(
+            date = date,
+            log = analytics.findLogForDate(logs, date),
+            onDismiss = { selectedDate = null }
+        )
+    }
+}
+
+@Composable
+private fun CalorieDayDetailsDialog(
+    date: String,
+    log: DailyFoodLog?,
+    onDismiss: () -> Unit
+) {
+    val readableDate = remember(date) {
+        runCatching {
+            val parsed = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)
+            parsed?.let { SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault()).format(it) }
+                ?: date
+        }.getOrDefault(date)
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Icon(
+                imageVector = Icons.Outlined.CalendarMonth,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        },
+        title = { Text(readableDate) },
+        text = {
+            if (log == null) {
+                Text(
+                    text = stringResource(R.string.txt_calorie_no_details_for_day),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            } else {
+                val target = log.targetCalories
+                val difference = log.totalCalories - target
+                val differenceText = when {
+                    target <= 0.0 -> stringResource(R.string.txt_calorie_target_not_set)
+                    kotlin.math.abs(difference) <= 100.0 ->
+                        stringResource(R.string.txt_calorie_target_near)
+                    difference > 0.0 ->
+                        stringResource(R.string.txt_calorie_above_target, difference.toInt())
+                    else ->
+                        stringResource(R.string.txt_calorie_below_target, (-difference).toInt())
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 420.dp)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "${"%.0f".format(log.totalCalories)} kcal",
+                                style = MaterialTheme.typography.headlineSmall.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                            Text(
+                                text = if (target > 0.0) {
+                                    "$differenceText · ${"%.0f".format(target)} kcal target"
+                                } else {
+                                    differenceText
+                                },
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = stringResource(R.string.txt_macronutrients),
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    HistoryMacroRow(
+                        icon = Icons.Outlined.FitnessCenter,
+                        label = stringResource(R.string.txt_protein),
+                        value = "${"%.1f".format(log.totalProtein)} g",
+                        color = HealthColors.Info
+                    )
+                    HistoryMacroRow(
+                        icon = Icons.Outlined.Grain,
+                        label = stringResource(R.string.txt_carbs),
+                        value = "${"%.1f".format(log.totalCarbs)} g",
+                        color = HealthColors.Healthy
+                    )
+                    HistoryMacroRow(
+                        icon = Icons.Outlined.WaterDrop,
+                        label = stringResource(R.string.txt_fat),
+                        value = "${"%.1f".format(log.totalFat)} g",
+                        color = HealthColors.Warning
+                    )
+
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    Text(
+                        text = stringResource(R.string.txt_calorie_logged_food),
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    log.entries.forEach { entry ->
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Top
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = entry.name,
+                                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                                    )
+                                    val detail = listOf(entry.mealSlot, entry.servingSize)
+                                        .filter { it.isNotBlank() }
+                                        .joinToString(" · ")
+                                    if (detail.isNotBlank()) {
+                                        Text(
+                                            text = detail,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                                Text(
+                                    text = "${"%.0f".format(entry.calories)} kcal",
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            HorizontalDivider(
+                                modifier = Modifier.padding(top = 6.dp),
+                                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.txt_done))
+            }
+        }
+    )
+}
+
+@Composable
+private fun HistoryMacroRow(
+    icon: ImageVector,
+    label: String,
+    value: String,
+    color: Color
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(18.dp))
+        Text(label, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+        Text(
+            value,
+            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 

@@ -785,6 +785,12 @@
 <string name="txt_start_logging_your_food_intake">Start logging your food intake to see trends, calendar highlights, and insights here.</string>
 <string name="txt_no_tracking_history_yet">No tracking history yet</string>
 <string name="txt_calorie_history">Calorie History</string>
+<string name="txt_calorie_logged_food">Logged foods</string>
+<string name="txt_calorie_no_details_for_day">No food details were saved for this day.</string>
+<string name="txt_calorie_target_near">Within 100 kcal of target</string>
+<string name="txt_calorie_above_target">%1$d kcal above target</string>
+<string name="txt_calorie_below_target">%1$d kcal below target</string>
+<string name="txt_calorie_target_not_set">No daily target was set</string>
 <string name="txt_weight_gain_1">Weight Gain</string>
 <string name="txt_maintenance">Maintenance</string>
 <string name="txt_weight_loss_1">Weight Loss</string>

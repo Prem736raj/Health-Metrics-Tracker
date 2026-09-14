@@ -1127,10 +1127,7 @@ fun NavGraph(
                 logs = logs,
                 stats = stats,
                 weeklySummaries = weeklySummaries,
-                onNavigateBack = { navController.popBackStack() },
-                onDayTapped = { _ ->
-                    // Optional: navigate to specific day food log if we implement historical viewing
-                }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
