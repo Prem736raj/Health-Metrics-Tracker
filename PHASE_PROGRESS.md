@@ -1499,6 +1499,25 @@ Updated: 2026-09-14
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
 
+## Follow-up — BMI comparison and range-bar polish
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** BMI age/context comparison surfaces now use vector status
+  icons and shared semantic colors instead of emoji and isolated literals. The
+  obsolete population-average panel (which could show a misleading 0.0 average)
+  was removed because no representative dataset is bundled. The adult reference
+  range highlight now measures the available card width rather than relying on a
+  fixed dp offset, preventing overlap on small or large screens. Pediatric
+  compatibility data remains intact but is not approximated by the adult flow.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** BMI comparison rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue auditing BMI risk, trend and goal surfaces for
+  remaining placeholders and inconsistent interaction cues.
+
 ## Follow-up — Metabolic syndrome education trust polish
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open.

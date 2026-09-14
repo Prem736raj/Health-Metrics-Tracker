@@ -1101,6 +1101,24 @@ These cannot be proven by a Windows unit/build run:
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
 
+## BMI comparison and range-bar polish — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** BMI comparison surfaces use vector status icons and shared
+  semantic colors instead of emoji and isolated literals. The obsolete
+  population-average panel (which could display a misleading 0.0 average) was
+  removed because no representative dataset is bundled. The adult reference
+  range highlight now scales to the available card width instead of a fixed dp
+  offset, preventing overlap on different screen sizes. Pediatric compatibility
+  data remains unchanged and is not approximated by the adult flow.
+- **Verification:** Focused compilation/tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** BMI comparison rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.
+
 ## Metabolic syndrome education trust polish — 2026-09-14
 
 - **Status:** Code-fixable polish complete; device/accessibility validation
