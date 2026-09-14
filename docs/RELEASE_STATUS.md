@@ -897,3 +897,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device score-ring and large-font rendering,
   TalkBack, light/dark theme and route checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## Home recommendations visual consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Recommendation cards now use a shared icon vocabulary by
+  recommendation type, with plain accessible labels instead of emoji. Dismiss,
+  priority and completed-state surfaces use shared semantic colors; the
+  recommendation engine now supplies feature/semantic palette tokens instead
+  of raw literals. Ordering, dismissal, actions and copy remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device swipe/animation and contrast checks,
+  TalkBack, large-font, light/dark theme and route checks, plus signing,
+  Firebase and Play Console work, remain owner-only.

@@ -1,6 +1,9 @@
 package com.health.calculator.bmi.tracker.util
 
 import androidx.compose.ui.graphics.Color
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
@@ -120,7 +123,7 @@ object SmartRecommendationEngine {
                     actionRoute = "profile",
                     priority = RecommendationPriority.HIGH,
                     type = RecommendationType.PROFILE_INCOMPLETE,
-                    color = Color(0xFF9C27B0)
+                    color = HealthColors.Info
                 )
             )
         }
@@ -137,7 +140,7 @@ object SmartRecommendationEngine {
                     actionRoute = "bmi_calculator",
                     priority = RecommendationPriority.HIGH,
                     type = RecommendationType.BMI_CHECK,
-                    color = Color(0xFF2196F3)
+                    color = CalculatorColors.BMI
                 )
             )
         }
@@ -156,7 +159,7 @@ object SmartRecommendationEngine {
                         actionRoute = "bmi_calculator",
                         priority = RecommendationPriority.MEDIUM,
                         type = RecommendationType.BMI_CHECK,
-                        color = Color(0xFF2196F3)
+                        color = CalculatorColors.BMI
                     )
                 )
             }
@@ -174,7 +177,7 @@ object SmartRecommendationEngine {
                     actionRoute = "blood_pressure_checker",
                     priority = RecommendationPriority.HIGH,
                     type = RecommendationType.BP_CHECK,
-                    color = Color(0xFFE53935)
+                    color = CalculatorColors.BloodPressure
                 )
             )
         }
@@ -193,7 +196,7 @@ object SmartRecommendationEngine {
                         actionRoute = "blood_pressure_checker",
                         priority = RecommendationPriority.MEDIUM,
                         type = RecommendationType.BP_CHECK,
-                        color = Color(0xFFE53935)
+                        color = CalculatorColors.BloodPressure
                     )
                 )
             }
@@ -216,7 +219,7 @@ object SmartRecommendationEngine {
                     actionRoute = "water_intake_calculator",
                     priority = if (context.waterStreak > 3) RecommendationPriority.HIGH else RecommendationPriority.MEDIUM,
                     type = RecommendationType.WATER_REMINDER,
-                    color = Color(0xFF03A9F4)
+                    color = CalculatorColors.WaterIntake
                 )
             )
         }
@@ -234,7 +237,7 @@ object SmartRecommendationEngine {
                     actionRoute = "water_intake_calculator",
                     priority = RecommendationPriority.LOW,
                     type = RecommendationType.GOAL_PROGRESS,
-                    color = Color(0xFF4CAF50)
+                    color = HealthColors.Healthy
                 )
             )
         }
@@ -251,7 +254,7 @@ object SmartRecommendationEngine {
                     actionRoute = "calorie_calculator",
                     priority = RecommendationPriority.MEDIUM,
                     type = RecommendationType.CALORIE_REMINDER,
-                    color = Color(0xFFFF9800)
+                    color = CalculatorColors.DailyCalorie
                 )
             )
         }
@@ -272,7 +275,7 @@ object SmartRecommendationEngine {
                         actionRoute = "calorie_calculator",
                         priority = RecommendationPriority.HIGH,
                         type = RecommendationType.WEIGHT_TREND,
-                        color = Color(0xFFFF9800)
+                        color = HealthColors.Caution
                     )
                 )
             }
@@ -292,7 +295,7 @@ object SmartRecommendationEngine {
                         actionRoute = "bmi_calculator",
                         priority = RecommendationPriority.CELEBRATION,
                         type = RecommendationType.GOAL_PROGRESS,
-                        color = Color(0xFF4CAF50)
+                        color = HealthColors.Healthy
                     )
                 )
             }
@@ -312,7 +315,7 @@ object SmartRecommendationEngine {
                         actionRoute = "profile",
                         priority = RecommendationPriority.CELEBRATION,
                         type = RecommendationType.GOAL_PROGRESS,
-                        color = Color(0xFF4CAF50)
+                        color = HealthColors.Healthy
                     )
                 )
             }
@@ -330,7 +333,7 @@ object SmartRecommendationEngine {
                     actionRoute = "whr_calculator",
                     priority = RecommendationPriority.LOW,
                     type = RecommendationType.WHR_CHECK,
-                    color = Color(0xFF9C27B0)
+                    color = CalculatorColors.WaistToHip
                 )
             )
         }
@@ -347,7 +350,7 @@ object SmartRecommendationEngine {
                     actionRoute = "heart_rate_zone_calculator",
                     priority = RecommendationPriority.LOW,
                     type = RecommendationType.HR_CHECK,
-                    color = Color(0xFFE91E63)
+                    color = CalculatorColors.HeartRateZone
                 )
             )
         }
@@ -364,7 +367,7 @@ object SmartRecommendationEngine {
                     actionRoute = "water_intake_calculator",
                     priority = RecommendationPriority.CELEBRATION,
                     type = RecommendationType.STREAK,
-                    color = Color(0xFFFF5722)
+                    color = HealthColors.Caution
                 )
             )
         }
@@ -387,7 +390,7 @@ object SmartRecommendationEngine {
                     actionRoute = "home",
                     priority = RecommendationPriority.CELEBRATION,
                     type = RecommendationType.ALL_GOOD,
-                    color = Color(0xFF4CAF50)
+                    color = HealthColors.Healthy
                 )
             )
         }

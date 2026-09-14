@@ -12,12 +12,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Flag
+import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.Timeline
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.util.SmartRecommendation
 import com.health.calculator.bmi.tracker.util.RecommendationPriority
+import com.health.calculator.bmi.tracker.util.RecommendationType
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 // ============================================================
 // MAIN RECOMMENDATIONS SECTION
@@ -57,7 +70,12 @@ fun RecommendationsSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_recommendations),
@@ -205,7 +223,7 @@ private fun RecommendationCard(
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color(0xFFF44336).copy(alpha = 0.15f))
+                        .background(HealthColors.Danger.copy(alpha = 0.15f))
                         .padding(horizontal = 20.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
@@ -213,14 +231,14 @@ private fun RecommendationCard(
                         Text(
                             text = stringResource(R.string.txt_dismiss),
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFFF44336),
+                            color = HealthColors.Danger,
                             fontWeight = FontWeight.Medium
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Icon(
                             Icons.Default.Close,
                             contentDescription = "Dismiss",
-                            tint = Color(0xFFF44336),
+                            tint = HealthColors.Danger,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -270,7 +288,8 @@ private fun RecommendationCardContent(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
             ) {
-                // Emoji with color background
+                // A stable vector icon keeps the recommendation language
+                // readable across platforms and accessibility settings.
                 Box(
                     modifier = Modifier
                         .size(44.dp)
@@ -278,9 +297,11 @@ private fun RecommendationCardContent(
                         .background(recommendation.color.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = recommendation.emoji,
-                        fontSize = 22.sp
+                    Icon(
+                        imageVector = recommendationIcon(recommendation.type),
+                        contentDescription = recommendation.title,
+                        tint = recommendation.color,
+                        modifier = Modifier.size(22.dp)
                     )
                 }
 
@@ -304,14 +325,14 @@ private fun RecommendationCardContent(
                             Spacer(modifier = Modifier.width(6.dp))
                             Surface(
                                 shape = RoundedCornerShape(4.dp),
-                                color = Color(0xFFFF9800).copy(alpha = 0.15f)
+                                color = HealthColors.Caution.copy(alpha = 0.15f)
                             ) {
                                 Text(
                                     text = stringResource(R.string.txt_important),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontSize = 9.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFFF9800),
+                                    color = HealthColors.Caution,
                                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
                                 )
                             }
@@ -355,7 +376,7 @@ private fun RecommendationCardContent(
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = recommendation.color,
-                    contentColor = Color.White
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 0.dp
@@ -389,7 +410,7 @@ fun NoRecommendationsCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF4CAF50).copy(alpha = 0.06f)
+            containerColor = HealthColors.Healthy.copy(alpha = 0.06f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -399,14 +420,19 @@ fun NoRecommendationsCard(
                 .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(R.string.txt_text_placeholder_13), fontSize = 32.sp)
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
+                contentDescription = null,
+                tint = HealthColors.Healthy,
+                modifier = Modifier.size(32.dp)
+            )
             Spacer(modifier = Modifier.width(14.dp))
             Column {
                 Text(
                     text = stringResource(R.string.txt_you_re_all_caught_up),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF4CAF50)
+                    color = HealthColors.Healthy
                 )
                 Text(
                     text = stringResource(R.string.txt_no_new_recommendations_right_n),
@@ -417,4 +443,18 @@ fun NoRecommendationsCard(
             }
         }
     }
+}
+
+private fun recommendationIcon(type: RecommendationType) = when (type) {
+    RecommendationType.BMI_CHECK, RecommendationType.NEW_CALCULATOR -> Icons.Outlined.Calculate
+    RecommendationType.BP_CHECK -> Icons.Outlined.MonitorHeart
+    RecommendationType.WATER_REMINDER -> Icons.Outlined.WaterDrop
+    RecommendationType.CALORIE_REMINDER -> Icons.Outlined.Restaurant
+    RecommendationType.WEIGHT_TREND -> Icons.Outlined.MonitorWeight
+    RecommendationType.GOAL_PROGRESS -> Icons.Outlined.Flag
+    RecommendationType.WHR_CHECK -> Icons.Outlined.Straighten
+    RecommendationType.HR_CHECK -> Icons.Outlined.FavoriteBorder
+    RecommendationType.ALL_GOOD -> Icons.Outlined.CheckCircle
+    RecommendationType.STREAK -> Icons.Outlined.Timeline
+    RecommendationType.PROFILE_INCOMPLETE -> Icons.Outlined.Person
 }

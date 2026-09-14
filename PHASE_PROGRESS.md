@@ -432,6 +432,26 @@ Updated: 2026-09-13
 
 Updated: 2026-09-14
 
+## Follow-up — Home recommendations visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** Recommendation cards now use a shared icon vocabulary by
+  recommendation type, with plain accessible labels instead of emoji. Dismiss,
+  priority and completed-state surfaces use shared semantic colors; the
+  recommendation engine now supplies feature/semantic palette tokens instead
+  of raw literals. Recommendation ordering, dismissal, actions and copy remain
+  unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device swipe/animation and contrast checks,
+  TalkBack, large-font, light/dark theme and route checks remain open; signing,
+  Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing calculator discovery cards for remaining
+  legacy emoji/raw styling and status semantics.
+
+Updated: 2026-09-14
+
 ## Follow-up — Home wellness overview visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open
