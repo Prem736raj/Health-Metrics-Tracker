@@ -1176,3 +1176,24 @@ Updated: 2026-09-13
   truthful interpretation, accessibility or reliability.
 
 Updated: 2026-09-13
+
+## Follow-up — Calorie education and safety trust/visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** Calorie education now describes energy-use categories as
+  variable rather than repeating fixed population percentages. Weight-gain
+  guidance no longer promises a particular muscle/fat outcome or treats a
+  surplus as a prescription; it explains relevant context and uncertainty.
+  Calorie safety warning surfaces now use the shared semantic palette instead
+  of isolated legacy color literals. Existing education navigation, food
+  references and warning severity behavior remain unchanged.
+- **Tests:** Existing calorie/macro unit coverage remains green; the complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device education rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing,
+  Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue the deep calculator audit only where it improves
+  truthful interpretation, accessibility or reliability.
+
+Updated: 2026-09-14

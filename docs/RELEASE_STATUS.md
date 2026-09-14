@@ -823,3 +823,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device timeline animation, TalkBack,
   large-font, light/dark theme and route checks, plus signing/Firebase/Play
   Console work, remain owner-only.
+
+## Calorie education and safety trust/visual consistency follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Calorie education now describes energy-use categories as
+  variable rather than repeating fixed population percentages. Weight-gain
+  guidance no longer promises a particular muscle/fat outcome or treats a
+  surplus as a prescription; it explains relevant context and uncertainty.
+  Calorie safety warning surfaces now use the shared semantic palette instead
+  of isolated legacy color literals. Education navigation, food references
+  and warning severity behavior remain unchanged.
+- **Verification:** Existing calorie/macro unit coverage remains green. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device education rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing/Firebase/Play
+  Console work, remain owner-only.

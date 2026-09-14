@@ -192,7 +192,7 @@ private fun UnderstandingCaloriesContent() {
         EduHighlight(
             emoji = "⚡",
             title = "Energy In, Energy Out",
-            text = "Your body uses calories in three main ways:\n\n• BMR (Basal Metabolic Rate): ~60-75% — energy to keep you alive at rest (breathing, circulation, cell repair)\n• Physical Activity: ~15-30% — energy for movement and exercise\n• TEF (Thermic Effect of Food): ~10% — energy to digest and absorb food",
+            text = "Your body uses calories in three broad ways, and the balance varies by person and day:\n\n• Resting energy — energy for breathing, circulation, temperature control, and other vital work\n• Physical activity — movement and exercise\n• Food processing — energy used to digest and absorb what you eat\n\nThese categories overlap in real life, so the percentages are not fixed personal measurements.",
             color = HealthColors.Warning
         )
 
@@ -313,7 +313,7 @@ private fun DeficitVsSurplusContent() {
         EduHighlight(
             emoji = "💪",
             title = "Lean Bulk vs Aggressive Surplus",
-            text = "For weight gain/muscle building:\n\n• Lean bulk (250 cal surplus): slower but mostly muscle gain\n• Aggressive surplus: faster weight gain but more fat accumulation\n• Your body can only synthesize a limited amount of muscle per week regardless of calorie surplus\n• Excess calories beyond muscle synthesis needs are stored as fat",
+            text = "For people planning weight gain:\n\n• A modest surplus may make a gradual plan easier to follow, but the amount of muscle and fat gained varies\n• A larger surplus can increase the pace of scale change without guaranteeing a particular body composition\n• Resistance training, protein intake, sleep, genetics, and starting point all influence outcomes\n• These are planning considerations, not a promise of muscle gain or a prescription for a specific surplus",
             color = HealthColors.Severe
         )
     }

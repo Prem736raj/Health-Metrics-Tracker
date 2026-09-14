@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import com.health.calculator.bmi.tracker.util.CalorieEdgeCaseHandler.WarningSeverity
 
 @Composable
@@ -26,16 +27,16 @@ fun CalorieSafetyWarningCard(
     if (severity == WarningSeverity.NONE) return
 
     val containerColor = when (severity) {
-        WarningSeverity.INFO -> Color(0xFF2196F3).copy(alpha = 0.1f)
-        WarningSeverity.WARNING -> Color(0xFFFF9800).copy(alpha = 0.12f)
-        WarningSeverity.DANGER -> Color(0xFFF44336).copy(alpha = 0.12f)
+        WarningSeverity.INFO -> HealthColors.Info.copy(alpha = 0.1f)
+        WarningSeverity.WARNING -> HealthColors.Warning.copy(alpha = 0.12f)
+        WarningSeverity.DANGER -> HealthColors.Danger.copy(alpha = 0.12f)
         WarningSeverity.NONE -> Color.Transparent
     }
 
     val iconColor = when (severity) {
-        WarningSeverity.INFO -> Color(0xFF2196F3)
-        WarningSeverity.WARNING -> Color(0xFFFF9800)
-        WarningSeverity.DANGER -> Color(0xFFF44336)
+        WarningSeverity.INFO -> HealthColors.Info
+        WarningSeverity.WARNING -> HealthColors.Warning
+        WarningSeverity.DANGER -> HealthColors.Danger
         WarningSeverity.NONE -> Color.Transparent
     }
 
