@@ -931,3 +931,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Connected-device card/animation rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing, Firebase and
   Play Console work, remain owner-only.
+
+## Home dashboard score and action semantics follow-up — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The dashboard Wellness Score subtitle now accurately describes
+  recent check-ins and daily logging instead of naming inputs the score does
+  not use. Restored score values are clamped before progress-ring rendering,
+  and home quick actions use matching feature colors/icons for weight and blood
+  pressure. AI/action icons use the shared hero token, and recommendation icon
+  mapping matches the underlying metric type. Navigation and score methodology
+  remain unchanged.
+- **Verification:** Focused Kotlin compilation and unit tests passed. The
+  complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate is run before this slice is committed.
+- **Remaining gates:** Connected-device ring/contrast rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing, Firebase and
+  Play Console work, remain owner-only.

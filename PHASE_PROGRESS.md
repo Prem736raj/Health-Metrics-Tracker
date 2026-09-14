@@ -432,6 +432,27 @@ Updated: 2026-09-13
 
 Updated: 2026-09-14
 
+## Follow-up — Home dashboard score and action semantics
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open
+- **Major changes:** The dashboard Wellness Score subtitle now accurately
+  describes recent check-ins and daily logging instead of naming inputs the
+  score does not use. Restored score values are clamped before progress-ring
+  rendering, and home quick actions use matching feature colors/icons for
+  weight and blood pressure. AI/action icons now use the shared hero token,
+  and recommendation icon mapping matches the underlying metric type.
+  Navigation and score methodology remain unchanged.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate is run before this slice is committed.
+- **Known limitations:** Connected-device ring/contrast rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing, Firebase
+  and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing deep calculator result/history and report
+  surfaces for stale emoji, fixed-color styling or no-op actions.
+
+Updated: 2026-09-14
+
 ## Follow-up — Home calculator discovery card consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open

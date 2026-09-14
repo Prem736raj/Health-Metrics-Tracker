@@ -27,21 +27,22 @@ import java.util.Date
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Scale
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Assessment
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DirectionsWalk
+import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.LocalDining
 import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.ShowChart
+import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.Timeline
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.Button
@@ -377,7 +378,8 @@ private fun WellnessScoreCard(
     modifier: Modifier = Modifier
 ) {
     val hasEnoughData = result.category != HealthScoreCategory.INSUFFICIENT_DATA
-    val displayedProgress = if (hasEnoughData) result.totalScore / 100f else 0f
+    val safeScore = result.totalScore.coerceIn(0, 100)
+    val displayedProgress = if (hasEnoughData) safeScore / 100f else 0f
     val animatedProgress by animateFloatAsState(
         targetValue = displayedProgress,
         animationSpec = tween(durationMillis = 900),
@@ -399,7 +401,7 @@ private fun WellnessScoreCard(
                 )
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = if (hasEnoughData) result.totalScore.toString() else "--",
+                        text = if (hasEnoughData) safeScore.toString() else "--",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.ExtraBold,
                         color = WellnessPalette.OnHero
@@ -437,7 +439,7 @@ private fun WellnessScoreCard(
                 Spacer(Modifier.height(2.dp))
                 Text(
                     text = if (hasEnoughData) {
-                        "Based on weight, water, steps & check-ins this week."
+                        "Based on recent check-ins and daily logging."
                     } else {
                         "Record at least two metrics to build your consistency score."
                     },
@@ -531,7 +533,7 @@ private fun DailyMetricsSection(
                 supportingText = if (weight == null) "start a trend" else "latest log",
                 progress = null,
                 onClick = onOpenWeight,
-                accent = FeatureColors.BmiDeep,
+                accent = FeatureColors.WeightDeep,
                 modifier = Modifier.weight(1f)
             )
             DailyMetricCard(
@@ -797,9 +799,9 @@ private fun InsightPreviewSection(
                     shape = RoundedCornerShape(14.dp),
                     contentPadding = PaddingValues(vertical = 12.dp)
                 ) {
-                    Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp), tint = Color.White)
+                    Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp), tint = WellnessPalette.OnHero)
                     Spacer(Modifier.width(8.dp))
-                    Text("Open AI Wellness Assistant", fontWeight = FontWeight.Bold, color = Color.White)
+                    Text("Open AI Wellness Assistant", fontWeight = FontWeight.Bold, color = WellnessPalette.OnHero)
                 }
             }
         }
@@ -815,9 +817,9 @@ private fun QuickActionsSection(
     modifier: Modifier = Modifier
 ) {
     val actions = listOf(
-        HomeAction("Water", Icons.Default.WaterDrop, onOpenWater, FeatureColors.WaterDeep),
-        HomeAction("Weight", Icons.Default.Scale, onOpenWeight, FeatureColors.BmiDeep),
-        HomeAction("BP", Icons.Default.Favorite, onOpenBloodPressure, FeatureColors.HeartDeep),
+        HomeAction("Water", Icons.Outlined.WaterDrop, onOpenWater, FeatureColors.WaterDeep),
+        HomeAction("Weight", Icons.Outlined.MonitorWeight, onOpenWeight, FeatureColors.WeightDeep),
+        HomeAction("BP", Icons.Outlined.MonitorHeart, onOpenBloodPressure, FeatureColors.BpDeep),
         HomeAction("Calc", Icons.Default.Calculate, onOpenCalculators, FeatureColors.CalorieDeep)
     )
 
@@ -845,7 +847,7 @@ private fun QuickActionsSection(
                             shadowElevation = 2.dp
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Icon(action.icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+                                Icon(action.icon, contentDescription = action.label, tint = WellnessPalette.OnHero, modifier = Modifier.size(20.dp))
                             }
                         }
                         Text(
@@ -876,11 +878,11 @@ private fun recommendationIcon(type: RecommendationType): ImageVector = when (ty
     RecommendationType.WATER_REMINDER -> Icons.Outlined.WaterDrop
     RecommendationType.CALORIE_REMINDER -> Icons.Outlined.LocalDining
     RecommendationType.WEIGHT_TREND -> Icons.Outlined.MonitorWeight
-    RecommendationType.GOAL_PROGRESS -> Icons.Outlined.ShowChart
-    RecommendationType.WHR_CHECK -> Icons.Outlined.ShowChart
+    RecommendationType.GOAL_PROGRESS -> Icons.Outlined.Flag
+    RecommendationType.WHR_CHECK -> Icons.Outlined.Straighten
     RecommendationType.HR_CHECK -> Icons.Outlined.FavoriteBorder
-    RecommendationType.ALL_GOOD -> Icons.Outlined.FavoriteBorder
-    RecommendationType.STREAK -> Icons.Outlined.ShowChart
+    RecommendationType.ALL_GOOD -> Icons.Outlined.CheckCircle
+    RecommendationType.STREAK -> Icons.Outlined.Timeline
     RecommendationType.NEW_CALCULATOR -> Icons.Default.Calculate
     RecommendationType.PROFILE_INCOMPLETE -> Icons.Default.Person
 }
