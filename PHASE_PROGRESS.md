@@ -1415,3 +1415,21 @@ Updated: 2026-09-14
   Console tasks still require owner access.
 - **Next phase:** Continue the deep calculator and empty-state audit for
   remaining legacy visual placeholders or misleading interactions.
+
+## Follow-up — Settings visual consistency
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Settings theme choices now use the existing vector theme
+  icons and plain labels rather than emoji text. Theme, hydration, reminder,
+  export, privacy, legal, rating and sharing rows now use shared semantic or
+  theme colors instead of isolated legacy color literals. The destructive
+  confirmation keeps its existing safeguards while presenting a clear text
+  warning.
+- **Tests:** Focused Kotlin compilation and unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed before this slice is committed.
+- **Known limitations:** Settings rendering, TalkBack, large-font, light/dark
+  theme and route checks remain open; signing, Firebase and Play Console tasks
+  still require owner access.
+- **Next phase:** Continue the deep calculator audit for remaining UI-only
+  emoji placeholders and legacy visual treatments.

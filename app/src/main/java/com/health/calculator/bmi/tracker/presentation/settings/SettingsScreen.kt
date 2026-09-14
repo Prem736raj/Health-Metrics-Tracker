@@ -124,12 +124,13 @@ import com.health.calculator.bmi.tracker.data.repository.InactivityRepository
 import com.health.calculator.bmi.tracker.notifications.InactivityCheckScheduler
 import com.health.calculator.bmi.tracker.notifications.NotificationPermissionHelper
 import com.health.calculator.bmi.tracker.notifications.StreakProtectionScheduler
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 // ─── Accent Colors ────────────────────────────────────────────────────────────
 
 private val SettingsAccent = com.health.calculator.bmi.tracker.ui.theme.HealthColors.BelowNormal
-private val DangerRed = com.health.calculator.bmi.tracker.ui.theme.HealthColors.Danger
-private val WarningOrange = com.health.calculator.bmi.tracker.ui.theme.HealthColors.Caution
+private val DangerRed = HealthColors.Danger
+private val WarningOrange = HealthColors.Caution
 
 // ─── Main Settings Screen ─────────────────────────────────────────────────────
 
@@ -322,13 +323,13 @@ fun SettingsScreen(
                             SettingsClickItem(
                                 icon = themeIcon,
                                 iconTint = when (uiState.themeMode) {
-                                    ThemeMode.LIGHT -> Color(0xFFFF9800)
-                                    ThemeMode.DARK -> Color(0xFF5C6BC0)
+                                    ThemeMode.LIGHT -> HealthColors.Warning
+                                    ThemeMode.DARK -> HealthColors.Info
                                     ThemeMode.SYSTEM -> SettingsAccent
                                 },
                                 title = "Theme",
                                 subtitle = "App appearance",
-                                trailingText = "${uiState.themeMode.emoji} ${uiState.themeMode.displayName}",
+                                trailingText = uiState.themeMode.displayName,
                                 onClick = { viewModel.showThemePicker() }
                             )
                         }
@@ -345,7 +346,7 @@ fun SettingsScreen(
 
                             SettingsToggleItem(
                                 icon = Icons.Outlined.WaterDrop,
-                                iconTint = Color(0xFF4CAF50),
+                                iconTint = HealthColors.Healthy,
                                 title = "Hydration Plant Companion",
                                 subtitle = "Show a virtual plant that grows over time",
                                 checked = plantVisible,
@@ -387,7 +388,7 @@ fun SettingsScreen(
 
                                     SettingsToggleItem(
                                         icon = Icons.Outlined.WaterDrop,
-                                        iconTint = Color(0xFF0277BD),
+                                        iconTint = HealthColors.Good,
                                         title = "Water Intake Reminder",
                                         subtitle = "Daily hydration reminders",
                                         checked = uiState.waterReminderEnabled,
@@ -402,7 +403,7 @@ fun SettingsScreen(
 
                                     SettingsToggleItem(
                                         icon = Icons.Outlined.Straighten,
-                                        iconTint = Color(0xFF43A047),
+                                        iconTint = HealthColors.Healthy,
                                         title = "Weight Tracking Reminder",
                                         subtitle = "Weekly weigh-in reminders",
                                         checked = uiState.weightReminderEnabled,
@@ -466,7 +467,7 @@ fun SettingsScreen(
                         SettingsCard {
                             SettingsClickItem(
                                 icon = Icons.Filled.FileDownload,
-                                iconTint = Color(0xFF1E88E5),
+                                iconTint = HealthColors.Info,
                                 title = "Export All Data",
                                 subtitle = "Share a JSON wellness-data copy",
                                 onClick = { viewModel.exportData() }
@@ -620,7 +621,7 @@ fun SettingsScreen(
 
                             SettingsClickItem(
                                 icon = Icons.Outlined.Shield,
-                                iconTint = Color(0xFF43A047),
+                                iconTint = HealthColors.Healthy,
                                 title = "Privacy Policy",
                                 subtitle = "How we handle your data",
                                 onClick = {
@@ -632,7 +633,7 @@ fun SettingsScreen(
 
                             SettingsClickItem(
                                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
-                                iconTint = Color(0xFF1E88E5),
+                                iconTint = HealthColors.Info,
                                 title = "Terms of Service",
                                 subtitle = "Usage terms and conditions",
                                 onClick = {
@@ -644,7 +645,7 @@ fun SettingsScreen(
 
                             SettingsClickItem(
                                 icon = Icons.Filled.Star,
-                                iconTint = Color(0xFFFFC107),
+                                iconTint = HealthColors.Warning,
                                 title = "Rate the App",
                                 subtitle = "Share your feedback on Play Store",
                                 onClick = { openAppRating(context, packageName) }
@@ -654,7 +655,7 @@ fun SettingsScreen(
 
                             SettingsClickItem(
                                 icon = Icons.Filled.Share,
-                                iconTint = Color(0xFF7B1FA2),
+                                iconTint = MaterialTheme.colorScheme.tertiary,
                                 title = "Share the App",
                                 subtitle = "Recommend to friends and family",
                                 onClick = { shareApp(context, packageName) }
@@ -726,7 +727,7 @@ fun SettingsScreen(
             icon = Icons.Filled.DeleteForever,
             iconColor = DangerRed,
             title = "Clear ALL Data?",
-            message = "⚠️ This will permanently delete:\n\n• All calculation history\n• Your profile information\n• All saved preferences\n• App settings\n\nThe app will reset to its initial state.\n\nThis action CANNOT be undone.",
+            message = "This will permanently delete:\n\n• All calculation history\n• Your profile information\n• All saved preferences\n• App settings\n\nThe app will reset to its initial state.\n\nThis action CANNOT be undone.",
             confirmText = "Delete Everything",
             confirmColor = DangerRed,
             onConfirm = { viewModel.confirmClearAllData() },
@@ -1185,8 +1186,8 @@ private fun ThemePickerDialog(
                         ThemeMode.SYSTEM -> Icons.Filled.PhoneAndroid
                     }
                     val themeColor = when (mode) {
-                        ThemeMode.LIGHT -> Color(0xFFFF9800)
-                        ThemeMode.DARK -> Color(0xFF5C6BC0)
+                        ThemeMode.LIGHT -> HealthColors.Warning
+                        ThemeMode.DARK -> HealthColors.Info
                         ThemeMode.SYSTEM -> SettingsAccent
                     }
                     val bgColor by animateColorAsState(
@@ -1220,7 +1221,7 @@ private fun ThemePickerDialog(
                         Spacer(modifier = Modifier.width(14.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "${mode.emoji} ${mode.displayName}",
+                                text = mode.displayName,
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                                 ),

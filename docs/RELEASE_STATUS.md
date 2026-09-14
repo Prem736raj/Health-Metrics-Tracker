@@ -1025,3 +1025,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Destructive-flow rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## Settings visual consistency — 2026-09-14
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Theme selectors use vector icons and plain labels instead of
+  emoji. Theme, hydration, reminder, export, privacy, legal, rating and share
+  rows now use shared semantic/theme tokens. The destructive confirmation
+  retains its existing safeguards and presents a clear text warning.
+- **Verification:** Focused compilation/tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Settings rendering, TalkBack, large-font, light/dark
+  theme and route checks, plus signing, Firebase and Play Console work, remain
+  owner-only.
