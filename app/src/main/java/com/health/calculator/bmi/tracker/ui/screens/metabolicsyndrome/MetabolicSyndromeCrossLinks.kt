@@ -11,10 +11,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -23,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.ui.theme.*
 
 data class CrossLink(
-    val emoji: String,
+    val icon: ImageVector,
     val title: String,
     val description: String,
     val route: String,
@@ -40,28 +45,28 @@ fun CrossLinksSection(
 
     val links = listOf(
         CrossLink(
-            emoji = "📏",
+            icon = Icons.Outlined.Straighten,
             title = "Update Waist Measurement",
             description = "Use the Waist-to-Hip Ratio calculator for accurate waist measurement",
             route = "waist_to_hip_ratio",
             criterionName = "Central Obesity"
         ),
         CrossLink(
-            emoji = "❤️",
+            icon = Icons.Outlined.MonitorHeart,
             title = "Check Blood Pressure",
             description = "Use the Blood Pressure checker for accurate BP readings",
             route = "blood_pressure",
             criterionName = "Elevated Blood Pressure"
         ),
         CrossLink(
-            emoji = "⚖️",
+            icon = Icons.Outlined.MonitorWeight,
             title = "Calculate BMI",
             description = "Add BMI context; it is not one of the five markers shown here",
             route = "bmi",
             criterionName = "Additional context"
         ),
         CrossLink(
-            emoji = "🔥",
+            icon = Icons.Outlined.LocalFireDepartment,
             title = "Calculate BMR & Calories",
             description = "Understand your metabolic rate for weight management",
             route = "bmr",
@@ -142,7 +147,12 @@ fun CrossLinksSection(
                                     .padding(12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(link.emoji, fontSize = 22.sp)
+                                Icon(
+                                    imageVector = link.icon,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(22.dp)
+                                )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(

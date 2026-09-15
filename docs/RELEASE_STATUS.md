@@ -1181,3 +1181,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Edge-case rendering, TalkBack, large-font, light/dark
   theme and route checks, plus signing, Firebase and Play Console work, remain
   owner-only.
+
+## Cross-link and daily-tip icon consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Metabolic-syndrome and calorie cross-links plus the home daily-tip
+  card use stable Material vector icons and shared semantic colors instead of
+  emoji. All daily-tip categories, including mental health and weight
+  management, now have a visible icon mapping.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Cross-link/daily-content rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.

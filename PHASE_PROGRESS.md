@@ -1536,6 +1536,23 @@ Updated: 2026-09-14
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
 
+## Follow-up — Cross-link and daily-tip icon consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Metabolic-syndrome related-calculator links, calorie
+  cross-links and the home daily-tip card now use stable Material vector icons
+  with semantic theme colors instead of emoji. Daily-tip categories cover all
+  supported content types, including mental health and weight management; the
+  favorite state uses the shared danger token.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Known limitations:** Cross-link and daily-content rendering, TalkBack,
+  large-font, light/dark theme and route checks remain open; signing, Firebase
+  and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining calculator educational/result
+  surfaces for user-visible placeholders and inconsistent interaction cues.
+
 ## Follow-up — BMI risk context visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open.

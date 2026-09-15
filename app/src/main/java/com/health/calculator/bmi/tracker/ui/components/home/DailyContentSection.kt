@@ -8,20 +8,27 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.HealthTip
 import com.health.calculator.bmi.tracker.data.model.MotivationalQuote
+import com.health.calculator.bmi.tracker.data.model.DailyTipCategory
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun DailyTipCard(
@@ -46,7 +53,12 @@ fun DailyTipCard(
                     .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = tip.category.emoji, fontSize = 28.sp)
+                Icon(
+                    imageVector = tipCategoryIcon(tip.category),
+                    contentDescription = tip.category.displayName,
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(28.dp)
+                )
             }
             
             Spacer(modifier = Modifier.width(16.dp))
@@ -75,6 +87,16 @@ fun DailyTipCard(
             }
         }
     }
+}
+
+private fun tipCategoryIcon(category: DailyTipCategory) = when (category) {
+    DailyTipCategory.NUTRITION -> Icons.Outlined.Restaurant
+    DailyTipCategory.EXERCISE -> Icons.Outlined.DirectionsWalk
+    DailyTipCategory.HYDRATION -> Icons.Outlined.WaterDrop
+    DailyTipCategory.SLEEP -> Icons.Outlined.Schedule
+    DailyTipCategory.MENTAL_HEALTH -> Icons.Outlined.FavoriteBorder
+    DailyTipCategory.HEART_HEALTH -> Icons.Outlined.MonitorHeart
+    DailyTipCategory.WEIGHT_MANAGEMENT -> Icons.Outlined.MonitorWeight
 }
 
 @Composable
@@ -130,7 +152,7 @@ fun MotivationalQuoteCard(
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = if (isFavorite) HealthColors.Danger else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

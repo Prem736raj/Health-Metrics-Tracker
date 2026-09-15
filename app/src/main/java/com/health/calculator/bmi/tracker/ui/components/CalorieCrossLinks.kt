@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.ShowChart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -43,7 +47,7 @@ fun CalorieCalculatorCrossLinks(
             Spacer(modifier = Modifier.height(12.dp))
 
             CrossLinkItem(
-                emoji = "🔥",
+                icon = Icons.Outlined.LocalFireDepartment,
                 title = "BMR Calculator",
                 description = "Detailed metabolic analysis with multiple formulas",
                 onClick = onNavigateToBMR
@@ -55,7 +59,7 @@ fun CalorieCalculatorCrossLinks(
             )
 
             CrossLinkItem(
-                emoji = "⚖️",
+                icon = Icons.Outlined.MonitorWeight,
                 title = "Ideal Body Weight",
                 description = "Find your ideal weight to set realistic goals",
                 onClick = onNavigateToIBW
@@ -67,7 +71,7 @@ fun CalorieCalculatorCrossLinks(
             )
 
             CrossLinkItem(
-                emoji = "📊",
+                icon = Icons.Outlined.ShowChart,
                 title = "BMI Calculator",
                 description = "Check if your current weight is in healthy range",
                 onClick = onNavigateToBMI
@@ -78,7 +82,7 @@ fun CalorieCalculatorCrossLinks(
 
 @Composable
 private fun CrossLinkItem(
-    emoji: String,
+    icon: ImageVector,
     title: String,
     description: String,
     onClick: () -> Unit
@@ -90,7 +94,12 @@ private fun CrossLinkItem(
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = emoji, style = MaterialTheme.typography.titleLarge)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp)
+        )
 
         Spacer(modifier = Modifier.width(12.dp))
 
