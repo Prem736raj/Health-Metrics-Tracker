@@ -10,16 +10,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.model.BpHomeCardInfo
 import com.health.calculator.bmi.tracker.ui.screens.bloodpressure.getBpCategoryColor
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun BpHomeCardOverlay(
@@ -80,14 +81,16 @@ fun BpHomeCardOverlay(
                 horizontalArrangement = Arrangement.spacedBy(3.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    stringResource(R.string.txt_text_placeholder_6),
-                    style = MaterialTheme.typography.labelSmall
+                Icon(
+                    imageVector = Icons.Filled.Whatshot,
+                    contentDescription = "Logging streak",
+                    tint = HealthColors.Warning,
+                    modifier = Modifier.size(14.dp)
                 )
                 Text(
                     "${info.streakDays}d streak",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFFFF9800).copy(alpha = 0.8f),
+                    color = HealthColors.Warning.copy(alpha = 0.8f),
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -113,14 +116,14 @@ fun BpHomeCardOverlay(
                 Icon(
                     Icons.Filled.Warning,
                     contentDescription = null,
-                    tint = Color(0xFFF44336).copy(alpha = pulseAlpha),
+                    tint = HealthColors.Danger.copy(alpha = pulseAlpha),
                     modifier = Modifier.size(12.dp)
                 )
                 Text(
                     stringResource(R.string.txt_needs_attention),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFFF44336).copy(alpha = pulseAlpha)
+                    color = HealthColors.Danger.copy(alpha = pulseAlpha)
                 )
             }
         }

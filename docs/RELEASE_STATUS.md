@@ -1430,3 +1430,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Blood-pressure/metabolic-risk rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing, Firebase and Play
   Console work, remain owner-only.
+
+## Residual visual token cleanup — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Home calculator cards now use the shared calculator palette; the
+  blood-pressure home widget uses semantic warning/danger tokens and a vector
+  streak icon; splash colors are sourced from the brand theme; and the
+  hydration plant illustration uses named wellness illustration tones and a
+  vector streak icon instead of emoji. Existing navigation, calculations,
+  persistence and copy are unchanged.
+- **Verification:** The complete `test`, `lintRelease`, `assembleDebug`,
+  `assembleRelease` and `bundleRelease` gate passed with exit code 0 in 9m24s;
+  only known SDK XML/deprecation warnings were emitted.
+- **Remaining gates:** Remaining raw-color/placeholder audits, route rendering,
+  TalkBack, large-font, light/dark theme and connected-device checks, plus
+  signing, Firebase and Play Console work, remain owner-only.

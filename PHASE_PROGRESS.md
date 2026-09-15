@@ -1765,3 +1765,11 @@ Updated: 2026-09-14
   validation; signing, Firebase and Play Console tasks remain owner-only.
 - **Next phase:** Continue auditing remaining report, insight and tracker
   surfaces for direct emoji rendering, raw colors and inconsistent interaction cues.
+
+## Follow-up — Residual visual token cleanup — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Home calculator cards now consume the shared calculator palette; the blood-pressure home widget uses semantic warning/danger tokens and a vector streak icon; splash colors are sourced from the brand theme; the hydration plant illustration uses named wellness illustration tones and a vector streak icon instead of emoji. Existing navigation, calculations, persistence and copy are unchanged.
+- **Tests:** The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed with exit code 0 in 9m24s (known SDK XML/deprecation warnings only).
+- **Known limitations:** Remaining raw-color/placeholder audits, route rendering, TalkBack, large-font, light/dark theme and connected-device checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue the remaining runtime/accessibility verification and address only issues reproduced on supported devices.

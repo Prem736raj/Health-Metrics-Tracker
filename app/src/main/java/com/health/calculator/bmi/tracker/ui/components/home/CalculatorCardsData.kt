@@ -1,6 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
 import androidx.compose.ui.graphics.Color
+import com.health.calculator.bmi.tracker.ui.theme.CalculatorColors
 
 /**
  * Data class to hold all calculator card states
@@ -65,7 +66,7 @@ val calculatorInfoList = listOf(
         title = "BMI Calculator",
         description = "Calculate your Body Mass Index",
         route = "bmi_calculator",
-        accentColor = Color(0xFF2196F3)
+        accentColor = CalculatorColors.BMI
     ),
     CalculatorInfo(
         id = "bmr",
@@ -73,7 +74,7 @@ val calculatorInfoList = listOf(
         title = "BMR Calculator",
         description = "Calculate your Basal Metabolic Rate",
         route = "bmr_calculator",
-        accentColor = Color(0xFFFF9800)
+        accentColor = CalculatorColors.BMR
     ),
     CalculatorInfo(
         id = "bp",
@@ -81,7 +82,7 @@ val calculatorInfoList = listOf(
         title = "Blood Pressure",
         description = "Check your blood pressure category",
         route = "blood_pressure_checker",
-        accentColor = Color(0xFFE53935)
+        accentColor = CalculatorColors.BloodPressure
     ),
     CalculatorInfo(
         id = "whr",
@@ -89,7 +90,7 @@ val calculatorInfoList = listOf(
         title = "Waist-to-Hip Ratio",
         description = "Assess your body fat distribution",
         route = "whr_calculator",
-        accentColor = Color(0xFF9C27B0)
+        accentColor = CalculatorColors.WaistToHip
     ),
     CalculatorInfo(
         id = "water",
@@ -97,7 +98,7 @@ val calculatorInfoList = listOf(
         title = "Water Intake",
         description = "Track your daily hydration",
         route = "water_intake_calculator",
-        accentColor = Color(0xFF03A9F4)
+        accentColor = CalculatorColors.WaterIntake
     ),
     CalculatorInfo(
         id = "metabolic",
@@ -105,7 +106,7 @@ val calculatorInfoList = listOf(
         title = "Metabolic Syndrome",
         description = "Assess your metabolic health risk",
         route = "metabolic_syndrome_checker",
-        accentColor = Color(0xFF9C27B0)
+        accentColor = CalculatorColors.MetabolicSyndrome
     ),
     CalculatorInfo(
         id = "bsa",
@@ -113,7 +114,7 @@ val calculatorInfoList = listOf(
         title = "Body Surface Area",
         description = "Calculate your body surface area",
         route = "bsa_calculator",
-        accentColor = Color(0xFF607D8B)
+        accentColor = CalculatorColors.BSA
     ),
     CalculatorInfo(
         id = "ibw",
@@ -121,7 +122,7 @@ val calculatorInfoList = listOf(
         title = "Ideal Body Weight",
         description = "Find your ideal weight range",
         route = "ibw_calculator",
-        accentColor = Color(0xFF4CAF50)
+        accentColor = CalculatorColors.IdealWeight
     ),
     CalculatorInfo(
         id = "calorie",
@@ -129,7 +130,7 @@ val calculatorInfoList = listOf(
         title = "Daily Calories",
         description = "Track your daily calorie intake",
         route = "calorie_calculator",
-        accentColor = Color(0xFFFF9800)
+        accentColor = CalculatorColors.DailyCalorie
     ),
     CalculatorInfo(
         id = "heartrate",
@@ -137,6 +138,6 @@ val calculatorInfoList = listOf(
         title = "Heart Rate Zones",
         description = "Optimize your training intensity",
         route = "heart_rate_zone_calculator",
-        accentColor = Color(0xFFE53935)
+        accentColor = CalculatorColors.HeartRateZone
     )
 )

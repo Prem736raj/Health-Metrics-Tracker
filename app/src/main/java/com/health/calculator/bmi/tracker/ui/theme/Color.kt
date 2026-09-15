@@ -243,6 +243,13 @@ object CalculatorColors {
     val HeartRateZone = Color(0xFFE11D48)
 }
 
+/** Natural supporting tones for the optional hydration plant illustration. */
+object WellnessIllustrationColors {
+    val Soil = Color(0xFF6D4C41)
+    val Pot = Color(0xFFBCAAA4)
+    val PotShade = Color(0xFF8D6E63)
+}
+
 // Compatibility aliases used by older feature screens.
 val HealthGreen = HealthColors.Healthy
 val HealthYellow = HealthColors.Warning

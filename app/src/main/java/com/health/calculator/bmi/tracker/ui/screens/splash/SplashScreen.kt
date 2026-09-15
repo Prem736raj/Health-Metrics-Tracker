@@ -50,13 +50,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import com.health.calculator.bmi.tracker.ui.theme.InversePrimaryLight
+import com.health.calculator.bmi.tracker.ui.theme.OnPrimaryContainerLight
+import com.health.calculator.bmi.tracker.ui.theme.PrimaryLight
 
 // ─── Splash Colors ────────────────────────────────────────────────────────────
 
 // Brand-consistent violet — matches the new PrimaryLight (#6C3CE1) palette.
-private val SplashTeal = Color(0xFF6C3CE1)
-private val SplashTealDark = Color(0xFF22005D)
-private val SplashTealLight = Color(0xFFD0BCFF)
+private val SplashTeal = PrimaryLight
+private val SplashTealDark = OnPrimaryContainerLight
+private val SplashTealLight = InversePrimaryLight
 
 /**
  * Animated splash screen displayed on every app launch.

@@ -48,27 +48,29 @@ import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.PlantMood
 import com.health.calculator.bmi.tracker.data.model.PlantStage
 import com.health.calculator.bmi.tracker.data.model.PlantState
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+import com.health.calculator.bmi.tracker.ui.theme.WellnessIllustrationColors
 import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
 // Plant colors
-private val StemGreen = Color(0xFF4CAF50)
-private val LeafGreen = Color(0xFF66BB6A)
-private val LeafDarkGreen = Color(0xFF388E3C)
-private val WiltYellow = Color(0xFFC8B900)
-private val WiltBrown = Color(0xFF8D6E63)
-private val FlowerPink = Color(0xFFEC407A)
-private val FlowerYellow = Color(0xFFFFEB3B)
-private val FlowerPurple = Color(0xFFAB47BC)
-private val FruitRed = Color(0xFFF44336)
-private val FruitOrange = Color(0xFFFF9800)
-private val SoilBrown = Color(0xFF795548)
-private val PotColor = Color(0xFFBCAAA4)
-private val PotDarkColor = Color(0xFF8D6E63)
-private val SkyBlue = Color(0xFFE3F2FD)
-private val SparkleGold = Color(0xFFFFD700)
+private val StemGreen = HealthColors.Healthy
+private val LeafGreen = HealthColors.HealthyDark
+private val LeafDarkGreen = HealthColors.Healthy
+private val WiltYellow = HealthColors.Warning
+private val WiltBrown = HealthColors.Caution
+private val FlowerPink = HealthColors.DangerDark
+private val FlowerYellow = HealthColors.WarningDark
+private val FlowerPurple = HealthColors.Info
+private val FruitRed = HealthColors.Danger
+private val FruitOrange = HealthColors.Caution
+private val SoilBrown = WellnessIllustrationColors.Soil
+private val PotColor = WellnessIllustrationColors.Pot
+private val PotDarkColor = WellnessIllustrationColors.PotShade
+private val SkyBlue = HealthColors.GoodLight
+private val SparkleGold = HealthColors.WarningDark
 
 @Composable
 fun HydrationPlantCard(
@@ -214,13 +216,14 @@ fun HydrationPlantCard(
 
             // Streak sparkle indicator
             if (plantState.currentStreak >= 7) {
-                Text(
-                    text = stringResource(R.string.txt_text_placeholder_12),
-                    fontSize = 16.sp,
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = "Seven day hydration streak",
+                    tint = HealthColors.Warning.copy(alpha = sparkleAlpha),
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(8.dp)
-                        .alpha(sparkleAlpha)
+                        .size(18.dp)
                 )
             }
         }
