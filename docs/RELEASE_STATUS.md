@@ -1,6 +1,6 @@
 # Release status
 
-Updated: 2026-09-15
+Updated: 2026-09-16
 
 This file records evidence that can be reproduced from the repository. It does
 not replace device, Play Console, Firebase Console, signing, or closed-test
@@ -1447,3 +1447,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Remaining raw-color/placeholder audits, route rendering,
   TalkBack, large-font, light/dark theme and connected-device checks, plus
   signing, Firebase and Play Console work, remain owner-only.
+
+## Deep-screen header and action-bar layout polish — 2026-09-16
+
+- **Status:** Code-fixable polish complete; focused emulator smoke checks passed.
+- **Changes:** The BMI calculator now uses a compact responsive top bar instead
+  of the oversized large app bar. Its title and context remain readable without
+  wrapping/clipping, and the clear action is an accessible icon-only control.
+  Water result actions use responsive content padding and a minimum share width
+  so Recalculate, Save and share stay legible on narrow layouts.
+- **Verification:** On `emulator-5554`, the BMI route rendered the full
+  `BMI Calculator` title and `Clear all BMI inputs` action. The Water input route
+  rendered to a `3.0 Liters` (`3000 ml per day`) result with visible actions; no
+  blank screen or app fatal exception was observed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with exit code 0 in 31m50s (known SDK XML/deprecation warnings only).
+- **Remaining gates:** Broader device/accessibility/theme/process-death checks,
+  release signing, Firebase console/secret rotation and Play Console work remain
+  owner-only.

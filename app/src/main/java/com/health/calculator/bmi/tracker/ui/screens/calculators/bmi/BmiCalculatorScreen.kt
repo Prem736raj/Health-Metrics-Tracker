@@ -44,7 +44,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -80,7 +80,6 @@ import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.L
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.RealTimeBMIPreview
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedInputField
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedCalculateButton
-import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedClearButton
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.ValidationErrorSummary
 import com.health.calculator.bmi.tracker.ui.components.WellnessLoadingState
 import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
@@ -103,6 +102,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.outlined.ClearAll
 import androidx.compose.material.icons.outlined.Calculate
 import androidx.compose.material.icons.outlined.Timeline
 import androidx.compose.material3.Tab
@@ -128,7 +128,6 @@ import androidx.compose.material.icons.outlined.Height
 import androidx.compose.material.icons.outlined.Straighten
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedInputField
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedCalculateButton
-import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedClearButton
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.ValidationErrorSummary
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.EdgeCaseWarningCard
 import com.health.calculator.bmi.tracker.ui.utils.rememberHapticManager
@@ -197,19 +196,23 @@ fun BmiCalculatorScreen(
                 onClick = { focusManager.clearFocus() }
             ),
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = {
                     Column {
                         Text(
                             text = stringResource(R.string.txt_bmi_calculator),
-                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                         )
                         Text(
                             text = if (uiState.showResult) "Your Result"
                                    else if (pagerState.currentPage == 1) "Your BMI History"
                                    else if (pagerState.currentPage == 2) "Educational Content"
                                    else "Adult BMI reference categories",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.labelMedium,
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                             color = if (uiState.showResult)
                                 uiState.bmiResult?.let { bmiCategoryUiColor(it.category) } ?: FeatureColors.BmiDeep
                             else FeatureColors.BmiDeep.copy(alpha = 0.8f)
@@ -241,17 +244,22 @@ fun BmiCalculatorScreen(
                         IconButton(onClick = onNavigateToHistory) {
                             Icon(Icons.Default.List, contentDescription = "History")
                         }
-                        AnimatedClearButton(
+                        IconButton(
                             onClick = {
                                 focusManager.clearFocus()
                                 viewModel.clearAll()
                                 hapticManager.lightTap()
                             }
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.ClearAll,
+                                contentDescription = "Clear all BMI inputs"
+                            )
+                        }
                     }
                 },
                 scrollBehavior = scrollBehavior,
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                     scrolledContainerColor = MaterialTheme.colorScheme.surface
                 )

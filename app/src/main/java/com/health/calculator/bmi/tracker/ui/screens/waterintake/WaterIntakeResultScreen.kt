@@ -1342,13 +1342,14 @@ private fun BottomActionBar(
             OutlinedButton(
                 onClick = onRecalculate,
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
             ) {
                 Icon(Icons.Default.Refresh, null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(4.dp))
                 Text(
                     stringResource(R.string.txt_recalculate),
-                    fontSize = 12.sp,
+                    fontSize = 13.sp,
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis
@@ -1360,6 +1361,7 @@ private fun BottomActionBar(
                 onClick = { if (!isSaved) onSave() },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (isSaved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
                 )
@@ -1382,7 +1384,9 @@ private fun BottomActionBar(
             // Share
             FilledTonalButton(
                 onClick = onShare,
-                shape = RoundedCornerShape(12.dp)
+                modifier = Modifier.widthIn(min = 64.dp),
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
             ) {
                 Icon(Icons.Default.Share, null, modifier = Modifier.size(18.dp))
             }

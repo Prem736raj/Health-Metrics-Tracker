@@ -1773,3 +1773,11 @@ Updated: 2026-09-14
 - **Tests:** The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed with exit code 0 in 9m24s (known SDK XML/deprecation warnings only).
 - **Known limitations:** Remaining raw-color/placeholder audits, route rendering, TalkBack, large-font, light/dark theme and connected-device checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue the remaining runtime/accessibility verification and address only issues reproduced on supported devices.
+
+## Follow-up — Deep-screen header and action-bar layout polish — 2026-09-16
+
+- **Status:** Code-fixable polish complete; focused emulator smoke checks passed.
+- **Major changes:** Replaced the BMI calculator's oversized `LargeTopAppBar` with a compact responsive top bar so the title and context stay on one line without clipping or excessive top whitespace. The clear action is now an accessible icon-only control (`Clear all BMI inputs`) while back, method and history actions remain available. Tightened the Water result action bar's responsive button padding and minimum share width so `Recalculate`, `Save` and share remain readable on compact screens.
+- **Tests:** On emulator `emulator-5554`, the calculator hub opened, the BMI screen rendered a complete `BMI Calculator` title and clear-all action without overlap, and the Water input flow produced a visible `3.0 Liters` / `3000 ml per day` result (no blank route or fatal exception). The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed with exit code 0 in 31m50s (known SDK XML/deprecation warnings only).
+- **Known limitations:** Broader device matrix, TalkBack, large-font, dark-theme and process-death checks remain open; release signing, Firebase console/secret rotation and Play Console work still require owner access.
+- **Next phase:** Continue only with reproduced high-impact runtime/accessibility issues; preserve the stable visual and calculator behavior now verified.
