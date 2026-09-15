@@ -1664,3 +1664,11 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed (lint report generated at `app/build/reports/lint-results-release.html`).
 - **Known limitations:** WHR history/detail and greeting rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining report, insight and tracker presentation surfaces for direct emoji rendering and raw colors.
+
+## Follow-up — Return journey icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** The health-journey summary uses typed Material icons for calculation, milestone and record stats, with semantic trend colors. The welcome-back route replaces wave, streak-break, freeze, plant and last-metric/quick-calculator emoji with accessible vector icons mapped to the metric or route; re-engagement copy remains gentle and non-punitive.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed (lint report generated at `app/build/reports/lint-results-release.html`).
+- **Known limitations:** Return-journey rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining report, insight and tracker presentation surfaces for direct emoji rendering and raw colors.

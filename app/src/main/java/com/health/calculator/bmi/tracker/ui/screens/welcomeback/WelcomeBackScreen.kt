@@ -14,7 +14,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,12 +25,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.models.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
+
+private fun welcomeMetricIcon(name: String, route: String): ImageVector {
+    val key = "$name $route".lowercase(Locale.ROOT)
+    return when {
+        "water" in key -> Icons.Outlined.WaterDrop
+        "blood" in key || " bp" in key || "heart" in key -> Icons.Outlined.FavoriteBorder
+        "weight" in key || "bmi" in key || "whr" in key -> Icons.Outlined.MonitorWeight
+        "bmr" in key || "calorie" in key || "calculator" in key -> Icons.Outlined.Calculate
+        "milestone" in key || "record" in key -> Icons.Outlined.EmojiEvents
+        else -> Icons.Outlined.Assessment
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,11 +93,14 @@ fun WelcomeBackScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Animated wave emoji
-            Text(
-                text = stringResource(R.string.txt_text_placeholder_85),
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier.scale(waveScale)
+            // Animated welcome mark
+            Icon(
+                imageVector = Icons.Outlined.AutoAwesome,
+                contentDescription = "Welcome back",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .size(56.dp)
+                    .scale(waveScale)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -217,24 +235,34 @@ private fun StreakStatusCard(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (freezeApplied)
-                Color(0xFF4CAF50).copy(alpha = 0.1f)
+                HealthColors.Healthy.copy(alpha = 0.1f)
             else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             if (freezeApplied) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.txt_text_placeholder), style = MaterialTheme.typography.titleLarge)
+                    Icon(
+                        imageVector = Icons.Outlined.Shield,
+                        contentDescription = null,
+                        tint = HealthColors.Healthy,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
-                        Text(stringResource(R.string.txt_streak_protected), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
+                        Text(stringResource(R.string.txt_streak_protected), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = HealthColors.Healthy)
                         Text(stringResource(R.string.txt_your_streak_freeze_kept_your_s), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             } else {
                 if (streakStatus.wasWaterStreakBroken) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.txt_text_placeholder_71), style = MaterialTheme.typography.titleLarge)
+                        Icon(
+                            imageVector = Icons.Outlined.WaterDrop,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
                             Text(
@@ -254,7 +282,12 @@ private fun StreakStatusCard(
                 if (streakStatus.wasTrackingStreakBroken) {
                     if (streakStatus.wasWaterStreakBroken) Spacer(modifier = Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.txt_text_placeholder_47), style = MaterialTheme.typography.titleLarge)
+                        Icon(
+                            imageVector = Icons.Outlined.CalendarMonth,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
                             Text(
@@ -278,7 +311,9 @@ private fun StreakStatusCard(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp)
                     ) {
-                        Text("🛡️ Use Streak Freeze ($freezeCount available)")
+                        Icon(Icons.Outlined.Shield, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Use Streak Freeze ($freezeCount available)")
                     }
                 }
             }
@@ -299,7 +334,12 @@ private fun PlantStatusCard(plantStatus: PlantWelcomeStatus) {
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(R.string.txt_text_placeholder_49), style = MaterialTheme.typography.headlineMedium)
+            Icon(
+                imageVector = Icons.Outlined.WaterDrop,
+                contentDescription = "Plant hydration",
+                tint = MaterialTheme.colorScheme.tertiary,
+                modifier = Modifier.size(32.dp)
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
@@ -332,7 +372,12 @@ private fun LastMetricCard(
             modifier = Modifier.fillMaxWidth().padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(metric.icon, style = MaterialTheme.typography.titleMedium)
+            Icon(
+                imageVector = welcomeMetricIcon(metric.name, metric.route),
+                contentDescription = metric.name,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(metric.name, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -367,7 +412,12 @@ private fun QuickActionButton(
             modifier = Modifier.fillMaxWidth().padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(calculator.icon, style = MaterialTheme.typography.titleLarge)
+            Icon(
+                imageVector = welcomeMetricIcon(calculator.name, calculator.route),
+                contentDescription = calculator.name,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp)
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 calculator.name.split(" ").first(),
@@ -386,6 +436,6 @@ private fun getDaysAwayMessage(days: Int): String {
         days < 7 -> "It's been $days days. Your health data is right where you left it."
         days < 14 -> "It's been about ${days / 7} week${if (days >= 14) "s" else ""}. We kept everything safe for you!"
         days < 30 -> "It's been a while — ${days} days to be exact. No judgment, just glad you're here!"
-        else -> "It's been ${days} days. Every moment is the perfect time to restart. 💙"
+        else -> "It's been ${days} days. Every moment is the perfect time to restart."
     }
 }

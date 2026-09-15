@@ -1293,3 +1293,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** WHR history/detail and greeting rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing, Firebase and
   Play Console work, remain owner-only.
+
+## Return journey icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The health-journey summary uses typed Material icons for
+  calculation, milestone and record stats with semantic trend colors. The
+  welcome-back route replaces wave, streak-break, freeze, plant and
+  last-metric/quick-calculator emoji with accessible vector icons mapped to
+  each metric or route; re-engagement copy remains gentle and non-punitive.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed; lint report generated at `app/build/reports/lint-results-release.html`.
+- **Remaining gates:** Return-journey rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.

@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,10 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.models.HealthJourneySummary
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -101,22 +103,22 @@ fun HealthJourneySummaryCard(
                     JourneyStatItem(
                         value = "${summary.totalCalculations}",
                         label = "Calculations",
-                        icon = "📊"
+                        icon = Icons.Default.Analytics
                     )
                     JourneyStatItem(
                         value = "${summary.calculatorsUsed}/${summary.totalCalculatorsAvailable}",
                         label = "Calculators\nUsed",
-                        icon = "🧮"
+                        icon = Icons.Default.Calculate
                     )
                     JourneyStatItem(
                         value = "${summary.milestonesEarned}",
                         label = "Milestones\nEarned",
-                        icon = "🏅"
+                        icon = Icons.Default.EmojiEvents
                     )
                     JourneyStatItem(
                         value = "${summary.personalRecordsSet}",
                         label = "Personal\nRecords",
-                        icon = "🏆"
+                        icon = Icons.Default.Star
                     )
                 }
 
@@ -136,8 +138,8 @@ fun HealthJourneySummaryCard(
                         Icon(
                             Icons.Default.TrendingUp,
                             contentDescription = null,
-                            tint = if (summary.healthScoreChange > 0) Color(0xFF4CAF50)
-                            else Color(0xFFFF9800),
+                            tint = if (summary.healthScoreChange > 0) HealthColors.Healthy
+                            else HealthColors.Warning,
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
@@ -147,8 +149,8 @@ fun HealthJourneySummaryCard(
                             else "Wellness Score consistency changed by ${summary.healthScoreChange} points",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium,
-                            color = if (summary.healthScoreChange > 0) Color(0xFF4CAF50)
-                            else Color(0xFFFF9800)
+                            color = if (summary.healthScoreChange > 0) HealthColors.Healthy
+                            else HealthColors.Warning
                         )
                     }
                 }
@@ -171,10 +173,15 @@ fun HealthJourneySummaryCard(
 private fun JourneyStatItem(
     value: String,
     label: String,
-    icon: String
+    icon: ImageVector
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = icon, style = MaterialTheme.typography.titleMedium)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(22.dp)
+        )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = value,
