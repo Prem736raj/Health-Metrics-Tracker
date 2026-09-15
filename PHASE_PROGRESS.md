@@ -1640,3 +1640,11 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
 - **Known limitations:** Ideal-weight comparison rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining calculator and tracker surfaces for user-visible emoji placeholders and inconsistent interaction cues.
+
+## Follow-up — Blood-pressure alert and profile selection polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** The blood-pressure quick-log card now uses a labeled vector time icon instead of rendering a legacy suggestion emoji. Markedly elevated-reading, saved-reading and validation surfaces now use Material theme/error containers and shared semantic colors rather than fixed light-theme literals, keeping the existing safety guidance and behavior intact. Activity-level and health-goal selection dialogs now use consistent vector icons and descriptions, improving scanning and removing emoji from profile setup.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Known limitations:** Blood-pressure alert/quick-log rendering and profile dialogs still need device, TalkBack, large-font, light/dark theme and route checks; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining user-visible calculator, report and tracker surfaces for placeholders, raw colors and inconsistent interaction cues.

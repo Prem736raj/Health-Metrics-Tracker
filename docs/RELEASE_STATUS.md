@@ -1244,3 +1244,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Ideal-weight comparison rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing, Firebase and
   Play Console work, remain owner-only.
+
+## Blood-pressure alert and profile selection polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Blood-pressure quick-log uses a labeled vector time icon instead
+  of a legacy suggestion emoji. Markedly elevated-reading, saved-reading and
+  validation surfaces use Material theme/error containers and shared semantic
+  colors instead of fixed light-theme literals, with existing safety guidance
+  and behavior preserved. Activity-level and health-goal profile dialogs use
+  consistent vector icons and descriptions rather than emoji.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Blood-pressure alert/quick-log and profile-dialog
+  rendering, TalkBack, large-font, light/dark theme and route checks, plus
+  signing, Firebase and Play Console work, remain owner-only.

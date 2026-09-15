@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -26,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 // ─── Quick Log Card ────────────────────────────────────────────────────────────
 
@@ -68,9 +68,11 @@ fun BpQuickLogCard(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    suggestion.emoji,
-                    style = MaterialTheme.typography.titleLarge
+                Icon(
+                    imageVector = Icons.Outlined.AccessTime,
+                    contentDescription = "Suggested blood pressure check-in",
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.size(28.dp)
                 )
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -122,13 +124,18 @@ fun BpQuickLogCard(
     }
 }
 
-// ─── Enhanced Emergency Alert (Pulsing) ────────────────────────────────────────
+// ─── Markedly Elevated Reading Alert (Pulsing) ─────────────────────────────────
 
 @Composable
 fun BpEmergencyPulsingAlert(
     reading: BloodPressureReading,
     onDismiss: () -> Unit
 ) {
+    val alertColor = MaterialTheme.colorScheme.error
+    val alertContainerColor = MaterialTheme.colorScheme.errorContainer
+    val alertOnContainerColor = MaterialTheme.colorScheme.onErrorContainer
+    val warningContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+    val warningOnContainerColor = MaterialTheme.colorScheme.onTertiaryContainer
     val infiniteTransition = rememberInfiniteTransition(label = "emergency")
 
     val bgPulse by infiniteTransition.animateFloat(
@@ -163,7 +170,7 @@ fun BpEmergencyPulsingAlert(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = Color(0xFFFFF3F3),
+        containerColor = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(24.dp),
         tonalElevation = 8.dp,
         icon = {
@@ -171,10 +178,10 @@ fun BpEmergencyPulsingAlert(
                 modifier = Modifier
                     .size(80.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFB71C1C).copy(alpha = bgPulse * 0.15f))
+                    .background(alertContainerColor.copy(alpha = bgPulse * 0.75f))
                     .border(
                         width = borderWidth.dp,
-                        color = Color(0xFFB71C1C).copy(alpha = bgPulse * 0.4f),
+                        color = alertColor.copy(alpha = bgPulse * 0.4f),
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -182,7 +189,7 @@ fun BpEmergencyPulsingAlert(
                 Icon(
                     Icons.Filled.Error,
                     contentDescription = null,
-                    tint = Color(0xFFB71C1C).copy(alpha = bgPulse),
+                    tint = alertColor.copy(alpha = bgPulse),
                     modifier = Modifier
                         .size(48.dp)
                         .scale(iconScale)
@@ -194,7 +201,7 @@ fun BpEmergencyPulsingAlert(
                 stringResource(R.string.txt_hypertensive_crisis),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFFB71C1C),
+                color = alertColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -207,12 +214,12 @@ fun BpEmergencyPulsingAlert(
                 // Reading with pulsing border
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFB71C1C).copy(alpha = 0.08f)
+                        containerColor = alertContainerColor.copy(alpha = 0.55f)
                     ),
                     shape = RoundedCornerShape(16.dp),
                     border = BorderStroke(
                         borderWidth.dp,
-                        Color(0xFFB71C1C).copy(alpha = bgPulse * 0.3f)
+                        alertColor.copy(alpha = bgPulse * 0.3f)
                     )
                 ) {
                     Column(
@@ -224,13 +231,13 @@ fun BpEmergencyPulsingAlert(
                         Text(
                             stringResource(R.string.txt_your_reading),
                             style = MaterialTheme.typography.labelMedium,
-                            color = Color(0xFFB71C1C).copy(alpha = 0.7f)
+                            color = alertOnContainerColor.copy(alpha = 0.8f)
                         )
                         Text(
                             "${reading.systolic}/${reading.diastolic} mmHg",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFFB71C1C)
+                            color = alertColor
                         )
                     }
                 }
@@ -239,12 +246,12 @@ fun BpEmergencyPulsingAlert(
                     stringResource(R.string.txt_this_reading_indicates_a_hyper_1),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = Color(0xFF424242)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 // Symptoms to watch
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF9C4)),
+                    colors = CardDefaults.cardColors(containerColor = warningContainerColor),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Column(
@@ -255,7 +262,7 @@ fun BpEmergencyPulsingAlert(
                             stringResource(R.string.txt_seek_emergency_care_if_you_exp),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF5D4037)
+                            color = warningOnContainerColor
                         )
                         listOf(
                             "Severe headache",
@@ -273,22 +280,22 @@ fun BpEmergencyPulsingAlert(
                                     modifier = Modifier
                                         .size(5.dp)
                                         .clip(CircleShape)
-                                        .background(Color(0xFFD32F2F))
+                                        .background(alertColor)
                                 )
                                 Text(
                                     symptom,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = Color(0xFF5D4037)
+                                    color = warningOnContainerColor
                                 )
                             }
                         }
                     }
                 }
 
-                // Emergency call card with pulse
+                // Local-care guidance card with pulse
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFB71C1C).copy(alpha = bgPulse)
+                        containerColor = alertColor.copy(alpha = bgPulse)
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -302,7 +309,7 @@ fun BpEmergencyPulsingAlert(
                         Icon(
                             Icons.Filled.Call,
                             contentDescription = null,
-                            tint = Color.White,
+                            tint = MaterialTheme.colorScheme.onError,
                             modifier = Modifier.size(24.dp)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
@@ -311,13 +318,13 @@ fun BpEmergencyPulsingAlert(
                                 stringResource(R.string.txt_call_emergency_services),
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.onError
                             )
                             Text(
                                 stringResource(R.string.txt_emergency_911_112),
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White.copy(alpha = 0.9f)
+                                color = MaterialTheme.colorScheme.onError.copy(alpha = 0.9f)
                             )
                         }
                     }
@@ -327,7 +334,7 @@ fun BpEmergencyPulsingAlert(
         confirmButton = {
             Button(
                 onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C)),
+                colors = ButtonDefaults.buttonColors(containerColor = alertColor),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(stringResource(R.string.txt_i_understand), fontWeight = FontWeight.Bold)
@@ -397,10 +404,10 @@ fun BpSaveConfirmation(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFF4CAF50).copy(alpha = 0.12f)
+                containerColor = HealthColors.Healthy.copy(alpha = 0.12f)
             ),
             shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(1.dp, Color(0xFF4CAF50).copy(alpha = 0.2f))
+            border = BorderStroke(1.dp, HealthColors.Healthy.copy(alpha = 0.2f))
         ) {
             Row(
                 modifier = Modifier.padding(12.dp),
@@ -418,7 +425,7 @@ fun BpSaveConfirmation(
                 Icon(
                     Icons.Filled.CheckCircle,
                     contentDescription = null,
-                    tint = Color(0xFF4CAF50),
+                    tint = HealthColors.Healthy,
                     modifier = Modifier
                         .size(22.dp)
                         .scale(checkScale)
@@ -427,7 +434,7 @@ fun BpSaveConfirmation(
                     stringResource(R.string.txt_reading_saved_to_bp_log),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF2E7D32)
+                    color = HealthColors.Healthy
                 )
             }
         }
@@ -452,10 +459,10 @@ fun BpEdgeCaseWarning(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFFFF3E0)
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer
             ),
             shape = RoundedCornerShape(10.dp),
-            border = BorderStroke(1.dp, Color(0xFFFF9800).copy(alpha = 0.3f))
+            border = BorderStroke(1.dp, HealthColors.Warning.copy(alpha = 0.3f))
         ) {
             Row(
                 modifier = Modifier.padding(10.dp),
@@ -465,13 +472,13 @@ fun BpEdgeCaseWarning(
                 Icon(
                     Icons.Outlined.Info,
                     contentDescription = null,
-                    tint = Color(0xFFE65100),
+                    tint = HealthColors.Warning,
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
                     warning,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFE65100)
+                    color = MaterialTheme.colorScheme.onTertiaryContainer
                 )
             }
         }
