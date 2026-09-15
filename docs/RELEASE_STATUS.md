@@ -1309,3 +1309,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Return-journey rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## Ideal-weight and WHR progress polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Ideal-weight goal progress uses vector result/milestone icons,
+  shared semantic progress colors and theme-safe celebration surfaces. WHR
+  progress history replaces empty-state and goal emojis, removes emoji-led
+  motivational copy, uses shared trend/chart/risk tokens, and keeps graph
+  point markers readable against the active surface. Calculations, saved data
+  and goal behavior are unchanged.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed; lint report generated at `app/build/reports/lint-results-release.html`.
+- **Remaining gates:** Ideal-weight and WHR progress rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing, Firebase and
+  Play Console work, remain owner-only.

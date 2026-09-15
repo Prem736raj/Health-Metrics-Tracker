@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 import com.health.calculator.bmi.tracker.ui.screens.whr.WhrHistoryEntryCard
@@ -213,7 +214,12 @@ private fun EmptyProgressState(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(100.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(stringResource(R.string.txt_text_placeholder_9), fontSize = 48.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Assessment,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(48.dp)
+                    )
                 }
             }
             Text(
@@ -335,8 +341,8 @@ private fun ComparisonItem(
     suffix: String
 ) {
     val color = when (direction) {
-        WhrTrendDirection.IMPROVING -> Color(0xFF4CAF50)
-        WhrTrendDirection.WORSENING -> Color(0xFFF44336)
+        WhrTrendDirection.IMPROVING -> HealthColors.Healthy
+        WhrTrendDirection.WORSENING -> HealthColors.Danger
         WhrTrendDirection.STEADY -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
     }
 
@@ -394,7 +400,7 @@ private fun GoalProgressCard(
     } else 1f
 
     val isGoalReached = remaining <= 0f
-    val goalColor = if (isGoalReached) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary
+    val goalColor = if (isGoalReached) HealthColors.Healthy else MaterialTheme.colorScheme.primary
 
     val animatedProgress = remember { Animatable(0f) }
     LaunchedEffect(progress) {
@@ -432,7 +438,7 @@ private fun GoalProgressCard(
                         modifier = Modifier.size(22.dp)
                     )
                     Text(
-                        if (isGoalReached) "Goal Reached! 🎉" else "Waist Goal",
+                        if (isGoalReached) "Goal Reached!" else "Waist Goal",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -559,8 +565,8 @@ private fun GraphLineSelector(
             WhrGraphLine.entries.forEach { line ->
                 val lineColor = when (line) {
                     WhrGraphLine.WHR -> MaterialTheme.colorScheme.primary
-                    WhrGraphLine.WAIST -> Color(0xFFF44336)
-                    WhrGraphLine.HIP -> Color(0xFF2196F3)
+                    WhrGraphLine.WAIST -> HealthColors.Danger
+                    WhrGraphLine.HIP -> HealthColors.Good
                 }
                 FilterChip(
                     selected = selectedLine == line && !showAllLines,
@@ -622,13 +628,14 @@ private fun TrendGraphCard(
     }
 
     val primaryColor = MaterialTheme.colorScheme.primary
-    val waistColor = Color(0xFFF44336)
-    val hipColor = Color(0xFF2196F3)
-    val greenZone = Color(0xFF4CAF50)
-    val yellowZone = Color(0xFFFFA726)
-    val redZone = Color(0xFFF44336)
+    val waistColor = HealthColors.Danger
+    val hipColor = HealthColors.Good
+    val greenZone = HealthColors.Healthy
+    val yellowZone = HealthColors.Warning
+    val redZone = HealthColors.Danger
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
     val textColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+    val pointRingColor = MaterialTheme.colorScheme.surface
 
     val dateFormat = SimpleDateFormat("M/d", Locale.getDefault())
 
@@ -802,7 +809,7 @@ private fun TrendGraphCard(
                         val y = valueToY(values[i])
                         drawCircle(color = color, radius = 4.dp.toPx(), center = Offset(x, y))
                         drawCircle(
-                            color = Color.White,
+                            color = pointRingColor,
                             radius = 2.dp.toPx(),
                             center = Offset(x, y)
                         )
@@ -921,7 +928,7 @@ private fun ProgressStatsCard(stats: WhrProgressStats) {
                 stringResource(R.string.txt_waist),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFFF44336)
+                color = HealthColors.Danger
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -935,8 +942,8 @@ private fun ProgressStatsCard(stats: WhrProgressStats) {
                         String.format("%.1f", stats.waistChange)
                     } cm",
                     valueColor = when (stats.waistTrend) {
-                        WhrTrendDirection.IMPROVING -> Color(0xFF4CAF50)
-                        WhrTrendDirection.WORSENING -> Color(0xFFF44336)
+                        WhrTrendDirection.IMPROVING -> HealthColors.Healthy
+                        WhrTrendDirection.WORSENING -> HealthColors.Danger
                         WhrTrendDirection.STEADY -> null
                     }
                 )
@@ -949,7 +956,7 @@ private fun ProgressStatsCard(stats: WhrProgressStats) {
                 stringResource(R.string.txt_hip),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF2196F3)
+                color = HealthColors.Good
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -1036,19 +1043,19 @@ private fun CategoryDistributionCard(entries: List<WhrHistoryEntry>) {
                 label = "Low Risk",
                 count = lowCount,
                 total = total,
-                color = Color(0xFF4CAF50)
+                color = HealthColors.Healthy
             )
             DistributionBar(
                 label = "Moderate",
                 count = modCount,
                 total = total,
-                color = Color(0xFFFFA726)
+                color = HealthColors.Warning
             )
             DistributionBar(
                 label = "High Risk",
                 count = highCount,
                 total = total,
-                color = Color(0xFFF44336)
+                color = HealthColors.Danger
             )
         }
     }
@@ -1152,7 +1159,12 @@ private fun GoalSettingDialog(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text(stringResource(R.string.txt_text_placeholder_1), fontSize = 14.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Lightbulb,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
                         Text(
                             "A commonly used waist action point is ${
                                 "94 cm for men and 80 cm for women"
@@ -1160,7 +1172,8 @@ private fun GoalSettingDialog(
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 11.sp,
                             lineHeight = 16.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.IBWGoal
 import com.health.calculator.bmi.tracker.data.model.IBWResult
 import com.health.calculator.bmi.tracker.data.model.WeightPaceOption
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
@@ -198,25 +199,30 @@ fun IBWGoalPlanScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFF4CAF50).copy(alpha = 0.1f)
+                        containerColor = HealthColors.Healthy.copy(alpha = 0.1f)
                     )
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(stringResource(R.string.txt_text_placeholder_65), fontSize = 32.sp)
+                        Icon(
+                            imageVector = Icons.Default.EmojiEvents,
+                            contentDescription = null,
+                            tint = HealthColors.Healthy,
+                            modifier = Modifier.size(32.dp)
+                        )
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(
                                 stringResource(R.string.txt_you_re_already_at_your_ideal_w),
                                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                                color = Color(0xFF4CAF50)
+                                color = HealthColors.Healthy
                             )
                             Text(
                                 stringResource(R.string.txt_focus_on_maintaining_your_curr),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = Color(0xFF4CAF50).copy(alpha = 0.8f)
+                                color = HealthColors.Healthy.copy(alpha = 0.8f)
                             )
                         }
                     }
@@ -519,12 +525,12 @@ private fun WeightChangePlanSection(
                                             Spacer(modifier = Modifier.width(6.dp))
                                             Surface(
                                                 shape = RoundedCornerShape(4.dp),
-                                                color = Color(0xFF4CAF50)
+                                                color = HealthColors.Healthy
                                             ) {
                                                 Text(
                                                     stringResource(R.string.txt_recommended_1),
                                                     style = MaterialTheme.typography.labelSmall,
-                                                    color = Color.White,
+                                                    color = MaterialTheme.colorScheme.onPrimary,
                                                     modifier = Modifier.padding(
                                                         horizontal = 6.dp,
                                                         vertical = 2.dp
@@ -659,7 +665,7 @@ fun ExistingGoalProgressCard(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isReached)
-                Color(0xFF4CAF50).copy(alpha = 0.1f)
+                HealthColors.Healthy.copy(alpha = 0.1f)
             else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -675,10 +681,17 @@ fun ExistingGoalProgressCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Icon(
+                    imageVector = if (isReached) Icons.Default.EmojiEvents else Icons.Default.Assessment,
+                    contentDescription = null,
+                    tint = if (isReached) HealthColors.Healthy else MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = if (isReached) "🎉 Goal Reached!" else "📊 Your Goal Progress",
+                    text = if (isReached) "Goal Reached!" else "Your Goal Progress",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = if (isReached) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary
+                    color = if (isReached) HealthColors.Healthy else MaterialTheme.colorScheme.primary
                 )
                 IconButton(onClick = onClearGoal, modifier = Modifier.size(24.dp)) {
                     Icon(
@@ -698,11 +711,11 @@ fun ExistingGoalProgressCard(
                 contentAlignment = Alignment.Center
             ) {
                 val progressColor = when {
-                    isReached -> Color(0xFF4CAF50)
-                    progress >= 75 -> Color(0xFF8BC34A)
+                    isReached -> HealthColors.Healthy
+                    progress >= 75 -> HealthColors.HealthyDark
                     progress >= 50 -> MaterialTheme.colorScheme.primary
-                    progress >= 25 -> Color(0xFFFF9800)
-                    else -> Color(0xFFFF5722)
+                    progress >= 25 -> HealthColors.Warning
+                    else -> HealthColors.Caution
                 }
                 val trackColor = MaterialTheme.colorScheme.surfaceVariant
 
@@ -794,24 +807,42 @@ fun ExistingGoalProgressCard(
                 enter = scaleIn() + fadeIn(),
                 exit = scaleOut() + fadeOut()
             ) {
+                val celebrationIcon = when (milestone) {
+                    100 -> Icons.Default.EmojiEvents
+                    75 -> Icons.Default.Star
+                    50 -> Icons.Default.TrendingUp
+                    else -> Icons.Default.Flag
+                }
+                val celebrationText = when (milestone) {
+                    25 -> "25% milestone reached! Keep going!"
+                    50 -> "Halfway there! You're doing amazing!"
+                    75 -> "75% done! The finish line is close!"
+                    100 -> "Goal reached! Incredible achievement!"
+                    else -> ""
+                }
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = Color(0xFFFFD700).copy(alpha = 0.2f),
+                    color = HealthColors.Warning.copy(alpha = 0.16f),
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    Text(
-                        text = when (milestone) {
-                            25 -> "🏅 25% milestone reached! Keep going!"
-                            50 -> "🥈 Halfway there! You're doing amazing!"
-                            75 -> "🥇 75% done! The finish line is close!"
-                            100 -> "🏆 GOAL REACHED! Incredible achievement!"
-                            else -> ""
-                        },
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                    Row(
                         modifier = Modifier.padding(12.dp),
-                        textAlign = TextAlign.Center,
-                        color = Color(0xFF795548)
-                    )
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = celebrationIcon,
+                            contentDescription = null,
+                            tint = HealthColors.Warning,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = celebrationText,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
             }
         }

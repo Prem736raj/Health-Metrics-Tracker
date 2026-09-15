@@ -124,15 +124,15 @@ class WhrProgressViewModel @Inject constructor(
             goal != null -> {
                 val remaining = stats.currentWaist - goal.targetWaistCm
                 when {
-                    remaining <= 0 -> "🎉 Amazing! You've reached your waist goal!"
-                    remaining < 2f -> "🔥 Almost there! Just ${String.format("%.1f", remaining)} cm to go!"
-                    stats.waistTrend == WhrTrendDirection.IMPROVING -> "📈 Great progress! Keep going, you're heading in the right direction!"
-                    else -> "💪 Stay consistent! Every measurement brings you closer to your goal."
+                    remaining <= 0 -> "Amazing! You've reached your waist goal!"
+                    remaining < 2f -> "Almost there! Just ${String.format("%.1f", remaining)} cm to go!"
+                    stats.waistTrend == WhrTrendDirection.IMPROVING -> "Great progress! Keep going, you're heading in the right direction!"
+                    else -> "Stay consistent! Every measurement brings you closer to your goal."
                 }
             }
-            stats.whrTrend == WhrTrendDirection.IMPROVING -> "👏 Your WHR is trending in the right direction!"
-            stats.whrTrend == WhrTrendDirection.STEADY -> "📊 Your WHR is steady. Consistency is key!"
-            else -> "📝 Keep tracking to monitor your progress over time."
+            stats.whrTrend == WhrTrendDirection.IMPROVING -> "Your WHR is trending in the right direction!"
+            stats.whrTrend == WhrTrendDirection.STEADY -> "Your WHR is steady. Consistency is key!"
+            else -> "Keep tracking to monitor your progress over time."
         }
     }
 }
