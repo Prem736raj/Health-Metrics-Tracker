@@ -1746,3 +1746,22 @@ Updated: 2026-09-14
   Play Console tasks remain owner-only.
 - **Next phase:** Continue auditing remaining calculator, insight and tracker
   surfaces for raw colors, placeholders and inconsistent interaction cues.
+
+## Follow-up — Blood-pressure and risk-surface color-token polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Blood-pressure category and risk mappings, the gauge scale,
+  reading values, input fields, pulse field, education action and crisis action
+  now use shared semantic `HealthColors` or Material error tokens instead of
+  isolated legacy literals. Metabolic-syndrome risk and consultation surfaces,
+  personal-record celebrations and notification-channel badges now follow the
+  same role-based palette with theme-aware foregrounds. Calculations, safety
+  guidance, persistence and navigation are unchanged.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with exit code 0 (known SDK XML/deprecation warnings only).
+- **Known limitations:** Blood-pressure and metabolic-risk rendering, TalkBack,
+  large-font, light/dark theme and route checks still require connected-device
+  validation; signing, Firebase and Play Console tasks remain owner-only.
+- **Next phase:** Continue auditing remaining report, insight and tracker
+  surfaces for direct emoji rendering, raw colors and inconsistent interaction cues.

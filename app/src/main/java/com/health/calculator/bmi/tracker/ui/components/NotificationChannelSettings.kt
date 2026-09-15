@@ -15,12 +15,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.notifications.NotificationChannelsManager
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun NotificationChannelSettingsCard() {
@@ -105,8 +105,8 @@ private fun ChannelItem(name: String, description: String, isEnabled: Boolean) {
         }
         
         Badge(
-            containerColor = if (isEnabled) Color(0xFF4CAF50) else Color.Gray,
-            contentColor = Color.White,
+            containerColor = if (isEnabled) HealthColors.Healthy else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 8.dp)
         ) {
             Text(

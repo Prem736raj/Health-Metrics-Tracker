@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -37,25 +38,25 @@ import kotlin.math.sin
 
 fun getBpCategoryColor(category: BpCategory): Color {
     return when (category) {
-        BpCategory.HYPOTENSION -> Color(0xFF42A5F5)        // Blue
-        BpCategory.OPTIMAL -> Color(0xFF4CAF50)             // Green
-        BpCategory.NORMAL -> Color(0xFF8BC34A)              // Light Green
-        BpCategory.HIGH_NORMAL -> Color(0xFFFFC107)         // Amber
-        BpCategory.ISOLATED_SYSTOLIC -> Color(0xFFFF9800)   // Orange
-        BpCategory.GRADE_1_HYPERTENSION -> Color(0xFFFF7043) // Deep Orange
-        BpCategory.GRADE_2_HYPERTENSION -> Color(0xFFF44336) // Red
-        BpCategory.GRADE_3_HYPERTENSION -> Color(0xFFD32F2F) // Dark Red
-        BpCategory.HYPERTENSIVE_CRISIS -> Color(0xFFB71C1C)  // Very Dark Red
+        BpCategory.HYPOTENSION -> HealthColors.Good
+        BpCategory.OPTIMAL -> HealthColors.Healthy
+        BpCategory.NORMAL -> HealthColors.Healthy
+        BpCategory.HIGH_NORMAL -> HealthColors.Warning
+        BpCategory.ISOLATED_SYSTOLIC -> HealthColors.Caution
+        BpCategory.GRADE_1_HYPERTENSION -> HealthColors.Caution
+        BpCategory.GRADE_2_HYPERTENSION -> HealthColors.Danger
+        BpCategory.GRADE_3_HYPERTENSION -> HealthColors.Danger
+        BpCategory.HYPERTENSIVE_CRISIS -> HealthColors.DangerDark
     }
 }
 
 fun getBpRiskColor(risk: BpRiskLevel): Color {
     return when (risk) {
-        BpRiskLevel.LOW -> Color(0xFF4CAF50)
-        BpRiskLevel.MODERATE -> Color(0xFFFFC107)
-        BpRiskLevel.HIGH -> Color(0xFFFF9800)
-        BpRiskLevel.VERY_HIGH -> Color(0xFFF44336)
-        BpRiskLevel.EMERGENCY -> Color(0xFFB71C1C)
+        BpRiskLevel.LOW -> HealthColors.Healthy
+        BpRiskLevel.MODERATE -> HealthColors.Warning
+        BpRiskLevel.HIGH -> HealthColors.Caution
+        BpRiskLevel.VERY_HIGH -> HealthColors.Danger
+        BpRiskLevel.EMERGENCY -> HealthColors.DangerDark
     }
 }
 
@@ -196,9 +197,9 @@ fun BpResultSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = Color(0xFF00897B)
+                contentColor = HealthColors.BelowNormal
             ),
-            border = BorderStroke(1.dp, Color(0xFF00897B).copy(alpha = 0.3f))
+            border = BorderStroke(1.dp, HealthColors.BelowNormal.copy(alpha = 0.3f))
         ) {
             Icon(Icons.Outlined.School, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(modifier = Modifier.width(8.dp))
@@ -266,7 +267,7 @@ private fun BpReadingCard(
                             fontSize = 56.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color(0xFFE53935)
+                        color = HealthColors.Danger
                     )
                     Text(
                         stringResource(R.string.txt_text_placeholder_14),
@@ -282,7 +283,7 @@ private fun BpReadingCard(
                             fontSize = 56.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color(0xFF1E88E5)
+                        color = HealthColors.Good
                     )
                 }
 
@@ -447,13 +448,13 @@ private fun BpSemiCircularGauge(
     modifier: Modifier = Modifier
 ) {
     val gaugeColors = listOf(
-        Color(0xFF42A5F5), // Hypotension - Blue
-        Color(0xFF4CAF50), // Optimal - Green
-        Color(0xFF8BC34A), // Normal - Light Green
-        Color(0xFFFFC107), // High Normal - Amber
-        Color(0xFFFF9800), // Grade 1 - Orange
-        Color(0xFFF44336), // Grade 2 - Red
-        Color(0xFFB71C1C)  // Grade 3/Crisis - Dark Red
+        HealthColors.Good,
+        HealthColors.Healthy,
+        HealthColors.Healthy,
+        HealthColors.Warning,
+        HealthColors.Caution,
+        HealthColors.Danger,
+        HealthColors.DangerDark
     )
 
     val density = LocalDensity.current
@@ -924,7 +925,7 @@ fun BpEmergencyDialog(
             Button(
                 onClick = onDismiss,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFB71C1C)
+                    containerColor = MaterialTheme.colorScheme.error
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {

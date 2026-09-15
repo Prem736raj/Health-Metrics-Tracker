@@ -28,7 +28,7 @@ fun MetabolicSyndromeLastResult(
 
     if (latestRecord != null) {
         val riskColor = when {
-            latestRecord.criteriaMet >= 4 -> Color(0xFFB71C1C)
+            latestRecord.criteriaMet >= 4 -> HealthColors.Danger
             latestRecord.criteriaMet >= 3 -> HealthRed
             latestRecord.criteriaMet >= 2 -> HealthOrange
             latestRecord.criteriaMet >= 1 -> HealthYellow

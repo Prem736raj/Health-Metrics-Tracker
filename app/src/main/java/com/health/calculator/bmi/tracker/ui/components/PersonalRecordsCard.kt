@@ -16,12 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.models.PersonalRecord
 import com.health.calculator.bmi.tracker.data.models.PersonalRecordType
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,7 +51,7 @@ fun PersonalRecordsCard(
                 Icon(
                     Icons.Default.EmojiEvents,
                     contentDescription = null,
-                    tint = Color(0xFFFFD700),
+                    tint = HealthColors.Warning,
                     modifier = Modifier.size(22.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))

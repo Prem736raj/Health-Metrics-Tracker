@@ -779,7 +779,7 @@ private fun AssessmentTimeline(records: List<MetabolicSyndromeRecord>) {
 
             records.forEachIndexed { index, record ->
                 val riskColor = when {
-                    record.criteriaMet >= 4 -> Color(0xFFB71C1C)
+                    record.criteriaMet >= 4 -> HealthColors.Danger
                     record.criteriaMet >= 3 -> HealthRed
                     record.criteriaMet >= 2 -> HealthOrange
                     record.criteriaMet >= 1 -> HealthYellow

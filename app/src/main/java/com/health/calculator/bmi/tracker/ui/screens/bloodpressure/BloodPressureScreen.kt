@@ -48,7 +48,7 @@ import com.health.calculator.bmi.tracker.ui.screens.bloodpressure.BpEdgeCaseWarn
 import com.health.calculator.bmi.tracker.ui.screens.bloodpressure.BpSaveConfirmation
 import com.health.calculator.bmi.tracker.ui.screens.bloodpressure.BpEmergencyPulsingAlert
 import com.health.calculator.bmi.tracker.ui.screens.bloodpressure.QuickLogSuggestion
-// import com.health.calculator.bmi.tracker.ui.theme.* 
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -555,8 +555,8 @@ private fun BpIllustrationCard() {
                                 .background(
                                     Brush.verticalGradient(
                                         colors = listOf(
-                                            Color(0xFFEF5350),
-                                            Color(0xFFE53935)
+                                            HealthColors.DangerDark,
+                                            HealthColors.Danger
                                         )
                                     )
                                 ),
@@ -582,7 +582,7 @@ private fun BpIllustrationCard() {
                             stringResource(R.string.txt_systolic),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFFE53935)
+                            color = HealthColors.Danger
                         )
                         Text(
                             stringResource(R.string.txt_heart_beating),
@@ -623,8 +623,8 @@ private fun BpIllustrationCard() {
                                 .background(
                                     Brush.verticalGradient(
                                         colors = listOf(
-                                            Color(0xFF42A5F5),
-                                            Color(0xFF1E88E5)
+                                            HealthColors.GoodDark,
+                                            HealthColors.Good
                                         )
                                     )
                                 ),
@@ -650,7 +650,7 @@ private fun BpIllustrationCard() {
                             stringResource(R.string.txt_diastolic),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF1E88E5)
+                            color = HealthColors.Good
                         )
                         Text(
                             stringResource(R.string.txt_heart_resting),
@@ -755,7 +755,7 @@ private fun BpMainInputCard(
                     Icon(
                         Icons.Filled.Favorite,
                         contentDescription = null,
-                        tint = Color(0xFFE53935),
+                        tint = HealthColors.Danger,
                         modifier = Modifier.size(22.dp)
                     )
                     Text(
@@ -797,8 +797,8 @@ private fun BpMainInputCard(
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFFE53935),
-                                focusedLabelColor = Color(0xFFE53935)
+                                focusedBorderColor = HealthColors.Danger,
+                                focusedLabelColor = HealthColors.Danger
                             )
                         )
                         AnimatedVisibility(visible = systolicError != null) {
@@ -838,8 +838,8 @@ private fun BpMainInputCard(
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFF1E88E5),
-                                focusedLabelColor = Color(0xFF1E88E5)
+                                focusedBorderColor = HealthColors.Good,
+                                focusedLabelColor = HealthColors.Good
                             )
                         )
                         AnimatedVisibility(visible = diastolicError != null) {
@@ -955,7 +955,7 @@ private fun BpPulseInputCard(
                     Icon(
                         Icons.Filled.FavoriteBorder,
                         contentDescription = null,
-                        tint = Color(0xFFE91E63),
+                        tint = HealthColors.Caution,
                         modifier = Modifier
                             .size(20.dp)
                             .graphicsLayer {
@@ -996,8 +996,8 @@ private fun BpPulseInputCard(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFFE91E63),
-                        focusedLabelColor = Color(0xFFE91E63)
+                        focusedBorderColor = HealthColors.Caution,
+                        focusedLabelColor = HealthColors.Caution
                     )
                 )
 

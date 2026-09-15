@@ -12,12 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.models.PersonalRecordType
 import com.health.calculator.bmi.tracker.data.models.MilestoneType
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun NewRecordCelebrationDialog(
@@ -48,7 +48,7 @@ fun NewRecordCelebrationDialog(
                 Icon(
                     Icons.Default.EmojiEvents,
                     contentDescription = "Trophy",
-                    tint = Color(0xFFFFD700),
+                    tint = HealthColors.Warning,
                     modifier = Modifier
                         .size(56.dp)
                         .scale(trophyScale)

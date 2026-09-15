@@ -98,7 +98,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
         "Low-Moderate" -> HealthYellow
         "Moderate" -> HealthOrange
         "High" -> HealthRed
-        "Very High" -> Color(0xFFB71C1C)
+        "Very High" -> HealthColors.Danger
         else -> Color.Gray
     }
 
@@ -491,7 +491,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
         label = "pulse_alpha"
     )
 
-    val bannerColor = if (criteriaMet >= 4) Color(0xFFB71C1C) else HealthRed
+    val bannerColor = if (criteriaMet >= 4) HealthColors.Danger else HealthRed
 
     Card(
         colors = CardDefaults.cardColors(

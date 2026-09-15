@@ -1412,3 +1412,21 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** BMI gauge/slider, WHR home, IBW history and statistics
   rendering, TalkBack, large-font, light/dark theme and route checks, plus
   signing, Firebase and Play Console work, remain owner-only.
+
+## Blood-pressure and risk-surface color-token polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Blood-pressure category and risk mappings, gauge scale, reading
+  values, input fields, pulse field, education action and crisis action now use
+  shared semantic `HealthColors` or Material error tokens instead of isolated
+  legacy literals. Metabolic-syndrome risk and consultation surfaces,
+  personal-record celebrations and notification-channel badges follow the same
+  role-based palette with theme-aware foregrounds. Calculations, safety
+  guidance, persistence and navigation are unchanged.
+- **Verification:** Focused compilation/unit tests plus the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with exit code 0; only known SDK XML/deprecation warnings were emitted.
+- **Remaining gates:** Blood-pressure/metabolic-risk rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing, Firebase and Play
+  Console work, remain owner-only.
