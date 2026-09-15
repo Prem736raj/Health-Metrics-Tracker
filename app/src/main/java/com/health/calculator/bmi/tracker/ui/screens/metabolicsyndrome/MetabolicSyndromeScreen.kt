@@ -24,12 +24,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.health.calculator.bmi.tracker.ui.theme.HealthRed
 import com.health.calculator.bmi.tracker.ui.theme.HealthOrange
 import com.health.calculator.bmi.tracker.ui.theme.HealthYellow
@@ -43,6 +45,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.content.Intent
+
+private fun metabolicMarkerIcon(marker: String): ImageVector = when {
+    marker.contains("📊") || marker.contains("🧮") -> Icons.Outlined.Assessment
+    marker.contains("❤️") || marker.contains("🩸") -> Icons.Outlined.MonitorHeart
+    marker.contains("🧪") -> Icons.Outlined.Science
+    marker.contains("📏") -> Icons.Outlined.Straighten
+    marker.contains("💛") -> Icons.Outlined.FavoriteBorder
+    else -> Icons.Outlined.Info
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -405,7 +416,12 @@ private fun MetabolicSyndromeInputContent(
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.txt_text_placeholder_9), fontSize = 16.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Assessment,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Live Preview: ${partial.metCount} of ${partial.providedCount} entered criteria abnormal",
@@ -422,14 +438,19 @@ private fun MetabolicSyndromeInputContent(
                     ) {
                         partial.criteria.forEach { c ->
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(c.icon, fontSize = 16.sp)
+                                Icon(
+                                    imageVector = metabolicMarkerIcon(c.icon),
+                                    contentDescription = c.name,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(18.dp)
+                                )
                                 Box(
                                     modifier = Modifier
                                         .size(12.dp)
                                         .clip(CircleShape)
                                         .background(
                                             when {
-                                                !c.isProvided -> Color.Gray.copy(alpha = 0.3f)
+                                                !c.isProvided -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
                                                 c.isMet == true -> HealthRed.copy(alpha = 0.8f)
                                                 else -> HealthGreen.copy(alpha = 0.8f)
                                             }
@@ -560,7 +581,12 @@ fun CriterionInputCard(
                 .padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = icon, fontSize = 24.sp)
+                Icon(
+                    imageVector = metabolicMarkerIcon(icon),
+                    contentDescription = title,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(

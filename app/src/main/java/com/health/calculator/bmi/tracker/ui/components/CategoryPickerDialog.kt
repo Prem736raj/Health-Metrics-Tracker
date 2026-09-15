@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +20,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.health.calculator.bmi.tracker.data.models.ReminderCategory
+
+private fun ReminderCategory.displayIcon() = when (this) {
+    ReminderCategory.WATER_INTAKE -> Icons.Outlined.WaterDrop
+    ReminderCategory.BLOOD_PRESSURE -> Icons.Outlined.FavoriteBorder
+    ReminderCategory.WEIGHT_CHECK -> Icons.Outlined.MonitorWeight
+    ReminderCategory.MEDICATION -> Icons.Outlined.Medication
+    ReminderCategory.EXERCISE -> Icons.Outlined.DirectionsRun
+    ReminderCategory.CALORIE_LOGGING -> Icons.Outlined.Restaurant
+    ReminderCategory.CUSTOM -> Icons.Outlined.Notifications
+}
 
 @Composable
 fun CategoryPickerDialog(
@@ -90,7 +101,12 @@ private fun CategoryItem(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(category.icon, style = MaterialTheme.typography.headlineMedium)
+            Icon(
+                imageVector = category.displayIcon(),
+                contentDescription = category.displayName,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp)
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 category.displayName,

@@ -1343,3 +1343,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Progress milestone/trend rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing, Firebase and
   Play Console work, remain owner-only.
+
+## Metabolic preview and reminder icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Metabolic-syndrome live preview criteria and input cards render
+  mapped Material icons with accessible criterion labels instead of emoji.
+  Reminder category selection and edit flows use a consistent category-to-icon
+  treatment for water, blood pressure, weight, medication, exercise, calories
+  and custom reminders; saved reminder icon strings remain compatible.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Metabolic preview and reminder-dialog rendering,
+  TalkBack, large-font, light/dark theme and route checks, plus signing,
+  Firebase and Play Console work, remain owner-only.

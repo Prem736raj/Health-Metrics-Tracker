@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +19,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.health.calculator.bmi.tracker.data.models.ReminderCategory
+
+private fun ReminderCategory.editIcon() = when (this) {
+    ReminderCategory.WATER_INTAKE -> Icons.Outlined.WaterDrop
+    ReminderCategory.BLOOD_PRESSURE -> Icons.Outlined.FavoriteBorder
+    ReminderCategory.WEIGHT_CHECK -> Icons.Outlined.MonitorWeight
+    ReminderCategory.MEDICATION -> Icons.Outlined.Medication
+    ReminderCategory.EXERCISE -> Icons.Outlined.DirectionsRun
+    ReminderCategory.CALORIE_LOGGING -> Icons.Outlined.Restaurant
+    ReminderCategory.CUSTOM -> Icons.Outlined.Notifications
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -85,7 +96,12 @@ fun ReminderEditDialog(
                     label = { Text(stringResource(R.string.txt_reminder_title)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    leadingIcon = { Text(category.icon, modifier = Modifier.padding(start = 12.dp)) }
+                    leadingIcon = {
+                        Icon(
+                            imageVector = category.editIcon(),
+                            contentDescription = category.displayName
+                        )
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

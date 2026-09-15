@@ -1688,3 +1688,11 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
 - **Known limitations:** Progress milestone/trend rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining report, insight and tracker presentation surfaces for direct emoji rendering and raw colors.
+
+## Follow-up — Metabolic preview and reminder icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Metabolic-syndrome live preview criteria and input cards now render mapped Material icons with accessible criterion labels instead of emoji. Reminder category selection and edit flows use a shared category-to-icon treatment for water, blood pressure, weight, medication, exercise, calories and custom reminders; model icon strings remain compatible with saved reminders.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Known limitations:** Metabolic preview and reminder-dialog rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining reports, insights and tracker surfaces for direct emoji rendering and raw colors.
