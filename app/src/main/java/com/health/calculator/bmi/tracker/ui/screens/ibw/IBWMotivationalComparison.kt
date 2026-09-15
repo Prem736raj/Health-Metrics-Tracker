@@ -24,12 +24,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.IBWResult
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.abs
+
+private data class MotivationalContent(
+    val icon: ImageVector,
+    val title: String,
+    val message: String,
+    val color: Color
+)
 
 @Composable
 fun IBWMotivationalComparison(
@@ -97,14 +106,14 @@ fun IBWMotivationalComparison(
                     label = "Ideal",
                     weight = "${"%.1f".format(idealWeight)}",
                     unit = unit,
-                    color = Color(0xFF4CAF50),
+                    color = HealthColors.Healthy,
                     icon = Icons.Default.Star
                 )
                 WeightBubble(
                     label = "Range",
                     weight = "${"%.0f".format(bmiLower)}-${"%.0f".format(bmiUpper)}",
                     unit = unit,
-                    color = Color(0xFF2196F3),
+                    color = HealthColors.Good,
                     icon = Icons.Default.FitnessCenter
                 )
             }
@@ -142,10 +151,11 @@ private fun WeightRangeVisual(
         label = "rangeProgress"
     )
 
-    val healthyColor = Color(0xFF4CAF50)
+    val healthyColor = HealthColors.Healthy
     val currentColor = MaterialTheme.colorScheme.primary
-    val idealColor = Color(0xFFFF9800)
+    val idealColor = HealthColors.Caution
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
+    val markerRingColor = MaterialTheme.colorScheme.surface
 
     Box(
         modifier = Modifier
@@ -198,12 +208,12 @@ private fun WeightRangeVisual(
                 close()
             }
             drawPath(diamondPath, color = idealColor)
-            drawPath(diamondPath, color = Color.White, style = Stroke(width = 2.dp.toPx()))
+            drawPath(diamondPath, color = markerRingColor, style = Stroke(width = 2.dp.toPx()))
 
             // Current weight marker (circle with ring)
             val currentX = padding + ((currentWeight.toFloat() - minVal) / range * barWidth) * animatedProgress
             drawCircle(
-                color = Color.White,
+                color = markerRingColor,
                 radius = markerRadius + 2.dp.toPx(),
                 center = Offset(currentX, barY)
             )
@@ -213,7 +223,7 @@ private fun WeightRangeVisual(
                 center = Offset(currentX, barY)
             )
             drawCircle(
-                color = Color.White,
+                color = markerRingColor,
                 radius = markerRadius * 0.45f,
                 center = Offset(currentX, barY)
             )
@@ -236,13 +246,13 @@ private fun WeightRangeVisual(
                 modifier = Modifier
                     .size(6.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF4CAF50).copy(alpha = 0.4f))
+                    .background(healthyColor.copy(alpha = 0.4f))
             )
             Spacer(modifier = Modifier.width(3.dp))
             Text(
                 stringResource(R.string.txt_healthy_range),
                 style = MaterialTheme.typography.labelSmall,
-                color = Color(0xFF4CAF50),
+                color = healthyColor,
                 fontSize = 9.sp
             )
         }
@@ -321,72 +331,76 @@ private fun MotivationalMessageCard(
     absDiff: Double,
     unit: String
 ) {
-    val (emoji, title, message, color) = when {
-        isInRange && absDiff < 2 -> listOf(
-            "🌟",
-            "Amazing! You're at your ideal weight!",
-            "You're right where you should be. Keep up your healthy habits and focus on maintaining this great balance!",
-            Color(0xFF4CAF50)
+    val content = when {
+        isInRange && absDiff < 2 -> MotivationalContent(
+            icon = Icons.Default.Star,
+            title = "Amazing! You're at your ideal weight!",
+            message = "You're right where you should be. Keep up your healthy habits and focus on maintaining this great balance!",
+            color = HealthColors.Healthy
         )
-        isInRange -> listOf(
-            "✅",
-            "Great! You're within the healthy range",
-            "You're within the healthy BMI weight range even if not at the exact formula result. This is a great place to be!",
-            Color(0xFF4CAF50)
+        isInRange -> MotivationalContent(
+            icon = Icons.Default.CheckCircle,
+            title = "Great! You're within the healthy range",
+            message = "You're within the healthy BMI weight range even if not at the exact formula result. This is a great place to be!",
+            color = HealthColors.Healthy
         )
-        isAbove && absDiff < 5 -> listOf(
-            "💪",
-            "Almost there! Just ${"%.1f".format(absDiff)} $unit to go",
-            "You're so close to your ideal range! Small, consistent changes in diet and activity can get you there. You've got this!",
-            Color(0xFF2196F3)
+        isAbove && absDiff < 5 -> MotivationalContent(
+            icon = Icons.Default.TrendingUp,
+            title = "Almost there! Just ${"%.1f".format(absDiff)} $unit to go",
+            message = "You're so close to your ideal range! Small, consistent changes in diet and activity can get you there. You've got this!",
+            color = HealthColors.Good
         )
-        isAbove && absDiff < 15 -> listOf(
-            "🚀",
-            "A reachable goal ahead",
-            "${"%.1f".format(absDiff)} $unit may seem like a lot, but at a healthy pace of 0.5 $unit/week, you could reach your ideal in about ${(absDiff / 0.5).toInt()} weeks. One step at a time!",
-            Color(0xFFFF9800)
+        isAbove && absDiff < 15 -> MotivationalContent(
+            icon = Icons.Default.Flag,
+            title = "A reachable goal ahead",
+            message = "${"%.1f".format(absDiff)} $unit may seem like a lot, but at a healthy pace of 0.5 $unit/week, you could reach your ideal in about ${(absDiff / 0.5).toInt()} weeks. One step at a time!",
+            color = HealthColors.Warning
         )
-        isAbove -> listOf(
-            "🎯",
-            "Your journey starts here",
-            "Every journey begins with a first step. Focus on small, sustainable changes. Even losing 5-10% of your current weight can significantly improve health markers.",
-            Color(0xFFFF9800)
+        isAbove -> MotivationalContent(
+            icon = Icons.Default.TrackChanges,
+            title = "Your journey starts here",
+            message = "Every journey begins with a first step. Focus on small, sustainable changes. Even losing 5-10% of your current weight can significantly improve health markers.",
+            color = HealthColors.Warning
         )
-        isBelow && absDiff < 5 -> listOf(
-            "🍎",
-            "Just a little more to go",
-            "You're close to your ideal weight. Focus on nutritious, calorie-dense foods and strength training to reach your goal safely.",
-            Color(0xFF2196F3)
+        isBelow && absDiff < 5 -> MotivationalContent(
+            icon = Icons.Default.LocalDining,
+            title = "Just a little more to go",
+            message = "You're close to your ideal weight. Focus on nutritious, calorie-dense foods and strength training to reach your goal safely.",
+            color = HealthColors.Good
         )
-        else -> listOf(
-            "🍽️",
-            "Nourish your body",
-            "Consider consulting a healthcare provider about a healthy weight gain plan. Focus on nutrient-dense foods and strength training.",
-            Color(0xFFFF9800)
+        else -> MotivationalContent(
+            icon = Icons.Default.Restaurant,
+            title = "Nourish your body",
+            message = "Consider consulting a healthcare provider about a healthy weight gain plan. Focus on nutrient-dense foods and strength training.",
+            color = HealthColors.Warning
         )
     }
 
-    @Suppress("UNCHECKED_CAST")
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = (color as Color).copy(alpha = 0.08f),
+        color = content.color.copy(alpha = 0.08f),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Text(emoji as String, fontSize = 24.sp)
+            Icon(
+                imageVector = content.icon,
+                contentDescription = null,
+                tint = content.color,
+                modifier = Modifier.size(24.dp)
+            )
             Spacer(modifier = Modifier.width(10.dp))
             Column {
                 Text(
-                    text = title as String,
+                    text = content.title,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = color
+                    color = content.color
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = message as String,
+                    text = content.message,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     lineHeight = 18.sp

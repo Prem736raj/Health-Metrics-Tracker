@@ -1632,3 +1632,11 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
 - **Known limitations:** Blood-pressure streak, medication and milestone rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining calculator and tracker surfaces for user-visible emoji placeholders and inconsistent interaction cues.
+
+## Follow-up — Ideal-weight comparison visual consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** The ideal-weight journey card now uses typed motivational content and Material vector icons instead of emoji. Its current/ideal/range bubbles, range marker, healthy-range legend and motivational surfaces use shared semantic theme colors; marker rings follow the active surface color for light/dark contrast. Existing estimates, wording and unit conversions are unchanged.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Known limitations:** Ideal-weight comparison rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining calculator and tracker surfaces for user-visible emoji placeholders and inconsistent interaction cues.

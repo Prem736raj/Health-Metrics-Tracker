@@ -1228,3 +1228,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Blood-pressure streak, medication and milestone
   rendering, TalkBack, large-font, light/dark theme and route checks, plus
   signing, Firebase and Play Console work, remain owner-only.
+
+## Ideal-weight comparison visual consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The ideal-weight journey card uses typed motivational content
+  and Material vector icons instead of emoji. Current/ideal/range bubbles,
+  range markers, legend and motivational surfaces use shared semantic theme
+  colors, while marker rings follow the active surface for light/dark
+  contrast. Existing estimates, copy and unit conversions are unchanged.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Ideal-weight comparison rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing, Firebase and
+  Play Console work, remain owner-only.
