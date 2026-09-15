@@ -1391,3 +1391,24 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Ideal-weight and IBW rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## BMI scale and history surface polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Shared semantic BMI category/status tokens now drive the BMI
+  result header, gauge, live slider preview and additional metrics instead of
+  legacy UI color literals; model color fields remain for compatibility. The
+  gauge value badge clamps to the actual available width rather than a fixed
+  300dp assumption, preventing edge overlap. WHR home risk states and IBW
+  history/statistics surfaces use shared semantic colors and vector icons
+  instead of emoji placeholders; trend chips provide accessible icon
+  descriptions.
+- **Verification:** Extended `BmiSliderPolicyTest` for category-role and
+  invalid-preview behavior. Focused compilation/unit tests plus the complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed with exit code 0; only known SDK XML/deprecation warnings were
+  emitted.
+- **Remaining gates:** BMI gauge/slider, WHR home, IBW history and statistics
+  rendering, TalkBack, large-font, light/dark theme and route checks, plus
+  signing, Firebase and Play Console work, remain owner-only.

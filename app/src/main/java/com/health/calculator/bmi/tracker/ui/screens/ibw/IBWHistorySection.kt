@@ -12,6 +12,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.TrendingDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.IBWHistoryEntry
 import com.health.calculator.bmi.tracker.data.repository.IBWStatistics
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
@@ -75,7 +79,12 @@ fun IBWHistorySection(
                         .padding(32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(stringResource(R.string.txt_text_placeholder_9), fontSize = 40.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.BarChart,
+                        contentDescription = "No ideal-weight history yet",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(40.dp)
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = stringResource(R.string.txt_no_ibw_calculations_yet),
@@ -186,9 +195,9 @@ private fun StatisticsSummaryCard(
                         label = "Average\n% of IBW",
                         value = "${"%.0f".format(avg)}%",
                         color = when {
-                            avg in 90.0..110.0 -> Color(0xFF4CAF50)
-                            avg in 80.0..120.0 -> Color(0xFFFF9800)
-                            else -> Color(0xFFF44336)
+                            avg in 90.0..110.0 -> HealthColors.Healthy
+                            avg in 80.0..120.0 -> HealthColors.Warning
+                            else -> HealthColors.Danger
                         }
                     )
                 }
@@ -199,7 +208,7 @@ private fun StatisticsSummaryCard(
                         label = "Weight\nChange",
                         value = "${if (displayChange > 0) "+" else ""}${"%.1f".format(displayChange)} $unit",
                         color = when {
-                            abs(displayChange) < 0.5 -> Color(0xFF4CAF50)
+                            abs(displayChange) < 0.5 -> HealthColors.Healthy
                             else -> MaterialTheme.colorScheme.primary
                         }
                     )
@@ -213,7 +222,7 @@ private fun StatisticsSummaryCard(
                     Spacer(modifier = Modifier.height(12.dp))
                     Surface(
                         shape = RoundedCornerShape(8.dp),
-                        color = Color(0xFF4CAF50).copy(alpha = 0.08f)
+                        color = HealthColors.Healthy.copy(alpha = 0.08f)
                     ) {
                         Row(
                             modifier = Modifier
@@ -221,13 +230,18 @@ private fun StatisticsSummaryCard(
                                 .padding(10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(stringResource(R.string.txt_text_placeholder_2), fontSize = 16.sp)
+                            Icon(
+                                imageVector = Icons.Outlined.StarOutline,
+                                contentDescription = "Closest to ideal",
+                                tint = HealthColors.Healthy,
+                                modifier = Modifier.size(18.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Column {
                                 Text(
                                     text = stringResource(R.string.txt_closest_to_ideal),
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = Color(0xFF4CAF50)
+                                    color = HealthColors.Healthy
                                 )
                                 Text(
                                     text = "${"%.1f".format(diff)} $unit from ideal on ${
@@ -250,7 +264,7 @@ private fun StatisticsSummaryCard(
                     Spacer(modifier = Modifier.height(6.dp))
                     Surface(
                         shape = RoundedCornerShape(8.dp),
-                        color = Color(0xFFFF9800).copy(alpha = 0.08f)
+                        color = HealthColors.Warning.copy(alpha = 0.08f)
                     ) {
                         Row(
                             modifier = Modifier
@@ -258,13 +272,18 @@ private fun StatisticsSummaryCard(
                                 .padding(10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(stringResource(R.string.txt_text_placeholder_19), fontSize = 16.sp)
+                            Icon(
+                                imageVector = Icons.Outlined.TrendingDown,
+                                contentDescription = "Furthest from ideal",
+                                tint = HealthColors.Warning,
+                                modifier = Modifier.size(18.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Column {
                                 Text(
                                     text = stringResource(R.string.txt_furthest_from_ideal),
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = Color(0xFFFF9800)
+                                    color = HealthColors.Warning
                                 )
                                 Text(
                                     text = "${"%.1f".format(diff)} $unit from ideal on ${
@@ -359,7 +378,7 @@ private fun WeightTrendGraph(
                     modifier = Modifier
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFF4CAF50))
+                        .background(HealthColors.Healthy)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -372,7 +391,7 @@ private fun WeightTrendGraph(
             Spacer(modifier = Modifier.height(12.dp))
 
             val actualColor = MaterialTheme.colorScheme.primary
-            val idealColor = Color(0xFF4CAF50)
+            val idealColor = HealthColors.Healthy
 
             Canvas(
                 modifier = Modifier
@@ -508,9 +527,9 @@ private fun HistoryEntryCard(
                         val diff = actual - entry.frameAdjustedDevineKg
                         val absDiff = abs(diff) * factor
                         val diffColor = when {
-                            abs(diff) < entry.frameAdjustedDevineKg * 0.1 -> Color(0xFF4CAF50)
-                            abs(diff) < entry.frameAdjustedDevineKg * 0.2 -> Color(0xFFFF9800)
-                            else -> Color(0xFFF44336)
+                            abs(diff) < entry.frameAdjustedDevineKg * 0.1 -> HealthColors.Healthy
+                            abs(diff) < entry.frameAdjustedDevineKg * 0.2 -> HealthColors.Warning
+                            else -> HealthColors.Danger
                         }
                         Surface(
                             shape = RoundedCornerShape(6.dp),

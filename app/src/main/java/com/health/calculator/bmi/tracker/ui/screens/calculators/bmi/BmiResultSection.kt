@@ -92,7 +92,7 @@ fun BmiResultSection(
     onDismissSaveConfirmation: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val categoryColor = Color(result.category.colorHex)
+    val categoryColor = bmiCategoryUiColor(result.category)
     val context = LocalContext.current
 
     var showBmiNumber by remember { mutableStateOf(false) }

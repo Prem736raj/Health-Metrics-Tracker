@@ -20,6 +20,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.TrendingDown
+import androidx.compose.material.icons.outlined.TrendingFlat
+import androidx.compose.material.icons.outlined.TrendingUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun StatisticsScreen(
@@ -193,7 +197,7 @@ fun StreakCard(currentStreak: Int, longestStreak: Int) {
                     .size(60.dp)
                     .background(
                         brush = Brush.verticalGradient(
-                            colors = listOf(Color(0xFFFF9800), Color(0xFFFF5722))
+                            colors = listOf(HealthColors.Warning, HealthColors.Caution)
                         ),
                         shape = CircleShape
                     ),
@@ -216,7 +220,7 @@ fun StreakCard(currentStreak: Int, longestStreak: Int) {
                     text = "$currentStreak Days",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF5722)
+                    color = HealthColors.Caution
                 )
             }
 
@@ -332,9 +336,15 @@ fun TrendSummaryCard(trend: HealthTrendSummary) {
 @Composable
 fun TrendChip(percentage: Float, direction: TrendDirection) {
     val color = when (direction) {
-        TrendDirection.IMPROVING -> Color(0xFF4CAF50)
-        TrendDirection.DECLINING -> Color(0xFFF44336)
+        TrendDirection.IMPROVING -> HealthColors.Healthy
+        TrendDirection.DECLINING -> HealthColors.Danger
         else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    val icon = when (direction) {
+        TrendDirection.IMPROVING -> Icons.Outlined.TrendingUp
+        TrendDirection.DECLINING -> Icons.Outlined.TrendingDown
+        TrendDirection.STABLE -> Icons.Outlined.TrendingFlat
+        TrendDirection.FLUCTUATING -> Icons.Filled.SwapVert
     }
 
     Surface(
@@ -347,11 +357,11 @@ fun TrendChip(percentage: Float, direction: TrendDirection) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
-                text = direction.icon,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = color
+            Icon(
+                imageVector = icon,
+                contentDescription = direction.name.lowercase().replace('_', ' '),
+                tint = color,
+                modifier = Modifier.size(16.dp)
             )
             Text(
                 text = "${String.format("%.1f", Math.abs(percentage))}%",

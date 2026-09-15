@@ -9,6 +9,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -16,12 +18,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.WhrCategory
 import com.health.calculator.bmi.tracker.data.model.WhrHistoryEntry
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun WhrHomeCardContent(
@@ -31,9 +33,9 @@ fun WhrHomeCardContent(
     if (lastEntry == null) return
 
     val riskColor = when (lastEntry.category) {
-        WhrCategory.LOW_RISK -> Color(0xFF4CAF50)
-        WhrCategory.MODERATE_RISK -> Color(0xFFFFA726)
-        WhrCategory.HIGH_RISK -> Color(0xFFF44336)
+        WhrCategory.LOW_RISK -> HealthColors.Healthy
+        WhrCategory.MODERATE_RISK -> HealthColors.Warning
+        WhrCategory.HIGH_RISK -> HealthColors.Danger
     }
 
     val animatedColor by animateColorAsState(
@@ -84,7 +86,12 @@ fun WhrHomeCardContent(
             ) {
                 // Alert indicator for high risk
                 if (lastEntry.category == WhrCategory.HIGH_RISK) {
-                    Text(stringResource(R.string.txt_text_placeholder_21), fontSize = 10.sp)
+                    androidx.compose.material3.Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = "Higher-risk waist-to-hip result",
+                        tint = animatedColor,
+                        modifier = Modifier.size(14.dp)
+                    )
                 }
                 Text(
                     lastEntry.category.label,
@@ -109,7 +116,7 @@ fun WhrHomeAlertIndicator(
     Surface(
         modifier = modifier,
         shape = CircleShape,
-        color = Color(0xFFF44336)
+        color = HealthColors.Danger
     ) {
         Box(
             modifier = Modifier.size(8.dp)

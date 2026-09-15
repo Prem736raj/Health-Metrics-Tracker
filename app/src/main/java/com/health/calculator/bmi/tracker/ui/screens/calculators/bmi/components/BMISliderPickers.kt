@@ -36,6 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
+import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.bmiValueUiColor
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 // ============================================================
 // Real-time BMI Preview Card
@@ -179,13 +181,13 @@ private fun MiniCategoryBar(
             0.737f to 1f       // Obese III (40+)
         )
         val segmentColors = listOf(
-            Color(0xFFB71C1C),
-            Color(0xFFFF9800),
-            Color(0xFF4CAF50),
-            Color(0xFFFFC107),
-            Color(0xFFFF9800),
-            Color(0xFFD32F2F),
-            Color(0xFFB71C1C)
+            HealthColors.Severe,
+            HealthColors.Caution,
+            HealthColors.Healthy,
+            HealthColors.Warning,
+            HealthColors.Caution,
+            HealthColors.Danger,
+            HealthColors.Severe
         )
 
         segmentRanges.forEachIndexed { i, (start, end) ->
@@ -628,17 +630,7 @@ fun InputModeToggle(
 // Shared color helpers
 // ============================================================
 internal fun getBMICategoryColor(bmi: Float): Color {
-    return when {
-        bmi <= 0f -> Color.Gray
-        bmi < 16f -> Color(0xFFB71C1C)
-        bmi < 17f -> Color(0xFFD32F2F)
-        bmi < 18.5f -> Color(0xFFFF9800)
-        bmi < 25f -> Color(0xFF4CAF50)
-        bmi < 30f -> Color(0xFFFFC107)
-        bmi < 35f -> Color(0xFFFF9800)
-        bmi < 40f -> Color(0xFFD32F2F)
-        else -> Color(0xFFB71C1C)
-    }
+    return bmiValueUiColor(bmi)
 }
 
 /**

@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -61,11 +62,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.abs
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
 
-private val MetricsAccent = Color(0xFF5C6BC0)
+private val MetricsAccent = HealthColors.Info
 
 /**
  * Expandable section that displays additional BMI-related metrics:
@@ -204,7 +206,7 @@ fun BmiAdditionalMetricsSection(
 
 @Composable
 private fun BmiPrimeCard(bmiPrime: BmiPrimeResult) {
-    val statusColor = Color(bmiPrime.status.colorHex)
+    val statusColor = bmiPrimeUiColor(bmiPrime.status)
 
     MetricCard(
         icon = Icons.Filled.Speed,
@@ -312,10 +314,10 @@ private fun BmiPrimeScale(value: Double, statusColor: Color) {
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
-                            Color(0xFF43A047).copy(alpha = 0.3f),
-                            Color(0xFF43A047).copy(alpha = 0.6f),
-                            Color(0xFFFFC107).copy(alpha = 0.6f),
-                            Color(0xFFE53935).copy(alpha = 0.6f)
+                            HealthColors.Healthy.copy(alpha = 0.3f),
+                            HealthColors.Healthy.copy(alpha = 0.6f),
+                            HealthColors.Warning.copy(alpha = 0.6f),
+                            HealthColors.Danger.copy(alpha = 0.6f)
                         )
                     )
                 )
@@ -356,7 +358,7 @@ private fun BmiPrimeScale(value: Double, statusColor: Color) {
             Text(
                 stringResource(R.string.txt_1_0),
                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, fontWeight = FontWeight.Bold),
-                color = Color(0xFFFFC107).copy(alpha = 0.7f)
+                color = HealthColors.Warning.copy(alpha = 0.7f)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -372,11 +374,11 @@ private fun BmiPrimeScale(value: Double, statusColor: Color) {
 
 @Composable
 private fun PonderalIndexCard(ponderalIndex: PonderalIndexResult) {
-    val statusColor = Color(ponderalIndex.status.colorHex)
+    val statusColor = ponderalIndexUiColor(ponderalIndex.status)
 
     MetricCard(
         icon = Icons.Outlined.Analytics,
-        iconColor = Color(0xFF00897B),
+        iconColor = HealthColors.BelowNormal,
         title = "Ponderal Index",
         formulaText = "Weight(kg) ÷ Height(m)³"
     ) {
@@ -431,7 +433,7 @@ private fun PonderalIndexCard(ponderalIndex: PonderalIndexResult) {
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    color = Color(0xFF43A047)
+                    color = HealthColors.Healthy
                 )
             }
         }
@@ -484,10 +486,10 @@ private fun PonderalIndexScale(value: Double, statusColor: Color) {
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
-                            Color(0xFFFF9800).copy(alpha = 0.4f),
-                            Color(0xFF43A047).copy(alpha = 0.5f),
-                            Color(0xFF43A047).copy(alpha = 0.5f),
-                            Color(0xFFE53935).copy(alpha = 0.4f)
+                            HealthColors.Caution.copy(alpha = 0.4f),
+                            HealthColors.Healthy.copy(alpha = 0.5f),
+                            HealthColors.Healthy.copy(alpha = 0.5f),
+                            HealthColors.Danger.copy(alpha = 0.4f)
                         )
                     )
                 )
@@ -530,15 +532,14 @@ private fun AsianBmiCard(
     bmiValue: Double,
     standardCategory: BmiCategory
 ) {
-    val asianColor = Color(asianCategory.colorHex)
-    val standardColor = Color(standardCategory.colorHex)
+    val asianColor = asianBmiUiColor(asianCategory)
 
     // Check if the Asian classification differs from standard
     val isDifferent = asianCategory.label != standardCategory.label
 
     MetricCard(
         icon = Icons.Outlined.Groups,
-        iconColor = Color(0xFFE65100),
+        iconColor = HealthColors.Caution,
         title = "Optional Asian-population action points",
         formulaText = "Not a WHO reclassification; use as context only"
     ) {
@@ -590,16 +591,21 @@ private fun AsianBmiCard(
 
             Surface(
                 shape = RoundedCornerShape(10.dp),
-                color = Color(0xFFFF9800).copy(alpha = 0.06f),
+                color = HealthColors.Warning.copy(alpha = 0.06f),
                 border = androidx.compose.foundation.BorderStroke(
-                    0.5.dp, Color(0xFFFF9800).copy(alpha = 0.2f)
+                    0.5.dp, HealthColors.Warning.copy(alpha = 0.2f)
                 )
             ) {
                 Row(
                     modifier = Modifier.padding(12.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(text = stringResource(R.string.txt_text_placeholder_21), fontSize = 14.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = "Different from standard classification",
+                        tint = HealthColors.Warning,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
@@ -607,7 +613,7 @@ private fun AsianBmiCard(
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
-                            color = Color(0xFFFF9800)
+                            color = HealthColors.Warning
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
@@ -683,7 +689,7 @@ private fun AsianBmiTable(
         // Category rows
         AsianBmiCategory.entries.forEach { category ->
             val isCurrentCategory = category == currentCategory
-            val catColor = Color(category.colorHex)
+            val catColor = asianBmiUiColor(category)
 
             val rangeText = when (category) {
                 AsianBmiCategory.UNDERWEIGHT -> "< 18.5"

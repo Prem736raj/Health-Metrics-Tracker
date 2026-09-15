@@ -8,6 +8,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,23 +35,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 // ─── Gauge Color Stops ────────────────────────────────────────────────────────
 
 private val gaugeColors = listOf(
-    Color(0xFFB71C1C),  // Severe thinness (0-16)
-    Color(0xFFE53935),  // Moderate thinness (16-17)
-    Color(0xFFFF9800),  // Mild thinness (17-18.5)
-    Color(0xFF43A047),  // Normal (18.5-25)
-    Color(0xFFFFC107),  // Overweight (25-30)
-    Color(0xFFFF9800),  // Obese I (30-35)
-    Color(0xFFE53935),  // Obese II (35-40)
-    Color(0xFFB71C1C)   // Obese III (40+)
+    HealthColors.Severe,  // Severe thinness (0-16)
+    HealthColors.Danger,  // Moderate thinness (16-17)
+    HealthColors.Caution, // Mild thinness (17-18.5)
+    HealthColors.Healthy, // Normal (18.5-25)
+    HealthColors.Warning, // Overweight (25-30)
+    HealthColors.Caution, // Obese I (30-35)
+    HealthColors.Danger,  // Obese II (35-40)
+    HealthColors.Severe   // Obese III (40+)
 )
 
 // BMI boundaries on the gauge (maps to position 0.0 → 1.0)
@@ -115,26 +116,29 @@ fun BmiGauge(
         }
     }
 
-    val categoryColor = Color(category.colorHex)
-    val density = LocalDensity.current
-
+    val categoryColor = bmiCategoryUiColor(category)
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 4.dp)
     ) {
         // ── Pointer and BMI Value ─────────────────────────────────────
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp)
         ) {
+            val labelWidth = 56.dp
+            val labelOffset = (maxWidth * animatedPosition.value - labelWidth / 2)
+                .coerceIn(0.dp, (maxWidth - labelWidth).coerceAtLeast(0.dp))
+
             Canvas(modifier = Modifier.fillMaxWidth().height(40.dp)) {
                 val barWidth = size.width
-                val pointerX = animatedPosition.value * barWidth
+                val triangleSize = 10.dp.toPx()
+                val pointerX = (animatedPosition.value * barWidth)
+                    .coerceIn(triangleSize / 2f, barWidth - triangleSize / 2f)
 
                 // Draw pointer triangle
-                val triangleSize = 10.dp.toPx()
                 val triangleY = size.height
 
                 val path = Path().apply {
@@ -150,12 +154,6 @@ fun BmiGauge(
                 )
             }
 
-            // BMI value label above pointer
-            val offsetX = with(density) {
-                val totalWidth = 300.dp // Approximate, will be calculated
-                (animatedPosition.value * totalWidth.toPx() - 24.dp.toPx()).toDp()
-            }
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -165,12 +163,7 @@ fun BmiGauge(
                 Surface(
                     shape = RoundedCornerShape(8.dp),
                     color = categoryColor,
-                    modifier = Modifier.offset(
-                        x = with(density) {
-                            val parentWidthPx = 300.dp.toPx() // Will be recalculated
-                            (animatedPosition.value * parentWidthPx).toDp() - 20.dp
-                        }.coerceAtLeast(0.dp)
-                    )
+                    modifier = Modifier.offset(x = labelOffset)
                 ) {
                     Text(
                         text = String.format("%.1f", bmiValue),
@@ -269,15 +262,6 @@ fun BmiGauge(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            val labels = listOf(
-                Pair("16", Color(0xFFE53935)),
-                Pair("18.5", Color(0xFFFF9800)),
-                Pair("25", Color(0xFF43A047)),
-                Pair("30", Color(0xFFFFC107)),
-                Pair("35", Color(0xFFFF9800)),
-                Pair("40", Color(0xFFE53935))
-            )
-
             Text(
                 text = stringResource(R.string.txt_underweight),
                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
@@ -290,7 +274,7 @@ fun BmiGauge(
                     fontSize = 9.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = Color(0xFF43A047).copy(alpha = 0.8f)
+                color = HealthColors.Healthy.copy(alpha = 0.8f)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(

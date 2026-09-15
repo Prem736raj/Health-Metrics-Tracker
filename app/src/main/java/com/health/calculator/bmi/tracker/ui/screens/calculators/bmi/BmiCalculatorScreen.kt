@@ -211,7 +211,7 @@ fun BmiCalculatorScreen(
                                    else "Adult BMI reference categories",
                             style = MaterialTheme.typography.bodySmall,
                             color = if (uiState.showResult)
-                                uiState.bmiResult?.let { Color(it.category.colorHex) } ?: FeatureColors.BmiDeep
+                                uiState.bmiResult?.let { bmiCategoryUiColor(it.category) } ?: FeatureColors.BmiDeep
                             else FeatureColors.BmiDeep.copy(alpha = 0.8f)
                         )
                     }

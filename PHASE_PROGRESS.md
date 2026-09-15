@@ -1723,3 +1723,26 @@ Updated: 2026-09-14
   signing, Firebase and Play Console tasks remain owner-only.
 - **Next phase:** Continue auditing remaining calculator, insight and tracker
   surfaces for raw colors, placeholders and inconsistent interaction cues.
+
+## Follow-up — BMI scale and history surface polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Added shared semantic BMI category/status tokens and
+  migrated the BMI result header, gauge, live slider preview and additional
+  metrics away from legacy UI color literals while preserving the model's
+  compatibility fields. The gauge value badge now clamps against its actual
+  available width rather than a hard-coded 300dp, preventing edge overlap on
+  compact and large screens. WHR home risk states and IBW history/statistics
+  surfaces now use the same semantic palette and vector icons instead of
+  emoji placeholders; trend chips expose accessible icon descriptions.
+- **Tests:** Extended `BmiSliderPolicyTest` for shared category roles and
+  invalid preview values. Focused compilation/unit tests and the complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed with exit code 0 (only the known SDK XML/deprecation warnings
+  were emitted).
+- **Known limitations:** BMI gauge/slider, WHR home, IBW history and
+  statistics rendering still require connected-device checks for TalkBack,
+  large fonts, light/dark themes and route behavior; signing, Firebase and
+  Play Console tasks remain owner-only.
+- **Next phase:** Continue auditing remaining calculator, insight and tracker
+  surfaces for raw colors, placeholders and inconsistent interaction cues.
