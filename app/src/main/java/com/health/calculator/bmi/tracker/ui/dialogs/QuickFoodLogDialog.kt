@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,13 @@ data class QuickFoodPreset(
     val fat: Float = 0f,
     val emoji: String = "🍽️"
 )
+
+private fun QuickFoodPreset.displayIcon(): ImageVector = when {
+    name.contains("water", ignoreCase = true) -> Icons.Default.WaterDrop
+    name.contains("coffee", ignoreCase = true) -> Icons.Default.LocalCafe
+    name.contains("protein", ignoreCase = true) || name.contains("chicken", ignoreCase = true) -> Icons.Default.FitnessCenter
+    else -> Icons.Default.Restaurant
+}
 
 val defaultQuickPresets = listOf(
     QuickFoodPreset("Glass of Water", 0, emoji = "💧"),
@@ -293,9 +301,15 @@ fun QuickPresetItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = preset.emoji,
-                    style = MaterialTheme.typography.titleMedium
+                Icon(
+                    imageVector = preset.displayIcon(),
+                    contentDescription = preset.name,
+                    tint = if (preset.calories == 0) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.tertiary
+                    },
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {

@@ -1261,3 +1261,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Blood-pressure alert/quick-log and profile-dialog
   rendering, TalkBack, large-font, light/dark theme and route checks, plus
   signing, Firebase and Play Console work, remain owner-only.
+
+## Quick food log icon consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Quick food presets render a consistent Material icon mapped to
+  the preset type with an accessible preset-name description, replacing
+  platform-dependent food emoji in the dialog. The legacy `QuickFoodPreset`
+  emoji field remains for custom/persisted-data compatibility but is not
+  rendered here.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Quick food dialog rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.
