@@ -1696,3 +1696,11 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
 - **Known limitations:** Metabolic preview and reminder-dialog rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining reports, insights and tracker surfaces for direct emoji rendering and raw colors.
+
+## Follow-up — Weekly report icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Weekly report metrics, highlights, next-week goals and no-data states now render mapped Material icons with accessible descriptions instead of platform-dependent emoji. Wellness Score change colors use shared healthy/danger tokens, and report copy remains informational and non-diagnostic.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Known limitations:** Weekly report rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining insights, tracker and secondary dialog surfaces for direct emoji rendering and raw colors.

@@ -1359,3 +1359,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Metabolic preview and reminder-dialog rendering,
   TalkBack, large-font, light/dark theme and route checks, plus signing,
   Firebase and Play Console work, remain owner-only.
+
+## Weekly report icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Weekly report metrics, highlights, next-week goals and no-data
+  states render mapped Material icons with accessible descriptions instead of
+  platform-dependent emoji. Wellness Score change colors use shared
+  healthy/danger tokens; report copy remains informational and non-diagnostic.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Weekly report rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.

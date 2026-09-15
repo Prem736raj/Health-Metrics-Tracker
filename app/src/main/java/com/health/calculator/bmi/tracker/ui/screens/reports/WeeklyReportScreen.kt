@@ -23,14 +23,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.models.*
 import com.health.calculator.bmi.tracker.domain.engagement.WellnessEngagementPolicy
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
+
+private fun reportIcon(marker: String): ImageVector = when {
+    marker.contains("💧") || marker.contains("water", ignoreCase = true) -> Icons.Outlined.WaterDrop
+    marker.contains("❤️") || marker.contains("heart", ignoreCase = true) || marker.contains("blood", ignoreCase = true) -> Icons.Outlined.FavoriteBorder
+    marker.contains("⚖") || marker.contains("weight", ignoreCase = true) -> Icons.Outlined.MonitorWeight
+    marker.contains("🍽") || marker.contains("calorie", ignoreCase = true) || marker.contains("food", ignoreCase = true) -> Icons.Outlined.Restaurant
+    marker.contains("🔥") || marker.contains("bmr", ignoreCase = true) -> Icons.Outlined.LocalFireDepartment
+    marker.contains("🏃") || marker.contains("💪") || marker.contains("exercise", ignoreCase = true) -> Icons.Outlined.FitnessCenter
+    marker.contains("🎯") || marker.contains("goal", ignoreCase = true) -> Icons.Outlined.Flag
+    marker.contains("🏆") || marker.contains("🏅") || marker.contains("milestone", ignoreCase = true) -> Icons.Outlined.EmojiEvents
+    marker.contains("📈") || marker.contains("📉") || marker.contains("📊") || marker.contains("trend", ignoreCase = true) -> Icons.Outlined.Analytics
+    else -> Icons.Outlined.AutoAwesome
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -277,8 +292,8 @@ private fun WeeklyRhythmCard(grade: String, message: String, weekStart: Long, we
 @Composable
 private fun HealthScoreChangeCard(scoreStart: Int, scoreEnd: Int, change: Int) {
     val changeColor = when {
-        change > 0 -> Color(0xFF4CAF50)
-        change < 0 -> Color(0xFFF44336)
+        change > 0 -> HealthColors.Healthy
+        change < 0 -> HealthColors.Danger
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
@@ -293,7 +308,16 @@ private fun HealthScoreChangeCard(scoreStart: Int, scoreEnd: Int, change: Int) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text("\uD83C\uDFC6 Wellness Score", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Outlined.EmojiEvents,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Wellness Score", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
@@ -356,7 +380,12 @@ private fun MetricSummaryCard(metric: MetricWeeklySummary) {
             modifier = Modifier.fillMaxWidth().padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = metric.icon, style = MaterialTheme.typography.titleLarge)
+            Icon(
+                imageVector = reportIcon(metric.icon),
+                contentDescription = metric.metricName,
+                tint = trendColor,
+                modifier = Modifier.size(24.dp)
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -398,7 +427,12 @@ private fun HighlightCard(highlight: WeeklyHighlight) {
             modifier = Modifier.fillMaxWidth().padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(highlight.icon, style = MaterialTheme.typography.titleLarge)
+            Icon(
+                imageVector = reportIcon(highlight.icon),
+                contentDescription = highlight.title,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(highlight.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -419,7 +453,14 @@ private fun NextWeekGoalCard(goal: NextWeekGoal) {
             modifier = Modifier.fillMaxWidth().padding(14.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Text(goal.icon, style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 2.dp))
+            Icon(
+                imageVector = reportIcon(goal.icon),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.tertiary,
+                modifier = Modifier
+                    .padding(top = 2.dp)
+                    .size(22.dp)
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(goal.suggestion, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
@@ -475,7 +516,12 @@ private fun NoDataCard() {
             modifier = Modifier.fillMaxWidth().padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("\uD83D\uDCCA", style = MaterialTheme.typography.displaySmall)
+            Icon(
+                imageVector = Icons.Outlined.Analytics,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(40.dp)
+            )
             Spacer(modifier = Modifier.height(12.dp))
             Text(stringResource(R.string.txt_not_enough_data_yet), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text(
