@@ -17,12 +17,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.model.*
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
+
+private fun BodyShape.displayIcon(): ImageVector = when (this) {
+    BodyShape.APPLE -> Icons.Outlined.FavoriteBorder
+    BodyShape.PEAR -> Icons.Outlined.CompareArrows
+    BodyShape.BALANCED -> Icons.Outlined.Straighten
+}
+
+private fun WhrCategory.displayColor(): Color = when (this) {
+    WhrCategory.LOW_RISK -> HealthColors.Healthy
+    WhrCategory.MODERATE_RISK -> HealthColors.Warning
+    WhrCategory.HIGH_RISK -> HealthColors.Danger
+}
 
 @Composable
 fun WhrHistoryEntryCard(
@@ -32,11 +46,7 @@ fun WhrHistoryEntryCard(
     showDeleteOption: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    val riskColor = when (entry.category) {
-        WhrCategory.LOW_RISK -> Color(0xFF4CAF50)
-        WhrCategory.MODERATE_RISK -> Color(0xFFFFA726)
-        WhrCategory.HIGH_RISK -> Color(0xFFF44336)
-    }
+    val riskColor = entry.category.displayColor()
 
     val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
     val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
@@ -166,17 +176,17 @@ fun WhrHistoryEntryCard(
                 HistoryDetailItem(
                     label = "Waist",
                     value = "${String.format("%.1f", entry.waistCm)} cm",
-                    icon = "📏"
+                    icon = Icons.Outlined.Straighten
                 )
                 HistoryDetailItem(
                     label = "Hip",
                     value = "${String.format("%.1f", entry.hipCm)} cm",
-                    icon = "📏"
+                    icon = Icons.Outlined.Straighten
                 )
                 HistoryDetailItem(
                     label = "Shape",
                     value = entry.bodyShape.label,
-                    icon = entry.bodyShape.emoji
+                    icon = entry.bodyShape.displayIcon()
                 )
                 HistoryDetailItem(
                     label = "Waist Risk",
@@ -186,9 +196,9 @@ fun WhrHistoryEntryCard(
                         WaistRiskLevel.SUBSTANTIALLY_INCREASED -> "At or above reference"
                     },
                     icon = when (entry.waistRiskLevel) {
-                        WaistRiskLevel.NORMAL -> "•"
+                        WaistRiskLevel.NORMAL -> Icons.Outlined.CheckCircle
                         WaistRiskLevel.INCREASED,
-                        WaistRiskLevel.SUBSTANTIALLY_INCREASED -> "•"
+                        WaistRiskLevel.SUBSTANTIALLY_INCREASED -> Icons.Outlined.Info
                     }
                 )
             }
@@ -199,10 +209,8 @@ fun WhrHistoryEntryCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            if (whtr > 0.5f)
-                                Color(0xFFF44336).copy(alpha = 0.06f)
-                            else
-                                Color(0xFF4CAF50).copy(alpha = 0.06f),
+                            (if (whtr > 0.5f) HealthColors.Danger else HealthColors.Healthy)
+                                .copy(alpha = 0.08f),
                             RoundedCornerShape(8.dp)
                         )
                         .padding(horizontal = 10.dp, vertical = 6.dp),
@@ -218,7 +226,7 @@ fun WhrHistoryEntryCard(
                         if (whtr > 0.5f) "At Risk" else "Normal",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = if (whtr > 0.5f) Color(0xFFF44336) else Color(0xFF4CAF50)
+                        color = if (whtr > 0.5f) HealthColors.Danger else HealthColors.Healthy
                     )
                 }
             }
@@ -230,7 +238,7 @@ fun WhrHistoryEntryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "${if (entry.gender == Gender.FEMALE) "👩 Female" else "👨 Male"} • ${entry.age} years",
+                    "${if (entry.gender == Gender.FEMALE) "Female" else "Male"} • ${entry.age} years",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     fontSize = 10.sp
@@ -258,13 +266,18 @@ fun WhrHistoryEntryCard(
 private fun HistoryDetailItem(
     label: String,
     value: String,
-    icon: String
+    icon: ImageVector
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        Text(icon, fontSize = 14.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(18.dp)
+        )
         Text(
             value,
             style = MaterialTheme.typography.bodySmall,
@@ -285,11 +298,7 @@ fun WhrHistoryEntryDetailDialog(
     entry: WhrHistoryEntry,
     onDismiss: () -> Unit
 ) {
-    val riskColor = when (entry.category) {
-        WhrCategory.LOW_RISK -> Color(0xFF4CAF50)
-        WhrCategory.MODERATE_RISK -> Color(0xFFFFA726)
-        WhrCategory.HIGH_RISK -> Color(0xFFF44336)
-    }
+    val riskColor = entry.category.displayColor()
 
     val dateFormat = SimpleDateFormat("MMMM d, yyyy 'at' h:mm a", Locale.getDefault())
 
@@ -321,7 +330,11 @@ fun WhrHistoryEntryDetailDialog(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 DetailRow("Waist", "${String.format("%.1f", entry.waistCm)} cm")
                 DetailRow("Hip", "${String.format("%.1f", entry.hipCm)} cm")
-                DetailRow("Body Shape", "${entry.bodyShape.emoji} ${entry.bodyShape.label}")
+                DetailRow(
+                    "Body Shape",
+                    entry.bodyShape.label,
+                    leadingIcon = entry.bodyShape.displayIcon()
+                )
                 DetailRow("Waist Risk", entry.waistRiskLevel.label)
                 entry.whtr?.let { DetailRow("WHtR", String.format("%.2f", it)) }
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
@@ -341,7 +354,8 @@ fun WhrHistoryEntryDetailDialog(
 private fun DetailRow(
     label: String,
     value: String,
-    valueColor: Color? = null
+    valueColor: Color? = null,
+    leadingIcon: ImageVector? = null
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -353,11 +367,24 @@ private fun DetailRow(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         )
-        Text(
-            value,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.SemiBold,
-            color = valueColor ?: MaterialTheme.colorScheme.onSurface
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            leadingIcon?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    tint = valueColor ?: MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+            Text(
+                value,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.SemiBold,
+                color = valueColor ?: MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }

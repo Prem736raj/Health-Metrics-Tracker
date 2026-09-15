@@ -1656,3 +1656,11 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
 - **Known limitations:** Quick food dialog rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining report, insight and tracker presentation surfaces for direct emoji rendering and raw colors.
+
+## Follow-up — WHR history and greeting icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Waist-to-hip history cards and detail dialogs now use vector measurement/body-shape/risk icons instead of emoji, shared semantic risk tokens, and theme-safe WHtR surfaces. Gender metadata is presented as readable text without emoji. The personalized greeting uses a time-of-day vector icon and keeps its warm copy and gradient treatment.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed (lint report generated at `app/build/reports/lint-results-release.html`).
+- **Known limitations:** WHR history/detail and greeting rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining report, insight and tracker presentation surfaces for direct emoji rendering and raw colors.

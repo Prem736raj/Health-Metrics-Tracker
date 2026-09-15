@@ -1277,3 +1277,19 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Quick food dialog rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## WHR history and greeting icon polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Waist-to-hip history cards and detail dialogs use vector
+  measurement, body-shape and risk icons instead of emoji, shared semantic
+  risk tokens and theme-safe WHtR surfaces. Gender metadata is readable text
+  without emoji. The personalized greeting uses a time-of-day vector icon
+  while retaining its calm copy and gradient treatment.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed; lint report generated at `app/build/reports/lint-results-release.html`.
+- **Remaining gates:** WHR history/detail and greeting rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing, Firebase and
+  Play Console work, remain owner-only.
