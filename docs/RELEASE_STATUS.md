@@ -1326,3 +1326,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Ideal-weight and WHR progress rendering, TalkBack,
   large-font, light/dark theme and route checks, plus signing, Firebase and
   Play Console work, remain owner-only.
+
+## Progress milestone and trend-token polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Ideal-weight milestones use vector achievement/progress icons
+  and semantic progress colors instead of emoji and fixed literals. WHR
+  progress empty, goal, comparison, graph, statistics and distribution
+  surfaces use shared healthy/warning/danger/chart tokens; trend messages no
+  longer inject emoji into the banner, and the goal-reference note wraps
+  safely on narrow screens.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Progress milestone/trend rendering, TalkBack,
+  large-font, light/dark theme and route checks, plus signing, Firebase and
+  Play Console work, remain owner-only.

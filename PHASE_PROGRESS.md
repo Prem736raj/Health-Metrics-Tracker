@@ -1680,3 +1680,11 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed (lint report generated at `app/build/reports/lint-results-release.html`).
 - **Known limitations:** Ideal-weight and WHR progress rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining report, insight and tracker presentation surfaces for direct emoji rendering and raw colors.
+
+## Follow-up — Progress milestone and trend-token polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Ideal-weight goal milestones now use vector achievement/progress icons and semantic progress colors instead of emoji and fixed literals. WHR progress empty, goal, comparison, graph, statistics and distribution surfaces now use shared healthy/warning/danger/chart tokens; trend messages no longer inject emoji into the banner, and the goal-reference note wraps safely on narrow screens.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Known limitations:** Progress milestone/trend rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining report, insight and tracker presentation surfaces for direct emoji rendering and raw colors.
