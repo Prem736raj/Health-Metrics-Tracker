@@ -1196,3 +1196,18 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Cross-link/daily-content rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.
+
+## Water celebration visual polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Hydration-goal celebration surfaces now use vector trophy,
+  water, progress and streak icons, shared theme surfaces and chart colors.
+  The existing haptics, auto-dismiss and share behavior remain intact while
+  the copy avoids competitive or emoji-led presentation.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Celebration rendering, TalkBack, large-font, light/dark
+  theme and route checks, plus signing, Firebase and Play Console work, remain
+  owner-only.

@@ -1553,6 +1553,23 @@ Updated: 2026-09-14
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
 
+## Follow-up — Water celebration visual polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** The hydration-goal celebration now uses vector trophy,
+  water, progress and streak icons instead of emoji. Its card, scrim and share
+  action follow the active light/dark Material theme; confetti uses the shared
+  chart palette; and copy is calmer and non-competitive while preserving the
+  existing haptics, auto-dismiss and sharing behavior.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Known limitations:** Celebration rendering, TalkBack, large-font,
+  light/dark theme and route checks remain open; signing, Firebase and Play
+  Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining calculator educational/result
+  surfaces for user-visible placeholders and inconsistent interaction cues.
+
 ## Follow-up — BMI risk context visual consistency
 
 - **Status:** Code-fixable polish complete; device/accessibility validation remains open.

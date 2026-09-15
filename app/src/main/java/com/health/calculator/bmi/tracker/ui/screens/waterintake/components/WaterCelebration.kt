@@ -11,6 +11,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.EmojiEvents
+import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.ShowChart
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -26,6 +32,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.util.WaterShareHelper
+import com.health.calculator.bmi.tracker.ui.theme.ChartColors
+import com.health.calculator.bmi.tracker.ui.theme.FeatureColors
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -68,7 +77,7 @@ fun WaterGoalCelebration(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.6f))
+            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f))
             .clickable { onDismiss() },
         contentAlignment = Alignment.Center
     ) {
@@ -84,7 +93,7 @@ fun WaterGoalCelebration(
                 .padding(32.dp)
                 .scale(scale),
             shape = RoundedCornerShape(28.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(16.dp)
         ) {
             Column(
@@ -105,17 +114,20 @@ fun WaterGoalCelebration(
                     label = "trophy_pulse"
                 )
 
-                Text(
-                    stringResource(R.string.txt_text_placeholder_46),
-                    fontSize = 48.sp,
-                    modifier = Modifier.scale(trophyScale)
+                Icon(
+                    imageVector = Icons.Outlined.EmojiEvents,
+                    contentDescription = "Hydration goal achieved",
+                    tint = HealthColors.Healthy,
+                    modifier = Modifier
+                        .size(52.dp)
+                        .scale(trophyScale)
                 )
 
                 Text(
                     if (percentage >= 150) "INCREDIBLE!" else "GOAL ACHIEVED!",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 26.sp,
-                    color = Color(0xFF4CAF50)
+                    color = HealthColors.Healthy
                 )
 
                 // Stats
@@ -123,20 +135,20 @@ fun WaterGoalCelebration(
                     horizontalArrangement = Arrangement.spacedBy(24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CelebrationStat("💧", "${String.format("%.1f", currentMl / 1000f)}L", "Drank")
-                    CelebrationStat("📊", "${percentage.toInt()}%", "Progress")
+                    CelebrationStat(Icons.Outlined.WaterDrop, "${String.format("%.1f", currentMl / 1000f)}L", "Drank", FeatureColors.WaterDeep)
+                    CelebrationStat(Icons.Outlined.ShowChart, "${percentage.toInt()}%", "Progress", ChartColors.Primary)
                     if (streakDays > 0) {
-                        CelebrationStat("🔥", "$streakDays", "Streak")
+                        CelebrationStat(Icons.Outlined.LocalFireDepartment, "$streakDays", "Streak", HealthColors.Warning)
                     }
                 }
 
                 // Motivational message
                 val message = when {
-                    percentage >= 150 -> "You're a hydration superstar! 🌟"
-                    percentage >= 125 -> "Above and beyond! Amazing!"
-                    streakDays >= 30 -> "A whole month of perfect hydration!"
-                    streakDays >= 7 -> "Week streak! You're on fire!"
-                    else -> "Your body thanks you!"
+                    percentage >= 150 -> "Excellent hydration progress."
+                    percentage >= 125 -> "You went beyond today's target."
+                    streakDays >= 30 -> "A month of consistent check-ins."
+                    streakDays >= 7 -> "A full week of consistent check-ins."
+                    else -> "A useful check-in for your day."
                 }
 
                 Text(
@@ -175,7 +187,7 @@ fun WaterGoalCelebration(
                             )
                         },
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                        colors = ButtonDefaults.buttonColors(containerColor = HealthColors.Healthy)
                     ) {
                         Text(stringResource(R.string.txt_share_1), fontSize = 14.sp)
                     }
@@ -186,9 +198,14 @@ fun WaterGoalCelebration(
 }
 
 @Composable
-private fun CelebrationStat(emoji: String, value: String, label: String) {
+private fun CelebrationStat(icon: ImageVector, value: String, label: String, tint: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(emoji, fontSize = 24.sp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = tint,
+            modifier = Modifier.size(24.dp)
+        )
         Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         Text(
             label,
@@ -207,13 +224,13 @@ private fun ConfettiAnimation() {
                 startY = Random.nextFloat() * -0.5f,
                 speedY = 0.5f + Random.nextFloat() * 0.5f,
                 color = listOf(
-                    Color(0xFFFF6B6B),
-                    Color(0xFF4ECDC4),
-                    Color(0xFFFFE66D),
-                    Color(0xFF95E1D3),
-                    Color(0xFFF38181),
-                    Color(0xFF3EDBF0),
-                    Color(0xFFFF9FF3)
+                    ChartColors.Secondary,
+                    ChartColors.Tertiary,
+                    ChartColors.Accent1,
+                    ChartColors.Accent2,
+                    ChartColors.Accent3,
+                    FeatureColors.WaterEnd,
+                    FeatureColors.AiEnd
                 ).random(),
                 size = 8f + Random.nextFloat() * 12f
             )
@@ -255,9 +272,14 @@ private data class ConfettiParticle(
 
 @Composable
 private fun FloatingWaterDrops(infiniteTransition: InfiniteTransition) {
-    val emojis = listOf("💧", "🌊", "💦", "🫧")
+    val dropIcons = listOf(
+        Icons.Outlined.WaterDrop,
+        Icons.Outlined.WaterDrop,
+        Icons.Outlined.WaterDrop,
+        Icons.Outlined.WaterDrop
+    )
 
-    emojis.forEachIndexed { index, emoji ->
+    dropIcons.forEachIndexed { index, icon ->
         val offsetY by infiniteTransition.animateFloat(
             initialValue = 600f,
             targetValue = -100f,
@@ -274,10 +296,13 @@ private fun FloatingWaterDrops(infiniteTransition: InfiniteTransition) {
 
         val offsetX = ((index * 80 + 50) % 300) - 150
 
-        Text(
-            text = emoji,
-            fontSize = 28.sp,
-            modifier = Modifier.offset(x = offsetX.dp, y = offsetY.dp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = FeatureColors.WaterEnd.copy(alpha = 0.65f),
+            modifier = Modifier
+                .size(28.dp)
+                .offset(x = offsetX.dp, y = offsetY.dp)
         )
     }
 }
