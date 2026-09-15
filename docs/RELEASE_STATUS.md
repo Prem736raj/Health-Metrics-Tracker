@@ -1,6 +1,6 @@
 # Release status
 
-Updated: 2026-09-11
+Updated: 2026-09-15
 
 This file records evidence that can be reproduced from the repository. It does
 not replace device, Play Console, Firebase Console, signing, or closed-test
@@ -1372,5 +1372,22 @@ These cannot be proven by a Windows unit/build run:
   `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
   passed.
 - **Remaining gates:** Weekly report rendering, TalkBack, large-font,
+  light/dark theme and route checks, plus signing, Firebase and Play Console
+  work, remain owner-only.
+
+## Ideal-weight and IBW theme-token polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** Ideal-weight healthy-range pills, IBW comparison links, home
+  summary deltas and result warning/save states now use shared semantic
+  `HealthColors` and Material theme containers instead of isolated raw color
+  literals. Existing calculations, copy, navigation and saved-result behavior
+  are unchanged; the surfaces remain readable in light and dark themes.
+- **Verification:** Focused Kotlin compilation/unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed with exit code 0; the only emitted warning was the known SDK XML
+  version compatibility notice.
+- **Remaining gates:** Ideal-weight and IBW rendering, TalkBack, large-font,
   light/dark theme and route checks, plus signing, Firebase and Play Console
   work, remain owner-only.

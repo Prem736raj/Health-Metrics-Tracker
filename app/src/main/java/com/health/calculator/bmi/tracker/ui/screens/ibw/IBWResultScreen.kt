@@ -22,6 +22,7 @@ import com.health.calculator.bmi.tracker.data.model.IBWHistoryEntry
 import com.health.calculator.bmi.tracker.data.model.IBWResult
 import com.health.calculator.bmi.tracker.data.repository.IBWStatistics
 import com.health.calculator.bmi.tracker.domain.usecase.AdjustedWeightMetrics
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun IBWResultScreen(
@@ -76,7 +77,7 @@ fun IBWResultScreen(
                         .padding(bottom = 16.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFF3E0)
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
@@ -87,13 +88,13 @@ fun IBWResultScreen(
                         Box(
                             modifier = Modifier
                                 .size(36.dp)
-                                .background(Color(0xFFFF9800).copy(alpha = 0.2f), CircleShape),
+                                .background(HealthColors.Warning.copy(alpha = 0.2f), CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 Icons.Default.Warning,
                                 contentDescription = null,
-                                tint = Color(0xFFFF9800),
+                                tint = HealthColors.Warning,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -101,7 +102,7 @@ fun IBWResultScreen(
                         Text(
                             text = warning,
                             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
-                            color = Color(0xFFE65100),
+                            color = MaterialTheme.colorScheme.onTertiaryContainer,
                             lineHeight = 18.sp
                         )
                     }
@@ -501,8 +502,8 @@ private fun ActionButtonsRow(
                 enabled = !isSaved && canSave,
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSaved) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
-                    disabledContainerColor = Color(0xFF4CAF50)
+                    containerColor = if (isSaved) HealthColors.Healthy else MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = HealthColors.Healthy
                 )
             ) {
                 Icon(

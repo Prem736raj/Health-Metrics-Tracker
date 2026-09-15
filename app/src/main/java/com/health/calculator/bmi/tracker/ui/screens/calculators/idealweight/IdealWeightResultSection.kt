@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedActionButton
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.util.Locale
 
 @Composable
@@ -89,8 +90,8 @@ fun IdealWeightResultSection(
                 // Healthy Range Pill
                 Surface(
                     shape = RoundedCornerShape(50.dp),
-                    color = Color(0xFF4CAF50).copy(alpha = 0.12f),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF4CAF50).copy(alpha = 0.3f))
+                    color = HealthColors.Healthy.copy(alpha = 0.12f),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, HealthColors.Healthy.copy(alpha = 0.3f))
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -99,14 +100,14 @@ fun IdealWeightResultSection(
                         Icon(
                             Icons.Outlined.CheckCircle,
                             contentDescription = null,
-                            tint = Color(0xFF4CAF50),
+                            tint = HealthColors.Healthy,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Adult BMI reference range: ${String.format(Locale.US, "%.1f", resultData.healthyRangeMin)} - ${String.format(Locale.US, "%.1f", resultData.healthyRangeMax)} kg",
                             style = MaterialTheme.typography.labelLarge,
-                            color = Color(0xFF2E7D32),
+                            color = HealthColors.Healthy,
                             fontWeight = FontWeight.Bold
                         )
                     }

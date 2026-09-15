@@ -1704,3 +1704,22 @@ Updated: 2026-09-14
 - **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
 - **Known limitations:** Weekly report rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining insights, tracker and secondary dialog surfaces for direct emoji rendering and raw colors.
+
+## Follow-up — Ideal-weight and IBW theme-token polish — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** Ideal-weight healthy-range pills, IBW comparison links,
+  home summary deltas and result warnings/save states now use shared semantic
+  `HealthColors` and Material theme containers instead of isolated raw color
+  literals. Existing calculations, copy, navigation and saved-result behavior
+  are unchanged; the updated surfaces now remain legible across light and dark
+  themes.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed with exit code 0 (the only output was the known SDK XML version
+  compatibility warning).
+- **Known limitations:** Ideal-weight and IBW rendering, TalkBack, large-font,
+  light/dark theme and route checks still require connected-device validation;
+  signing, Firebase and Play Console tasks remain owner-only.
+- **Next phase:** Continue auditing remaining calculator, insight and tracker
+  surfaces for raw colors, placeholders and inconsistent interaction cues.

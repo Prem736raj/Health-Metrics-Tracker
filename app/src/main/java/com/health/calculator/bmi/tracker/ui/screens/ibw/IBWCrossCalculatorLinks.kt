@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun IBWCrossCalculatorLinks(
@@ -52,7 +53,7 @@ fun IBWCrossCalculatorLinks(
                 icon = Icons.Default.MonitorWeight,
                 title = "Calculate your BMI",
                 subtitle = "See where your weight falls on the BMI scale",
-                color = Color(0xFF2196F3),
+                color = HealthColors.Good,
                 onClick = onNavigateToBMI
             )
 
@@ -62,7 +63,7 @@ fun IBWCrossCalculatorLinks(
                 icon = Icons.Default.LocalFireDepartment,
                 title = "Find your daily calories",
                 subtitle = "Calculate BMR & TDEE for your weight goals",
-                color = Color(0xFFFF9800),
+                color = HealthColors.Warning,
                 onClick = onNavigateToBMR
             )
 
@@ -72,7 +73,7 @@ fun IBWCrossCalculatorLinks(
                 icon = Icons.Default.Straighten,
                 title = "Track your waist measurement",
                 subtitle = "Waist-to-Hip Ratio for body composition insights",
-                color = Color(0xFF4CAF50),
+                color = HealthColors.Healthy,
                 onClick = onNavigateToWHR
             )
         }

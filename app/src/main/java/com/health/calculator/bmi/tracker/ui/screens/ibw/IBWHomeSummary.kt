@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.abs
 
 data class IBWHomeSummaryData(
@@ -53,9 +54,9 @@ fun IBWHomeSummaryContent(
                     else -> "${"%.1f".format(absDiff)} $unit below ideal"
                 }
                 val diffColor = when {
-                    abs(diff) < 0.5 -> Color(0xFF4CAF50)
-                    abs(diff) < 5.0 -> Color(0xFFFF9800)
-                    else -> Color(0xFFF44336)
+                    abs(diff) < 0.5 -> HealthColors.Healthy
+                    abs(diff) < 5.0 -> HealthColors.Warning
+                    else -> HealthColors.Danger
                 }
                 Text(
                     text = diffText,
