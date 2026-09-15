@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.health.calculator.bmi.tracker.data.manager.BpStreakManager
+import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 @Composable
 fun BpStreakCard(
@@ -32,7 +33,6 @@ fun BpStreakCard(
     longestStreak: Int,
     modifier: Modifier = Modifier
 ) {
-    val streakEmoji = BpStreakManager.getStreakEmoji(currentStreak)
     val motivation = BpStreakManager.getMotivationalMessage(currentStreak)
 
     Card(
@@ -55,20 +55,25 @@ fun BpStreakCard(
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                Color(0xFFFF9800).copy(alpha = 0.2f),
-                                Color(0xFFFF5722).copy(alpha = 0.2f)
+                                HealthColors.Warning.copy(alpha = 0.2f),
+                                HealthColors.Caution.copy(alpha = 0.2f)
                             )
                         )
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(streakEmoji, fontSize = 24.sp)
+                    Icon(
+                        imageVector = if (currentStreak > 0) Icons.Outlined.LocalFireDepartment else Icons.Outlined.Flag,
+                        contentDescription = if (currentStreak > 0) "Current check-in streak" else "Start a check-in streak",
+                        tint = HealthColors.Caution,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Text(
                         currentStreak.toString(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFF5722)
+                        color = HealthColors.Caution
                     )
                 }
             }
@@ -121,14 +126,14 @@ fun BpMedicationCard(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Surface(
-                        color = Color(0xFFE3F2FD),
+                        color = HealthColors.Good.copy(alpha = 0.12f),
                         shape = CircleShape,
                         modifier = Modifier.size(40.dp)
                     ) {
                         Icon(
                             Icons.Outlined.Medication,
                             contentDescription = null,
-                            tint = Color(0xFF1E88E5),
+                            tint = HealthColors.Good,
                             modifier = Modifier.padding(8.dp)
                         )
                     }
@@ -154,7 +159,7 @@ fun BpMedicationCard(
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF1E88E5),
+                            focusedBorderColor = HealthColors.Good,
                             unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                         )
                     )
@@ -210,7 +215,7 @@ fun BpDoctorSuggestionBanner(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text(stringResource(R.string.txt_set_reminder), color = Color.White, style = MaterialTheme.typography.labelLarge)
+                        Text(stringResource(R.string.txt_set_reminder), color = MaterialTheme.colorScheme.onError, style = MaterialTheme.typography.labelLarge)
                     }
                     TextButton(onClick = onDismiss) {
                         Text(stringResource(R.string.txt_dismiss), color = MaterialTheme.colorScheme.onErrorContainer)
@@ -254,7 +259,7 @@ fun BpMilestoneCelebrationDialog(
                         .clip(CircleShape)
                         .background(
                             Brush.sweepGradient(
-                                listOf(Color(0xFFFF9800), Color(0xFFFF5722), Color(0xFFFF9800))
+                                listOf(HealthColors.Warning, HealthColors.Caution, HealthColors.Warning)
                             )
                         ),
                     contentAlignment = Alignment.Center

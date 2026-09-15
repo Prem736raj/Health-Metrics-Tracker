@@ -1624,3 +1624,11 @@ Updated: 2026-09-14
   Console tasks still require owner access.
 - **Next phase:** Continue auditing remaining calculator educational/result
   surfaces for user-visible placeholders and inconsistent interaction cues.
+
+## Follow-up — Blood-pressure streak visual consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation remains open.
+- **Major changes:** The blood-pressure streak card now uses accessible vector fire/flag icons instead of a streak emoji, with semantic warning/caution tokens for its gradient and value. Medication tracking uses the shared wellness color token for its icon, surface and focused field. The doctor-suggestion action and milestone dialog use theme-aware/shared semantic colors while preserving the existing reminder and celebration behavior.
+- **Tests:** Focused Kotlin compilation/unit tests passed. The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed.
+- **Known limitations:** Blood-pressure streak, medication and milestone rendering, TalkBack, large-font, light/dark theme and route checks remain open; signing, Firebase and Play Console tasks still require owner access.
+- **Next phase:** Continue auditing remaining calculator and tracker surfaces for user-visible emoji placeholders and inconsistent interaction cues.

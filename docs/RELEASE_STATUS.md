@@ -1211,3 +1211,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Celebration rendering, TalkBack, large-font, light/dark
   theme and route checks, plus signing, Firebase and Play Console work, remain
   owner-only.
+
+## Blood-pressure streak visual consistency — 2026-09-15
+
+- **Status:** Code-fixable polish complete; device/accessibility validation
+  remains open.
+- **Changes:** The blood-pressure streak card uses vector fire/flag icons and
+  semantic warning/caution tokens instead of an emoji and raw colors.
+  Medication tracking uses the shared wellness color token for its icon,
+  surface and focused field. Doctor-suggestion and milestone actions use
+  theme-aware/shared semantic colors; reminder and celebration behavior is
+  unchanged.
+- **Verification:** Focused compilation/unit tests and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed.
+- **Remaining gates:** Blood-pressure streak, medication and milestone
+  rendering, TalkBack, large-font, light/dark theme and route checks, plus
+  signing, Firebase and Play Console work, remain owner-only.
