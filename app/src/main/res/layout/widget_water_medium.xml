@@ -82,7 +82,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="💧 Water Intake"
+                android:text="Water Intake"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@color/widget_text_primary" />
@@ -105,7 +105,7 @@
             android:id="@+id/medium_glasses_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🥛 0 glasses"
+            android:text="0 glasses"
             android:textSize="10sp"
             android:textColor="@color/widget_text_secondary"
             android:layout_marginTop="2dp" />
@@ -115,7 +115,7 @@
             android:id="@+id/medium_last_logged"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⏰ Not logged today"
+            android:text="Not logged today"
             android:textSize="9sp"
             android:textColor="@color/widget_text_secondary"
             android:layout_marginTop="2dp" />

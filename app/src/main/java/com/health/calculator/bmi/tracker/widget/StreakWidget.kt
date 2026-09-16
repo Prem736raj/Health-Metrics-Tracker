@@ -30,13 +30,13 @@ class StreakWidget : AppWidgetProvider() {
         private val milestones = listOf(3, 7, 14, 21, 30, 60, 90, 180, 365)
 
         private val motivations = listOf(
-            "You're unstoppable! 💪",
+            "You're unstoppable!",
             "Consistency is your superpower!",
             "Champions never quit. Keep going!",
-            "Your future self thanks you 🙌",
+            "Your future self thanks you",
             "Small steps = big results!",
             "One more day, one step closer!",
-            "You're on fire! Keep it up 🔥",
+            "You're on a roll! Keep it up",
             "Progress over perfection!",
             "Discipline beats motivation every time.",
             "Building habits that last a lifetime!"
@@ -66,11 +66,11 @@ class StreakWidget : AppWidgetProvider() {
             // Streak type label
             val typeLabel = when {
                 streakDays == 0 -> "No Streak Yet"
-                streakDays < 7  -> "Getting Started 🌱"
-                streakDays < 14 -> "Building Habit 📈"
-                streakDays < 30 -> "Consistent 🏃"
-                streakDays < 60 -> "Dedicated 🏆"
-                else            -> "Legend Status 👑"
+                streakDays < 7  -> "Getting Started"
+                streakDays < 14 -> "Building Habit"
+                streakDays < 30 -> "Consistent"
+                streakDays < 60 -> "Dedicated"
+                else            -> "Legend Status"
             }
             views.setTextViewText(R.id.streak_type_label, typeLabel)
 
@@ -78,9 +78,9 @@ class StreakWidget : AppWidgetProvider() {
             val nextMilestone = milestones.firstOrNull { it > streakDays }
             val milestoneText = if (nextMilestone != null) {
                 val daysLeft = nextMilestone - streakDays
-                "🎯 $daysLeft day${if (daysLeft > 1) "s" else ""} to $nextMilestone-day milestone"
+                "$daysLeft day${if (daysLeft > 1) "s" else ""} to $nextMilestone-day milestone"
             } else {
-                "🌟 You've hit all milestones!"
+                "You've hit all milestones!"
             }
             views.setTextViewText(R.id.streak_milestone, milestoneText)
 

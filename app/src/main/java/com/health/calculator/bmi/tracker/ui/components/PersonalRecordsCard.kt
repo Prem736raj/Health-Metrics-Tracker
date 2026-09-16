@@ -119,10 +119,11 @@ private fun PersonalRecordRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Icon
-            Text(
-                text = recordType.icon,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.width(32.dp)
+            Icon(
+                imageVector = personalRecordIcon(recordType),
+                contentDescription = recordType.displayName,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -181,7 +182,12 @@ private fun EmptyRecordsCard(modifier: Modifier = Modifier) {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.txt_text_placeholder_2), style = MaterialTheme.typography.headlineMedium)
+            Icon(
+                imageVector = Icons.Filled.EmojiEvents,
+                contentDescription = stringResource(R.string.txt_personal_records),
+                tint = HealthColors.Warning,
+                modifier = Modifier.size(40.dp)
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(R.string.txt_no_personal_records_yet),

@@ -20,6 +20,9 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ShowChart
+import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -271,7 +274,10 @@ private fun MiniStat(value: String, label: String, icon: androidx.compose.ui.gra
     }
 }
 
-private fun milestoneIcon(type: MilestoneType): androidx.compose.ui.graphics.vector.ImageVector = when (type.category) {
+internal fun milestoneIcon(type: MilestoneType): androidx.compose.ui.graphics.vector.ImageVector =
+    milestoneCategoryIcon(type.category)
+
+internal fun milestoneCategoryIcon(category: com.health.calculator.bmi.tracker.data.models.MilestoneCategory): androidx.compose.ui.graphics.vector.ImageVector = when (category) {
     com.health.calculator.bmi.tracker.data.models.MilestoneCategory.GETTING_STARTED -> Icons.Outlined.Flag
     com.health.calculator.bmi.tracker.data.models.MilestoneCategory.CONSISTENCY -> Icons.Outlined.CalendarMonth
     com.health.calculator.bmi.tracker.data.models.MilestoneCategory.ACHIEVEMENTS -> Icons.Outlined.EmojiEvents
@@ -280,10 +286,19 @@ private fun milestoneIcon(type: MilestoneType): androidx.compose.ui.graphics.vec
     com.health.calculator.bmi.tracker.data.models.MilestoneCategory.SOCIAL -> Icons.Outlined.Share
 }
 
-private fun personalRecordIcon(type: PersonalRecordType): androidx.compose.ui.graphics.vector.ImageVector = when {
+internal fun personalRecordIcon(type: PersonalRecordType): androidx.compose.ui.graphics.vector.ImageVector = when {
     type.name.contains("WEIGHT") -> Icons.Outlined.MonitorWeight
     type.name.contains("WATER") -> Icons.Outlined.WaterDrop
     type.name.contains("BP") || type.name.contains("HR") -> Icons.Outlined.FavoriteBorder
     type.name.contains("BMI") || type.name.contains("WHR") -> Icons.Outlined.Assessment
     else -> Icons.Outlined.EmojiEvents
+}
+
+/** Maps legacy metabolic marker labels to stable vector icons for rendering. */
+internal fun metabolicCriterionIcon(criterionName: String): androidx.compose.ui.graphics.vector.ImageVector = when {
+    criterionName.contains("waist", ignoreCase = true) -> Icons.Outlined.Straighten
+    criterionName.contains("pressure", ignoreCase = true) -> Icons.Outlined.MonitorHeart
+    criterionName.contains("glucose", ignoreCase = true) -> Icons.Outlined.Science
+    criterionName.contains("hdl", ignoreCase = true) -> Icons.Outlined.FavoriteBorder
+    else -> Icons.Outlined.Science
 }

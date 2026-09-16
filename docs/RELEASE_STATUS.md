@@ -1465,3 +1465,20 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Broader device/accessibility/theme/process-death checks,
   release signing, Firebase console/secret rotation and Play Console work remain
   owner-only.
+
+## Legacy emoji surface cleanup — 2026-09-16
+
+- **Status:** Code-fixable visual polish complete; device/accessibility
+  validation remains open.
+- **Changes:** Milestone, personal-record, metabolic criterion/status and
+  reminder-category surfaces now use shared semantic Material icons. Streak and
+  hydration widgets use vector assets and plain labels rather than
+  font-dependent emoji. Legacy marker fields are retained for persisted and
+  exported compatibility.
+- **Verification:** Added `WellnessIconMappingTest` for all affected mappings;
+  the complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and
+  `bundleRelease` gate passed with exit code 0. Known SDK XML/deprecation
+  warnings only.
+- **Remaining gates:** Full device/widget-host matrix, TalkBack, large-font,
+  light/dark themes, process death, release signing, Firebase console/key
+  restriction and Play Console work remain open.

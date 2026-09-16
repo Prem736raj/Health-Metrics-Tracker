@@ -82,9 +82,16 @@ fun MilestonesSection(
                 FilterChip(
                     selected = selectedCategory == category,
                     onClick = { onCategorySelected(category) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = milestoneCategoryIcon(category),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    },
                     label = {
                         Text(
-                            "${category.icon} ${category.displayName} ($earnedInCategory/$totalInCategory)",
+                            "${category.displayName} ($earnedInCategory/$totalInCategory)",
                             style = MaterialTheme.typography.labelSmall
                         )
                     },
@@ -161,9 +168,11 @@ private fun EarnedMilestoneItem(
                         .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = milestoneType.icon,
-                        style = MaterialTheme.typography.labelMedium
+                    Icon(
+                        imageVector = milestoneIcon(milestoneType),
+                        contentDescription = milestoneType.displayName,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(16.dp)
                     )
                 }
                 if (!isLast) {
@@ -268,12 +277,21 @@ private fun LockedMilestoneItem(milestoneType: MilestoneType) {
                 .weight(1f)
                 .padding(bottom = 4.dp)
         ) {
-            Text(
-                text = "${milestoneType.icon} ${milestoneType.displayName}",
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = milestoneIcon(milestoneType),
+                    contentDescription = milestoneType.displayName,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = milestoneType.displayName,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             Text(
                 text = milestoneType.description,
                 style = MaterialTheme.typography.labelSmall,

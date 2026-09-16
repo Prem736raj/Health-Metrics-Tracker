@@ -216,12 +216,12 @@ class WaterIntakeWidget : AppWidgetProvider() {
             )
             views.setTextViewText(
                 R.id.medium_glasses_count,
-                "\uD83E\uDD5B ${data.glassesCount} glasses"
+                "${data.glassesCount} glasses"
             )
             views.setTextViewText(
                 R.id.medium_last_logged,
-                if (data.lastLoggedTime.isEmpty()) "⏰ Not logged today"
-                else "⏰ Last: ${data.lastLoggedTime}"
+                if (data.lastLoggedTime.isEmpty()) "Not logged today"
+                else "Last: ${data.lastLoggedTime}"
             )
 
             // Draw large progress arc

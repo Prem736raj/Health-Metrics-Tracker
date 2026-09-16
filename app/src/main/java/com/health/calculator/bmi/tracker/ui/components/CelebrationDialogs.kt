@@ -70,9 +70,11 @@ fun NewRecordCelebrationDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = recordType.icon,
-                    style = MaterialTheme.typography.headlineMedium
+                Icon(
+                    imageVector = personalRecordIcon(recordType),
+                    contentDescription = recordType.displayName,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(40.dp)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -170,10 +172,13 @@ fun NewMilestoneCelebrationDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = milestoneType.icon,
-                    style = MaterialTheme.typography.displaySmall,
-                    modifier = Modifier.scale(iconScale)
+                Icon(
+                    imageVector = milestoneIcon(milestoneType),
+                    contentDescription = milestoneType.displayName,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .scale(iconScale)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -222,8 +227,15 @@ fun NewMilestoneCelebrationDialog(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Icon(
+                            imageVector = milestoneCategoryIcon(milestoneType.category),
+                            contentDescription = milestoneType.category.displayName,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "${milestoneType.category.icon} ${milestoneType.category.displayName}",
+                            text = milestoneType.category.displayName,
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.primary

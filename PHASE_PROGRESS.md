@@ -1781,3 +1781,24 @@ Updated: 2026-09-14
 - **Tests:** On emulator `emulator-5554`, the calculator hub opened, the BMI screen rendered a complete `BMI Calculator` title and clear-all action without overlap, and the Water input flow produced a visible `3.0 Liters` / `3000 ml per day` result (no blank route or fatal exception). The complete `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate passed with exit code 0 in 31m50s (known SDK XML/deprecation warnings only).
 - **Known limitations:** Broader device matrix, TalkBack, large-font, dark-theme and process-death checks remain open; release signing, Firebase console/secret rotation and Play Console work still require owner access.
 - **Next phase:** Continue only with reproduced high-impact runtime/accessibility issues; preserve the stable visual and calculator behavior now verified.
+
+## Follow-up — Legacy emoji surface cleanup — 2026-09-16
+
+- **Status:** Code-fixable visual polish complete; focused unit tests and the
+  complete release gate passed.
+- **Major changes:** Replaced direct milestone, personal-record, metabolic
+  criterion/status and reminder-category emoji rendering with shared semantic
+  Material icons. Widget streak and hydration surfaces now use vector assets
+  and plain, readable labels rather than font-dependent emoji. Legacy marker
+  fields remain in domain/persistence models for compatibility and exports;
+  calculations, navigation, reminders and saved data are unchanged.
+- **Tests:** Added `WellnessIconMappingTest` coverage for every milestone,
+  personal-record, metabolic and reminder category mapping. The complete
+  `test`, `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease`
+  gate passed with exit code 0 (known SDK XML/deprecation warnings only).
+- **Known limitations:** Connected-device rendering across the full size,
+  font-scale, theme, TalkBack and widget-host matrix remains open, as do
+  release signing, Firebase console/key restriction and Play Console tasks.
+- **Next phase:** Perform owner/device verification and address only issues
+  reproduced on supported devices; do not remove compatibility marker fields
+  without a data/export migration plan.

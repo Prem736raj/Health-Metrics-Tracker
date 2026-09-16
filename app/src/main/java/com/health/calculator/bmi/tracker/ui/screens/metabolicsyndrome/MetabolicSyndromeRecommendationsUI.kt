@@ -240,7 +240,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                         verticalAlignment = Alignment.Top
                     ) {
                         Text(
-                            text = if (item.startsWith("🏥") || item.startsWith("🚨")) "" else "•",
+                            text = "•",
                             style = MaterialTheme.typography.bodySmall,
                             color = riskColor,
                             fontWeight = FontWeight.Bold,
@@ -293,9 +293,13 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = recommendation.icon,
-                    fontSize = 24.sp
+                Icon(
+                    imageVector = com.health.calculator.bmi.tracker.ui.components.metabolicCriterionIcon(
+                        recommendation.criterionName
+                    ),
+                    contentDescription = recommendation.criterionName,
+                    tint = borderColor,
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column(modifier = Modifier.weight(1f)) {
@@ -304,12 +308,21 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold
                     )
-                    Text(
-                        text = if (recommendation.isAbnormal) "⚠️ Needs Attention" else "✅ Healthy Range",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (recommendation.isAbnormal) HealthRed else HealthGreen,
-                        fontWeight = FontWeight.SemiBold
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = if (recommendation.isAbnormal) Icons.Outlined.Warning else Icons.Outlined.CheckCircle,
+                            contentDescription = if (recommendation.isAbnormal) "Needs attention" else "Healthy range",
+                            tint = if (recommendation.isAbnormal) HealthRed else HealthGreen,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = if (recommendation.isAbnormal) "Needs Attention" else "Healthy Range",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (recommendation.isAbnormal) HealthRed else HealthGreen,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
 
                 // Status badge
@@ -460,7 +473,12 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                                 modifier = Modifier.padding(12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(stringResource(R.string.txt_text_placeholder_65), fontSize = 20.sp)
+                                Icon(
+                                    imageVector = Icons.Outlined.CheckCircle,
+                                    contentDescription = "Healthy range",
+                                    tint = HealthGreen,
+                                    modifier = Modifier.size(20.dp)
+                                )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = recommendation.normalMessage,

@@ -36,6 +36,7 @@ import com.health.calculator.bmi.tracker.ui.components.NotificationChannelSettin
 import com.health.calculator.bmi.tracker.ui.components.RateLimitInfoCard
 import com.health.calculator.bmi.tracker.ui.components.ReminderCard
 import com.health.calculator.bmi.tracker.ui.components.TimePickerDialog
+import com.health.calculator.bmi.tracker.ui.components.reminderCategoryIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -151,13 +152,24 @@ fun RemindersScreen(
 
                 grouped.forEach { (category, reminders) ->
                     item(key = "header_${category.name}") {
-                        Text(
-                            text = "${category.icon} ${category.displayName}",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                        )
+                        Row(
+                            modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = reminderCategoryIcon(category),
+                                contentDescription = category.displayName,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = category.displayName,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
 
                     items(

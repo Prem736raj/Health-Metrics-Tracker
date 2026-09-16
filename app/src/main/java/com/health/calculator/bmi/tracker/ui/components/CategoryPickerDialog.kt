@@ -21,16 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.health.calculator.bmi.tracker.data.models.ReminderCategory
 
-private fun ReminderCategory.displayIcon() = when (this) {
-    ReminderCategory.WATER_INTAKE -> Icons.Outlined.WaterDrop
-    ReminderCategory.BLOOD_PRESSURE -> Icons.Outlined.FavoriteBorder
-    ReminderCategory.WEIGHT_CHECK -> Icons.Outlined.MonitorWeight
-    ReminderCategory.MEDICATION -> Icons.Outlined.Medication
-    ReminderCategory.EXERCISE -> Icons.Outlined.DirectionsRun
-    ReminderCategory.CALORIE_LOGGING -> Icons.Outlined.Restaurant
-    ReminderCategory.CUSTOM -> Icons.Outlined.Notifications
-}
-
 @Composable
 fun CategoryPickerDialog(
     onSelect: (ReminderCategory) -> Unit,
@@ -102,7 +92,7 @@ private fun CategoryItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = category.displayIcon(),
+                imageVector = reminderCategoryIcon(category),
                 contentDescription = category.displayName,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(28.dp)

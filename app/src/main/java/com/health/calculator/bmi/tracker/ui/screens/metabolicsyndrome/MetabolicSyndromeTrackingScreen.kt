@@ -124,7 +124,12 @@ private fun EmptyTrackingState() {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(stringResource(R.string.txt_text_placeholder_9), fontSize = 48.sp)
+            Icon(
+                imageVector = Icons.Outlined.Timeline,
+                contentDescription = stringResource(R.string.txt_progress_tracking),
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = stringResource(R.string.txt_no_assessments_yet),
@@ -205,10 +210,11 @@ private fun TrendArrowRow(trend: CriterionTrend) {
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = trend.icon,
-            fontSize = 20.sp,
-            modifier = Modifier.width(28.dp)
+        Icon(
+            imageVector = com.health.calculator.bmi.tracker.ui.components.metabolicCriterionIcon(trend.name),
+            contentDescription = trend.name,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp)
         )
 
         Column(modifier = Modifier.weight(1f)) {
@@ -229,10 +235,13 @@ private fun TrendArrowRow(trend: CriterionTrend) {
             color = if (trend.currentlyMet) HealthRed.copy(alpha = 0.12f) else HealthGreen.copy(alpha = 0.12f),
             shape = RoundedCornerShape(6.dp)
         ) {
-            Text(
-                text = if (trend.currentlyMet) "⚠️" else "✅",
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+            Icon(
+                imageVector = if (trend.currentlyMet) Icons.Outlined.Warning else Icons.Outlined.CheckCircle,
+                contentDescription = if (trend.currentlyMet) "Reference exceeded" else "Within reference",
+                tint = if (trend.currentlyMet) HealthRed else HealthGreen,
+                modifier = Modifier
+                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                    .size(16.dp)
             )
         }
 

@@ -20,16 +20,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.health.calculator.bmi.tracker.data.models.ReminderCategory
 
-private fun ReminderCategory.editIcon() = when (this) {
-    ReminderCategory.WATER_INTAKE -> Icons.Outlined.WaterDrop
-    ReminderCategory.BLOOD_PRESSURE -> Icons.Outlined.FavoriteBorder
-    ReminderCategory.WEIGHT_CHECK -> Icons.Outlined.MonitorWeight
-    ReminderCategory.MEDICATION -> Icons.Outlined.Medication
-    ReminderCategory.EXERCISE -> Icons.Outlined.DirectionsRun
-    ReminderCategory.CALORIE_LOGGING -> Icons.Outlined.Restaurant
-    ReminderCategory.CUSTOM -> Icons.Outlined.Notifications
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReminderEditDialog(
@@ -98,7 +88,7 @@ fun ReminderEditDialog(
                     singleLine = true,
                     leadingIcon = {
                         Icon(
-                            imageVector = category.editIcon(),
+                        imageVector = reminderCategoryIcon(category),
                             contentDescription = category.displayName
                         )
                     }

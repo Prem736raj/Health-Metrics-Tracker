@@ -25,7 +25,8 @@
 <string name="widget_streak_days">days</string>
 <string name="widget_quick_calc_description">⚡ Quick access to your 4 favourite calculators</string>
 <string name="widget_single_calc_description">📊 Single calculator with last result</string>
-<string name="widget_streak_description">🔥 View your current activity streak</string>
+<string name="widget_streak_description">View your current activity streak</string>
+<string name="widget_streak_icon_description">Activity streak</string>
 
     <!-- Widget error states -->
 <string name="widget_error_no_data">Open app to get started</string>
