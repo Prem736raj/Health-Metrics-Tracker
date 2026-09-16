@@ -9,7 +9,8 @@ import android.widget.RemoteViews
 object WidgetErrorHandler {
 
     data class ErrorConfig(
-        val emoji: String,
+        /** Compact, font-stable marker shown in the widget's numeric slot. */
+        val marker: String,
         val title: String,
         val subtitle: String,
         val actionText: String
@@ -18,31 +19,31 @@ object WidgetErrorHandler {
     fun getErrorConfig(state: WidgetStateManager.WidgetState): ErrorConfig {
         return when (state) {
             WidgetStateManager.WidgetState.EMPTY -> ErrorConfig(
-                emoji      = "📊",
+                marker     = "—",
                 title      = "No data yet",
                 subtitle   = "Open app to get started",
                 actionText = "Open App"
             )
             WidgetStateManager.WidgetState.STALE -> ErrorConfig(
-                emoji      = "🔄",
+                marker     = "↻",
                 title      = "Data is outdated",
                 subtitle   = "Tap to refresh",
                 actionText = "Refresh"
             )
             WidgetStateManager.WidgetState.SETUP_REQUIRED -> ErrorConfig(
-                emoji      = "⚙️",
+                marker     = "!",
                 title      = "Setup required",
                 subtitle   = "Open app to set up",
                 actionText = "Set Up"
             )
             WidgetStateManager.WidgetState.ERROR -> ErrorConfig(
-                emoji      = "⚠️",
+                marker     = "!",
                 title      = "Something went wrong",
                 subtitle   = "Tap to try again",
                 actionText = "Retry"
             )
             WidgetStateManager.WidgetState.HEALTHY -> ErrorConfig(
-                emoji      = "✅",
+                marker     = "✓",
                 title      = "Healthy",
                 subtitle   = "",
                 actionText = ""
@@ -59,12 +60,12 @@ object WidgetErrorHandler {
         state: WidgetStateManager.WidgetState,
         titleViewId: Int,
         subtitleViewId: Int,
-        emojiViewId: Int? = null
+        markerViewId: Int? = null
     ) {
         val config = getErrorConfig(state)
         views.setTextViewText(titleViewId, config.title)
         views.setTextViewText(subtitleViewId, config.subtitle)
-        emojiViewId?.let { views.setTextViewText(it, config.emoji) }
+        markerViewId?.let { views.setTextViewText(it, config.marker) }
     }
 
     /**
@@ -80,9 +81,9 @@ object WidgetErrorHandler {
      */
     fun getStaleBadge(state: WidgetStateManager.WidgetState): String? {
         return when (state) {
-            WidgetStateManager.WidgetState.STALE          -> "⚠ Outdated"
-            WidgetStateManager.WidgetState.SETUP_REQUIRED -> "⚙ Setup needed"
-            WidgetStateManager.WidgetState.EMPTY          -> "📊 No data"
+            WidgetStateManager.WidgetState.STALE          -> "Outdated"
+            WidgetStateManager.WidgetState.SETUP_REQUIRED -> "Setup needed"
+            WidgetStateManager.WidgetState.EMPTY          -> "No data"
             else                                           -> null
         }
     }

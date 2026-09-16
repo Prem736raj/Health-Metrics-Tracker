@@ -89,7 +89,7 @@ object PolishedWidgetUpdater {
                 else -> {
                     // Error / empty state
                     val config = WidgetErrorHandler.getErrorConfig(state)
-                    views.setTextViewText(intakeId, config.emoji)
+                    views.setTextViewText(intakeId, config.marker)
                     views.setTextViewText(pctId,    "")
                 }
             }
@@ -191,7 +191,7 @@ object PolishedWidgetUpdater {
             }
             else -> {
                 val config = WidgetErrorHandler.getErrorConfig(state)
-                views.setTextViewText(R.id.txt_health_score, config.emoji)
+                views.setTextViewText(R.id.txt_health_score, config.marker)
                 views.setTextViewText(R.id.txt_score_status, config.subtitle)
                 
                 // Reset card values if in error/empty state

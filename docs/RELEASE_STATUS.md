@@ -1482,3 +1482,17 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Full device/widget-host matrix, TalkBack, large-font,
   light/dark themes, process death, release signing, Firebase console/key
   restriction and Play Console work remain open.
+
+## Widget fallback and recovery-state polish — 2026-09-16
+
+- **Status:** Code-fixable reliability and trust polish complete; device
+  validation remains open.
+- **Changes:** Widget error/empty markers and stale badges no longer depend on
+  emoji fonts. The generic fallback destination now uses a vector info icon and
+  accurate recovery copy instead of “Coming soon.”
+- **Verification:** Added widget marker tests; `test`, `lintRelease`,
+  `assembleDebug`, `assembleRelease` and `bundleRelease` passed with exit code
+  0. Known SDK XML/deprecation warnings only.
+- **Remaining gates:** Device/widget-host matrix, TalkBack, large-font,
+  light/dark themes, process death, release signing, Firebase console/key
+  restriction and Play Console work remain open.

@@ -23,8 +23,8 @@
 <string name="widget_target">Target</string>
 <string name="widget_today">Today</string>
 <string name="widget_streak_days">days</string>
-<string name="widget_quick_calc_description">⚡ Quick access to your 4 favourite calculators</string>
-<string name="widget_single_calc_description">📊 Single calculator with last result</string>
+<string name="widget_quick_calc_description">Quick access to your 4 favourite calculators</string>
+<string name="widget_single_calc_description">Single calculator with last result</string>
 <string name="widget_streak_description">View your current activity streak</string>
 <string name="widget_streak_icon_description">Activity streak</string>
 
@@ -56,6 +56,7 @@
 <string name="data_management_button">Data Management</string>
     
 <string name="coming_soon_text">Coming soon...</string>
+<string name="fallback_screen_message">This screen is not available right now. Please go back and try again.</string>
 
     <!-- Extracted UI Strings -->
 <string name="txt_calculators">Calculators</string>

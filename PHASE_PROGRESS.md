@@ -1802,3 +1802,21 @@ Updated: 2026-09-14
 - **Next phase:** Perform owner/device verification and address only issues
   reproduced on supported devices; do not remove compatibility marker fields
   without a data/export migration plan.
+
+## Follow-up — Widget fallback and recovery-state polish — 2026-09-16
+
+- **Status:** Code-fixable reliability and trust polish complete; full release
+  gate passed.
+- **Major changes:** Widget error/empty states now use compact font-stable
+  markers instead of emoji in numeric slots and stale badges. The generic
+  fallback destination now uses a semantic vector info icon and explains how
+  to recover, rather than presenting an unfinished “Coming soon” message.
+  Existing navigation, data access and widget actions are unchanged.
+- **Tests:** Added coverage ensuring every widget error marker is non-blank and
+  independent of emoji fonts. Focused unit tests plus `test`, `lintRelease`,
+  `assembleDebug`, `assembleRelease` and `bundleRelease` all passed with exit
+  code 0 (known SDK XML/deprecation warnings only).
+- **Known limitations:** Device/widget-host, accessibility, font-scale, theme,
+  process-death, signing, Firebase and Play Console verification remain open.
+- **Next phase:** Validate fallback and widget states on supported hosts and
+  continue only with issues reproduced in runtime testing.
