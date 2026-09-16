@@ -1836,3 +1836,24 @@ Updated: 2026-09-14
 - **Next phase:** Repeat the same smoke journey on release-like signed builds
   and complete the broader runtime matrix when those environments are
   available.
+
+## Follow-up — Calendar-aware food log refresh — 2026-09-16
+
+- **Status:** Code-fixable data-boundary polish complete; focused and full
+  release gates passed.
+- **Major changes:** FoodLogRepository now exposes a stable day-scoped
+  StateFlow and refreshes at each local midnight, with bounded clock/timezone
+  rechecks. Yesterday's entries are archived before reset, local ISO-date
+  conversion is thread-safe, and reset/write operations are serialized. Food
+  writes also re-check the day boundary, preventing a tap around midnight from
+  being stored in the prior day's log. Existing JSON keys, history retention,
+  and persisted data remain compatible.
+- **Tests:** Extended FoodLogDayPolicyTest with a daylight-saving/local-midnight
+  boundary assertion. Focused regression and the complete `test`,
+  `lintRelease`, `assembleDebug`, `assembleRelease` and `bundleRelease` gate
+  passed with exit code 0 (known SDK XML/deprecation warnings only).
+- **Known limitations:** Device process-death, midnight/timezone-change,
+  multi-instance and restore behavior still require connected-device
+  verification; signing, Firebase and Play Console gates remain owner-only.
+- **Next phase:** Validate calendar rollover on supported devices and continue
+  only with reproduced data-boundary issues.

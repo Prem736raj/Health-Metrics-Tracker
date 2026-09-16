@@ -10,10 +10,19 @@ import com.health.calculator.bmi.tracker.data.model.FoodPreset
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class FoodLogRepository @Inject constructor(@ApplicationContext private val context: Context) {
 
@@ -24,20 +33,20 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         context.getSharedPreferences("food_presets", Context.MODE_PRIVATE)
     }
 
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    private val todayKey get() = dateFormat.format(Date())
+    /** ISO dates sort chronologically and the formatter is safe across threads. */
+    private val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE
+    private val todayKey: String
+        get() = LocalDate.now(ZoneId.systemDefault()).format(dateFormat)
 
     private val _todayLog = MutableStateFlow(emptyDailyLog())
     /**
-     * The food log is day-scoped. Re-check the date whenever a consumer asks
-     * for the stream so a process that stays alive across midnight cannot keep
-     * showing yesterday's entries indefinitely.
+     * The food log is day-scoped. The repository refreshes at the next local
+     * midnight (and periodically while waiting), so a process that stays alive
+     * across midnight cannot keep showing yesterday's entries indefinitely.
      */
-    val todayLog: StateFlow<DailyFoodLog>
-        get() {
-            checkAndResetIfNewDay()
-            return _todayLog.asStateFlow()
-        }
+    val todayLog: StateFlow<DailyFoodLog> = _todayLog.asStateFlow()
+
+    private val dateRefreshScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private val _customPresets = MutableStateFlow<List<FoodPreset>>(emptyList())
     val customPresets: StateFlow<List<FoodPreset>> = _customPresets.asStateFlow()
@@ -63,9 +72,26 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
     init {
         loadTodayLog()
         loadCustomPresets()
+        scheduleDateRefresh()
     }
 
+    private fun scheduleDateRefresh() {
+        dateRefreshScope.launch {
+            while (isActive) {
+                val now = ZonedDateTime.now(ZoneId.systemDefault())
+                val untilMidnight = FoodLogDayPolicy.nextMidnightDelayMillis(now)
+
+                // Re-check hourly at most so a timezone or clock adjustment
+                // is reflected promptly even when the process remains alive.
+                delay(untilMidnight.coerceAtMost(MAX_DATE_REFRESH_DELAY_MS))
+                checkAndResetIfNewDay()
+            }
+        }
+    }
+
+    @Synchronized
     fun addEntry(entry: FoodEntry) {
+        checkAndResetIfNewDay()
         val current = _todayLog.value
         val updatedEntries = current.entries + entry
         val updated = current.copy(entries = updatedEntries)
@@ -73,7 +99,9 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         saveTodayLog(updated)
     }
 
+    @Synchronized
     fun removeEntry(entryId: Long) {
+        checkAndResetIfNewDay()
         val current = _todayLog.value
         val updatedEntries = current.entries.filter { it.id != entryId }
         val updated = current.copy(entries = updatedEntries)
@@ -81,12 +109,14 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         saveTodayLog(updated)
     }
 
+    @Synchronized
     fun updateDailyTargets(
         targetCalories: Double,
         targetProtein: Double = 0.0,
         targetCarbs: Double = 0.0,
         targetFat: Double = 0.0
     ) {
+        checkAndResetIfNewDay()
         val updated = _todayLog.value.copy(
             targetCalories = targetCalories,
             targetProteinGrams = targetProtein,
@@ -111,6 +141,7 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         saveCustomPresets(current)
     }
 
+    @Synchronized
     fun checkAndResetIfNewDay() {
         val savedDate = prefs.getString("log_date", "") ?: ""
         val today = todayKey
@@ -324,8 +355,15 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         val allHistory = getHistoricalLogs()
         val today = _todayLog.value
         
-        val startStr = dateFormat.format(Date(startMillis))
-        val endStr = dateFormat.format(Date(endMillis))
+        val zone = ZoneId.systemDefault()
+        val startStr = java.time.Instant.ofEpochMilli(startMillis)
+            .atZone(zone)
+            .toLocalDate()
+            .format(dateFormat)
+        val endStr = java.time.Instant.ofEpochMilli(endMillis)
+            .atZone(zone)
+            .toLocalDate()
+            .format(dateFormat)
         
         return (allHistory + today).filter { log ->
             log.date >= startStr && log.date <= endStr
@@ -335,4 +373,12 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
 
 internal object FoodLogDayPolicy {
     fun needsReset(savedDate: String, today: String): Boolean = savedDate != today
+
+    fun nextMidnightDelayMillis(now: ZonedDateTime): Long =
+        Duration.between(now, now.toLocalDate().plusDays(1).atStartOfDay(now.zone))
+            .toMillis()
+            .coerceAtLeast(MIN_DATE_REFRESH_DELAY_MS)
 }
+
+private const val MIN_DATE_REFRESH_DELAY_MS = 1_000L
+private const val MAX_DATE_REFRESH_DELAY_MS = 60 * 60 * 1_000L

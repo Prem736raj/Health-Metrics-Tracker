@@ -1508,3 +1508,22 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Release-like signed build, broader API/device and
   widget-host matrix, TalkBack, large-font, themes, process death, migration,
   performance, Firebase and Play Console validation remain open.
+
+## Calendar-aware food log refresh — 2026-09-16
+
+- **Status:** Code-fixable data-boundary polish complete; focused and full
+  release gates passed.
+- **Changes:** FoodLogRepository now refreshes the day-scoped StateFlow at the
+  next local midnight with bounded clock/timezone rechecks, archives yesterday
+  before reset, uses thread-safe ISO local-date conversion, and serializes
+  reset/write operations. Every food-log write also checks the current day, so
+  entries cannot be appended to yesterday around midnight. Persisted JSON keys,
+  history retention and existing user data remain compatible.
+- **Verification:** Added a DST/local-midnight boundary regression test. The
+  focused test and complete `test`, `lintRelease`, `assembleDebug`,
+  `assembleRelease` and `bundleRelease` gate passed with exit code 0; only
+  known SDK XML/deprecation warnings were emitted.
+- **Remaining gates:** Device process-death, midnight/timezone-change,
+  multi-instance and restore checks, broader API/device/accessibility/theme
+  coverage, release signing, Firebase console/key restriction and Play Console
+  work remain open.
