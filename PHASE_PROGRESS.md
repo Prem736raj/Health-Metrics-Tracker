@@ -1820,3 +1820,19 @@ Updated: 2026-09-14
   process-death, signing, Firebase and Play Console verification remain open.
 - **Next phase:** Validate fallback and widget states on supported hosts and
   continue only with issues reproduced in runtime testing.
+
+## Runtime smoke verification — 2026-09-16
+
+- **Status:** Focused emulator smoke passed for the current `master` build.
+- **Evidence:** Installed the debug APK on `emulator-5554` (`small_phone`),
+  cold-started the app, opened Profile and the Calculator hub, opened the
+  Water input route, entered 70 kg / 30 years, scrolled to the action and
+  opened the result. The result exposed `3.0 Liters` and `3000 ml per day`,
+  with Recalculate, Save and Share actions visible. The crash buffer and fatal
+  log scan were empty throughout the journey.
+- **Known limitations:** This is not a substitute for the full API/device,
+  widget-host, TalkBack, font-scale, theme, process-death, migration,
+  performance or owner-console gates.
+- **Next phase:** Repeat the same smoke journey on release-like signed builds
+  and complete the broader runtime matrix when those environments are
+  available.

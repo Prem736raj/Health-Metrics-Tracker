@@ -1496,3 +1496,15 @@ These cannot be proven by a Windows unit/build run:
 - **Remaining gates:** Device/widget-host matrix, TalkBack, large-font,
   light/dark themes, process death, release signing, Firebase console/key
   restriction and Play Console work remain open.
+
+## Runtime smoke verification — 2026-09-16
+
+- **Status:** Focused emulator smoke passed for the current `master` build.
+- **Verification:** On `emulator-5554` (`small_phone`), cold start, Profile,
+  Calculator hub, Water input and Water result were exercised. Entering 70 kg
+  and 30 years produced a visible `3.0 Liters` / `3000 ml per day` result;
+  Recalculate, Save and Share were visible. `adb logcat -b crash` and a fatal
+  exception scan were empty.
+- **Remaining gates:** Release-like signed build, broader API/device and
+  widget-host matrix, TalkBack, large-font, themes, process death, migration,
+  performance, Firebase and Play Console validation remain open.
