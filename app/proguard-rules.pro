@@ -12,18 +12,15 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
 # --- Custom ProGuard Rules ---
 
-# Keep line numbers for Crashlytics/stack traces
+# Keep line numbers for Crashlytics/Play Console stack traces
 -keepattributes SourceFile,LineNumberTable
+
+# Renames source files to "SourceFile" for consistent mapping.
+# Upload the R8 mapping file from app/build/outputs/mapping/release/mapping.txt
+# to Play Console for readable stack traces.
+-renamesourcefileattribute SourceFile
 
 # Coroutines
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
@@ -56,6 +53,13 @@
 # provider remains optional at compile time. Keep the public entry points for
 # opted-in release builds; collection is still disabled by default.
 -keep class com.google.firebase.analytics.FirebaseAnalytics { *; }
+
+# Health Connect client — the SDK uses reflection internally for record
+# type resolution. Keep the record classes used by the app.
+-keep class androidx.health.connect.client.records.StepsRecord { *; }
+-keep class androidx.health.connect.client.records.WeightRecord { *; }
+-keep class androidx.health.connect.client.** { *; }
+-dontwarn androidx.health.connect.client.**
 
 # Coil
 -keep class coil.** { *; }
