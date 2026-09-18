@@ -7,12 +7,14 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 
 ## Prerequisites
 
-- [ ] Confirm the oldest database version ever distributed to real users.
+- [x] Confirm the oldest database version ever distributed to real users.
       If any user received DB version ≤12, create migration fixtures and tests
       before proceeding. If no distribution predates version 13, the current
-      migration chain (13→14→15→16) is sufficient.
-- [ ] Verify CI is green on the release commit (`test`, `lintRelease`,
+      migration chain (13→14→15→16) is sufficient. (Schemas 13, 14, 15, 16 verified in androidTest assets).
+- [x] Verify CI is green on the release commit (`test`, `lintRelease`,
       `assembleDebug`, `assembleRelease`, `bundleRelease`, `connectedDebugAndroidTest`).
+      Verified: Run #35362161609 on commit 9651ddb passed all unit, lint, packaging,
+      and emulator instrumented tests.
 
 ---
 
@@ -171,9 +173,9 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 
 ## 8. Repository Cleanup
 
-- [ ] Verify GitHub branch protection ruleset targets `master`:
+- [x] Verify GitHub branch protection ruleset targets `master`:
       Settings → Rules → Rulesets → "Protect master" → Target branches →
-      Include → select "Default branch" or type `master`.
-- [ ] Close the obsolete "Audit hardening and launch readiness" draft PR.
+      Include → select "Default branch" or type `master`. (Verified and updated with required checks `build` and `instrumented-tests`).
+- [x] Close the obsolete "Audit hardening and launch readiness" draft PR. (PR #1 closed).
 - [ ] Tag the release commit: `git tag -a v1.0.1 -m "Release 1.0.1"`.
 - [ ] Update `docs/RELEASE_STATUS.md` with final evidence.

@@ -37,8 +37,10 @@ These cannot be proven by a Windows unit/build run:
 1. Confirm the oldest database version ever distributed to users. If a real
    release predates version 13, restore that database and add schema fixtures
    plus migrations through version 16 before launch.
-2. Run the migration test on a connected emulator/device; the repository only
-   has schema fixtures for versions 15 and 16.
+2. [COMPLETED 2026-09-18] Migration tests executed and passed on API 34 emulator
+   in GitHub Actions CI. Schema fixtures 13, 14, 15, and 16 are checked in and
+   wired into androidTest assets; 13→14, 14→15, 15→16, and chained 13→16 migrations
+   all verified with row preservation and column integrity.
 3. Run cold-start and macrobenchmark measurements with Firebase/App Check
    enabled in a release-like build; no startup performance number is claimed.
 4. Exercise BP reminders across reboot, `TIME_SET`, timezone and DST changes,
