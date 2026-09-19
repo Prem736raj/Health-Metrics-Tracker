@@ -73,8 +73,7 @@ fun TrackHubScreen(
 ) {
     HubScaffold(
         title = "Track",
-        subtitle = "Small check-ins that make trends useful",
-        icon = Icons.Outlined.DirectionsWalk
+        subtitle = "Small check-ins that make trends useful"
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
@@ -119,8 +118,7 @@ fun CalculatorsHubScreen(onOpen: (CalculatorDestination) -> Unit) {
     var selectedInfo by remember { mutableStateOf<CalculatorQualityInfo?>(null) }
     HubScaffold(
         title = "Calculators",
-        subtitle = "Estimates with context, limits and sources",
-        icon = Icons.Outlined.Calculate
+        subtitle = "Estimates with context, limits and sources"
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
@@ -162,8 +160,7 @@ fun InsightsHubScreen(
 ) {
     HubScaffold(
         title = "Insights",
-        subtitle = "Patterns from the information you choose to record",
-        icon = Icons.Outlined.AutoAwesome
+        subtitle = "Patterns from the information you choose to record"
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
@@ -277,7 +274,6 @@ private fun CalculatorHubCard(
 private fun HubScaffold(
     title: String,
     subtitle: String,
-    icon: ImageVector,
     content: @Composable (androidx.compose.foundation.layout.PaddingValues) -> Unit
 ) {
     Scaffold(
@@ -288,14 +284,6 @@ private fun HubScaffold(
                         Text(title, fontWeight = FontWeight.Bold)
                         Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                },
-                navigationIcon = {
-                    WellnessIconBadge(
-                        icon = icon,
-                        tint = MaterialTheme.colorScheme.primary,
-                        container = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.75f),
-                        modifier = Modifier.padding(start = 12.dp)
-                    )
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
