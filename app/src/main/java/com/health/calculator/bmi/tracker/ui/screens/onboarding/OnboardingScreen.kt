@@ -1,8 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.onboarding
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
-import com.health.calculator.bmi.tracker.core.brand.BrandVoice
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -41,10 +41,10 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.outlined.Assignment
+import androidx.compose.material.icons.automirrored.outlined.DirectionsWalk
 import androidx.compose.material.icons.outlined.Analytics
-import androidx.compose.material.icons.outlined.Assignment
-import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.MonitorHeart
@@ -85,71 +85,57 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-// ─── Onboarding Page Data ─────────────────────────────────────────────────────
-
 private data class OnboardingPage(
     val icon: ImageVector,
     val decorativeIcons: List<ImageVector>,
-    val title: String,
-    val subtitle: String,
-    val description: String
+    @StringRes val titleRes: Int,
+    @StringRes val subtitleRes: Int,
+    @StringRes val descriptionRes: Int
 )
 
-/** The first useful destination a new user can choose without completing a profile. */
 enum class OnboardingStartAction(
-    val label: String,
-    val description: String,
+    @StringRes val labelRes: Int,
+    @StringRes val descriptionRes: Int,
     val analyticsValue: String,
     val icon: ImageVector
 ) {
-    WATER("Water", "Log a drink", "water", Icons.Outlined.WaterDrop),
-    WEIGHT("Weight", "Start a trend", "weight", Icons.Outlined.MonitorWeight),
-    STEPS("Steps", "Connect when ready", "steps", Icons.Outlined.DirectionsWalk),
-    CALCULATORS("BMI calculator", "Get a quick estimate", "calculator", Icons.Outlined.Analytics)
+    WATER(R.string.onboarding_action_water, R.string.onboarding_action_water_description, "water", Icons.Outlined.WaterDrop),
+    WEIGHT(R.string.onboarding_action_weight, R.string.onboarding_action_weight_description, "weight", Icons.Outlined.MonitorWeight),
+    STEPS(R.string.onboarding_action_steps, R.string.onboarding_action_steps_description, "steps", Icons.AutoMirrored.Outlined.DirectionsWalk),
+    CALCULATORS(R.string.onboarding_action_bmi, R.string.onboarding_action_bmi_description, "calculator", Icons.Outlined.Analytics)
 }
 
 private val onboardingPages = listOf(
     OnboardingPage(
         icon = Icons.Outlined.FavoriteBorder,
-        decorativeIcons = listOf(Icons.Outlined.MonitorHeart, Icons.Outlined.DirectionsWalk, Icons.Outlined.WaterDrop),
-        title = "Welcome to\nHealth Metrics Tracker",
-        subtitle = BrandVoice.TAGLINE,
-        description = "Choose a few everyday measures to track, then understand them with clear, informational estimates. Your records stay private on this device."
+        decorativeIcons = listOf(Icons.Outlined.MonitorHeart, Icons.AutoMirrored.Outlined.DirectionsWalk, Icons.Outlined.WaterDrop),
+        titleRes = R.string.onboarding_welcome_title,
+        subtitleRes = R.string.txt_your_personal_health_companion,
+        descriptionRes = R.string.onboarding_welcome_description
     ),
     OnboardingPage(
         icon = Icons.Outlined.Analytics,
-        decorativeIcons = listOf(Icons.Outlined.MonitorWeight, Icons.Outlined.Timeline, Icons.Outlined.Assignment),
-        title = "10 practical\nhealth calculators",
-        subtitle = "Evidence-informed estimates",
-        description = "From BMI and BMR to blood pressure and heart-rate zones — each tool explains its method, sources, and limits."
+        decorativeIcons = listOf(Icons.Outlined.MonitorWeight, Icons.Outlined.Timeline, Icons.AutoMirrored.Outlined.Assignment),
+        titleRes = R.string.onboarding_calculators_title,
+        subtitleRes = R.string.onboarding_calculators_subtitle,
+        descriptionRes = R.string.onboarding_calculators_description
     ),
     OnboardingPage(
         icon = Icons.Outlined.Timeline,
-        decorativeIcons = listOf(Icons.Outlined.Analytics, Icons.Outlined.Flag, Icons.Outlined.DirectionsWalk),
-        title = "Start with one\nsmall step",
-        subtitle = "Choose what feels useful today",
-        description = "Pick one quick action now. You can change it later — nothing is required, and missing a day does not erase your progress."
+        decorativeIcons = listOf(Icons.Outlined.Analytics, Icons.Outlined.Flag, Icons.AutoMirrored.Outlined.DirectionsWalk),
+        titleRes = R.string.onboarding_start_title,
+        subtitleRes = R.string.onboarding_start_subtitle,
+        descriptionRes = R.string.onboarding_start_description
     )
 )
 
 @Composable
-private fun onboardingAccentColor(pageIndex: Int): Color {
-    return when (pageIndex % 3) {
-        0 -> MaterialTheme.colorScheme.primary
-        1 -> MaterialTheme.colorScheme.secondary
-        else -> MaterialTheme.colorScheme.tertiary
-    }
+private fun onboardingAccentColor(pageIndex: Int): Color = when (pageIndex % 3) {
+    0 -> MaterialTheme.colorScheme.primary
+    1 -> MaterialTheme.colorScheme.secondary
+    else -> MaterialTheme.colorScheme.tertiary
 }
 
-// ─── Main Onboarding Screen ──────────────────────────────────────────────────
-
-/**
- * Full-screen onboarding flow shown only on first app launch.
- * Contains three swipeable pages with page indicators and a first-action choice.
- *
- * @param onComplete Called when user taps "Get Started" / "Skip" — navigates to Home
- * @param onSetUpProfile Optional legacy shortcut for users who want to personalize first.
- */
 @Composable
 fun OnboardingScreen(
     onComplete: () -> Unit,
@@ -160,109 +146,47 @@ fun OnboardingScreen(
     val scope = rememberCoroutineScope()
     val isLastPage = pagerState.currentPage == onboardingPages.size - 1
     var selectedStartAction by remember { mutableStateOf<OnboardingStartAction?>(null) }
-
-    // Entrance animation
     var showContent by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        delay(100)
-        showContent = true
-    }
+    LaunchedEffect(Unit) { delay(100); showContent = true }
 
-    Scaffold(
-        containerColor = Color.Transparent
-    ) { innerPadding ->
+    Scaffold(containerColor = Color.Transparent) { innerPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.surface,
-                            MaterialTheme.colorScheme.background
-                        )
-                    )
-                )
+            modifier = Modifier.fillMaxSize().background(
+                Brush.verticalGradient(listOf(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.background))
+            )
         ) {
-            AnimatedVisibility(
-                visible = showContent,
-                enter = fadeIn(tween(500))
-            ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                // ── Skip Button ───────────────────────────────────────────
-                AnimatedVisibility(
-                    visible = !isLastPage,
-                    enter = fadeIn(tween(200)),
-                    exit = fadeOut(tween(200)),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        TextButton(onClick = onComplete) {
-                            Text(
-                                text = stringResource(R.string.txt_skip),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                            )
+            AnimatedVisibility(visible = showContent, enter = fadeIn(tween(500))) {
+                Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                    AnimatedVisibility(visible = !isLastPage, enter = fadeIn(tween(200)), exit = fadeOut(tween(200)), modifier = Modifier.fillMaxWidth()) {
+                        Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), contentAlignment = Alignment.CenterEnd) {
+                            TextButton(onClick = onComplete) {
+                                Text(stringResource(R.string.txt_skip), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                            }
                         }
                     }
-                }
-
-                // ── Pager Content ─────────────────────────────────────────
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) { pageIndex ->
-                    OnboardingPageContent(
-                        page = onboardingPages[pageIndex],
-                        pageIndex = pageIndex,
-                        isCurrentPage = pagerState.currentPage == pageIndex,
-                        selectedAction = selectedStartAction,
-                        onSelectAction = { selectedStartAction = it }
+                    HorizontalPager(state = pagerState, modifier = Modifier.weight(1f).fillMaxWidth()) { pageIndex ->
+                        OnboardingPageContent(
+                            page = onboardingPages[pageIndex], pageIndex = pageIndex,
+                            isCurrentPage = pagerState.currentPage == pageIndex,
+                            selectedAction = selectedStartAction, onSelectAction = { selectedStartAction = it }
+                        )
+                    }
+                    BottomSection(
+                        pagerState = pagerState, isLastPage = isLastPage,
+                        onNext = { scope.launch { pagerState.animateScrollToPage(page = pagerState.currentPage + 1, animationSpec = tween(400, easing = FastOutSlowInEasing)) } },
+                        onComplete = onComplete, onSetUpProfile = onSetUpProfile,
+                        selectedAction = selectedStartAction, onStartAction = onStartAction
                     )
                 }
-
-                // ── Bottom Section ────────────────────────────────────────
-                BottomSection(
-                    pagerState = pagerState,
-                    isLastPage = isLastPage,
-                    onNext = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(
-                                page = pagerState.currentPage + 1,
-                                animationSpec = tween(400, easing = FastOutSlowInEasing)
-                            )
-                        }
-                    },
-                    onComplete = onComplete,
-                    onSetUpProfile = onSetUpProfile,
-                    selectedAction = selectedStartAction,
-                    onStartAction = onStartAction
-                )
             }
-        }
         }
     }
 }
 
-// ─── Onboarding Page Content ──────────────────────────────────────────────────
-
 @Composable
 private fun OnboardingPageContent(
-    page: OnboardingPage,
-    pageIndex: Int,
-    isCurrentPage: Boolean,
-    selectedAction: OnboardingStartAction?,
-    onSelectAction: (OnboardingStartAction) -> Unit
+    page: OnboardingPage, pageIndex: Int, isCurrentPage: Boolean,
+    selectedAction: OnboardingStartAction?, onSelectAction: (OnboardingStartAction) -> Unit
 ) {
     val accentColor = onboardingAccentColor(pageIndex)
     val isActionPage = pageIndex == onboardingPages.lastIndex
@@ -272,7 +196,6 @@ private fun OnboardingPageContent(
     val innerIllustrationSize = if (isActionPage) 84.dp else 110.dp
     val illustrationIconSize = if (isActionPage) 38.dp else 48.dp
 
-    // Icon entrance animation
     val iconScale = remember { Animatable(0.5f) }
     LaunchedEffect(isCurrentPage) {
         if (isCurrentPage) {
@@ -283,8 +206,6 @@ private fun OnboardingPageContent(
             )
         }
     }
-
-    // Subtle floating animation
     val infiniteTransition = rememberInfiniteTransition(label = "float_$pageIndex")
     val floatY by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -296,422 +217,147 @@ private fun OnboardingPageContent(
         label = "float_y_$pageIndex"
     )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // ── Illustration Area ─────────────────────────────────────────
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(illustrationBoxSize)
-                .scale(iconScale.value)
-        ) {
-            // Decorative vector icons reinforce the page without relying on
-            // emoji glyphs that vary by device and theme.
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(illustrationBoxSize).scale(iconScale.value)) {
             page.decorativeIcons.forEachIndexed { index, icon ->
                 val angle = (360f / page.decorativeIcons.size) * index
-                val radius = illustrationRadius
                 val radians = Math.toRadians(angle.toDouble())
-                val x = (radius.value * Math.cos(radians)).toFloat()
-                val y = (radius.value * Math.sin(radians)).toFloat()
-
+                val x = (illustrationRadius.value * Math.cos(radians)).toFloat()
+                val y = (illustrationRadius.value * Math.sin(radians)).toFloat()
                 val decorFloat by infiniteTransition.animateFloat(
                     initialValue = 0f,
                     targetValue = 6f,
                     animationSpec = infiniteRepeatable(
-                        animation = tween(
-                            2000 + (index * 300),
-                            easing = EaseInOut
-                        ),
+                        animation = tween(2000 + index * 300, easing = EaseInOut),
                         repeatMode = RepeatMode.Reverse
                     ),
                     label = "decor_${pageIndex}_$index"
                 )
-
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = accentColor.copy(alpha = 0.65f),
-                    modifier = Modifier
-                        .size(22.dp)
-                        .align(Alignment.Center)
-                        .offset(
-                            x = x.dp,
-                            y = (y - decorFloat).dp
-                        )
-                        .alpha(0.5f)
-                )
+                Icon(icon, null, tint = accentColor.copy(alpha = 0.65f), modifier = Modifier.size(22.dp).align(Alignment.Center).offset(x.dp, (y - decorFloat).dp).alpha(0.5f))
             }
-
-            // Outer glow
+            Box(modifier = Modifier.size(outerIllustrationSize).clip(CircleShape).background(Brush.radialGradient(listOf(accentColor.copy(alpha = 0.15f), accentColor.copy(alpha = 0.03f), Color.Transparent))))
             Box(
-                modifier = Modifier
-                    .size(outerIllustrationSize)
-                    .clip(CircleShape)
-                    .background(
-                        Brush.radialGradient(
-                            colors = listOf(
-                                accentColor.copy(alpha = 0.15f),
-                                accentColor.copy(alpha = 0.03f),
-                                Color.Transparent
-                            )
-                        )
-                    )
-            )
-
-            // Inner circle
-            Box(
-                modifier = Modifier
-                    .size(innerIllustrationSize)
-                    .clip(CircleShape)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                accentColor.copy(alpha = 0.1f),
-                                accentColor.copy(alpha = 0.04f)
-                            )
-                        )
-                    )
-                    .border(
-                        width = 1.5.dp,
-                        color = accentColor.copy(alpha = 0.2f),
-                        shape = CircleShape
-                    ),
+                modifier = Modifier.size(innerIllustrationSize).clip(CircleShape)
+                    .background(Brush.verticalGradient(listOf(accentColor.copy(alpha = 0.1f), accentColor.copy(alpha = 0.04f))))
+                    .border(1.5.dp, accentColor.copy(alpha = 0.2f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = page.icon,
-                    contentDescription = null,
-                    tint = accentColor,
-                    modifier = Modifier
-                        .size(illustrationIconSize)
-                        .padding(bottom = floatY.dp)
-                )
+                Icon(page.icon, null, tint = accentColor, modifier = Modifier.size(illustrationIconSize).padding(bottom = floatY.dp))
             }
         }
 
         Spacer(modifier = Modifier.height(if (isActionPage) 16.dp else 40.dp))
 
-        // ── Title ─────────────────────────────────────────────────────
-        Text(
-            text = page.title,
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.ExtraBold,
-                lineHeight = 36.sp,
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        accentColor,
-                        accentColor.copy(alpha = 0.7f)
-                    )
-                )
-            ),
-            textAlign = TextAlign.Center
-        )
-
+        // Title uses solid color for strong contrast in both light and dark mode
+        Text(stringResource(page.titleRes), style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold, lineHeight = 36.sp), color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(10.dp))
-
-        // ── Subtitle ──────────────────────────────────────────────────
-        Text(
-            text = page.subtitle,
-            style = MaterialTheme.typography.titleSmall.copy(
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 0.5.sp
-            ),
-            color = accentColor,
-            textAlign = TextAlign.Center
-        )
-
+        Text(stringResource(page.subtitleRes), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold, letterSpacing = 0.5.sp), color = accentColor, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(16.dp))
-
-        // ── Description ───────────────────────────────────────────────
-        Text(
-            text = page.description,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-            textAlign = TextAlign.Center,
-            lineHeight = 24.sp,
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
+        Text(stringResource(page.descriptionRes), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), textAlign = TextAlign.Center, lineHeight = 24.sp, modifier = Modifier.padding(horizontal = 8.dp))
 
         if (isActionPage) {
             Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Choose a starting point",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
-            )
+            Text("Choose a starting point", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(8.dp))
-            OnboardingActionPicker(
-                selectedAction = selectedAction,
-                onSelectAction = onSelectAction
-            )
+            OnboardingActionPicker(selectedAction = selectedAction, onSelectAction = onSelectAction)
         }
     }
 }
 
 @Composable
-private fun OnboardingActionPicker(
-    selectedAction: OnboardingStartAction?,
-    onSelectAction: (OnboardingStartAction) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
+private fun OnboardingActionPicker(selectedAction: OnboardingStartAction?, onSelectAction: (OnboardingStartAction) -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OnboardingStartAction.entries.chunked(2).forEach { rowActions ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 rowActions.forEach { action ->
                     val isSelected = selectedAction == action
+                    val actionLabel = stringResource(action.labelRes)
+                    val actionDescription = stringResource(action.descriptionRes)
                     Surface(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(58.dp)
-                            .selectable(
-                                selected = isSelected,
-                                onClick = { onSelectAction(action) },
-                                role = Role.RadioButton
-                            )
-                            .semantics {
-                                contentDescription = "${action.label}. ${action.description}"
-                                selected = isSelected
-                            },
+                        modifier = Modifier.weight(1f).height(58.dp)
+                            .selectable(selected = isSelected, role = Role.RadioButton, onClick = { onSelectAction(action) })
+                            .semantics { contentDescription = "$actionLabel. $actionDescription"; selected = isSelected },
                         shape = RoundedCornerShape(14.dp),
-                        color = if (isSelected) {
-                            MaterialTheme.colorScheme.primaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.surface
-                        },
-                        contentColor = if (isSelected) {
-                            MaterialTheme.colorScheme.onPrimaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
-                        border = BorderStroke(
-                            width = if (isSelected) 2.dp else 1.dp,
-                            color = if (isSelected) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.outlineVariant
-                            }
-                        )
+                        color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+                        contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+                        border = BorderStroke(if (isSelected) 2.dp else 1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = action.icon,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
+                        Row(modifier = Modifier.padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Icon(action.icon, null, modifier = Modifier.size(20.dp))
                             Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-                                Text(
-                                    text = action.label,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                                Text(
-                                    text = action.description,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = if (isSelected) {
-                                        MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f)
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurfaceVariant
-                                    }
-                                )
+                                Text(actionLabel, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                                Text(actionDescription, style = MaterialTheme.typography.labelSmall, color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f) else MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                     }
                 }
-                if (rowActions.size == 1) {
-                    Spacer(Modifier.weight(1f))
-                }
+                if (rowActions.size == 1) Spacer(Modifier.weight(1f))
             }
         }
     }
 }
 
-// ─── Bottom Section ───────────────────────────────────────────────────────────
-
 @Composable
 private fun BottomSection(
-    pagerState: PagerState,
-    isLastPage: Boolean,
-    onNext: () -> Unit,
-    onComplete: () -> Unit,
-    onSetUpProfile: () -> Unit,
-    selectedAction: OnboardingStartAction?,
-    onStartAction: (OnboardingStartAction) -> Unit
+    pagerState: PagerState, isLastPage: Boolean, onNext: () -> Unit,
+    onComplete: () -> Unit, onSetUpProfile: () -> Unit,
+    selectedAction: OnboardingStartAction?, onStartAction: (OnboardingStartAction) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // ── Page Indicators ───────────────────────────────────────────
-        PageIndicators(
-            pageCount = onboardingPages.size,
-            currentPage = pagerState.currentPage
-        )
-
+    val selectedActionLabel = selectedAction?.let { stringResource(it.labelRes) }
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        PageIndicators(pageCount = onboardingPages.size, currentPage = pagerState.currentPage)
         Spacer(modifier = Modifier.height(32.dp))
-
-        // ── Action Buttons ────────────────────────────────────────────
         AnimatedVisibility(
             visible = isLastPage,
             enter = fadeIn(tween(300)) + slideInVertically(
-                initialOffsetY = { it / 3 },
-                animationSpec = tween(300, easing = EaseOutCubic)
+                animationSpec = tween(300, easing = EaseOutCubic),
+                initialOffsetY = { it / 3 }
             ),
             exit = fadeOut(tween(200))
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                // Primary: take one useful action without requiring profile setup.
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Button(
-                    onClick = {
-                        selectedAction?.let(onStartAction) ?: onComplete()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    ),
-                    contentPadding = PaddingValues(0.dp),
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 6.dp,
-                        pressedElevation = 2.dp
-                    )
+                    onClick = { selectedAction?.let(onStartAction) ?: onComplete() },
+                    modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary),
+                    contentPadding = PaddingValues(0.dp), elevation = ButtonDefaults.buttonElevation(6.dp, pressedElevation = 2.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = selectedAction?.icon ?: Icons.Outlined.Timeline,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp)
-                        )
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                        Icon(selectedAction?.icon ?: Icons.Outlined.Timeline, null, modifier = Modifier.size(20.dp))
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = selectedAction?.let { "Start with ${it.label}" } ?: "Explore Home",
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold
-                            )
-                        )
+                        Text(selectedActionLabel?.let { stringResource(R.string.onboarding_start_with_action, it) } ?: stringResource(R.string.onboarding_explore_home), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
                     }
                 }
-
-                TextButton(onClick = onComplete) {
-                    Text("I’ll explore home first")
-                }
-                if (selectedAction == null) {
-                    TextButton(onClick = onSetUpProfile) {
-                        Text("Set up a profile instead")
-                    }
-                }
+                TextButton(onClick = onComplete) { Text(stringResource(R.string.onboarding_explore_home_first)) }
+                if (selectedAction == null) TextButton(onClick = onSetUpProfile) { Text(stringResource(R.string.onboarding_set_up_profile_instead)) }
             }
         }
-
-        AnimatedVisibility(
-            visible = !isLastPage,
-            enter = fadeIn(tween(300)),
-            exit = fadeOut(tween(200))
-        ) {
-            // Next button (circular)
+        AnimatedVisibility(visible = !isLastPage, enter = fadeIn(tween(300)), exit = fadeOut(tween(200))) {
             Button(
-                onClick = onNext,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = onboardingAccentColor(pagerState.currentPage),
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                contentPadding = PaddingValues(0.dp),
-                elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 4.dp,
-                    pressedElevation = 2.dp
-                )
+                onClick = onNext, modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = onboardingAccentColor(pagerState.currentPage), contentColor = MaterialTheme.colorScheme.onPrimary),
+                contentPadding = PaddingValues(0.dp), elevation = ButtonDefaults.buttonElevation(4.dp, pressedElevation = 2.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.txt_next),
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    Text(stringResource(R.string.txt_next), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.Filled.ArrowForward,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, null, modifier = Modifier.size(20.dp))
                 }
             }
         }
-
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
-// ─── Page Indicators ──────────────────────────────────────────────────────────
-
 @Composable
-private fun PageIndicators(
-    pageCount: Int,
-    currentPage: Int
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+private fun PageIndicators(pageCount: Int, currentPage: Int) {
+    val progressDescription = stringResource(R.string.onboarding_page_progress, currentPage + 1, pageCount)
+    Row(modifier = Modifier.semantics { contentDescription = progressDescription }, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
         repeat(pageCount) { index ->
             val isSelected = index == currentPage
-            val width by animateFloatAsState(
-                targetValue = if (isSelected) 28f else 8f,
-                animationSpec = tween(300, easing = FastOutSlowInEasing),
-                label = "indicator_width_$index"
-            )
-            val alpha by animateFloatAsState(
-                targetValue = if (isSelected) 1f else 0.3f,
-                animationSpec = tween(300),
-                label = "indicator_alpha_$index"
-            )
-
-            val pageColor = onboardingAccentColor(currentPage)
-
-            Box(
-                modifier = Modifier
-                    .height(8.dp)
-                    .width(width.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .alpha(alpha)
-                    .background(
-                        if (isSelected) pageColor
-                        else MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-            )
+            val width by animateFloatAsState(if (isSelected) 28f else 8f, tween(300, easing = FastOutSlowInEasing), label = "indicator_width_$index")
+            val alpha by animateFloatAsState(if (isSelected) 1f else 0.3f, tween(300), label = "indicator_alpha_$index")
+            Box(modifier = Modifier.height(8.dp).width(width.dp).clip(RoundedCornerShape(4.dp)).alpha(alpha).background(if (isSelected) onboardingAccentColor(currentPage) else MaterialTheme.colorScheme.onSurfaceVariant))
         }
     }
 }

@@ -60,12 +60,6 @@ fun WelcomeBackScreen(
 
     val data = uiState.data!!
 
-    val waveAnim = rememberInfiniteTransition(label = "wave")
-    val waveScale by waveAnim.animateFloat(
-        initialValue = 1f, targetValue = 1.1f,
-        animationSpec = infiniteRepeatable(tween(800, easing = EaseInOutCubic), RepeatMode.Reverse),
-        label = "wave_scale"
-    )
 
     Scaffold(
         topBar = {
@@ -91,17 +85,6 @@ fun WelcomeBackScreen(
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Animated welcome mark
-            Icon(
-                imageVector = Icons.Outlined.AutoAwesome,
-                contentDescription = "Welcome back",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .size(56.dp)
-                    .scale(waveScale)
-            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -110,6 +93,7 @@ fun WelcomeBackScreen(
                 else "Welcome back!",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
 

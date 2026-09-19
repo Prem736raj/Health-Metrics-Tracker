@@ -1394,4 +1394,25 @@
     <string name="ai_coach_welcome">Hi! I\'m your AI Wellness Assistant.\n\nI can explain general fitness, nutrition, hydration and wellness topics.\n\nI can\'t diagnose medical conditions or replace a healthcare professional.</string>
     <string name="ai_coach_error">Oops, I encountered an error. Please try again later.</string>
     <string name="ai_coach_system_prompt">You are a friendly, professional AI Wellness Assistant.\nKeep your answers concise, encouraging, and easy to read on a mobile device.\nUser asks: %s</string>
+    <string name="onboarding_welcome_title">Welcome to\nHealth Metrics Tracker</string>
+    <string name="onboarding_welcome_description">Choose a few everyday measures to track, then understand them with clear, informational estimates. Your records stay private on this device.</string>
+    <string name="onboarding_calculators_title">10 practical\nhealth calculators</string>
+    <string name="onboarding_calculators_subtitle">Evidence-informed estimates</string>
+    <string name="onboarding_calculators_description">From BMI and BMR to blood pressure and heart-rate zones — each tool explains its method, sources, and limits.</string>
+    <string name="onboarding_start_title">Start with one\nsmall step</string>
+    <string name="onboarding_start_subtitle">Choose what feels useful today</string>
+    <string name="onboarding_start_description">Pick one quick action now. You can change it later — nothing is required, and missing a day does not erase your progress.</string>
+    <string name="onboarding_action_water">Water</string>
+    <string name="onboarding_action_water_description">Log a drink</string>
+    <string name="onboarding_action_weight">Weight</string>
+    <string name="onboarding_action_weight_description">Start a trend</string>
+    <string name="onboarding_action_steps">Steps</string>
+    <string name="onboarding_action_steps_description">Connect when ready</string>
+    <string name="onboarding_action_bmi">BMI calculator</string>
+    <string name="onboarding_action_bmi_description">Get a quick estimate</string>
+    <string name="onboarding_start_with_action">Start with %1$s</string>
+    <string name="onboarding_explore_home">Explore Home</string>
+    <string name="onboarding_explore_home_first">I’ll explore home first</string>
+    <string name="onboarding_set_up_profile_instead">Set up a profile instead</string>
+    <string name="onboarding_page_progress">Page %1$d of %2$d</string>
 </resources>
