@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Assessment
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -44,7 +43,6 @@ import androidx.compose.material.icons.outlined.ShowChart
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Timeline
 import androidx.compose.material.icons.outlined.WaterDrop
-import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -267,11 +265,11 @@ private fun HomeHeader(
     onOpenSettings: () -> Unit
 ) {
     val hour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
-    val (greeting, greetingIcon) = when (hour) {
-        in 5..11 -> "Good morning" to Icons.Outlined.WbSunny
-        in 12..16 -> "Good afternoon" to Icons.Outlined.WbSunny
-        in 17..21 -> "Good evening" to Icons.Filled.Star
-        else -> "Welcome back" to Icons.Filled.AutoAwesome
+    val greeting = when (hour) {
+        in 5..11 -> "Good morning"
+        in 12..16 -> "Good afternoon"
+        in 17..21 -> "Good evening"
+        else -> "Welcome back"
     }
     val dateString = remember {
         try {
@@ -305,26 +303,13 @@ private fun HomeHeader(
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
                     )
                 }
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = greeting,
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            fontWeight = FontWeight.ExtraBold,
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    WellnessPalette.HeroEnd,
-                                    WellnessPalette.HeroStart
-                                )
-                            )
-                        )
-                    )
-                    Icon(
-                        imageVector = greetingIcon,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+                Text(
+                    text = greeting,
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(bottom = 2.dp)
+                )
                 Text(
                     text = "Let's reach your health goals today",
                     style = MaterialTheme.typography.bodyMedium,
