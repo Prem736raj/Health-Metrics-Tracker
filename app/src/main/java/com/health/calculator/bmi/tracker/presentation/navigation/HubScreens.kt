@@ -261,6 +261,7 @@ private fun CalculatorHubCard(
         description = entry.description,
         onClick = onOpen,
         accent = accent,
+        showLeadingIcon = false,
         trailingContent = {
             IconButton(onClick = onShowQuality) {
                 Icon(Icons.Outlined.Info, contentDescription = "Method and limits for ${entry.title}", tint = accent)
@@ -306,6 +307,7 @@ private fun HubActionCard(
         title = title,
         description = description,
         onClick = onClick,
-        accent = accent
+        accent = accent,
+        showLeadingIcon = false
     )
 }

@@ -238,6 +238,7 @@ fun WellnessActionRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     accent: Color = MaterialTheme.colorScheme.primary,
+    showLeadingIcon: Boolean = true,
     trailingContent: (@Composable () -> Unit)? = null
 ) {
     Surface(
@@ -258,11 +259,13 @@ fun WellnessActionRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            WellnessIconBadge(
-                icon = icon,
-                tint = accent,
-                container = accent.copy(alpha = 0.14f)
-            )
+            if (showLeadingIcon) {
+                WellnessIconBadge(
+                    icon = icon,
+                    tint = accent,
+                    container = accent.copy(alpha = 0.14f)
+                )
+            }
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Text(
