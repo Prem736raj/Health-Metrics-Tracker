@@ -53,9 +53,11 @@ class OnboardingScreenTest {
         waitForText(nextLabel)
 
         composeRule.onNodeWithText(nextLabel).performClick()
+        composeRule.mainClock.advanceTimeBy(500)
         waitForContentDescription(resourceString(R.string.onboarding_page_progress, 2, 3))
         waitForText(nextLabel)
         composeRule.onNodeWithText(nextLabel).performClick()
+        composeRule.mainClock.advanceTimeBy(500)
         waitForContentDescription(finalPageProgress)
 
         composeRule.onNodeWithContentDescription(finalPageProgress).assertIsDisplayed()
