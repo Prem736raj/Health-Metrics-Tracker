@@ -35,9 +35,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -190,11 +192,11 @@ private fun OnboardingPageContent(
 ) {
     val accentColor = onboardingAccentColor(pageIndex)
     val isActionPage = pageIndex == onboardingPages.lastIndex
-    val illustrationBoxSize = if (isActionPage) 148.dp else 200.dp
-    val illustrationRadius = if (isActionPage) 58.dp else 80.dp
-    val outerIllustrationSize = if (isActionPage) 120.dp else 160.dp
-    val innerIllustrationSize = if (isActionPage) 84.dp else 110.dp
-    val illustrationIconSize = if (isActionPage) 38.dp else 48.dp
+    val illustrationBoxSize = if (isActionPage) 112.dp else 200.dp
+    val illustrationRadius = if (isActionPage) 44.dp else 80.dp
+    val outerIllustrationSize = if (isActionPage) 96.dp else 160.dp
+    val innerIllustrationSize = if (isActionPage) 70.dp else 110.dp
+    val illustrationIconSize = if (isActionPage) 32.dp else 48.dp
 
     val iconScale = remember { Animatable(0.5f) }
     LaunchedEffect(isCurrentPage) {
@@ -217,7 +219,15 @@ private fun OnboardingPageContent(
         label = "float_y_$pageIndex"
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    val pageScrollState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(pageScrollState)
+            .padding(horizontal = 32.dp, vertical = if (isActionPage) 8.dp else 0.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = if (isActionPage) Arrangement.Top else Arrangement.Center
+    ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(illustrationBoxSize).scale(iconScale.value)) {
             page.decorativeIcons.forEachIndexed { index, icon ->
                 val angle = (360f / page.decorativeIcons.size) * index
@@ -246,7 +256,7 @@ private fun OnboardingPageContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(if (isActionPage) 16.dp else 40.dp))
+        Spacer(modifier = Modifier.height(if (isActionPage) 10.dp else 40.dp))
 
         // Title uses solid color for strong contrast in both light and dark mode
         Text(stringResource(page.titleRes), style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold, lineHeight = 36.sp), color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center)
@@ -256,7 +266,7 @@ private fun OnboardingPageContent(
         Text(stringResource(page.descriptionRes), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), textAlign = TextAlign.Center, lineHeight = 24.sp, modifier = Modifier.padding(horizontal = 8.dp))
 
         if (isActionPage) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text("Choose a starting point", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(8.dp))
             OnboardingActionPicker(selectedAction = selectedAction, onSelectAction = onSelectAction)
