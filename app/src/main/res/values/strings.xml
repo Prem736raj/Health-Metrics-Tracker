@@ -1389,8 +1389,8 @@
 <string name="txt_whr_results">WHR Results</string>
 <string name="txt_height_is_needed_to_calculate_">Height is needed to calculate your Waist-to-Height Ratio</string>
     <string name="txt_enter_your_height">Enter Your Height</string>
-    <string name="privacy_policy_url">https://YOUR-DOMAIN.com/privacy</string>
-    <string name="terms_of_service_url">https://YOUR-DOMAIN.com/terms</string>
+    <string name="privacy_policy_url">https://prem736raj.github.io/Health-Metrics-Tracker/privacy.html</string>
+    <string name="terms_of_service_url">https://prem736raj.github.io/Health-Metrics-Tracker/terms.html</string>
     <string name="ai_coach_welcome">Hi! I\'m your AI Wellness Assistant.\n\nI can explain general fitness, nutrition, hydration and wellness topics.\n\nI can\'t diagnose medical conditions or replace a healthcare professional.</string>
     <string name="ai_coach_error">Oops, I encountered an error. Please try again later.</string>
     <string name="ai_coach_system_prompt">You are a friendly, professional AI Wellness Assistant.\nKeep your answers concise, encouraging, and easy to read on a mobile device.\nUser asks: %s</string>
