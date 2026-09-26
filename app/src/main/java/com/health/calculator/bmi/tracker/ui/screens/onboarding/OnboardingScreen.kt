@@ -37,7 +37,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -217,7 +219,16 @@ private fun OnboardingPageContent(
         label = "float_y_$pageIndex"
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    val pageScrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .then(if (isActionPage) Modifier.verticalScroll(pageScrollState) else Modifier)
+            .padding(horizontal = 32.dp, vertical = if (isActionPage) 12.dp else 0.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = if (isActionPage) Arrangement.Top else Arrangement.Center
+    ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(illustrationBoxSize).scale(iconScale.value)) {
             page.decorativeIcons.forEachIndexed { index, icon ->
                 val angle = (360f / page.decorativeIcons.size) * index
