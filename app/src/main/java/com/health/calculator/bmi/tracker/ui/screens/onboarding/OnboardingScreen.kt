@@ -223,7 +223,7 @@ private fun OnboardingPageContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(pageScrollState)
+            .then(if (isActionPage) Modifier.verticalScroll(pageScrollState) else Modifier)
             .padding(horizontal = 32.dp, vertical = if (isActionPage) 8.dp else 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = if (isActionPage) Arrangement.Top else Arrangement.Center
