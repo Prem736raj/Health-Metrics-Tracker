@@ -2,6 +2,8 @@ package com.health.calculator.bmi.tracker.ui.screens.onboarding
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -30,6 +32,7 @@ class OnboardingScreenTest {
         val firstPageProgress = resourceString(R.string.onboarding_page_progress, 1, 3)
 
         setOnboardingContent(onComplete = { completed = true })
+        waitForText(welcomeTitle)
 
         composeRule.onNodeWithText(welcomeTitle).assertIsDisplayed()
         composeRule.onNodeWithContentDescription(firstPageProgress).assertIsDisplayed()
@@ -47,11 +50,13 @@ class OnboardingScreenTest {
         val finalPageProgress = resourceString(R.string.onboarding_page_progress, 3, 3)
 
         setOnboardingContent(onStartAction = { selectedAction = it })
+        waitForText(nextLabel)
 
         composeRule.onNodeWithText(nextLabel).performClick()
-        composeRule.waitForIdle()
+        waitForContentDescription(resourceString(R.string.onboarding_page_progress, 2, 3))
+        waitForText(nextLabel)
         composeRule.onNodeWithText(nextLabel).performClick()
-        composeRule.waitForIdle()
+        waitForContentDescription(finalPageProgress)
 
         composeRule.onNodeWithContentDescription(finalPageProgress).assertIsDisplayed()
 
@@ -79,6 +84,18 @@ class OnboardingScreenTest {
                     onStartAction = onStartAction
                 )
             }
+        }
+    }
+
+    private fun waitForText(text: String) {
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    private fun waitForContentDescription(description: String) {
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithContentDescription(description).fetchSemanticsNodes().isNotEmpty()
         }
     }
 
