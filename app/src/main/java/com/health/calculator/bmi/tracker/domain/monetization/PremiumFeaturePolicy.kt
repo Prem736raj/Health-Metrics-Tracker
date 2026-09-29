@@ -32,11 +32,6 @@ enum class PremiumFeature(
         productId = "plus_widget_customization",
         title = "Widget customization",
         description = "More choices for arranging the wellness information shown in widgets."
-    ),
-    AI_WELLNESS_MESSAGES(
-        productId = "plus_ai_wellness_messages",
-        title = "Additional AI Wellness Assistant messages",
-        description = "A higher usage allowance for optional, safety-screened wellness conversations."
     )
 }
 
