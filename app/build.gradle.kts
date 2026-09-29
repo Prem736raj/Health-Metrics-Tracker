@@ -207,14 +207,13 @@ dependencies {
     implementation(libs.androidx.health.connect.client)
 
     // ---------------------------------------------------------
-    // Firebase AI Logic
+    // Firebase
     // ---------------------------------------------------------
 
     implementation(
         platform("com.google.firebase:firebase-bom:34.18.0")
     )
 
-    implementation("com.google.firebase:firebase-ai")
 
     // Optional, consent-gated product analytics. Collection is disabled by
     // default in the manifest and enabled only after the user opts in.
@@ -223,15 +222,6 @@ dependencies {
     // bridge and remains safe when the optional runtime is unavailable.
     runtimeOnly("com.google.firebase:firebase-analytics")
 
-    // Real production protection
-    releaseImplementation(
-        "com.google.firebase:firebase-appcheck-playintegrity"
-    )
-
-    // Emulator/development only
-    debugImplementation(
-        "com.google.firebase:firebase-appcheck-debug"
-    )
 
     // ---------------------------------------------------------
     // Testing
