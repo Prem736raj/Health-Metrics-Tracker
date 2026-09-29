@@ -40,8 +40,6 @@ class SettingsDataStore(@ApplicationContext private val context: Context) {
         val KEY_WEIGHT_REMINDER = booleanPreferencesKey("weight_reminder_enabled")
         val KEY_LAST_UPDATED = longPreferencesKey("settings_last_updated")
         val KEY_ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
-        val KEY_AI_DISCLOSURE_ACCEPTED = booleanPreferencesKey("ai_disclosure_accepted")
-        val KEY_AI_CONTEXT_SHARING_ENABLED = booleanPreferencesKey("ai_context_sharing_enabled")
         val KEY_PRODUCT_ANALYTICS_ENABLED = booleanPreferencesKey("product_analytics_enabled")
     }
 
@@ -109,38 +107,8 @@ class SettingsDataStore(@ApplicationContext private val context: Context) {
     }
 
     /**
-     * Flow that emits whether the user has accepted the AI Wellness Assistant privacy disclosure.
-     */
-    val aiDisclosureAcceptedFlow: Flow<Boolean> = context.settingsDataStore.data.map { prefs ->
-        prefs[KEY_AI_DISCLOSURE_ACCEPTED] ?: false
-    }
-
-    /**
-     * Saves whether the AI privacy disclosure has been accepted.
-     */
-    suspend fun setAiDisclosureAccepted(accepted: Boolean = true) {
-        context.settingsDataStore.edit { prefs ->
-            prefs[KEY_AI_DISCLOSURE_ACCEPTED] = accepted
-        }
-    }
-
-    /**
-     * Optional second consent: when enabled, the assistant may receive a minimal summary of
-     * recent locally logged wellness data. It is independent from accepting the service disclosure.
-     */
-    val aiContextSharingEnabledFlow: Flow<Boolean> = context.settingsDataStore.data.map { prefs ->
-        prefs[KEY_AI_CONTEXT_SHARING_ENABLED] ?: false
-    }
-
-    suspend fun setAiContextSharingEnabled(enabled: Boolean) {
-        context.settingsDataStore.edit { prefs ->
-            prefs[KEY_AI_CONTEXT_SHARING_ENABLED] = enabled
-        }
-    }
-
-    /**
      * Optional consent for anonymous product-usage analytics. It is false by
-     * default and is independent from AI context sharing.
+     * default.
      */
     val productAnalyticsEnabledFlow: Flow<Boolean> = context.settingsDataStore.data.map { prefs ->
         prefs[KEY_PRODUCT_ANALYTICS_ENABLED] ?: false
