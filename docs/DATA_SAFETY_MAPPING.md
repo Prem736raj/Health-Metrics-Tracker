@@ -14,7 +14,7 @@ features and are not included in product analytics event parameters:
 - Profile preferences and optional goals
 - Weight, blood-pressure, water, calorie/food, step-history and calculator
   history records
-- Reminder preferences, report selections and AI disclosure/context choices
+- Reminder preferences and report selections
 - User-entered notes and locally generated reports/exports
 
 These records support the feature the user selected, are not required for app
@@ -33,18 +33,6 @@ The app requests no Health Connect write permissions and does not request sleep,
 heart-rate or other records pre-emptively. Users can deny or revoke access in
 Health Connect settings; the app keeps manual tracking available.
 
-## Optional Firebase AI context
-
-The AI Wellness Assistant is optional and requires the in-app disclosure. A
-separate context switch is required before the app sends a bounded summary of
-recent weight/water patterns. The summary excludes names, notes, raw entries,
-calculator payloads and unrelated health records. Chat messages are stored in
-the app's local chat history; Firebase service availability and retention are
-controlled by the configured Firebase project and its owner settings.
-
-The assistant is informational wellness guidance, not diagnosis, treatment or
-emergency care. Users can continue without AI or clear the local conversation.
-
 ## Optional product analytics
 
 Analytics collection is off by default and is enabled only through the app's
@@ -55,11 +43,10 @@ analytics adapter is called.
 
 ## Technical services
 
-Firebase App Check/Play Integrity and crash/service infrastructure may process
-technical identifiers needed to protect or operate the optional services. No
-health measurement is placed in an analytics event parameter. The release owner
-must verify the Firebase Console retention, processor and Data safety settings
-before publishing.
+Optional Firebase Analytics may process standard pseudonymous app/device information
+when the user enables product analytics. No health measurement is placed in an
+analytics event parameter. The release owner must verify the Firebase Console
+retention, processor and Data safety settings before publishing.
 
 ## User controls and release review
 
@@ -69,7 +56,7 @@ Firebase/Play configuration:
 1. Privacy disclosure links resolve to the Health Metrics Tracker pages.
 2. Health Connect permission screens explain each requested record and denial
    leaves the rest of the app usable.
-3. AI context and analytics are visibly optional and disabled by default.
+3. Product analytics is visibly optional and disabled by default.
 4. Clear-data behavior removes the local records described above.
 5. Play Console declarations match the actual release artifact and any enabled
    Firebase products; do not copy this mapping blindly if configuration changes.
