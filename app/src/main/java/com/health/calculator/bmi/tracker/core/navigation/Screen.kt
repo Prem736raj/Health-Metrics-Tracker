@@ -18,7 +18,7 @@ sealed class Screen(val route: String) {
     data object Track : Screen("track")
     /** Curated calculator directory; individual calculators remain deep links. */
     data object Calculators : Screen("calculators")
-    /** Trends, reports and assistant hub. */
+    /** Trends and reports hub. */
     data object Insights : Screen("insights")
     data object History : Screen("history")
     data object Profile : Screen("profile")
@@ -62,7 +62,6 @@ sealed class Screen(val route: String) {
     data object WeightTracking : Screen("weight_tracking")
     data object Reminders : Screen("reminders")
     data object WeeklyReport : Screen("weekly_report")
-    data object AiCoach : Screen("ai_coach")
 
     companion object {
         /**

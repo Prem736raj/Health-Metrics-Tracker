@@ -81,16 +81,11 @@ Run these on an API 35/36 device with TalkBack enabled:
   recommendation section is focusable.
 - Verify the widget BP badge announces the same category.
 
-### 4. AI Assistant
-- Open AI coach. Verify the disclosure is announced.
-- Send a message. Verify the assistant response is focusable and readable.
-- Trigger a retry. Verify no duplicate user bubble is announced.
-
-### 5. Water Tracker
+### 4. Water Tracker
 - Log water. Verify the progress update is announced.
 - Open the widget. Verify it announces intake, goal, and percentage.
 
-### 6. Exports
+### 5. Exports
 - Generate a weekly report. Verify the report header and disclaimer are
   announced.
 

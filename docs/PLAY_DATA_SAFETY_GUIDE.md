@@ -80,11 +80,11 @@ The app collects health and fitness data (locally stored).
 | --- | --- | --- |
 | Emails | No | |
 | SMS or MMS | No | |
-| Other in-app messages | **Yes** | AI chat messages stored locally |
+| Other in-app messages | No | No chat or messaging feature is shipped in this build |
 
 **Is this data shared?** No
 
-**Why is this data collected?** App functionality (AI Wellness Assistant)
+**Why is this data collected?** Not applicable
 
 ### 2.6 Photos and Videos
 
@@ -155,11 +155,11 @@ The app collects health and fitness data (locally stored).
 
 | Question | Answer | Notes |
 | --- | --- | --- |
-| Device or other IDs | **Yes** | Firebase App Check / Play Integrity uses device attestation |
+| Device or other IDs | **Yes** (if analytics opted in) | Firebase Analytics may use pseudonymous app/device identifiers |
 
 **Is this data shared?** No
 
-**Why is this data collected?** Security (App Check), app functionality
+**Why is this data collected?** Analytics (opt-in only, disabled by default)
 
 ---
 

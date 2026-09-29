@@ -28,7 +28,6 @@ The first paid tier can add convenience and depth without withholding core safet
 - Extended trend windows and richer comparisons.
 - Detailed report layouts and additional export customization.
 - More widget customization.
-- A clearly bounded, optional AI Wellness Assistant usage allowance.
 
 These are product proposals, not active entitlements. The app currently has no billing dependency or purchasable product IDs.
 

@@ -6,7 +6,7 @@ Health Metrics Tracker is an Android wellness and health-metrics app focused on 
 
 - Track common wellness and body metrics locally on Android.
 - Use informational calculators for areas such as BMI, hydration, blood pressure, body composition, and related trends.
-- Optional Firebase/App Check integrations are configured separately from signing and other private credentials.
+- Optional Firebase Analytics is consent-gated and kept separate from signing and other private credentials.
 - Release signing credentials and secret material are intentionally kept outside version control.
 
 ## Build and verify
@@ -30,9 +30,8 @@ The repository contains detailed operational documentation:
 - [Release status](docs/RELEASE_STATUS.md)
 - [Production release checklist](docs/PRODUCTION_RELEASE_CHECKLIST.md)
 - [Security operations](docs/SECURITY_OPERATIONS.md)
-- [Firebase App Check guide](docs/FIREBASE_APPCHECK_GUIDE.md)
 
-Before publishing, complete the remaining device, accessibility, signing, Firebase Console, privacy/data-safety, and Play Console checks documented in those files.
+Before publishing, complete the remaining device, accessibility, signing, optional Firebase Analytics, privacy/data-safety, and Play Console checks documented in those files.
 
 ## Disclaimer
 

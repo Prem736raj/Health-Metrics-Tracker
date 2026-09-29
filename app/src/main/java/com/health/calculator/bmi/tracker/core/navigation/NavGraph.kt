@@ -98,7 +98,6 @@ import com.health.calculator.bmi.tracker.notifications.ReminderScheduler
 import com.health.calculator.bmi.tracker.ui.screens.welcomeback.WelcomeBackViewModel
 import com.health.calculator.bmi.tracker.ui.screens.welcomeback.WelcomeBackScreen
 import com.health.calculator.bmi.tracker.data.repository.InactivityRepository
-import com.health.calculator.bmi.tracker.ui.screens.aicoach.AiCoachScreen
 import com.health.calculator.bmi.tracker.presentation.components.BottomNavigationBar
 import com.health.calculator.bmi.tracker.presentation.navigation.CalculatorDestination
 import com.health.calculator.bmi.tracker.presentation.navigation.CalculatorsHubScreen
@@ -351,7 +350,6 @@ fun NavGraph(
                 onNavigateToHistory = { navController.navigate(Screen.History.route) { launchSingleTop = true } },
                 onNavigateToProfile = { navController.navigate(Screen.Profile.route) { launchSingleTop = true } },
                 onNavigateToSettings = { navController.navigate(Screen.Settings.route) { launchSingleTop = true } },
-                onNavigateToAiCoach = { navController.navigate(Screen.AiCoach.route) { launchSingleTop = true } },
                 onNavigateToWeight = { navController.navigate(Screen.WeightTracking.route) { launchSingleTop = true } },
                 onNavigateToHealthConnections = { navController.navigate(Screen.HealthConnections.route) { launchSingleTop = true } },
                 onNavigateToCalculators = { navController.navigate(Screen.Calculators.route) { launchSingleTop = true } },
@@ -397,7 +395,6 @@ fun NavGraph(
             InsightsHubScreen(
                 onOpenWeeklyReport = { navController.navigate(Screen.WeeklyReport.route) { launchSingleTop = true } },
                 onOpenTrends = { navController.navigate(Screen.WeightTracking.route) { launchSingleTop = true } },
-                onOpenAssistant = { navController.navigate(Screen.AiCoach.route) { launchSingleTop = true } },
                 onOpenAchievements = { navController.navigate(Screen.Achievements.route) { launchSingleTop = true } },
                 onOpenArticles = { navController.navigate(Screen.HealthArticles.route) { launchSingleTop = true } },
                 onOpenHistory = { navController.navigate(Screen.History.route) { launchSingleTop = true } },
@@ -415,13 +412,6 @@ fun NavGraph(
             )
         }
 
-        composable(route = Screen.AiCoach.route) {
-            AiCoachScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
 
         composable(route = Screen.History.route) {
             HistoryScreen(
