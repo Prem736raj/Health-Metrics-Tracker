@@ -58,16 +58,9 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 
 ## 3. Firebase Configuration
 
-- [ ] In Firebase Console → Project Settings → Your Apps:
-      - Verify SHA-256 fingerprint from the release keystore is registered.
-- [ ] In Firebase Console → App Check:
-      - Register Play Integrity as the attestation provider for the release app.
-      - Add the SHA-256 fingerprint.
-      - Set enforcement to "Enforced" only after verifying tokens work.
-- [ ] Build a release APK, install on a device, and verify:
-      - Firebase AI requests succeed (App Check tokens are valid).
-      - Analytics events appear (if consent is granted).
-- [ ] Review Firebase data retention and processor settings.
+- [ ] Build a release APK, install on a device, and verify optional Firebase Analytics remains disabled until consent is granted.
+- [ ] If analytics consent is granted, verify only allowlisted product events appear.
+- [ ] Review Firebase Analytics retention and processor settings.
 
 ## 4. Google Play Console Setup
 
@@ -167,7 +160,6 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 
 - [ ] Monitor crash/ANR rates in Play Console → Android Vitals.
 - [ ] Monitor Firebase Crashlytics (if configured).
-- [ ] Monitor App Check enforcement metrics.
 - [ ] Monitor user reviews and ratings.
 - [ ] Set up Play Console alerts for crash rate spikes.
 
