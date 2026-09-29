@@ -3,7 +3,6 @@ package com.health.calculator.bmi.tracker
 import android.app.Application
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
-import com.health.calculator.bmi.tracker.core.security.AppCheckInitializerImpl
 import com.health.calculator.bmi.tracker.data.datastore.ProfileDataStore
 import com.health.calculator.bmi.tracker.data.datastore.SettingsDataStore
 import com.health.calculator.bmi.tracker.data.local.AppDatabase
@@ -23,7 +22,6 @@ class HealthCalculatorApp : Application() {
         super.onCreate()
 
         Firebase.initialize(this)
-        AppCheckInitializerImpl().initialize(this)
     }
 
     val database by lazy { AppDatabase.getDatabase(this) }
