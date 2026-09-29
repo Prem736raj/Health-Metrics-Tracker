@@ -1391,9 +1391,6 @@
     <string name="txt_enter_your_height">Enter Your Height</string>
     <string name="privacy_policy_url">https://prem736raj.github.io/Health-Metrics-Tracker/privacy.html</string>
     <string name="terms_of_service_url">https://prem736raj.github.io/Health-Metrics-Tracker/terms.html</string>
-    <string name="ai_coach_welcome">Hi! I\'m your AI Wellness Assistant.\n\nI can explain general fitness, nutrition, hydration and wellness topics.\n\nI can\'t diagnose medical conditions or replace a healthcare professional.</string>
-    <string name="ai_coach_error">Oops, I encountered an error. Please try again later.</string>
-    <string name="ai_coach_system_prompt">You are a friendly, professional AI Wellness Assistant.\nKeep your answers concise, encouraging, and easy to read on a mobile device.\nUser asks: %s</string>
     <string name="onboarding_welcome_title">Welcome to\nHealth Metrics Tracker</string>
     <string name="onboarding_welcome_description">Choose a few everyday measures to track, then understand them with clear, informational estimates. Your records stay private on this device.</string>
     <string name="onboarding_calculators_title">10 practical\nhealth calculators</string>
