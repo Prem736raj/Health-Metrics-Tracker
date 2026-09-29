@@ -56,8 +56,6 @@ Build a useful routine without pressure:
 - Choose gentle reminders only when they help
 - Add an Android home-screen widget for selected progress information
 
-The optional AI Wellness Assistant can answer general wellness questions. It is not a doctor. App context is off unless you explicitly enable it, and the assistant is designed not to diagnose, prescribe or recommend medication changes.
-
 Your choices stay in your hands:
 
 - Core tracking and calculators work without an account
@@ -76,7 +74,6 @@ Health Metrics Tracker is for informational wellness use. It is not a medical de
 - Explainable trends without diagnosis or blame
 - Optional Health Connect steps and weight access
 - Share only the report sections you choose
-- Optional AI wellness conversations with consent-based context
 
 Avoid putting raw health values, “WHO-standard” claims, emergency language, ranking claims, price promotions or medical promises in listing artwork.
 
@@ -115,7 +112,6 @@ Prepare phone screenshots with synthetic demo data, consistent blue-green brandi
 5. Insights — “Spot changes without diagnosis”
 6. Health Connect — “Connect steps only when you choose”
 7. Weekly report — “Review your week and share selected sections”
-8. AI assistant — “Ask general wellness questions — context is optional”
 
 Use the first two screenshots to explain the product in search previews. Do not show a concerning reading, medication suggestion, fake testimonial, before/after body claim or “perfect score.”
 
@@ -129,7 +125,7 @@ Use the first two screenshots to explain the product in search previews. Do not 
 
 1. **Make the numbers useful** — “Choose a few metrics to record. You can start with one check-in and add more later.”
 2. **Understand, don’t diagnose** — “Calculators and insights explain patterns and limits. They are informational, not medical advice.”
-3. **Stay in control** — “Health Connect, reminders, AI context and sharing are optional. Decide what this app can access.”
+3. **Stay in control** — “Health Connect, reminders and sharing are optional. Decide what this app can access.”
 
 ## Promotional copy
 
