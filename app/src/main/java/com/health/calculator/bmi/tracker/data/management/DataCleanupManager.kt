@@ -7,6 +7,7 @@ import com.health.calculator.bmi.tracker.data.model.CalculatorType
 import com.health.calculator.bmi.tracker.data.model.HistoryDisplayEntry
 import com.health.calculator.bmi.tracker.data.repository.HistoryRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import java.util.*
 
@@ -61,16 +62,7 @@ class DataCleanupManager private constructor(
         }.timeInMillis
 
         val toDelete = entries.filter { it.timestamp < cutoff }
-        var deleted = 0
-
-        withContext(Dispatchers.IO) {
-            toDelete.forEach { entry ->
-                historyRepository.deleteEntry(entry.id)
-                deleted++
-            }
-        }
-
-        return deleted
+        return historyRepository.deleteEntries(toDelete.map { it.id })
     }
 
     suspend fun cleanupByCalculator(
@@ -78,32 +70,7 @@ class DataCleanupManager private constructor(
         types: Set<CalculatorType>
     ): Int {
         val toDelete = entries.filter { it.calculatorType in types }
-        var deleted = 0
-
-        withContext(Dispatchers.IO) {
-            toDelete.forEach { entry ->
-                historyRepository.deleteEntry(entry.id)
-                deleted++
-            }
-        }
-
-        return deleted
-    }
-
-    suspend fun fixIntegrityIssues(entries: List<HistoryDisplayEntry>): Int {
-        val corruptedIds = integrityChecker.findCorruptedIds(entries)
-        val duplicateIds = integrityChecker.findDuplicateIds(entries)
-        val orphanedIds = integrityChecker.findOrphanedIds(entries)
-
-        val allIssueIds = (corruptedIds + duplicateIds + orphanedIds).distinct()
-
-        withContext(Dispatchers.IO) {
-            allIssueIds.forEach { id ->
-                historyRepository.deleteEntry(id)
-            }
-        }
-
-        return allIssueIds.size
+        return historyRepository.deleteEntries(toDelete.map { it.id })
     }
 
     suspend fun deleteEverything(): Boolean {
@@ -120,6 +87,8 @@ class DataCleanupManager private constructor(
                     historyRepository.deleteEntry(entryId)
                     data
                 } else null
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 null
             }
@@ -131,6 +100,8 @@ class DataCleanupManager private constructor(
             try {
                 historyRepository.restoreEntryFromMap(entryData)
                 true
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 false
             }

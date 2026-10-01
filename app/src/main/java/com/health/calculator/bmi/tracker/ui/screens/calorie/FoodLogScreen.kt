@@ -103,15 +103,17 @@ fun FoodLogScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    viewModel.showAddFoodDialog()
-                },
-                icon = { Icon(Icons.Default.Add, "Add food") },
-                text = { Text(stringResource(R.string.txt_add_food)) },
-                containerColor = MaterialTheme.colorScheme.primary
-            )
+            if (!uiState.foodStorageReadOnly) {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        viewModel.showAddFoodDialog()
+                    },
+                    icon = { Icon(Icons.Default.Add, "Add food") },
+                    text = { Text(stringResource(R.string.txt_add_food)) },
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     ) { padding ->
         val log = uiState.todayLog
@@ -124,32 +126,38 @@ fun FoodLogScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Daily Summary Ring
-            log?.let { DailySummaryCard(it) }
+            if (uiState.foodStorageReadOnly) {
+                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
+                    Text(
+                        text = stringResource(R.string.food_storage_read_only),
+                        modifier = Modifier.padding(16.dp),
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
+            } else {
+                // Do not show a fabricated empty summary if stored JSON is unreadable.
+                log?.let { DailySummaryCard(it) }
+                log?.let { MacroProgressCard(it) }
 
-            // Macro Progress Bars
-            log?.let { MacroProgressCard(it) }
-
-            // Quick Add Presets
-            QuickAddSection(
-                defaultPresets = viewModel.defaultPresets,
-                customPresets = uiState.customPresets,
-                isExpanded = uiState.showQuickAdd,
-                onToggle = viewModel::toggleQuickAdd,
-                onPresetTap = { preset ->
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    viewModel.addFoodFromPreset(preset)
-                },
-                onAddCustomPreset = viewModel::showAddPresetDialog,
-                onRemoveCustomPreset = viewModel::removeCustomPreset
-            )
-
-            // Per-Meal Log
-            log?.let { foodLog ->
-                MealLogSection(
-                    log = foodLog,
-                    onRemoveEntry = { viewModel.removeEntry(it) }
+                QuickAddSection(
+                    defaultPresets = viewModel.defaultPresets,
+                    customPresets = uiState.customPresets,
+                    isExpanded = uiState.showQuickAdd,
+                    onToggle = viewModel::toggleQuickAdd,
+                    onPresetTap = { preset ->
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        viewModel.addFoodFromPreset(preset)
+                    },
+                    onAddCustomPreset = viewModel::showAddPresetDialog,
+                    onRemoveCustomPreset = viewModel::removeCustomPreset
                 )
+
+                log?.let { foodLog ->
+                    MealLogSection(
+                        log = foodLog,
+                        onRemoveEntry = { viewModel.removeEntry(it) }
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(80.dp)) // FAB space

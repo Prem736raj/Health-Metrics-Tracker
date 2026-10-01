@@ -4,8 +4,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 import android.content.Context
 import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class StorageAnalyzer private constructor(
+class StorageAnalyzer internal constructor(
     @ApplicationContext private val context: Context
 ) {
     companion object {
@@ -19,10 +21,11 @@ class StorageAnalyzer private constructor(
         }
     }
 
-    fun analyzeStorage(): StorageInfo {
+    suspend fun analyzeStorage(): StorageInfo = withContext(Dispatchers.IO) {
         // Use the correct database name from AppDatabase
         val dbFile = context.getDatabasePath("health_calculator_database")
-        val historyBytes = if (dbFile?.exists() == true) dbFile.length() else 0L
+        val historyBytes = listOf(dbFile, File(dbFile.path + "-wal"), File(dbFile.path + "-shm"))
+            .filter { it.isFile }.sumOf { it.length() }
 
         val cacheBytes = getDirSize(context.cacheDir)
         val exportsDir = File(context.cacheDir, "exports")
@@ -40,9 +43,10 @@ class StorageAnalyzer private constructor(
 
         val totalSettings = settingsBytes + datastoreBytes
 
-        val totalBytes = historyBytes + cacheBytes + totalSettings + exportsBytes + backupsBytes
+        // Exports already belong to cacheBytes; do not count them twice.
+        val totalBytes = historyBytes + cacheBytes + totalSettings + backupsBytes
 
-        return StorageInfo(
+        StorageInfo(
             totalBytes = totalBytes,
             historyBytes = historyBytes,
             cacheBytes = (cacheBytes - exportsBytes).coerceAtLeast(0L), // Cache minus exports subfolder
@@ -52,25 +56,30 @@ class StorageAnalyzer private constructor(
         )
     }
 
-    fun clearCache(): Long {
+    suspend fun clearCache(): Long = withContext(Dispatchers.IO) {
         val before = getDirSize(context.cacheDir)
-        clearDir(context.cacheDir)
+        // Export removal has its own explicit action. Ordinary cache cleanup
+        // must not invalidate a report the user still intends to share.
+        context.cacheDir.listFiles()?.filterNot { it.name == "exports" }?.forEach { file ->
+            if (file.isDirectory) clearDir(file)
+            file.delete()
+        }
         val after = getDirSize(context.cacheDir)
-        return before - after
+        (before - after).coerceAtLeast(0L)
     }
 
-    fun clearExports(): Long {
+    suspend fun clearExports(): Long = withContext(Dispatchers.IO) {
         val dir = File(context.cacheDir, "exports")
         val size = getDirSize(dir)
         clearDir(dir)
-        return size
+        (size - getDirSize(dir)).coerceAtLeast(0L)
     }
 
-    fun clearBackups(): Long {
+    suspend fun clearBackups(): Long = withContext(Dispatchers.IO) {
         val dir = File(context.filesDir, "backups")
         val size = getDirSize(dir)
         clearDir(dir)
-        return size
+        (size - getDirSize(dir)).coerceAtLeast(0L)
     }
 
     private fun getDirSize(dir: File): Long {

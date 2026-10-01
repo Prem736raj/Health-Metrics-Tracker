@@ -42,7 +42,7 @@ enum class BottomNavItem(
     ),
     CALCULATORS(
         route = Screen.Calculators.route,
-        title = "Calculate",
+        title = "Calc",
         selectedIcon = Icons.Rounded.Calculate,
         unselectedIcon = Icons.Outlined.Calculate,
         contentDescription = "Health calculators"

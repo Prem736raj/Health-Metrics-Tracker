@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,6 +39,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -65,6 +68,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,7 +86,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private data class OnboardingPage(
@@ -145,9 +148,7 @@ fun OnboardingScreen(
     val pagerState = rememberPagerState(pageCount = { onboardingPages.size })
     val scope = rememberCoroutineScope()
     val isLastPage = pagerState.currentPage == onboardingPages.size - 1
-    var selectedStartAction by remember { mutableStateOf<OnboardingStartAction?>(null) }
-    var showContent by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { delay(100); showContent = true }
+    var selectedStartAction by rememberSaveable { mutableStateOf<OnboardingStartAction?>(null) }
 
     Scaffold(containerColor = Color.Transparent) { innerPadding ->
         Box(
@@ -155,12 +156,12 @@ fun OnboardingScreen(
                 Brush.verticalGradient(listOf(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.background))
             )
         ) {
-            AnimatedVisibility(visible = showContent, enter = fadeIn(tween(500))) {
+            Box {
                 Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                     AnimatedVisibility(visible = !isLastPage, enter = fadeIn(tween(200)), exit = fadeOut(tween(200)), modifier = Modifier.fillMaxWidth()) {
                         Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), contentAlignment = Alignment.CenterEnd) {
                             TextButton(onClick = onComplete) {
-                                Text(stringResource(R.string.txt_skip), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                Text(stringResource(R.string.txt_skip), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                     }
@@ -173,7 +174,11 @@ fun OnboardingScreen(
                     }
                     BottomSection(
                         pagerState = pagerState, isLastPage = isLastPage,
-                        onNext = { scope.launch { pagerState.animateScrollToPage(page = pagerState.currentPage + 1, animationSpec = tween(400, easing = FastOutSlowInEasing)) } },
+                        onNext = {
+                            if (!pagerState.isScrollInProgress && !isLastPage) {
+                                scope.launch { pagerState.animateScrollToPage(page = (pagerState.currentPage + 1).coerceAtMost(onboardingPages.lastIndex), animationSpec = tween(400, easing = FastOutSlowInEasing)) }
+                            }
+                        },
                         onComplete = onComplete, onSetUpProfile = onSetUpProfile,
                         selectedAction = selectedStartAction, onStartAction = onStartAction
                     )
@@ -217,7 +222,7 @@ private fun OnboardingPageContent(
         label = "float_y_$pageIndex"
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 32.dp, vertical = 16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(illustrationBoxSize).scale(iconScale.value)) {
             page.decorativeIcons.forEachIndexed { index, icon ->
                 val angle = (360f / page.decorativeIcons.size) * index
@@ -253,11 +258,11 @@ private fun OnboardingPageContent(
         Spacer(modifier = Modifier.height(10.dp))
         Text(stringResource(page.subtitleRes), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold, letterSpacing = 0.5.sp), color = accentColor, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(stringResource(page.descriptionRes), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), textAlign = TextAlign.Center, lineHeight = 24.sp, modifier = Modifier.padding(horizontal = 8.dp))
+        Text(stringResource(page.descriptionRes), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center, lineHeight = 24.sp, modifier = Modifier.padding(horizontal = 8.dp))
 
         if (isActionPage) {
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Choose a starting point", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.onboarding_choose_start), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(8.dp))
             OnboardingActionPicker(selectedAction = selectedAction, onSelectAction = onSelectAction)
         }
@@ -274,7 +279,7 @@ private fun OnboardingActionPicker(selectedAction: OnboardingStartAction?, onSel
                     val actionLabel = stringResource(action.labelRes)
                     val actionDescription = stringResource(action.descriptionRes)
                     Surface(
-                        modifier = Modifier.weight(1f).height(58.dp)
+                        modifier = Modifier.weight(1f).heightIn(min = 58.dp)
                             .selectable(selected = isSelected, role = Role.RadioButton, onClick = { onSelectAction(action) })
                             .semantics { contentDescription = "$actionLabel. $actionDescription"; selected = isSelected },
                         shape = RoundedCornerShape(14.dp),
@@ -282,7 +287,7 @@ private fun OnboardingActionPicker(selectedAction: OnboardingStartAction?, onSel
                         contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
                         border = BorderStroke(if (isSelected) 2.dp else 1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
                     ) {
-                        Row(modifier = Modifier.padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(action.icon, null, modifier = Modifier.size(20.dp))
                             Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                                 Text(actionLabel, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
@@ -306,7 +311,7 @@ private fun BottomSection(
     val selectedActionLabel = selectedAction?.let { stringResource(it.labelRes) }
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         PageIndicators(pageCount = onboardingPages.size, currentPage = pagerState.currentPage)
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         AnimatedVisibility(
             visible = isLastPage,
             enter = fadeIn(tween(300)) + slideInVertically(
@@ -318,9 +323,9 @@ private fun BottomSection(
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Button(
                     onClick = { selectedAction?.let(onStartAction) ?: onComplete() },
-                    modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp), shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary),
-                    contentPadding = PaddingValues(0.dp), elevation = ButtonDefaults.buttonElevation(6.dp, pressedElevation = 2.dp)
+                    contentPadding = PaddingValues(12.dp), elevation = ButtonDefaults.buttonElevation(6.dp, pressedElevation = 2.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                         Icon(selectedAction?.icon ?: Icons.Outlined.Timeline, null, modifier = Modifier.size(20.dp))
@@ -334,8 +339,8 @@ private fun BottomSection(
         }
         AnimatedVisibility(visible = !isLastPage, enter = fadeIn(tween(300)), exit = fadeOut(tween(200))) {
             Button(
-                onClick = onNext, modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = onboardingAccentColor(pagerState.currentPage), contentColor = MaterialTheme.colorScheme.onPrimary),
+                onClick = onNext, enabled = !pagerState.isScrollInProgress, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp), shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = onboardingAccentColor(pagerState.currentPage), contentColor = when (pagerState.currentPage % 3) { 0 -> MaterialTheme.colorScheme.onPrimary; 1 -> MaterialTheme.colorScheme.onSecondary; else -> MaterialTheme.colorScheme.onTertiary }),
                 contentPadding = PaddingValues(0.dp), elevation = ButtonDefaults.buttonElevation(4.dp, pressedElevation = 2.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {

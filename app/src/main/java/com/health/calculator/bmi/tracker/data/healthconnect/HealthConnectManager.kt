@@ -13,6 +13,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.CancellationException
 
 import java.time.Instant
 import java.time.LocalDate
@@ -61,6 +62,8 @@ class HealthConnectManager @Inject constructor(
 
             granted.containsAll(requiredPermissions)
 
+        } catch (cancelled: CancellationException) {
+            throw cancelled
         } catch (_: Exception) {
 
             false
@@ -105,6 +108,8 @@ class HealthConnectManager @Inject constructor(
                 val steps = aggregate[StepsRecord.COUNT_TOTAL] ?: 0L
                 HealthConnectStepsDay(date, steps.coerceAtLeast(0L))
             }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
         } catch (_: Exception) {
             emptyList()
         }
@@ -124,7 +129,11 @@ class HealthConnectManager @Inject constructor(
             val result = healthConnectClient.readRecords(
                 ReadRecordsRequest(
                     recordType = WeightRecord::class,
-                    timeRangeFilter = TimeRangeFilter.between(start, end)
+                    timeRangeFilter = TimeRangeFilter.between(start, end),
+                    // Default oldest-first ordering can omit the newest record
+                    // when the provider returns more than one page.
+                    ascendingOrder = false,
+                    pageSize = 1
                 )
             )
             result.records
@@ -137,6 +146,8 @@ class HealthConnectManager @Inject constructor(
                         null
                     }
                 }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
         } catch (_: Exception) {
             null
         }

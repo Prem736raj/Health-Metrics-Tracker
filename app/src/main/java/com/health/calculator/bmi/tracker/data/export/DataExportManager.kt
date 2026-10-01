@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider
 import com.health.calculator.bmi.tracker.data.model.CalculatorType
 import com.health.calculator.bmi.tracker.data.model.HistoryDisplayEntry
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,12 +44,12 @@ class DataExportManager(@ApplicationContext private val context: Context) {
         config: ExportConfig,
         profileName: String? = null,
         profileData: Map<String, String>? = null
-    ) {
+    ): Boolean {
         _exportProgress.update {
             ExportProgress(isExporting = true, statusMessage = "Preparing export...")
         }
 
-        try {
+        return try {
             val file = withContext(Dispatchers.IO) {
                 when (config.format) {
                     ExportFormat.PDF -> {
@@ -98,13 +99,18 @@ class DataExportManager(@ApplicationContext private val context: Context) {
                     statusMessage = "Export complete!"
                 )
             }
+            true
+        } catch (e: CancellationException) {
+            _exportProgress.update { ExportProgress() }
+            throw e
         } catch (e: Exception) {
             _exportProgress.update {
                 ExportProgress(
                     isExporting = false,
-                    error = "Export failed: ${e.localizedMessage}"
+                    error = "Could not create the export. Check available storage and try again."
                 )
             }
+            false
         }
     }
 
@@ -114,6 +120,8 @@ class DataExportManager(@ApplicationContext private val context: Context) {
                 shareImageHelper.generateHealthReportCard(card)
             }
             FileProvider.getUriForFile(context, authority, file)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             null
         }

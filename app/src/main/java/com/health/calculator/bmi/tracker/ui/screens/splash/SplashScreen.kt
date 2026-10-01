@@ -38,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,6 +79,7 @@ private val SplashTealLight = InversePrimaryLight
 fun SplashScreen(
     onSplashComplete: () -> Unit
 ) {
+    val latestOnSplashComplete by rememberUpdatedState(onSplashComplete)
     // ── Animation States ──────────────────────────────────────────────────
     val logoScale = remember { Animatable(0f) }
     val titleAlpha = remember { Animatable(0f) }
@@ -87,10 +89,7 @@ fun SplashScreen(
     val screenAlpha by animateFloatAsState(
         targetValue = if (fadeOut) 0f else 1f,
         animationSpec = tween(300, easing = EaseOutCubic),
-        label = "screen_fade",
-        finishedListener = {
-            if (fadeOut) onSplashComplete()
-        }
+        label = "screen_fade"
     )
 
     // Heartbeat pulse animation
@@ -147,12 +146,17 @@ fun SplashScreen(
             targetValue = 1f,
             animationSpec = tween(400, easing = FastOutSlowInEasing)
         )
+    }
 
-        // Step 4: Hold for a moment to let pulse animate
-        delay(600)
-
-        // Step 5: Fade out
+    // Keep navigation independent from animation completion. Compose animation
+    // clocks can be paused or disabled by system/test settings, but coroutine
+    // delays still advance, so a decorative animation can never trap the user
+    // on the splash destination.
+    LaunchedEffect(Unit) {
+        delay(1_600)
         fadeOut = true
+        delay(300)
+        latestOnSplashComplete()
     }
 
     // ── UI ────────────────────────────────────────────────────────────────

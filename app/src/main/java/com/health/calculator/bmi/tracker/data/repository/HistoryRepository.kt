@@ -46,49 +46,17 @@ class HistoryRepository @Inject constructor(
     }
 
     suspend fun getConsecutiveDaysWithEntryType(typeKey: String): Int {
-        val entries = historyDao.getEntriesByTypeSync(typeKey, 30) // Check last 30 days
-        if (entries.isEmpty()) return 0
-
-        var streak = 0
-        val cal = java.util.Calendar.getInstance()
-        cal.set(java.util.Calendar.HOUR_OF_DAY, 0)
-        cal.set(java.util.Calendar.MINUTE, 0)
-        cal.set(java.util.Calendar.SECOND, 0)
-        cal.set(java.util.Calendar.MILLISECOND, 0)
-        
-        var currentDay = cal.timeInMillis
-        val oneDay = 24 * 60 * 60 * 1000L
-
-        // Check if there's an entry for today or yesterday to start the streak
-        val lastEntryDate = entries[0].timestamp
-        cal.timeInMillis = lastEntryDate
-        cal.set(java.util.Calendar.HOUR_OF_DAY, 0)
-        cal.set(java.util.Calendar.MINUTE, 0)
-        cal.set(java.util.Calendar.SECOND, 0)
-        cal.set(java.util.Calendar.MILLISECOND, 0)
-        val lastEntryDay = cal.timeInMillis
-
-        if (lastEntryDay < currentDay - oneDay) return 0 // Streak broken if no entry yesterday or today
-
-        var lastProcessedDay = currentDay + oneDay // Future to start
-        val distinctDays = entries.map {
-            cal.timeInMillis = it.timestamp
-            cal.set(java.util.Calendar.HOUR_OF_DAY, 0)
-            cal.set(java.util.Calendar.MINUTE, 0)
-            cal.set(java.util.Calendar.SECOND, 0)
-            cal.set(java.util.Calendar.MILLISECOND, 0)
-            cal.timeInMillis
-        }.distinct().sortedDescending()
-
-        for (day in distinctDays) {
-            if (day == lastProcessedDay - oneDay || (lastProcessedDay > currentDay && (day == currentDay || day == currentDay - oneDay))) {
-                streak++
-                lastProcessedDay = day
-            } else {
-                break
-            }
-        }
-        return streak
+        val zone = java.time.ZoneId.systemDefault()
+        val today = java.time.LocalDate.now(zone)
+        // Bound by calendar dates, not 30 rows (one day can contain many logs).
+        val entries = historyDao.getEntriesByTypeInRange(
+            typeKey,
+            today.minusDays(29).atStartOfDay(zone).toInstant().toEpochMilli(),
+            today.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1
+        )
+        return com.health.calculator.bmi.tracker.core.utils.CalendarStreak.count(
+            entries.map { it.timestamp }, today, zone
+        )
     }
 
     suspend fun getLastEntryDate(): Long? {
@@ -104,6 +72,8 @@ class HistoryRepository @Inject constructor(
     suspend fun deleteEntry(id: Long) {
         historyDao.deleteEntryById(id)
     }
+
+    suspend fun deleteEntries(ids: List<Long>): Int = historyDao.deleteEntriesAtomically(ids)
 
     /** Delete all history entries */
     suspend fun deleteAllEntries() {

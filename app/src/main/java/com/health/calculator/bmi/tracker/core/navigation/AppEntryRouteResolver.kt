@@ -33,7 +33,6 @@ object AppEntryRouteResolver {
         "health_connections" to Screen.HealthConnections.route,
         "reminders" to Screen.Reminders.route,
         "weekly_report" to Screen.WeeklyReport.route,
-        "ai_coach" to Screen.AiCoach.route,
         WELLNESS_WELCOME_ROUTE to WELLNESS_WELCOME_ROUTE
     )
 

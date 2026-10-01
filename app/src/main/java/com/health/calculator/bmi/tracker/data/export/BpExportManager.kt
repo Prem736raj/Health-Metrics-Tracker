@@ -50,7 +50,7 @@ class BpExportManager(@ApplicationContext private val context: Context) {
                 }
                 // Header
                 fun writeRow(values: List<String>) {
-                    writer.append(values.joinToString(",") { escapeCsv(it) }).append('\n')
+                    writer.append(values.joinToString(",") { CsvCellEncoder.encode(it) }).append('\n')
                 }
 
                 writeRow(listOf(
@@ -718,11 +718,4 @@ class BpExportManager(@ApplicationContext private val context: Context) {
         }
     }
 
-    private fun escapeCsv(value: String): String {
-        return if (value.contains(',') || value.contains('"') || value.contains('\n')) {
-            "\"${value.replace("\"", "\"\"")}\""
-        } else {
-            value
-        }
-    }
 }

@@ -1,0 +1,690 @@
+HEALTH METRICS TRACKER
+CURRENT PRODUCTION READINESS RE-CHECK
+
+Repository:
+https://github.com/Prem736raj/Health-Metrics-Tracker
+
+Branch:
+master
+
+Latest master commit checked:
+9651ddb88c736cbf5a55349cb134b0d626dd69f5
+
+================================================================================
+1. CURRENT VERDICT
+================================================================================
+
+Current overall app quality:
+8.9 / 10
+
+Current code quality / code readiness:
+~9.1 / 10
+
+Current actual Play Store publishing readiness:
+~8.2 / 10
+
+Current status:
+STRONG RELEASE CANDIDATE
+NOT YET READY FOR FINAL PRODUCTION ROLLOUT
+
+The remaining work is now mostly:
+- real-device validation
+- accessibility/device matrix verification
+- Health Connect real-provider testing
+- reminder/widget lifecycle testing
+- signed release validation
+- Firebase production configuration
+- Google Play Console completion
+
+There is no longer a large unresolved code-hardening phase based on the latest re-check.
+
+================================================================================
+2. LATEST MASTER / CI STATUS
+================================================================================
+
+Current master:
+9651ddb88c736cbf5a55349cb134b0d626dd69f5
+
+Latest Android CI run on that exact commit:
+SUCCESS
+
+Current CI jobs:
+- build: PASS
+- instrumented-tests: PASS
+
+The build job runs:
+- ./gradlew test --stacktrace
+- ./gradlew lintRelease --stacktrace
+- ./gradlew assembleDebug --stacktrace
+- ./gradlew assembleRelease --stacktrace
+- ./gradlew bundleRelease --stacktrace
+
+The instrumented-tests job runs:
+- ./gradlew connectedDebugAndroidTest --stacktrace
+
+Emulator:
+- API 34
+- google_apis
+- x86_64
+
+Therefore, the current repository now has automated verification for:
+- unit tests
+- release lint
+- debug APK
+- release APK
+- release AAB
+- connected Android instrumentation tests
+- Room migration instrumentation tests
+
+================================================================================
+3. PREVIOUS 8 REMAINING RELEASE ITEMS — CURRENT STATUS
+================================================================================
+
+1. Full device/API QA, TalkBack, 2x font
+   STATUS: STILL REMAINING
+
+2. Room migration tests + oldest DB version
+   STATUS: ESSENTIALLY RESOLVED
+
+3. Health Connect real/multiple-provider testing
+   STATUS: STILL REMAINING
+
+4. Reminders/widgets reboot/timezone/Doze/OEM testing
+   STATUS: STILL REMAINING
+
+5. Signed production release AAB
+   STATUS: STILL REMAINING
+
+6. Firebase App Check production configuration + release AI verification
+   STATUS: STILL REMAINING
+
+7. Play Health Apps / Data Safety / Health Connect / closed test / pre-launch
+   STATUS: STILL REMAINING
+
+8. Protect master + close obsolete audit PR
+   STATUS: RESOLVED
+
+The old list of eight has effectively become FIVE main remaining release areas.
+
+================================================================================
+4. DATABASE / ROOM MIGRATION STATUS
+================================================================================
+
+This area has improved significantly.
+
+Current Room version:
+16
+
+Checked-in schema fixtures now include:
+13
+14
+15
+16
+
+Verified migration paths include:
+13 -> 14
+14 -> 15
+15 -> 16
+13 -> 16 chained migration
+
+The latest CI now executes the migration tests on an API 34 emulator and the
+instrumented test job passes.
+
+Important repository history finding:
+
+Older app builds originally used:
+applicationId = com.health.calculator.bmi.tracker
+
+Those older repository states included Room versions:
+12
+13
+14
+15
+
+The applicationId changed to:
+com.healthmetrics.tracker
+
+on 2026-08-31.
+
+At the point where the new applicationId appeared, the database was already
+version 15.
+
+This means:
+- old DB 12/13/14 builds were tied to a different Android package/applicationId
+- current public package history for com.healthmetrics.tracker begins around DB 15
+
+Therefore, the critical public migration path for the current package is:
+15 -> 16
+
+The additional 13 -> 16 test coverage is extra safety coverage.
+
+Remaining caveat:
+If any APK using com.healthmetrics.tracker with a DB older than 15 was manually
+distributed outside normal repository history, only the app owner can confirm it.
+
+Current conclusion:
+Room migration release risk is now LOW.
+
+================================================================================
+5. BRANCH PROTECTION / GITHUB STATUS
+================================================================================
+
+This is now fixed.
+
+Ruleset:
+Protect master
+
+Target:
+~DEFAULT_BRANCH
+
+Enforcement:
+active
+
+Required checks:
+- build
+- instrumented-tests
+
+Rules include:
+- pull request required
+- required conversation resolution
+- linear history
+- branch deletion blocked
+- non-fast-forward / force-push blocked
+
+The master branch now reports as protected.
+
+Old PR:
+#1 Audit hardening and launch readiness
+
+Status:
+CLOSED
+NOT MERGED
+
+This is the correct state.
+
+There is currently a documentation-only PR:
+#3 docs: update production release checklist and release status with verified CI evidence
+
+Its required CI checks are green.
+
+It can be merged when the wording is satisfactory.
+
+================================================================================
+6. WHAT STILL REMAINS BEFORE PRODUCTION
+================================================================================
+
+There are FIVE main remaining release areas.
+
+--------------------------------------------------------------------------------
+6.1 REAL DEVICE / ACCESSIBILITY QA
+--------------------------------------------------------------------------------
+
+Still required.
+
+Current repository QA matrix still leaves these unverified:
+
+Device/API matrix:
+- API 26/29 small phone
+- API 33/34 current phone
+- API 35/36 new Android phone
+- 600dp+ large/tablet layout
+
+Accessibility:
+- TalkBack
+- 1.5x font
+- 2.0x font
+- light mode
+- dark mode
+- landscape
+- split-screen
+- tablet widths
+
+Runtime:
+- cold start
+- process death
+- state restore
+- route restore
+- main navigation
+- every major calculator
+- exports
+- AI
+- settings
+- widgets
+- reminders
+
+The API 34 CI emulator proves connected test execution.
+It does NOT prove all UI/accessibility/device behavior.
+
+Release acceptance:
+[ ] No clipped important text at 2.0x font
+[ ] TalkBack can navigate all major screens
+[ ] No inaccessible icon-only controls
+[ ] Important charts have readable text alternatives
+[ ] No broken layouts on small devices
+[ ] No broken layouts on API 35/36
+[ ] Dark/light mode remain readable
+[ ] Process death does not corrupt important flows
+
+--------------------------------------------------------------------------------
+6.2 HEALTH CONNECT REAL-WORLD TESTING
+--------------------------------------------------------------------------------
+
+The code architecture is strong.
+
+Current requested Health Connect permissions remain minimal:
+- READ_STEPS
+- READ_WEIGHT
+
+The app does not request unnecessary write permissions.
+
+Steps use the Health Connect aggregation API rather than manually summing raw
+records, which is the correct direction.
+
+Still required on a real or realistic provider setup:
+
+Permission flow:
+[ ] grant Steps
+[ ] grant Weight
+[ ] grant only Steps
+[ ] grant only Weight
+[ ] deny all
+[ ] revoke Steps
+[ ] revoke Weight
+[ ] revoke all
+
+Provider behavior:
+[ ] Health Connect unavailable
+[ ] Health Connect available but empty
+[ ] one provider
+[ ] multiple providers
+[ ] Samsung Health where available
+[ ] Google Fit / other compatible provider where available
+
+Data behavior:
+[ ] no obvious duplicate step counting
+[ ] latest weight behaves correctly
+[ ] app remains usable when HC is denied
+[ ] process death during permission flow does not crash
+[ ] manual trackers remain available
+
+Release acceptance:
+Health Connect must fail gracefully and never block manual use.
+
+--------------------------------------------------------------------------------
+6.3 REMINDERS / WIDGETS / BACKGROUND LIFECYCLE
+--------------------------------------------------------------------------------
+
+The reminder architecture is much better than earlier versions.
+
+Still required:
+[ ] BP reminder fires correctly
+[ ] water reminder fires correctly
+[ ] weight reminder fires correctly
+[ ] notification tap opens correct destination
+[ ] notification denial does not crash app
+[ ] reboot restores required reminders
+[ ] timezone change recalculates schedules
+[ ] manual clock change behaves correctly
+[ ] DST transition behavior is acceptable
+[ ] Doze does not create pathological behavior
+[ ] OEM battery optimization does not break core UX without explanation
+[ ] widgets refresh after reboot
+[ ] widget actions persist correctly
+[ ] widget state survives process death
+
+Recommended OEM:
+Use at least one Samsung, Xiaomi, Realme, Vivo, Oppo, or similar device in
+addition to emulator/Pixel-style testing if available.
+
+ADB test examples:
+adb shell dumpsys alarm
+adb shell dumpsys deviceidle force-idle
+adb shell dumpsys deviceidle unforce
+adb shell am force-stop com.healthmetrics.tracker
+
+Release acceptance:
+No reminder/widget P0/P1 issue remains.
+
+--------------------------------------------------------------------------------
+6.4 SIGNED RELEASE + FIREBASE PRODUCTION VALIDATION
+--------------------------------------------------------------------------------
+
+CI currently proves release APK/AAB compilation.
+
+CI does NOT prove your real production upload key works.
+
+Still required:
+
+Signing:
+[ ] create/locate upload keystore
+[ ] store it outside Git
+[ ] configure:
+    RELEASE_STORE_FILE
+    RELEASE_STORE_PASSWORD
+    RELEASE_KEY_ALIAS
+    RELEASE_KEY_PASSWORD
+
+Run:
+./gradlew verifyPlayReleaseSigning
+./gradlew bundleRelease
+
+Verify:
+[ ] signed release AAB generated
+[ ] signing certificate SHA-256 recorded
+[ ] R8 mapping file saved
+[ ] bundle validates
+[ ] release build installs/tests where applicable
+
+Firebase:
+Current code correctly separates App Check providers:
+
+Debug:
+DebugAppCheckProviderFactory
+
+Release:
+PlayIntegrityAppCheckProviderFactory
+
+Still required in Firebase Console:
+[ ] production Android app matches com.healthmetrics.tracker
+[ ] release signing SHA-256 added
+[ ] Play Integrity App Check provider configured
+[ ] App Check token works in release build
+[ ] enforcement enabled only after successful verification
+[ ] Firebase AI requests succeed in signed release build
+[ ] analytics behaves according to user consent
+
+Release acceptance:
+AI must work from the signed release build with the intended production App
+Check configuration.
+
+--------------------------------------------------------------------------------
+6.5 GOOGLE PLAY CONSOLE COMPLETION
+--------------------------------------------------------------------------------
+
+Still required.
+
+Play Console:
+[ ] app exists with package com.healthmetrics.tracker
+[ ] Play App Signing configured
+[ ] upload key configured
+[ ] signed AAB accepted
+
+Health Apps:
+[ ] Health Apps declaration completed
+[ ] app categorized as wellness/health, not falsely as medical device
+[ ] claims match actual app behavior
+
+Health Connect:
+[ ] READ_STEPS declared
+[ ] READ_WEIGHT declared
+[ ] user-facing purpose matches app behavior
+[ ] no undeclared health permissions
+
+Data Safety:
+[ ] matches actual local storage
+[ ] optional Health Connect disclosed
+[ ] optional AI processing disclosed
+[ ] optional analytics disclosed
+[ ] deletion mechanism disclosed accurately
+
+Privacy:
+[ ] privacy policy URL works publicly
+[ ] terms URL works publicly
+[ ] support contact works
+[ ] no WHO endorsement implication
+
+Testing:
+[ ] closed testing track
+[ ] signed AAB uploaded
+[ ] testers added
+[ ] review completed
+[ ] pre-launch report reviewed
+
+Pre-launch report:
+[ ] no critical crashes
+[ ] no ANR blockers
+[ ] no severe accessibility issue
+[ ] no major security issue
+[ ] no layout blocker
+
+Store listing:
+[ ] app name
+[ ] short description
+[ ] full description
+[ ] 512x512 app icon
+[ ] 1024x500 feature graphic
+[ ] screenshots
+[ ] category
+[ ] content rating
+[ ] countries/regions
+[ ] release notes
+
+Production:
+[ ] staged rollout
+[ ] monitor Android Vitals
+[ ] monitor crash/ANR
+[ ] monitor App Check failures
+[ ] monitor support feedback
+
+================================================================================
+7. PERFORMANCE — RECOMMENDED BUT NOT A HARD BLOCKER
+================================================================================
+
+This is still worth doing.
+
+Recommended:
+- release-like cold-start measurement
+- macrobenchmark
+- frame timing on main routes
+- memory check during long export / AI use
+- battery/background observation
+
+Suggested targets:
+- no obvious main-thread I/O
+- no visibly slow cold launch on mid-range device
+- no sustained jank on Home / Track / main calculator result
+- no runaway background work
+
+This is recommended for the 9+/10 target, but it is not currently the primary
+release blocker.
+
+================================================================================
+8. CURRENT SCORECARD
+================================================================================
+
+Core functionality:
+9.1 / 10
+
+Medical / health correctness:
+8.9 / 10
+
+Reliability / code:
+9.0 / 10
+
+Security:
+9.1 / 10
+
+Privacy:
+9.1 / 10
+
+Health Connect code:
+9.1 / 10
+
+AI Assistant:
+9.0 / 10
+
+UI / UX:
+8.6 / 10
+
+Accessibility code:
+8.3 / 10
+
+Accessibility runtime proof:
+7.2 / 10
+
+Testing:
+9.0 / 10
+
+CI / CD:
+9.6 / 10
+
+Architecture:
+7.7 / 10
+
+Maintainability:
+8.3 / 10
+
+Play code readiness:
+9.2 / 10
+
+Actual publishing readiness:
+8.2 / 10
+
+OVERALL CURRENT APP QUALITY:
+8.9 / 10
+
+CURRENT CODE READINESS:
+~9.1 / 10
+
+================================================================================
+9. IS IT PRODUCTION READY?
+================================================================================
+
+Answer:
+NOT YET FOR FINAL PRODUCTION ROLLOUT.
+
+Better description:
+STRONG RELEASE CANDIDATE.
+
+Why not final production yet:
+- real-device accessibility QA not complete
+- real Health Connect provider testing not complete
+- reminder/widget lifecycle testing not complete
+- signed release artifact not yet verified
+- Firebase production App Check not yet verified
+- Play Console declarations/testing not yet complete
+
+There is no large unresolved code-hardening phase remaining based on the latest
+repository re-check.
+
+================================================================================
+10. FINAL FIVE RELEASE GATES
+================================================================================
+
+GATE 1 — DEVICE / ACCESSIBILITY
+[ ] API 26/29
+[ ] API 33/34
+[ ] API 35/36
+[ ] TalkBack
+[ ] 1.5x font
+[ ] 2.0x font
+[ ] dark/light
+[ ] small/large layout
+[ ] process death
+
+GATE 2 — HEALTH CONNECT
+[ ] grant
+[ ] deny
+[ ] revoke
+[ ] no provider
+[ ] no data
+[ ] multiple provider
+[ ] Samsung Health where practical
+
+GATE 3 — BACKGROUND
+[ ] reboot
+[ ] timezone
+[ ] clock change
+[ ] Doze
+[ ] notification denial
+[ ] OEM battery restriction
+[ ] widgets
+
+GATE 4 — SIGNED RELEASE / FIREBASE
+[ ] release keystore
+[ ] verifyPlayReleaseSigning
+[ ] signed AAB
+[ ] SHA-256
+[ ] production App Check
+[ ] release AI verification
+
+GATE 5 — GOOGLE PLAY
+[ ] Health Apps
+[ ] Data Safety
+[ ] Health Connect declarations
+[ ] privacy URL
+[ ] closed test
+[ ] pre-launch report
+[ ] listing assets
+[ ] staged rollout
+
+================================================================================
+11. RELEASE DECISION RULE
+================================================================================
+
+If all five gates pass and no new P0/P1 bug is found:
+
+APPROVE STAGED GOOGLE PLAY PRODUCTION ROLLOUT
+
+Expected quality after successful completion:
+approximately 9.1–9.3 / 10
+
+Do NOT delay the release for a giant architecture rewrite.
+
+Post-launch technical debt can include:
+- Hilt/service-locator consolidation
+- package structure cleanup
+- deeper tablet optimization
+- namespace cleanup
+- future wearable/watch integration
+- future multi-profile only after profile-scoped data migration
+
+================================================================================
+12. IMMEDIATE NEXT ACTIONS
+================================================================================
+
+Recommended order:
+
+1. Merge documentation-only PR #3 after review.
+2. Create/finalize the production upload keystore.
+3. Generate a signed release AAB.
+4. Register release SHA-256 in Firebase.
+5. Verify App Check / Firebase AI from release build.
+6. Upload to Play closed testing.
+7. Run device + Health Connect + reminder/widget QA.
+8. Review Play pre-launch report.
+9. Fix any discovered P0/P1.
+10. Start a small staged production rollout.
+
+================================================================================
+13. FINAL SUMMARY
+================================================================================
+
+The application has progressed from a codebase with several real medical,
+privacy, reminder, AI, export, and migration risks into a strong release
+candidate.
+
+Current state:
+- major previous code blockers fixed
+- CI green
+- instrumented tests green
+- Room migration test coverage improved
+- master protection fixed
+- obsolete hardening PR closed
+- medical/reference wording significantly improved
+- privacy/security posture strong
+- Health Connect permission scope conservative
+- AI retry/state behavior hardened
+
+What remains is now mostly evidence and release operations.
+
+FINAL CURRENT RATING:
+8.9 / 10
+
+FINAL CODE QUALITY / READINESS:
+~9.1 / 10
+
+FINAL PUBLIC PRODUCTION STATUS:
+WAIT UNTIL THE FIVE RELEASE GATES ABOVE ARE VERIFIED.
+
+END OF REPORT

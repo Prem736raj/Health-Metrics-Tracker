@@ -11,6 +11,7 @@ import com.health.calculator.bmi.tracker.data.repository.WeightRepository
 import com.health.calculator.bmi.tracker.data.repository.WeightTimeFilter
 import com.health.calculator.bmi.tracker.notifications.WeightReminderManager
 import com.health.calculator.bmi.tracker.domain.tracking.TrackingQualityPolicy
+import com.health.calculator.bmi.tracker.domain.tracking.WeightInputPolicy
 import com.health.calculator.bmi.tracker.domain.tracking.TrackingComparison
 import com.health.calculator.bmi.tracker.domain.tracking.buildTrackingComparison
 import com.health.calculator.bmi.tracker.domain.analytics.ProductAnalytics
@@ -18,6 +19,7 @@ import com.health.calculator.bmi.tracker.domain.analytics.ProductAnalyticsEvent
 import com.health.calculator.bmi.tracker.domain.analytics.NoOpProductAnalytics
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 
 data class WeightTrackingUiState(
     val weights: List<WeightEntry> = emptyList(),
@@ -137,11 +139,7 @@ class WeightTrackingViewModel @Inject constructor(
             it.copy(
                 isLogDialogOpen = true,
                 editingEntry = entry,
-                weightInput = String.format(
-                    java.util.Locale.getDefault(),
-                    "%.1f",
-                    if (it.useMetric) entry.weightKg else entry.weightLbs
-                ),
+                weightInput = WeightInputPolicy.editableValue(entry.weightKg, it.useMetric),
                 noteInput = entry.note.orEmpty(),
                 dateMillis = entry.dateMillis
             )
@@ -166,8 +164,8 @@ class WeightTrackingViewModel @Inject constructor(
 
     fun onSaveWeight() {
         val state = _uiState.value
-        val weight = state.weightInput.toDoubleOrNull()
-        val weightKg = weight?.let { if (state.useMetric) it else it / 2.20462 }
+        if (state.isSaving) return
+        val weightKg = WeightInputPolicy.kilograms(state.weightInput, state.useMetric)
         val validationError = when {
             weightKg == null -> "Enter a valid weight"
             else -> TrackingQualityPolicy.validateWeightKg(weightKg)
@@ -179,8 +177,8 @@ class WeightTrackingViewModel @Inject constructor(
             return
         }
 
+        _uiState.update { it.copy(isSaving = true) }
         viewModelScope.launch {
-            _uiState.update { it.copy(isSaving = true) }
             val note = state.noteInput.trim().ifBlank { null }
             val editingEntry = state.editingEntry
             try {
@@ -199,9 +197,13 @@ class WeightTrackingViewModel @Inject constructor(
                         )
                     )
                 }
-            } catch (_: IllegalArgumentException) {
-                _uiState.update { it.copy(isSaving = false, snackbarMessage = "Weight entry could not be saved") }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Weight entry could not be saved. Please try again.") }
                 return@launch
+            } finally {
+                _uiState.update { it.copy(isSaving = false) }
             }
             _uiState.update {
                 it.copy(
@@ -222,8 +224,14 @@ class WeightTrackingViewModel @Inject constructor(
 
     fun onDeleteEntry(entry: WeightEntry) {
         viewModelScope.launch {
-            weightRepository.deleteEntry(entry)
-            _uiState.update { it.copy(snackbarMessage = "Entry deleted") }
+            try {
+                weightRepository.deleteEntry(entry)
+                _uiState.update { it.copy(snackbarMessage = "Entry deleted") }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Entry could not be deleted. Please try again.") }
+            }
         }
     }
 
@@ -233,8 +241,14 @@ class WeightTrackingViewModel @Inject constructor(
 
     fun logWeightFromCalculator(weightKg: Double, source: WeightSource) {
         viewModelScope.launch {
-            weightRepository.logWeight(weightKg = weightKg, source = source)
-            _uiState.update { it.copy(snackbarMessage = "Weight updated from ${source.displayName}") }
+            try {
+                weightRepository.logWeight(weightKg = weightKg, source = source)
+                _uiState.update { it.copy(snackbarMessage = "Weight updated from ${source.displayName}") }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Weight entry could not be saved. Please try again.") }
+            }
         }
     }
 

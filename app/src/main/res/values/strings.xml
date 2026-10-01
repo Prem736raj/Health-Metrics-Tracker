@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="health_permissions_title">Health Connect privacy</string>
+    <string name="health_permissions_rationale">Health Metrics Tracker reads steps and weight only when you allow the corresponding connection. You can revoke access in Health Connect. Manual tracking remains available without these permissions. Open the full privacy policy using a browser; if no browser is installed, copy the address below on another device.</string>
+    <string name="health_permissions_open_policy">Open privacy policy</string>
+    <string name="integrity_review_notice">These checks can flag valid records, including repeated measurements or clock changes. No records are deleted automatically. Review calculator history and export a copy before deliberately deleting any entries.</string>
+    <string name="onboarding_choose_start">Choose a starting point</string>
 <string name="app_name">Health Metrics Tracker</string>
 
 <string name="widget_water_small_description">Shows your daily water intake progress</string>
@@ -839,6 +844,7 @@
 <string name="txt_macronutrients">Macronutrients</string>
 <string name="txt_today_s_calories">Today\'s Calories</string>
 <string name="txt_food_log">Food Log</string>
+<string name="food_storage_read_only">Saved food data could not be read. Food changes are paused to protect your stored records. Keep the app installed and seek help before clearing its data.</string>
 <string name="txt_per_meal_breakdown_1">Per Meal Breakdown</string>
 <string name="txt_percentages_must_total_100">⚠️ Percentages must total 100%</string>
 <string name="txt_custom_ratios_1">Custom Ratios</string>
@@ -1389,13 +1395,14 @@
 <string name="txt_whr_results">WHR Results</string>
 <string name="txt_height_is_needed_to_calculate_">Height is needed to calculate your Waist-to-Height Ratio</string>
     <string name="txt_enter_your_height">Enter Your Height</string>
-    <string name="privacy_policy_url">https://YOUR-DOMAIN.com/privacy</string>
-    <string name="terms_of_service_url">https://YOUR-DOMAIN.com/terms</string>
-    <string name="ai_coach_welcome">Hi! I\'m your AI Wellness Assistant.\n\nI can explain general fitness, nutrition, hydration and wellness topics.\n\nI can\'t diagnose medical conditions or replace a healthcare professional.</string>
-    <string name="ai_coach_error">Oops, I encountered an error. Please try again later.</string>
-    <string name="ai_coach_system_prompt">You are a friendly, professional AI Wellness Assistant.\nKeep your answers concise, encouraging, and easy to read on a mobile device.\nUser asks: %s</string>
+    <string name="privacy_policy_url">https://prem736raj.github.io/Health-Metrics-Tracker/privacy.html</string>
+    <string name="terms_of_service_url">https://prem736raj.github.io/Health-Metrics-Tracker/terms.html</string>
     <string name="onboarding_welcome_title">Welcome to\nHealth Metrics Tracker</string>
-    <string name="onboarding_welcome_description">Choose a few everyday measures to track, then understand them with clear, informational estimates. Your records stay private on this device.</string>
+    <string name="weight_edit_title">Edit weight</string>
+    <string name="weight_input_label">Weight (%1$s)</string>
+    <string name="weight_saving">Saving…</string>
+    <string name="weight_update">Update</string>
+    <string name="onboarding_welcome_description">Track everyday measures with clear, informational estimates. Core logs are stored on this device. Optional AI and sharing send selected information outside the app.</string>
     <string name="onboarding_calculators_title">10 practical\nhealth calculators</string>
     <string name="onboarding_calculators_subtitle">Evidence-informed estimates</string>
     <string name="onboarding_calculators_description">From BMI and BMR to blood pressure and heart-rate zones — each tool explains its method, sources, and limits.</string>

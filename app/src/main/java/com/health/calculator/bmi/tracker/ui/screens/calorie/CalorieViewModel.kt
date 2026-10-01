@@ -3,6 +3,7 @@ package com.health.calculator.bmi.tracker.ui.screens.calorie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import android.app.Application
+import com.health.calculator.bmi.tracker.R
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -107,7 +108,7 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
     private val historyRepository = CalorieHistoryRepository(application.applicationContext)
     private val profileRepository = ProfileRepository(ProfileDataStore(application.applicationContext))
     private val mainHistoryRepository = MainHistoryRepository(AppDatabase.getDatabase(application).historyDao())
-    private val foodLogRepository = FoodLogRepository(application.applicationContext)
+    private val foodLogRepository = (application as com.health.calculator.bmi.tracker.HealthCalculatorApp).foodLogRepository
 
     val activityLevels = listOf(
         ActivityLevelOption("sedentary", "Sedentary", "Desk job, no exercise. Mostly sitting throughout the day with minimal physical movement.", 1.2, "🪑"),
@@ -654,7 +655,11 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
                 mealSlot = getCurrentMealSlot(),
                 isPreset = false
             )
-            foodLogRepository.addEntry(entry)
+            if (!foodLogRepository.addEntry(entry)) {
+                _uiState.value = _uiState.value.copy(
+                    errorMessage = getApplication<Application>().getString(R.string.food_storage_read_only)
+                )
+            }
         }
     }
 

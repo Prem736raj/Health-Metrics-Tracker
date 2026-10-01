@@ -1,193 +1,64 @@
-# Play Console Data Safety Form Guide
+# Play Console Data Safety review guide
 
-Updated: 2026-09-18
+Updated: 20 September 2026. **Draft for owner verification; not pre-approved
+Yes/No answers and not evidence from a signed production build.**
 
-This document provides exact Yes/No answers for each Play Console Data Safety
-question, based on the actual implementation in `docs/DATA_SAFETY_MAPPING.md`
-and the current signed release build.
+The previous guide incorrectly treated on-device storage as Play “collection,”
+assumed Firebase crash uploads without an implemented Crashlytics integration,
+and implied local deletion removes service-side data. Those conclusions are
+superseded by this implementation-based review.
 
-> **Important**: Verify these answers against the actual release artifact before
-> submitting. If Firebase products, analytics behavior, or data handling change,
-> update this guide accordingly.
+## Definitions to apply
 
----
+Play's collection definition concerns transmission off the device, including
+SDK transmission. Solely on-device processing is not collection under that
+definition. Optional transmission still needs review; ephemeral processing is
+not an automatic exemption from answering the form. Sharing/service-provider
+and user-initiated-transfer exceptions depend on actual handling and terms.
+[Google Play Data Safety guidance](https://support.google.com/googleplay/android-developer/answer/10787469).
 
-## Section 1: Data Collection and Sharing
+Do not copy another app's answers. Final declarations must cover the actual
+release artifact, SDKs, enabled services, processors and retention settings.
 
-### Does your app collect or share any of the required user data types?
+## Source-backed data-flow worksheet
 
-**Answer: Yes**
+| Data / feature | Observed implementation | Owner review required |
+|---|---|---|
+| Core weight/BP/water/food/calculation logs | Stored in Room, DataStore or SharedPreferences; not included in allowlisted product analytics parameters | Local storage alone does not establish off-device collection; review user export paths separately |
+| Profile name/photo/preferences | Local profile and app-private image files | Confirm no additional distribution-specific upload SDKs; do not classify a local photo as uploaded |
+| Health Connect steps / weight | Optional, feature-led read permissions; manual weight copy can become a local weight record | Health Connect declarations and permitted use |
+| Product analytics | Default-off; fixed allowlisted product events, no raw health measurements in event parameters | App interactions, SDK identifiers and technical/derived data under the configured Analytics settings |
+| Crash logs | MainActivity writes a private local diagnostic file; no Crashlytics SDK declaration found in app Gradle | Do not claim automatic Firebase Crashlytics uploads; check Play diagnostics and any future crash SDK independently |
+| Reports/exports | PDF/CSV/JSON/image shared via scoped URI and user-selected target | Review user-initiated-transfer treatment; app cannot delete copies another app received |
+| Accounts, payments, ads | No implemented account, billing or ad flow found; advertising permissions removed | Confirm final merged manifest and business configuration before declaring absence |
 
-The app collects health and fitness data (locally stored).
+The absence of a particular Android permission is not proof that an SDK cannot
+derive a data category. Review SDK disclosures, not just manifest permissions.
+[Firebase Android disclosure reference](https://firebase.google.com/docs/android/play-data-disclosure).
 
----
+## Security and deletion answers are not automatic
 
-## Section 2: Data Types
+Cleartext traffic is disabled and Firebase APIs use TLS, but the final
+“encrypted in transit” answer requires checking all off-device paths in the
+release configuration. Android-private storage is not app-managed database
+encryption.
 
-### 2.1 Location
+In-app clear/reset controls delete local records. They do not prove deletion of
+service telemetry, backups held by a recipient or previously exported files. Do
+not assert a server-side deletion mechanism without verifying the service
+terms/configuration and the actual owner support process.
 
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Approximate location | No | |
-| Precise location | No | |
+## Before submitting
 
-### 2.2 Personal Info
+- [ ] Inspect the final merged release manifest and resolved SDK inventory.
+- [ ] Validate actual network/consent behavior with analytics off/on.
+- [ ] Review Firebase Analytics processing/retention settings.
+- [ ] Publish the updated privacy policy and verify its public URL in a browser.
+- [ ] Confirm applicable health-data/message/interaction/identifier categories.
+- [ ] Confirm collection purposes, optionality, sharing exceptions and deletion answers.
+- [ ] Complete the separate health-app and Health Connect declarations.
+- [ ] Retain screenshots/evidence of the final owner-approved console responses.
 
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Name | No | Profile uses a local display name only, not collected |
-| Email address | No | |
-| User IDs | No | No accounts |
-| Address | No | |
-| Phone number | No | |
-| Race and ethnicity | No | Ethnicity selection for WHR is local-only preference |
-| Political or religious beliefs | No | |
-| Sexual orientation | No | |
-| Other personal info | No | |
-
-### 2.3 Financial Info
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| User payment info | No | |
-| Purchase history | No | |
-| Credit score | No | |
-| Other financial info | No | |
-
-### 2.4 Health and Fitness
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Health info | **Yes** | Weight, BP readings, BMI, water intake, food logs — all stored locally |
-| Fitness info | **Yes** | Steps via Health Connect, exercise zone calculations — stored locally |
-
-**Is this data collected, shared, or both?**
-- **Collected**: Yes
-- **Shared**: No
-
-**Is this data processed ephemerally?**
-- No (it is persisted locally for the user's tracking features)
-
-**Is this data required for your app, or can users choose whether it's collected?**
-- Required for core features, but users choose which metrics to track
-
-**Why is this data collected?**
-- App functionality (wellness tracking and informational calculators)
-
-### 2.5 Messages
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Emails | No | |
-| SMS or MMS | No | |
-| Other in-app messages | **Yes** | AI chat messages stored locally |
-
-**Is this data shared?** No
-
-**Why is this data collected?** App functionality (AI Wellness Assistant)
-
-### 2.6 Photos and Videos
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Photos | No | |
-| Videos | No | |
-
-### 2.7 Audio
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Voice or sound recordings | No | |
-| Music files | No | |
-| Other audio files | No | |
-
-### 2.8 Files and Docs
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Files and docs | No | Exports are user-initiated and go to user's chosen location |
-
-### 2.9 Calendar
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Calendar events | No | |
-
-### 2.10 Contacts
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Contacts | No | |
-
-### 2.11 App Activity
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| App interactions | **Yes** (if analytics opted in) | Screen views, button taps — product analytics only |
-| In-app search history | No | |
-| Installed apps | No | |
-| Other user-generated content | No | |
-| Other actions | No | |
-
-**Is this data shared?** No
-
-**Why is this data collected?** Analytics (opt-in only, disabled by default)
-
-### 2.12 Web Browsing
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Web browsing history | No | |
-
-### 2.13 App Info and Performance
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Crash logs | **Yes** | Via Firebase infrastructure |
-| Diagnostics | **Yes** | Via Firebase infrastructure |
-| Other app performance data | No | |
-
-**Is this data shared?** No (processed by Firebase for the developer)
-
-**Why is this data collected?** Analytics, app functionality
-
-### 2.14 Device or Other IDs
-
-| Question | Answer | Notes |
-| --- | --- | --- |
-| Device or other IDs | **Yes** | Firebase App Check / Play Integrity uses device attestation |
-
-**Is this data shared?** No
-
-**Why is this data collected?** Security (App Check), app functionality
-
----
-
-## Section 3: Security Practices
-
-### Is all of the user data collected by your app encrypted in transit?
-
-**Answer: Yes**
-
-All network communication uses HTTPS/TLS. The `network_security_config.xml`
-enforces secure connections.
-
-### Do you provide a way for users to request that their data is deleted?
-
-**Answer: Yes**
-
-The app provides in-app clear-data controls. Users can also clear app data
-from Android Settings. No server-side user data exists beyond Firebase
-service infrastructure.
-
----
-
-## Section 4: Preview and Submit
-
-Before submitting, verify:
-
-1. The privacy policy URL resolves correctly.
-2. Answers match the actual signed release build behavior.
-3. Health Connect permissions are declared separately in the Health Connect
-   declarations section (not just Data Safety).
-4. Analytics collection is confirmed as opt-in / disabled by default.
+References: [engineering data-flow mapping](DATA_SAFETY_MAPPING.md),
+[current audit](audit/PRODUCTION_AUDIT_2026-09-19.md),
+[Health apps declaration](https://support.google.com/googleplay/android-developer/answer/14738291).

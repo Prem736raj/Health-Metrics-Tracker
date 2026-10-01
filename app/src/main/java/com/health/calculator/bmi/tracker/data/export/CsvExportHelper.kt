@@ -107,12 +107,6 @@ internal object CsvExportSchema {
             }
             add(entry.note.orEmpty())
         }
-        return values.joinToString(",") { escapeCsv(it) }
-    }
-
-    private fun escapeCsv(value: String): String {
-        return if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
-            "\"${value.replace("\"", "\"\"")}\""
-        } else value
+        return values.joinToString(",") { CsvCellEncoder.encode(it) }
     }
 }

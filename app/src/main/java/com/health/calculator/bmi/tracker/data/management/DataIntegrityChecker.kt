@@ -95,6 +95,9 @@ class DataIntegrityChecker private constructor() {
     private fun isDuplicate(a: HistoryDisplayEntry, b: HistoryDisplayEntry): Boolean {
         if (a.calculatorType != b.calculatorType) return false
         if (a.primaryValue != b.primaryValue) return false
+        if (a.primaryLabel != b.primaryLabel || a.category != b.category) return false
+        if (a.details != b.details || a.note != b.note) return false
+        if (a.id == b.id) return false
         val timeDiff = abs(a.timestamp - b.timestamp)
         return timeDiff < 1000L // Within 1 second
     }
@@ -109,13 +112,13 @@ class DataIntegrityChecker private constructor() {
 
     private fun buildStatusMessage(corrupted: Int, duplicates: Int, orphaned: Int): String {
         val total = corrupted + duplicates + orphaned
-        if (total == 0) return "All data verified ✓ No issues found."
+        if (total == 0) return "No potential issues found in calculator history."
 
         val parts = mutableListOf<String>()
         if (corrupted > 0) parts.add("$corrupted corrupted")
         if (duplicates > 0) parts.add("$duplicates duplicate")
         if (orphaned > 0) parts.add("$orphaned orphaned")
 
-        return "$total issue${if (total > 1) "s" else ""} found: ${parts.joinToString(", ")}."
+        return "$total potential issue${if (total > 1) "s" else ""} to review: ${parts.joinToString(", ")}. No records were changed."
     }
 }

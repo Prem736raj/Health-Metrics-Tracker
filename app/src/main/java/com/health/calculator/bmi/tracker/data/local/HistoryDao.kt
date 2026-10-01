@@ -28,6 +28,17 @@ interface HistoryDao {
     @Query("DELETE FROM history_entries WHERE id = :entryId")
     suspend fun deleteEntryById(entryId: Long)
 
+    @Query("DELETE FROM history_entries WHERE id IN (:entryIds)")
+    suspend fun deleteEntryIds(entryIds: List<Long>): Int
+
+    /** All chunks commit together; stay below SQLite's bind-parameter limit. */
+    @Transaction
+    suspend fun deleteEntriesAtomically(entryIds: List<Long>): Int {
+        var deleted = 0
+        entryIds.distinct().chunked(900).forEach { deleted += deleteEntryIds(it) }
+        return deleted
+    }
+
     @Query("UPDATE history_entries SET note = :note WHERE id = :id")
     suspend fun updateNote(id: Long, note: String)
 

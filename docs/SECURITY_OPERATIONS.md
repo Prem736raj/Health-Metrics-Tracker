@@ -6,13 +6,12 @@
 for `com.healthmetrics.tracker`. Its `current_key` is a Firebase-provisioned
 Android client API key, not a service-account private key, password or signing
 credential. Firebase documents these client identifiers as public by design;
-authorization for Firebase data comes from Firebase Security Rules and App
-Check, not from hiding this value.
+protect Firebase products with the controls appropriate to each enabled service
+and restrict the client key to the APIs the app actually uses.
 
-The key must remain scoped to Firebase-related APIs. Never add a Gemini
-Developer API key, service-account key, OAuth secret, signing key or other
-server credential to this file or to the Android repository. Those credentials
-belong in a server-side secret store.
+The key must remain scoped to Firebase-related APIs. Never add a service-account
+key, OAuth secret, signing key or other server credential to this file or to the
+Android repository. Those credentials belong in a server-side secret store.
 
 ## GitHub secret-scanning response
 
@@ -31,5 +30,5 @@ When GitHub flags this file:
    the value is public Firebase client configuration. Closing an alert does not
    replace the Google Cloud restriction review.
 
-This repository intentionally does not contain service-account credentials,
-release signing material or Gemini Developer API keys.
+This repository intentionally does not contain service-account credentials or
+release signing material.

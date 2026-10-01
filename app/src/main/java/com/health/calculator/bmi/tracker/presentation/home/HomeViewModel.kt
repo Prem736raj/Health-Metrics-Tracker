@@ -64,7 +64,7 @@ class HomeViewModel @Inject constructor(
     private val weightRepository = WeightRepository(database.weightDao())
     private val bloodPressureRepository = com.health.calculator.bmi.tracker.data.repository.BloodPressureRepository(database.bloodPressureDao())
     private val waterIntakeRepository = com.health.calculator.bmi.tracker.data.repository.WaterIntakeRepository(database.waterIntakeDao())
-    private val foodLogRepository = com.health.calculator.bmi.tracker.data.repository.FoodLogRepository(application)
+    private val foodLogRepository = (application as com.health.calculator.bmi.tracker.HealthCalculatorApp).foodLogRepository
     private val recommendationPrefs = RecommendationPreferencesManager(application)
     private val bmiGoalPrefs = com.health.calculator.bmi.tracker.data.preferences.BMIGoalPreferences(application)
 

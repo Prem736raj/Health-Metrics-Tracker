@@ -14,6 +14,7 @@ import com.health.calculator.bmi.tracker.data.repository.HistoryRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 
 @HiltViewModel
 class DataManagementViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
@@ -42,8 +43,16 @@ class DataManagementViewModel @Inject constructor(application: Application) : An
     private fun loadStorageInfo() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoadingStorage = true) }
-            val info = storageAnalyzer.analyzeStorage()
-            _uiState.update { it.copy(storageInfo = info, isLoadingStorage = false) }
+            try {
+                val info = storageAnalyzer.analyzeStorage()
+                _uiState.update { it.copy(storageInfo = info) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Storage information is unavailable. Please try again.") }
+            } finally {
+                _uiState.update { it.copy(isLoadingStorage = false) }
+            }
         }
     }
 
@@ -74,19 +83,27 @@ class DataManagementViewModel @Inject constructor(application: Application) : An
     }
 
     fun executeCleanupByAge() {
+        if (_uiState.value.isClearing) return
         val age = _uiState.value.selectedCleanupAge ?: return
         _uiState.update { it.copy(isClearing = true) }
 
         viewModelScope.launch {
-            val deleted = cleanupManager.cleanupByAge(allEntries, age)
-            _uiState.update {
-                it.copy(
-                    isClearing = false,
-                    showCleanupByAge = false,
-                    snackbarMessage = "$deleted entries deleted"
-                )
+            try {
+                val deleted = cleanupManager.cleanupByAge(allEntries, age)
+                _uiState.update {
+                    it.copy(
+                        showCleanupByAge = false,
+                        snackbarMessage = "$deleted entries deleted"
+                    )
+                }
+                loadStorageInfo()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Cleanup failed. No history entries were deleted.") }
+            } finally {
+                _uiState.update { it.copy(isClearing = false) }
             }
-            loadStorageInfo()
         }
     }
 
@@ -111,21 +128,29 @@ class DataManagementViewModel @Inject constructor(application: Application) : An
     }
 
     fun executeCleanupByCalculator() {
+        if (_uiState.value.isClearing) return
         val types = _uiState.value.selectedCleanupTypes
         if (types.isEmpty()) return
 
         _uiState.update { it.copy(isClearing = true) }
 
         viewModelScope.launch {
-            val deleted = cleanupManager.cleanupByCalculator(allEntries, types)
-            _uiState.update {
-                it.copy(
-                    isClearing = false,
-                    showCleanupByCalculator = false,
-                    snackbarMessage = "$deleted entries from ${types.size} calculator(s) deleted"
-                )
+            try {
+                val deleted = cleanupManager.cleanupByCalculator(allEntries, types)
+                _uiState.update {
+                    it.copy(
+                        showCleanupByCalculator = false,
+                        snackbarMessage = "$deleted entries from ${types.size} calculator(s) deleted"
+                    )
+                }
+                loadStorageInfo()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Cleanup failed. No history entries were deleted.") }
+            } finally {
+                _uiState.update { it.copy(isClearing = false) }
             }
-            loadStorageInfo()
         }
     }
 
@@ -133,21 +158,33 @@ class DataManagementViewModel @Inject constructor(application: Application) : An
 
     fun clearCache() {
         viewModelScope.launch {
-            val freed = storageAnalyzer.clearCache()
-            _uiState.update {
-                it.copy(snackbarMessage = "${StorageInfo.formatBytes(freed)} cache cleared")
+            try {
+                val freed = storageAnalyzer.clearCache()
+                _uiState.update {
+                    it.copy(snackbarMessage = "${StorageInfo.formatBytes(freed)} cache cleared")
+                }
+                loadStorageInfo()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Cache cleanup could not finish. Please try again.") }
             }
-            loadStorageInfo()
         }
     }
 
     fun clearExports() {
         viewModelScope.launch {
-            val freed = storageAnalyzer.clearExports()
-            _uiState.update {
-                it.copy(snackbarMessage = "${StorageInfo.formatBytes(freed)} exports cleared")
+            try {
+                val freed = storageAnalyzer.clearExports()
+                _uiState.update {
+                    it.copy(snackbarMessage = "${StorageInfo.formatBytes(freed)} exports cleared")
+                }
+                loadStorageInfo()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(snackbarMessage = "Export cleanup could not finish. Please try again.") }
             }
-            loadStorageInfo()
         }
     }
 
@@ -162,25 +199,6 @@ class DataManagementViewModel @Inject constructor(application: Application) : An
             delay(500) // Brief delay for UX
             val report = integrityChecker.checkIntegrity(allEntries)
             _uiState.update { it.copy(integrityReport = report) }
-        }
-    }
-
-    fun fixIntegrityIssues() {
-        viewModelScope.launch {
-            val fixed = cleanupManager.fixIntegrityIssues(allEntries)
-            _uiState.update { state ->
-                state.copy(
-                    integrityReport = state.integrityReport.copy(
-                        issuesFixed = fixed,
-                        corruptedEntries = 0,
-                        duplicateEntries = 0,
-                        orphanedEntries = 0,
-                        statusMessage = "$fixed issues fixed. Data is now clean."
-                    ),
-                    snackbarMessage = "$fixed issues fixed"
-                )
-            }
-            loadStorageInfo()
         }
     }
 

@@ -25,12 +25,12 @@ val OnPrimaryLight = Color(0xFFFFFFFF)
 val PrimaryContainerLight = Color(0xFFEDE4FF)
 val OnPrimaryContainerLight = Color(0xFF22005D)
 
-val SecondaryLight = Color(0xFF2ABBA7)       // Teal-mint — fresh & approachable
+val SecondaryLight = Color(0xFF00796B)       // Teal with 5.32:1 contrast against white
 val OnSecondaryLight = Color(0xFFFFFFFF)
 val SecondaryContainerLight = Color(0xFFCCFFF6)
 val OnSecondaryContainerLight = Color(0xFF00201B)
 
-val TertiaryLight = Color(0xFFFF6B6B)        // Living coral — warm, playful, human
+val TertiaryLight = Color(0xFFB73F48)        // Coral with 5.50:1 contrast against white
 val OnTertiaryLight = Color(0xFFFFFFFF)
 val TertiaryContainerLight = Color(0xFFFFE2E0)
 val OnTertiaryContainerLight = Color(0xFF3B0907)

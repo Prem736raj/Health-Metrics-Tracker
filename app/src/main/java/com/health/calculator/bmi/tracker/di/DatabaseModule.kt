@@ -55,6 +55,4 @@ object DatabaseModule {
     @Provides
     fun provideWeeklyReportDao(database: AppDatabase) = database.weeklyReportDao()
 
-    @Provides
-    fun provideChatDao(database: AppDatabase) = database.chatDao()
 }

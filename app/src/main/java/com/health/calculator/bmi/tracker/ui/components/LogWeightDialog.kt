@@ -2,9 +2,12 @@ package com.health.calculator.bmi.tracker.ui.components
 
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
-import com.health.calculator.bmi.tracker.domain.tracking.TrackingQualityPolicy
+import com.health.calculator.bmi.tracker.domain.tracking.WeightInputPolicy
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -13,8 +16,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,30 +49,42 @@ fun LogWeightDialog(
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
     }
 
-    val isValid = weightInput.toDoubleOrNull()?.let {
-        val weightKg = if (useMetric) it else it / 2.20462
-        TrackingQualityPolicy.validateWeightKg(weightKg) == null
-    } ?: false
+    val isValid = WeightInputPolicy.kilograms(weightInput, useMetric) != null
+    val keyboard = LocalSoftwareKeyboardController.current
+    val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    val submit = {
+        if (isValid && !isSaving) {
+            keyboard?.hide()
+            onSave()
+        }
+    }
 
     AlertDialog(
+        modifier = Modifier.imePadding(),
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = if (isEditing) "Edit weight" else stringResource(R.string.txt_log_weight),
+                text = if (isEditing) stringResource(R.string.weight_edit_title) else stringResource(R.string.txt_log_weight),
                 fontWeight = FontWeight.Bold
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(
+                modifier = Modifier
+                    .heightIn(max = if (isKeyboardVisible) 160.dp else 440.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 // Weight input
                 OutlinedTextField(
                     value = weightInput,
                     onValueChange = onWeightChange,
-                    label = { Text("Weight ($unit)") },
+                    label = { Text(stringResource(R.string.weight_input_label, unit)) },
                     leadingIcon = {
                         Icon(Icons.Outlined.MonitorWeight, contentDescription = null)
                     },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { submit() }),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
@@ -149,7 +167,7 @@ fun LogWeightDialog(
         },
         confirmButton = {
             Button(
-                onClick = onSave,
+                onClick = submit,
                 enabled = isValid && !isSaving
             ) {
                 if (isSaving) {
@@ -159,7 +177,7 @@ fun LogWeightDialog(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(if (isSaving) "Saving..." else if (isEditing) "Update" else "Save")
+                Text(stringResource(if (isSaving) R.string.weight_saving else if (isEditing) R.string.weight_update else R.string.txt_save))
             }
         },
         dismissButton = {

@@ -1,5 +1,12 @@
 name: Android CI
 
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ "master", "main" ]
@@ -9,6 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     env:
       GRADLE_OPTS: >-
         -Dorg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=768m

@@ -39,7 +39,8 @@ object BMRValidation {
         }
 
         val heightError = when {
-            formula == BMRFormula.WHO_FAO_UNU -> null // WHO doesn't need height
+            // Match the calculator's adult-input contract for every selectable
+            // equation, even where height does not contribute to the formula.
             !heightCm.isFinite() || heightCm <= 0f -> "Please enter a valid height"
             heightCm < 100f -> "Adult estimates require a height of at least 100 cm"
             heightCm > 250f -> "Please enter a height no greater than 250 cm"

@@ -19,7 +19,7 @@ import java.util.*
  */
 class WaterDataIntegrity(@ApplicationContext private val context: Context) {
 
-    private val dateKeyFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val dateKeyFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     private val prefs = context.getSharedPreferences("water_data_integrity", Context.MODE_PRIVATE)
 
     /**
@@ -88,7 +88,9 @@ class WaterDataIntegrity(@ApplicationContext private val context: Context) {
         gamificationDao.updateStreakData(updatedStreak)
 
         // Save yesterday's summary for history
-        saveYesterdaySummary(previousDate, yesterdayTotal, goalMl, metGoalYesterday)
+        // The previous app-open date may be several days ago, not yesterday.
+        val yesterdayDate = java.time.LocalDate.now().minusDays(1).toString()
+        saveYesterdaySummary(yesterdayDate, yesterdayTotal, goalMl, metGoalYesterday)
 
         // Refresh widget cache
         try {

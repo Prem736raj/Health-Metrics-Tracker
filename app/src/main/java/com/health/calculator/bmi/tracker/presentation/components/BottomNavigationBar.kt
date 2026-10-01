@@ -79,6 +79,8 @@ fun BottomNavigationBar(
                     Text(
                         text = item.title,
                         style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1,
+                        softWrap = false,
                         fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
                     )
                 },

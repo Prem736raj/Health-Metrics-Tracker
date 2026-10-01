@@ -10,12 +10,14 @@ import java.util.concurrent.TimeUnit
 
 object DateUtils {
 
-    private val fullDateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-    private val shortDateFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
-    private val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
-    private val dateTimeFormat = SimpleDateFormat("MMM d, yyyy • h:mm a", Locale.getDefault())
-    private val dayOfWeekFormat = SimpleDateFormat("EEEE", Locale.getDefault())
-    private val monthYearFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+    // SimpleDateFormat is mutable and not thread-safe. Resolve locale/timezone
+    // per call so settings changes do not leave process-wide stale formatters.
+    private val fullDateFormat get() = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+    private val shortDateFormat get() = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+    private val timeFormat get() = SimpleDateFormat("h:mm a", Locale.getDefault())
+    private val dateTimeFormat get() = SimpleDateFormat("MMM d, yyyy • h:mm a", Locale.getDefault())
+    private val dayOfWeekFormat get() = SimpleDateFormat("EEEE", Locale.getDefault())
+    private val monthYearFormat get() = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
 
     fun formatFullDate(timestamp: Long): String = fullDateFormat.format(Date(timestamp))
 
@@ -34,6 +36,7 @@ object DateUtils {
         val diff = now - timestamp
 
         return when {
+            diff < 0 -> formatShortDate(timestamp)
             diff < TimeUnit.MINUTES.toMillis(1) -> "Just now"
             diff < TimeUnit.HOURS.toMillis(1) -> {
                 val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)

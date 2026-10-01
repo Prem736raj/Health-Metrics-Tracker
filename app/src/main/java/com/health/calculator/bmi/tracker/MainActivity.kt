@@ -179,11 +179,21 @@ class MainActivity : ComponentActivity() {
             // Diagnostics stay in an app-private directory and are never
             // included in FileProvider share paths.
             val file = File(File(filesDir, "diagnostics").apply { mkdirs() }, "crash_log.txt")
-            FileOutputStream(file, true).use { output ->
+            // Keep only the latest startup crash and omit exception messages,
+            // which can contain values entered by a user. Repeated crashes
+            // must not grow a private diagnostics file without bound.
+            FileOutputStream(file, false).use { output ->
                 PrintWriter(output).use { writer ->
                     writer.println("Crash at ${java.util.Date()}")
-                    throwable.printStackTrace(writer)
-                    writer.println()
+                    var cause: Throwable? = throwable
+                    repeat(4) {
+                        val current = cause ?: return@repeat
+                        writer.println(current.javaClass.name)
+                        current.stackTrace.take(64).forEach { frame ->
+                            writer.println("at ${frame.className}.${frame.methodName}(${frame.fileName}:${frame.lineNumber})")
+                        }
+                        cause = current.cause
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.health.calculator.bmi.tracker.data.repository
 
 import javax.inject.Inject
+import com.health.calculator.bmi.tracker.core.navigation.Screen
 
 import com.health.calculator.bmi.tracker.data.model.*
 import kotlinx.coroutines.flow.Flow
@@ -15,11 +16,11 @@ class HealthOverviewRepository @Inject constructor(
 
     fun getHealthOverview(): Flow<HealthOverview> {
         return combine(
-            historyRepository.getLatestByType("BMI"),
-            historyRepository.getLatestByType("BP"),
-            historyRepository.getLatestByType("WHR"),
-            historyRepository.getLatestByType("BMR"),
-            historyRepository.getLatestByType("METABOLIC_SYNDROME"),
+            historyRepository.getLatestByType(CalculatorType.BMI.key),
+            historyRepository.getLatestByType(CalculatorType.BLOOD_PRESSURE.key),
+            historyRepository.getLatestByType(CalculatorType.WHR.key),
+            historyRepository.getLatestByType(CalculatorType.BMR.key),
+            historyRepository.getLatestByType(CalculatorType.METABOLIC_SYNDROME.key),
             waterGamificationRepository.observeStreakData(),
             foodLogRepository.getWeeklyAdherence()
         ) { args ->
@@ -35,13 +36,13 @@ class HealthOverviewRepository @Inject constructor(
             val wellnessScore = calculateWellnessScore(bmi, bp, whr, waterStreak, calorieAdherence)
 
             HealthOverview(
-                latestBmi = bmi?.toHealthMetricSummary("BMI", "bmi_calculator"),
-                latestBp = bp?.toHealthMetricSummary("Blood Pressure", "bp_calculator"),
-                latestWhr = whr?.toHealthMetricSummary("Waist-to-Hip", "whr_calculator"),
-                latestBmr = bmr?.toHealthMetricSummary("BMR", "bmr_calculator"),
+                latestBmi = bmi?.toHealthMetricSummary("BMI", Screen.BmiCalculator.route),
+                latestBp = bp?.toHealthMetricSummary("Blood Pressure", Screen.BloodPressureCalculator.route),
+                latestWhr = whr?.toHealthMetricSummary("Waist-to-Hip", Screen.WaistToHipCalculator.route),
+                latestBmr = bmr?.toHealthMetricSummary("BMR", Screen.BmrCalculator.route),
                 waterStreak = waterStreak,
                 calorieAdherence = calorieAdherence,
-                metabolicSyndromeStatus = metabolic?.toHealthMetricSummary("Metabolic Risk", "metabolic_syndrome"),
+                metabolicSyndromeStatus = metabolic?.toHealthMetricSummary("Metabolic Risk", Screen.MetabolicSyndromeCalculator.route),
                 healthScore = wellnessScore
             )
         }
@@ -52,26 +53,10 @@ class HealthOverviewRepository @Inject constructor(
             label = label,
             value = resultValue + (resultLabel?.let { " $it" } ?: ""),
             category = category ?: "Unknown",
-            categoryColor = mapToHealthCategoryColor(category),
+            categoryColor = HealthCategoryPresentation.colorFor(category),
             lastUpdated = timestamp,
             navigateRoute = route
         )
-    }
-
-    private fun mapToHealthCategoryColor(category: String?): HealthCategoryColor {
-        if (category == null) return HealthCategoryColor.NEUTRAL
-        val low = category.lowercase()
-        return when {
-            low.contains("normal") || low.contains("optimal") || low.contains("healthy") || low.contains("below action") ->
-                HealthCategoryColor.EXCELLENT
-            low.contains("overweight") || low.contains("high normal") || low.contains("moderate") || low.contains("above action") ->
-                HealthCategoryColor.MODERATE
-            low.contains("obese") || low.contains("hypertension") || low.contains("high risk") || low.contains("stage 1") || low.contains("several indicators") ->
-                HealthCategoryColor.WARNING
-            low.contains("emergency") || low.contains("crisis") || low.contains("stage 2") || low.contains("markedly") ->
-                HealthCategoryColor.DANGER
-            else -> HealthCategoryColor.NEUTRAL
-        }
     }
 
     /**

@@ -130,7 +130,7 @@ object BMRCalculator {
     // Validation helpers
     fun validateWeight(weightKg: Float): String? {
         return when {
-            weightKg <= 0f -> "Please enter a valid weight"
+            !weightKg.isFinite() || weightKg <= 0f -> "Please enter a valid weight"
             weightKg < 10f -> "Weight seems too low. Please check"
             weightKg > 500f -> "Weight exceeds maximum range"
             else -> null

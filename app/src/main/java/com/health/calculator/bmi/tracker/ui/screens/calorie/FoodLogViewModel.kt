@@ -3,6 +3,7 @@ package com.health.calculator.bmi.tracker.ui.screens.calorie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import android.app.Application
+import com.health.calculator.bmi.tracker.R
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.health.calculator.bmi.tracker.data.model.DailyFoodLog
@@ -10,11 +11,13 @@ import com.health.calculator.bmi.tracker.data.model.FoodEntry
 import com.health.calculator.bmi.tracker.data.model.FoodPreset
 import com.health.calculator.bmi.tracker.data.repository.FoodLogRepository
 import com.health.calculator.bmi.tracker.domain.usecase.CalorieHistoryAnalyticsUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class FoodLogUiState(
     val todayLog: DailyFoodLog? = null,
@@ -31,6 +34,7 @@ data class FoodLogUiState(
     val newFoodMealSlot: String = "Other",
     val newFoodServingSize: String = "",
     val showMacroFields: Boolean = false,
+    val foodStorageReadOnly: Boolean = false,
     // Custom preset form
     val presetName: String = "",
     val presetCalories: String = "",
@@ -46,7 +50,7 @@ data class FoodLogUiState(
 @HiltViewModel
 class FoodLogViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
-    private val repository = FoodLogRepository(application.applicationContext)
+    private val repository = (application as com.health.calculator.bmi.tracker.HealthCalculatorApp).foodLogRepository
 
     private val _uiState = MutableStateFlow(FoodLogUiState())
     val uiState: StateFlow<FoodLogUiState> = _uiState.asStateFlow()
@@ -56,6 +60,7 @@ class FoodLogViewModel @Inject constructor(application: Application) : AndroidVi
 
     init {
         viewModelScope.launch {
+            withContext(Dispatchers.IO) { repository.getHistoricalLogs() }
             repository.checkAndResetIfNewDay()
             repository.todayLog.collectLatest { log ->
                 _uiState.value = _uiState.value.copy(todayLog = log)
@@ -66,14 +71,29 @@ class FoodLogViewModel @Inject constructor(application: Application) : AndroidVi
                 _uiState.value = _uiState.value.copy(customPresets = presets)
             }
         }
+        viewModelScope.launch {
+            repository.isReadOnly.collectLatest { readOnly ->
+                _uiState.value = _uiState.value.copy(foodStorageReadOnly = readOnly)
+            }
+        }
+    }
+
+    private fun showStorageError() {
+        _uiState.value = _uiState.value.copy(
+            errorMessage = getApplication<Application>().getString(R.string.food_storage_read_only)
+        )
     }
 
     fun setTargetCalories(calories: Double, protein: Double = 0.0, carbs: Double = 0.0, fat: Double = 0.0) {
-        repository.saveTargetCalories(calories)
-        repository.updateDailyTargets(calories, protein, carbs, fat)
+        if (repository.updateDailyTargets(calories, protein, carbs, fat)) {
+            repository.saveTargetCalories(calories)
+        } else {
+            showStorageError()
+        }
     }
 
     fun showAddFoodDialog() {
+        if (repository.isReadOnly.value) { showStorageError(); return }
         _uiState.value = _uiState.value.copy(
             showAddFoodDialog = true,
             newFoodName = "", newFoodCalories = "",
@@ -88,6 +108,7 @@ class FoodLogViewModel @Inject constructor(application: Application) : AndroidVi
     }
 
     fun showAddPresetDialog() {
+        if (repository.isReadOnly.value) { showStorageError(); return }
         _uiState.value = _uiState.value.copy(
             showAddPresetDialog = true,
             presetName = "", presetCalories = "", presetProtein = "",
@@ -127,19 +148,24 @@ class FoodLogViewModel @Inject constructor(application: Application) : AndroidVi
         val name = s.newFoodName.trim()
         if (name.isBlank()) { _uiState.value = s.copy(errorMessage = "Please enter a food name"); return }
         val calories = s.newFoodCalories.toDoubleOrNull()
-        if (calories == null || calories <= 0) { _uiState.value = s.copy(errorMessage = "Please enter valid calories"); return }
+        if (calories == null || !calories.isFinite() || calories <= 0) { _uiState.value = s.copy(errorMessage = "Please enter valid calories"); return }
+        val macros = listOf(s.newFoodProtein, s.newFoodCarbs, s.newFoodFat).map { FoodInputPolicy.parseMacro(it) }
+        if (macros.any { it == null }) {
+            _uiState.value = s.copy(errorMessage = "Enter non-negative numbers for macros, or leave them blank")
+            return
+        }
 
         val entry = FoodEntry(
             name = name,
             calories = calories,
-            proteinGrams = s.newFoodProtein.toDoubleOrNull() ?: 0.0,
-            carbGrams = s.newFoodCarbs.toDoubleOrNull() ?: 0.0,
-            fatGrams = s.newFoodFat.toDoubleOrNull() ?: 0.0,
+            proteinGrams = requireNotNull(macros[0]),
+            carbGrams = requireNotNull(macros[1]),
+            fatGrams = requireNotNull(macros[2]),
             mealSlot = s.newFoodMealSlot,
             servingSize = s.newFoodServingSize,
             isPreset = false
         )
-        repository.addEntry(entry)
+        if (!repository.addEntry(entry)) { showStorageError(); return }
         hideAddFoodDialog()
     }
 
@@ -154,11 +180,11 @@ class FoodLogViewModel @Inject constructor(application: Application) : AndroidVi
             servingSize = preset.servingSize,
             isPreset = true
         )
-        repository.addEntry(entry)
+        if (!repository.addEntry(entry)) showStorageError()
     }
 
     fun removeEntry(entryId: Long) {
-        repository.removeEntry(entryId)
+        if (!repository.removeEntry(entryId)) showStorageError()
     }
 
     fun saveCustomPreset() {
@@ -166,24 +192,29 @@ class FoodLogViewModel @Inject constructor(application: Application) : AndroidVi
         val name = s.presetName.trim()
         if (name.isBlank()) return
         val calories = s.presetCalories.toDoubleOrNull() ?: return
+        val macros = listOf(s.presetProtein, s.presetCarbs, s.presetFat).map { FoodInputPolicy.parseMacro(it) }
+        if (!calories.isFinite() || calories <= 0 || macros.any { it == null }) {
+            _uiState.value = s.copy(errorMessage = "Enter positive calories and non-negative macros")
+            return
+        }
 
         val preset = FoodPreset(
             id = "custom_${System.currentTimeMillis()}",
             name = name,
             calories = calories,
-            proteinGrams = s.presetProtein.toDoubleOrNull() ?: 0.0,
-            carbGrams = s.presetCarbs.toDoubleOrNull() ?: 0.0,
-            fatGrams = s.presetFat.toDoubleOrNull() ?: 0.0,
+            proteinGrams = requireNotNull(macros[0]),
+            carbGrams = requireNotNull(macros[1]),
+            fatGrams = requireNotNull(macros[2]),
             servingSize = s.presetServing,
             emoji = s.presetEmoji,
             isCustom = true
         )
-        repository.addCustomPreset(preset)
+        if (!repository.addCustomPreset(preset)) { showStorageError(); return }
         hideAddPresetDialog()
     }
 
     fun removeCustomPreset(id: String) {
-        repository.removeCustomPreset(id)
+        if (!repository.removeCustomPreset(id)) showStorageError()
     }
 
     private fun getCurrentMealSlot(): String {

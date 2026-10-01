@@ -1,6 +1,13 @@
 # Release status
 
-Updated: 2026-09-16
+> Current audit notice (29 September 2026): this document contains historical
+> checkpoints, not proof that all code-fixable issues are closed. The source-backed
+> [production audit](audit/PRODUCTION_AUDIT_2026-09-19.md) supersedes broad completion
+> claims below and records current tests and remaining repository/device work.
+> The AI Wellness Assistant was removed from the current app source on
+> 29 September 2026; earlier AI-specific notes below are historical only.
+
+Updated: 2026-09-29
 
 This file records evidence that can be reproduced from the repository. It does
 not replace device, Play Console, Firebase Console, signing, or closed-test
@@ -9,6 +16,16 @@ verification.
 ## Current code and build gates
 
 - Application ID remains `com.healthmetrics.tracker`.
+- Current local source (28 September) passes 218 debug JVM tests and 218 release
+  JVM tests with zero failures/errors; debug/test APK packaging and
+  `assembleRelease bundleRelease` also pass.
+- A final cached combined gate covering both JVM suites, debug/test packaging,
+  both lint variants, `assembleRelease`, and `bundleRelease` reports
+  `BUILD SUCCESSFUL in 48s` (172 actionable tasks; 2 executed, 170 up-to-date).
+- `lintDebug` and `lintRelease` both pass with 0 errors, 846 warnings and 1 hint.
+- audit34/API 34 passes the full 25-test instrumentation suite with all animation
+  scales disabled; a fresh cold launch reaches visible onboarding and the
+  targeted log scan shows no app fatal exception or app ANR.
 - Latest completed audit commit is tracked in Git history; verify the SHA with
   `git log -1 --oneline` before creating a release artifact.
 - Required local gates are `test`, `lintRelease`, `assembleDebug`,
@@ -16,6 +33,9 @@ verification.
 - Release signing is intentionally credential-gated through
   `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, and
   `RELEASE_KEY_PASSWORD`; no key or password is stored in this repository.
+  `verifyPlayReleaseSigning` currently fails because those owner-controlled
+  values are not supplied, so the locally produced release artifacts are not a
+  signed Play upload.
 
 ## Audit fixes now covered by code/tests
 
@@ -41,19 +61,20 @@ These cannot be proven by a Windows unit/build run:
    in GitHub Actions CI. Schema fixtures 13, 14, 15, and 16 are checked in and
    wired into androidTest assets; 13→14, 14→15, 15→16, and chained 13→16 migrations
    all verified with row preservation and column integrity.
-3. Run cold-start and macrobenchmark measurements with Firebase/App Check
-   enabled in a release-like build; no startup performance number is claimed.
+3. Run cold-start and macrobenchmark measurements with optional Firebase
+   Analytics available in a release-like build; no startup performance number
+   is claimed.
 4. Exercise BP reminders across reboot, `TIME_SET`, timezone and DST changes,
    notification denial, and OEM battery restrictions.
 5. Run Compose/accessibility checks on small and large screens, 1.5–2.0x font
    scale, TalkBack, dark/light mode, and API 26/33/34/35/36 devices.
 6. Validate Health Connect aggregation with multiple data sources, denied
    permissions, unsupported providers, and process death.
-7. Complete Play Console/Firebase owner tasks: release signing, App Check
-   production registration, privacy/data-safety declarations, closed testing,
-   store listing, and crash/ANR monitoring.
+7. Complete Play Console/Firebase owner tasks: release signing,
+   privacy/data-safety declarations, optional Analytics configuration, closed
+   testing, store listing, and crash/ANR monitoring.
 
-## Post-audit medical and AI trust hardening — 2026-09-11
+## Post-audit medical trust hardening — 2026-09-11
 
 - **Status:** Code-fixable items complete locally; device/provider validation
   remains open.
@@ -64,9 +85,7 @@ These cannot be proven by a Windows unit/build run:
   categorization, recommendations and widget accessibility copy at inclusive
   `≥180 systolic or ≥120 diastolic`. Heart-rate zones no longer present fixed
   duration prescriptions and instead provide talk-test/planning guidance. The
-  unused BSA placeholder reader was removed. AI retry now replaces the transient
-  error bubble and reuses the persisted user turn rather than inserting a
-  duplicate user message. Public privacy/terms/support links now use the
+  unused BSA placeholder reader was removed. Public privacy/terms/support links now use the
   canonical `Health-Metrics-Tracker` Pages/repository URL.
 - **Follow-up:** Widget blood-pressure badges now delegate to the same
   categorization precedence as the calculator, so isolated severe systolic or
@@ -91,7 +110,7 @@ These cannot be proven by a Windows unit/build run:
   progress ring has a spoken summary and session removal uses a 48 dp target;
   decorative emoji markers are no longer rendered.
 - **Tests:** Added WHR landmark/reference-boundary, blood-pressure severe-edge,
-  heart-rate guidance and AI conversation-turn policy tests. The full local
+  and heart-rate guidance tests. The full local
   Gradle gate is green; connected instrumentation built its APK but stopped
   before execution on 2026-09-11 with `No connected devices!`.
 - **Owner/runtime notes:** Repository history contains an early Room version 12

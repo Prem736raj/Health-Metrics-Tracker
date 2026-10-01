@@ -56,8 +56,6 @@ Build a useful routine without pressure:
 - Choose gentle reminders only when they help
 - Add an Android home-screen widget for selected progress information
 
-The optional AI Wellness Assistant can answer general wellness questions. It is not a doctor. App context is off unless you explicitly enable it, and the assistant is designed not to diagnose, prescribe or recommend medication changes.
-
 Your choices stay in your hands:
 
 - Core tracking and calculators work without an account
@@ -121,6 +119,8 @@ Use the first two screenshots to explain the product in search previews. Do not 
 
 ## Feature graphic and icon concept
 
+- A [1024×500 candidate feature graphic](store/feature-graphic-1024x500.png)
+  now exists for owner review; it has not been uploaded or approved in Play Console.
 - Feature graphic: 1024×500 JPEG/24-bit PNG, an abstract blue-green path connecting small water, weight and trend shapes; no hospital cross, body silhouette, ranking badge, price or dense text. Keep the central area quiet so the icon and listing title remain distinct.
 - App icon: retain a simple geometric wellness mark with a single focal shape and high contrast; no words, numbers, medical cross or promotional badge. Export a 512×512 32-bit PNG with alpha under 1 MB.
 - Verify light/dark contrast, color-blind readability and legibility at launcher size before upload.

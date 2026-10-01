@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Assessment
-import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Calculate
 import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material.icons.outlined.Edit
@@ -151,7 +151,6 @@ fun CalculatorsHubScreen(onOpen: (CalculatorDestination) -> Unit) {
 fun InsightsHubScreen(
     onOpenWeeklyReport: () -> Unit,
     onOpenTrends: () -> Unit,
-    onOpenAssistant: () -> Unit,
     onOpenAchievements: () -> Unit,
     onOpenArticles: () -> Unit,
     onOpenHistory: () -> Unit,
@@ -185,7 +184,6 @@ fun InsightsHubScreen(
             }
             item { HubActionCard("Weekly wellness summary", "Compare your check-ins with the previous week", Icons.Outlined.Assessment, onOpenWeeklyReport, MaterialTheme.colorScheme.primary) }
             item { HubActionCard("Trends", "Review your weight trend; use Track for water and blood pressure logs", Icons.Outlined.Timeline, onOpenTrends, HealthColors.Good) }
-            item { HubActionCard("AI Wellness Assistant", "Ask general wellness questions with optional context", Icons.Outlined.AutoAwesome, onOpenAssistant, MaterialTheme.colorScheme.tertiary) }
             item { HubActionCard("Milestones", "Celebrate consistent, non-competitive progress", Icons.Outlined.Flag, onOpenAchievements, HealthColors.Healthy) }
             item { HubActionCard("Learn", "Read practical, evidence-informed explainers", Icons.Outlined.ShowChart, onOpenArticles, HealthColors.Info) }
             item { HubActionCard("All history", "Open the detailed history and export tools", Icons.Outlined.History, onOpenHistory, MaterialTheme.colorScheme.primary) }
@@ -278,12 +276,17 @@ private fun HubScaffold(
     content: @Composable (androidx.compose.foundation.layout.PaddingValues) -> Unit
 ) {
     Scaffold(
+        // The root Scaffold already reserves the bottom navigation area. The
+        // top app bar handles the status-bar inset itself; applying the child
+        // Scaffold's default safe-drawing insets here leaves a second blank
+        // strip above bottom navigation and clips the last visible card.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(title, fontWeight = FontWeight.Bold)
-                        Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)

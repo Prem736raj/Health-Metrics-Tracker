@@ -1,6 +1,5 @@
 package com.health.calculator.bmi.tracker.data.repository
 
-import javax.inject.Inject
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 import android.content.Context
@@ -10,6 +9,7 @@ import com.health.calculator.bmi.tracker.data.model.FoodPreset
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -24,7 +24,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class FoodLogRepository @Inject constructor(@ApplicationContext private val context: Context) {
+class FoodLogRepository(@ApplicationContext private val context: Context) {
 
     private val prefs by lazy {
         context.getSharedPreferences("food_log", Context.MODE_PRIVATE)
@@ -37,6 +37,10 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
     private val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE
     private val todayKey: String
         get() = LocalDate.now(ZoneId.systemDefault()).format(dateFormat)
+
+    private val _isReadOnly = MutableStateFlow(false)
+    /** A malformed stored record must not be replaced with an apparently empty log. */
+    val isReadOnly: StateFlow<Boolean> = _isReadOnly.asStateFlow()
 
     private val _todayLog = MutableStateFlow(emptyDailyLog())
     /**
@@ -70,9 +74,21 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
     )
 
     init {
-        loadTodayLog()
-        loadCustomPresets()
+        if (!_isReadOnly.value && verifyStoredData()) {
+            loadTodayLog()
+            loadCustomPresets()
+        }
         scheduleDateRefresh()
+    }
+
+    private fun verifyStoredData(): Boolean = try {
+        prefs.getString("log_date", null)
+        prefs.getString("today_log", null)?.let { fromJson(JSONObject(it)) }
+        presetPrefs.getString("custom_presets", null)?.let { parsePresets(it) }
+        true
+    } catch (_: Exception) {
+        _isReadOnly.value = true
+        false
     }
 
     private fun scheduleDateRefresh() {
@@ -90,23 +106,25 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
     }
 
     @Synchronized
-    fun addEntry(entry: FoodEntry) {
-        checkAndResetIfNewDay()
+    fun addEntry(entry: FoodEntry): Boolean {
+        if (!checkAndResetIfNewDay()) return false
         val current = _todayLog.value
-        val updatedEntries = current.entries + entry
+        val updatedEntries = FoodHistoryPolicy.append(current.entries, entry)
         val updated = current.copy(entries = updatedEntries)
         _todayLog.value = updated
         saveTodayLog(updated)
+        return true
     }
 
     @Synchronized
-    fun removeEntry(entryId: Long) {
-        checkAndResetIfNewDay()
+    fun removeEntry(entryId: Long): Boolean {
+        if (!checkAndResetIfNewDay()) return false
         val current = _todayLog.value
         val updatedEntries = current.entries.filter { it.id != entryId }
         val updated = current.copy(entries = updatedEntries)
         _todayLog.value = updated
         saveTodayLog(updated)
+        return true
     }
 
     @Synchronized
@@ -115,8 +133,8 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         targetProtein: Double = 0.0,
         targetCarbs: Double = 0.0,
         targetFat: Double = 0.0
-    ) {
-        checkAndResetIfNewDay()
+    ): Boolean {
+        if (!checkAndResetIfNewDay()) return false
         val updated = _todayLog.value.copy(
             targetCalories = targetCalories,
             targetProteinGrams = targetProtein,
@@ -125,45 +143,60 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         )
         _todayLog.value = updated
         saveTodayLog(updated)
+        return true
     }
 
-    fun addCustomPreset(preset: FoodPreset) {
+    fun addCustomPreset(preset: FoodPreset): Boolean {
+        if (_isReadOnly.value) return false
         val current = _customPresets.value.toMutableList()
         current.add(preset)
         _customPresets.value = current
         saveCustomPresets(current)
+        return true
     }
 
-    fun removeCustomPreset(presetId: String) {
+    fun removeCustomPreset(presetId: String): Boolean {
+        if (_isReadOnly.value) return false
         val current = _customPresets.value.toMutableList()
         current.removeAll { it.id == presetId }
         _customPresets.value = current
         saveCustomPresets(current)
+        return true
     }
 
     @Synchronized
-    fun checkAndResetIfNewDay() {
+    fun checkAndResetIfNewDay(): Boolean {
+        if (_isReadOnly.value) return false
         val savedDate = prefs.getString("log_date", "") ?: ""
         val today = todayKey
         if (FoodLogDayPolicy.needsReset(savedDate, today)) {
             // Save yesterday's log to history
             val yesterdayLog = _todayLog.value
             if (savedDate.isNotBlank() && yesterdayLog.entries.isNotEmpty()) {
-                saveToHistory(yesterdayLog, savedDate)
+                if (!saveToHistory(yesterdayLog, savedDate)) return false
             }
             // Reset for today
             val fresh = emptyDailyLog()
             _todayLog.value = fresh
             saveTodayLog(fresh)
         }
+        return true
     }
 
+    @Synchronized
     fun getHistoricalLogs(): List<DailyFoodLog> {
-        val json = prefs.getString("history_logs", null) ?: return emptyList()
+        if (_isReadOnly.value) return emptyList()
         return try {
-            val arr = JSONArray(json)
-            (0 until arr.length()).map { fromJson(arr.getJSONObject(it)) }
-        } catch (_: Exception) { emptyList() }
+            prefs.getString("history_logs", null)?.let { parseHistory(it) } ?: emptyList()
+        } catch (_: Exception) {
+            _isReadOnly.value = true
+            emptyList()
+        }
+    }
+
+    private fun parseHistory(json: String): List<DailyFoodLog> {
+        val arr = JSONArray(json)
+        return (0 until arr.length()).map { fromJson(arr.getJSONObject(it)) }
     }
 
     private fun loadTodayLog() {
@@ -175,7 +208,10 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
                 try {
                     _todayLog.value = fromJson(JSONObject(json))
                     return
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                    _isReadOnly.value = true
+                    return
+                }
             }
         }
         if (savedDate.isNotBlank() && savedDate != today) {
@@ -183,10 +219,11 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
             // replacing it. This also covers users who never reopen the food
             // screen while the app is running.
             prefs.getString("today_log", null)?.let { json ->
-                runCatching { fromJson(JSONObject(json)) }
-                    .getOrNull()
-                    ?.takeIf { it.entries.isNotEmpty() }
-                    ?.let { saveToHistory(it, savedDate) }
+                val oldLog = try { fromJson(JSONObject(json)) } catch (_: Exception) {
+                    _isReadOnly.value = true
+                    return
+                }
+                if (oldLog.entries.isNotEmpty() && !saveToHistory(oldLog, savedDate)) return
             }
         }
         val fresh = emptyDailyLog()
@@ -197,26 +234,24 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
     private fun loadCustomPresets() {
         val json = presetPrefs.getString("custom_presets", null) ?: return
         try {
-            val arr = JSONArray(json)
-            val list = mutableListOf<FoodPreset>()
-            for (i in 0 until arr.length()) {
-                val o = arr.getJSONObject(i)
-                list.add(
-                    FoodPreset(
-                        id = o.getString("id"),
-                        name = o.getString("name"),
-                        calories = o.getDouble("calories"),
-                        proteinGrams = o.getDouble("protein"),
-                        carbGrams = o.getDouble("carbs"),
-                        fatGrams = o.getDouble("fat"),
-                        servingSize = o.getString("serving"),
-                        emoji = o.getString("emoji"),
-                        isCustom = true
-                    )
-                )
-            }
-            _customPresets.value = list
-        } catch (_: Exception) {}
+            _customPresets.value = parsePresets(json)
+        } catch (_: Exception) {
+            _isReadOnly.value = true
+        }
+    }
+
+    private fun parsePresets(json: String): List<FoodPreset> {
+        val arr = JSONArray(json)
+        return (0 until arr.length()).map { i ->
+            val o = arr.getJSONObject(i)
+            FoodPreset(
+                id = o.getString("id"), name = o.getString("name"),
+                calories = o.getDouble("calories"), proteinGrams = o.getDouble("protein"),
+                carbGrams = o.getDouble("carbs"), fatGrams = o.getDouble("fat"),
+                servingSize = o.getString("serving"), emoji = o.getString("emoji"),
+                isCustom = true
+            )
+        }
     }
 
     private fun saveTodayLog(log: DailyFoodLog) {
@@ -238,16 +273,23 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         presetPrefs.edit().putString("custom_presets", arr.toString()).apply()
     }
 
-    private fun saveToHistory(log: DailyFoodLog, date: String) {
-        val current = getHistoricalLogs().toMutableList()
-        current.add(0, log.copy(date = date))
+    private fun saveToHistory(log: DailyFoodLog, date: String): Boolean {
+        val current = FoodHistoryPolicy.archive(getHistoricalLogs(), log.copy(date = date))
+        if (_isReadOnly.value) return false
         val arr = JSONArray()
-        current.take(90).forEach { arr.put(toJson(it)) }
+        // History is user data, not a rolling cache. Never silently discard old days.
+        current.forEach { arr.put(toJson(it)) }
         prefs.edit().putString("history_logs", arr.toString()).apply()
+        return true
     }
 
     private fun emptyDailyLog(): DailyFoodLog {
-        val targetCals = prefs.getFloat("target_calories", 2000f).toDouble()
+        val targetCals = try {
+            prefs.getFloat("target_calories", 2000f).toDouble()
+        } catch (_: ClassCastException) {
+            _isReadOnly.value = true
+            2000.0
+        }
         return DailyFoodLog(
             date = todayKey,
             entries = emptyList(),
@@ -296,33 +338,14 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         )
     }
 
-    fun saveTargetCalories(calories: Double) {
+    fun saveTargetCalories(calories: Double): Boolean {
+        if (_isReadOnly.value) return false
         prefs.edit().putFloat("target_calories", calories.toFloat()).apply()
+        return true
     }
 
-    fun getWeeklyAdherence(): kotlinx.coroutines.flow.Flow<Float> = kotlinx.coroutines.flow.flow {
-        val history = getHistoricalLogs()
-        val today = _todayLog.value
-        
-        val last7Days = (history + today).take(7)
-        if (last7Days.isEmpty()) {
-            emit(0f)
-            return@flow
-        }
-        
-        var adherenceSum = 0f
-        last7Days.forEach { log ->
-            val consumed = log.entries.sumOf { it.calories }
-            val target = log.targetCalories
-            if (target > 0) {
-                // Adherence = 1 if within +/- 10% of target, otherwise linear drop-off?
-                // Or just (consumed / target) capped at 1?
-                // Let's use simple (consumed / target) capped at 1 for now.
-                val ratio = (consumed / target).toFloat()
-                adherenceSum += ratio.coerceIn(0f, 1f)
-            }
-        }
-        emit(adherenceSum / last7Days.size)
+    fun getWeeklyAdherence(): kotlinx.coroutines.flow.Flow<Float> = todayLog.map { today ->
+        FoodHistoryPolicy.weeklyAdherence(getHistoricalLogs() + today, LocalDate.now(ZoneId.systemDefault()))
     }
 
     fun getDailyCalorieGoal(): kotlinx.coroutines.flow.Flow<Int> = kotlinx.coroutines.flow.flow {

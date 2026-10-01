@@ -88,7 +88,7 @@ class ConfigurationResilienceTest {
         val criticalAliases = listOf(
             "home", "track", "calculators", "insights", "profile",
             "bmi_calculator", "water_tracker", "blood_pressure",
-            "reminders", "settings", "ai_coach"
+            "reminders", "settings"
         )
         criticalAliases.forEach { alias ->
             assertNotNull(

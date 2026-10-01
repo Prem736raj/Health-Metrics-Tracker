@@ -195,8 +195,7 @@ fun DataManagementScreen(
             item(key = "integrity_card") {
                 IntegrityCard(
                     report = uiState.integrityReport,
-                    onCheck = { viewModel.runIntegrityCheck() },
-                    onFix = { viewModel.fixIntegrityIssues() }
+                    onCheck = { viewModel.runIntegrityCheck() }
                 )
             }
 
@@ -435,8 +434,7 @@ private fun ActionCard(
 @Composable
 private fun IntegrityCard(
     report: IntegrityReport,
-    onCheck: () -> Unit,
-    onFix: () -> Unit
+    onCheck: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(14.dp),
@@ -522,16 +520,11 @@ private fun IntegrityCard(
 
                     Spacer(Modifier.height(8.dp))
 
-                    Button(
-                        onClick = onFix,
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = HealthColors.Warning),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(Icons.Default.Build, null, Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text("Fix ${report.totalIssues} Issues")
-                    }
+                    Text(
+                        stringResource(R.string.integrity_review_notice),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
 

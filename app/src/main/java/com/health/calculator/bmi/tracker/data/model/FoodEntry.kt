@@ -38,7 +38,8 @@ data class DailyFoodLog(
     val totalCarbs: Double get() = entries.sumOf { it.carbGrams }
     val totalFat: Double get() = entries.sumOf { it.fatGrams }
     val remainingCalories: Double get() = targetCalories - totalCalories
-    val calorieProgress: Float get() = (totalCalories / targetCalories).toFloat().coerceIn(0f, 2f)
+    val calorieProgress: Float get() = if (targetCalories.isFinite() && targetCalories > 0 && totalCalories.isFinite())
+        (totalCalories / targetCalories).toFloat().coerceIn(0f, 2f) else 0f
     val proteinProgress: Float
         get() = if (targetProteinGrams > 0) (totalProtein / targetProteinGrams).toFloat().coerceIn(0f, 1.5f) else 0f
     val carbProgress: Float

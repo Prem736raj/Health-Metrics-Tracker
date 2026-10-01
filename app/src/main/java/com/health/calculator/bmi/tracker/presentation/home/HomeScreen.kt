@@ -25,7 +25,6 @@ import androidx.compose.ui.draw.shadow
 import java.text.SimpleDateFormat
 import java.util.Date
 
-import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.History
@@ -117,7 +116,6 @@ fun HomeScreen(
     onNavigateToHistory: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    onNavigateToAiCoach: () -> Unit,
     onNavigateToWeight: () -> Unit,
     onNavigateToHealthConnections: () -> Unit,
     onNavigateToCalculators: () -> Unit,
@@ -153,7 +151,6 @@ fun HomeScreen(
             "health_connections" -> onNavigateToHealthConnections()
             "track" -> onNavigateToTrack()
             "calculators" -> onNavigateToCalculators()
-            "ai_coach" -> onNavigateToAiCoach()
             "settings" -> onNavigateToSettings()
         }
     }
@@ -225,7 +222,6 @@ fun HomeScreen(
                 recommendations = HomeDashboardPolicy.insightPreview(uiState.recommendations),
                 onOpenRecommendation = navigateRoute,
                 onDismissRecommendation = viewModel::dismissRecommendation,
-                onOpenAiAssistant = onNavigateToAiCoach,
                 modifier = Modifier.padding(horizontal = HealthSpacing.screenHorizontal)
             )
         }
@@ -681,7 +677,6 @@ private fun InsightPreviewSection(
     recommendations: List<SmartRecommendation>,
     onOpenRecommendation: (String) -> Unit,
     onDismissRecommendation: (String) -> Unit,
-    onOpenAiAssistant: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -775,20 +770,10 @@ private fun InsightPreviewSection(
                     }
                 }
                 Text(
-                    "App suggestions use saved activity rules. AI responses are separate.",
+                    "App suggestions use saved activity rules and the information you record.",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Button(
-                    onClick = onOpenAiAssistant,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
-                    contentPadding = PaddingValues(vertical = 12.dp)
-                ) {
-                    Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp), tint = WellnessPalette.OnHero)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Open AI Wellness Assistant", fontWeight = FontWeight.Bold, color = WellnessPalette.OnHero)
-                }
             }
         }
     }

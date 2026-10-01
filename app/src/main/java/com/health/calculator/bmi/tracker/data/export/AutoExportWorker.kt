@@ -7,6 +7,7 @@ import com.health.calculator.bmi.tracker.data.local.AppDatabase
 import com.health.calculator.bmi.tracker.data.model.toDisplayEntry
 import com.health.calculator.bmi.tracker.data.repository.HistoryRepository
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.CancellationException
 
 class AutoExportWorker(
     appContext: Context,
@@ -41,17 +42,24 @@ class AutoExportWorker(
 
                 // We don't have easy access to profile data here without more plumbing, 
                 // but we can export the history at least.
-                exportManager.exportData(
+                val exported = exportManager.exportData(
                     entries = entries.map { it.toDisplayEntry() },
                     config = config
                 )
+
+                if (!exported) return retryOrFail()
 
                 scheduleManager.updateLastExportTime()
             }
 
             Result.success()
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Result.retry()
+            retryOrFail()
         }
     }
+
+    private fun retryOrFail(): Result =
+        if (runAttemptCount < 3) Result.retry() else Result.failure()
 }

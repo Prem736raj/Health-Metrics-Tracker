@@ -1,28 +1,40 @@
 # Production Release Checklist
 
-Updated: 2026-09-18
+Updated: 2026-09-28
 
 This checklist covers every step from signed AAB to staged Play Store rollout.
 Items are ordered by dependency. Do not skip items unless explicitly noted.
 
+Current local pre-signing evidence (28 September): debug and release JVM suites
+each pass 218 tests; debug/test APKs build; debug/release lint passes with zero
+errors (846 warnings, 1 hint each); unsigned release APK/AAB packaging succeeds;
+audit34/API 34 passes 25 instrumentation tests with animations disabled and a
+final cached combined Gradle gate reports `BUILD SUCCESSFUL in 48s`. A manual
+cold launch reaches onboarding. `verifyPlayReleaseSigning` remains red
+until the owner supplies the existing/new Play upload-key credentials.
+
 ## Prerequisites
 
-- [x] Confirm the oldest database version ever distributed to real users.
+- [ ] Owner must confirm the oldest database version ever distributed to real users.
       If any user received DB version ≤12, create migration fixtures and tests
       before proceeding. If no distribution predates version 13, the current
-      migration chain (13→14→15→16) is sufficient. (Schemas 13, 14, 15, 16 verified in androidTest assets).
-- [x] Verify CI is green on the release commit (`test`, `lintRelease`,
+      migration chain (13→14→15→16) is covered by tests. Checked-in schema
+      fixtures do not establish which versions real users received.
+- [ ] Verify CI is green on the actual release commit (`test`, `lintRelease`,
       `assembleDebug`, `assembleRelease`, `bundleRelease`, `connectedDebugAndroidTest`).
-      Verified: Run #35362161609 on commit 9651ddb passed all unit, lint, packaging,
-      and emulator instrumented tests.
+      Historical run #35362161609 on commit 9651ddb is not evidence for the
+      current uncommitted audit changes. See the current audit verification ledger.
 
 ---
 
 ## 1. Release Signing
 
-- [ ] Generate a release keystore (if not already done):
+- [ ] Confirm whether an upload key already exists and which certificate Play
+      Console expects. Do not generate a replacement for an existing app without
+      checking its signing history. If this is a new app and no upload key exists,
+      generate one in a secure directory outside the repository:
       ```
-      keytool -genkeypair -v -keystore health-metrics-release.jks \
+      keytool -genkeypair -v -keystore /secure/path/health-metrics-release.jks \
         -keyalg RSA -keysize 2048 -validity 10000 \
         -alias health-metrics-key \
         -dname "CN=Health Metrics Tracker, O=Prem736raj"
@@ -49,24 +61,19 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
       ```
       bundletool validate --bundle=app/build/outputs/bundle/release/app-release.aab
       ```
-- [ ] Extract the signing certificate SHA-256 for Firebase:
+- [ ] Extract the upload-key certificate SHA-256 and retain it with the release
+      signing records:
       ```
-      keytool -list -v -keystore health-metrics-release.jks -alias health-metrics-key
+      keytool -list -v -keystore /secure/path/health-metrics-release.jks -alias health-metrics-key
       ```
 - [ ] Save the R8 mapping file from
       `app/build/outputs/mapping/release/mapping.txt` — needed for Play Console.
 
 ## 3. Firebase Configuration
 
-- [ ] In Firebase Console → Project Settings → Your Apps:
-      - Verify SHA-256 fingerprint from the release keystore is registered.
-- [ ] In Firebase Console → App Check:
-      - Register Play Integrity as the attestation provider for the release app.
-      - Add the SHA-256 fingerprint.
-      - Set enforcement to "Enforced" only after verifying tokens work.
 - [ ] Build a release APK, install on a device, and verify:
-      - Firebase AI requests succeed (App Check tokens are valid).
-      - Analytics events appear (if consent is granted).
+      - Analytics remains off before consent.
+      - Analytics events appear only after consent is granted.
 - [ ] Review Firebase data retention and processor settings.
 
 ## 4. Google Play Console Setup
@@ -83,8 +90,8 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 - [ ] Short description: see `docs/ASO_LAUNCH_PLAN.md` (within 80 chars)
 - [ ] Full description: see `docs/ASO_LAUNCH_PLAN.md` (within 4000 chars)
 - [ ] Upload 512×512 app icon (32-bit PNG with alpha, <1 MB)
-- [ ] Upload 1024×500 feature graphic
-- [ ] Upload at least 2 phone screenshots (min 320px, max 3840px, 16:9 or 9:16)
+- [ ] Review and upload the local [1024×500 feature graphic](store/feature-graphic-1024x500.png)
+- [ ] Review and upload at least 2 phone screenshots (min 320px, max 3840px, 16:9 or 9:16); two unedited [API 34 candidates](store/README.md) are now prepared locally
       - Recommended: 8 screenshots per `docs/ASO_LAUNCH_PLAN.md` plan
 - [ ] Category: Health & Fitness
 - [ ] Tags: select up to 5 relevant tags
@@ -101,20 +108,21 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 - [ ] Complete the Health apps policy declaration.
       This is **required** for apps that handle health data, including on
       closed/open testing tracks — not just production.
-      - App type: Health & Fitness (not Medical Device)
-      - Data handling: Health information is stored locally on-device
+      - Review the relevant Health & Fitness categories and any medical-functionality
+        questions against the final app; do not assume a legal classification.
+      - Core records are stored locally; optional Firebase Analytics may send
+        technical/product-usage data only after consent.
       - Health Connect: read-only access to Steps and Weight
-      - No diagnostic, treatment, or clinical decision support claims
+      - Check all calculator, education and listing copy for unsupported diagnosis,
+        treatment or clinical decision-support claims.
 
 ### 4.5 Data Safety Form
 - [ ] Complete using the mapping in `docs/PLAY_DATA_SAFETY_GUIDE.md`.
-      Summary of declarations:
-      - Personal info collected: No (no names, emails, addresses)
-      - Health info collected: Yes (locally, for app functionality)
-      - Health info shared: No
-      - Data encrypted in transit: Yes (HTTPS/TLS)
-      - Data deletion: Available in-app
-      - App targets children: No
+      There are no pre-approved Yes/No answers: Google Play's collection
+      definition concerns off-device transmission, so local storage alone is not
+      collection. Review Firebase SDK traffic, user-initiated exports,
+      encryption, retention and deletion against the
+      final release artifact and service configuration before submitting.
 
 ### 4.6 Health Connect Declarations
 - [ ] Declare Health Connect permissions used:
@@ -137,6 +145,9 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 - [ ] Create a closed testing track.
 - [ ] Upload the signed release AAB.
 - [ ] Add test users (email list or Google Group).
+- [ ] If this is a personal developer account created after 13 November 2023,
+      keep at least 12 testers opted into the closed test continuously for at
+      least 14 days, then apply for production access in Play Console.
 - [ ] Submit for review.
 
 ### 5.2 Pre-Launch Report
@@ -167,7 +178,6 @@ Items are ordered by dependency. Do not skip items unless explicitly noted.
 
 - [ ] Monitor crash/ANR rates in Play Console → Android Vitals.
 - [ ] Monitor Firebase Crashlytics (if configured).
-- [ ] Monitor App Check enforcement metrics.
 - [ ] Monitor user reviews and ratings.
 - [ ] Set up Play Console alerts for crash rate spikes.
 
