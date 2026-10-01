@@ -74,7 +74,6 @@ Health Metrics Tracker is for informational wellness use. It is not a medical de
 - Explainable trends without diagnosis or blame
 - Optional Health Connect steps and weight access
 - Share only the report sections you choose
-- Optional AI wellness conversations with consent-based context
 
 Avoid putting raw health values, “WHO-standard” claims, emergency language, ranking claims, price promotions or medical promises in listing artwork.
 

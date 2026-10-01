@@ -1402,7 +1402,7 @@
     <string name="weight_input_label">Weight (%1$s)</string>
     <string name="weight_saving">Saving…</string>
     <string name="weight_update">Update</string>
-    <string name="onboarding_welcome_description">Track everyday measures with clear, informational estimates. Core logs are stored on this device. Optional AI and sharing send selected information outside the app.</string>
+    <string name="onboarding_welcome_description">Track everyday measures with clear, informational estimates. Core logs are stored on this device. Optional sharing sends selected information outside the app.</string>
     <string name="onboarding_calculators_title">10 practical\nhealth calculators</string>
     <string name="onboarding_calculators_subtitle">Evidence-informed estimates</string>
     <string name="onboarding_calculators_description">From BMI and BMR to blood pressure and heart-rate zones — each tool explains its method, sources, and limits.</string>
