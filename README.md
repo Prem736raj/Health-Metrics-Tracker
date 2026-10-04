@@ -25,8 +25,8 @@ Audit navigation: [readiness report](docs/audit/READINESS_REPORT.md) ·
 These are source-implemented capabilities, not a claim that every journey has
 passed device testing. The food diary has manual entries and presets, not a
 barcode scanner or comprehensive nutrition database. No account, cloud restore,
-subscription or advertising flow is implemented. Multi-profile tracking is not
-enabled because health records are not partitioned by profile.
+subscription or advertising flow is implemented. Multi-profile family tracking
+lets household members maintain separate health records.
 
 ## Requirements and local build
 

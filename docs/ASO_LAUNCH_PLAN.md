@@ -112,7 +112,7 @@ Prepare phone screenshots with synthetic demo data, consistent blue-green brandi
 5. Insights — “Spot changes without diagnosis”
 6. Health Connect — “Connect steps only when you choose”
 7. Weekly report — “Review your week and share selected sections”
-8. AI assistant — “Ask general wellness questions — context is optional”
+8. Family profiles — “Track health independently for each family member”
 
 Use the first two screenshots to explain the product in search previews. Do not show a concerning reading, medication suggestion, fake testimonial, before/after body claim or “perfect score.”
 
@@ -128,7 +128,7 @@ Use the first two screenshots to explain the product in search previews. Do not 
 
 1. **Make the numbers useful** — “Choose a few metrics to record. You can start with one check-in and add more later.”
 2. **Understand, don’t diagnose** — “Calculators and insights explain patterns and limits. They are informational, not medical advice.”
-3. **Stay in control** — “Health Connect, reminders, AI context and sharing are optional. Decide what this app can access.”
+3. **Stay in control** — “Health Connect, reminders and sharing are optional. Decide what this app can access.”
 
 ## Promotional copy
 
