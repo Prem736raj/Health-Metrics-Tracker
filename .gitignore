@@ -50,4 +50,6 @@ dependencies.txt
 extracted_strings.xml
 logs.txt
 *.ps1
+!tools/Build-PlayRelease.ps1
+!tools/Initialize-PlayUploadKey.ps1
 scratch/

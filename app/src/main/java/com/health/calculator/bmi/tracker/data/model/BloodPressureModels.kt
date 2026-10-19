@@ -30,6 +30,17 @@ enum class BpTimeOfDay(val displayName: String) {
 object BloodPressureReference {
     const val SEVERE_SYSTOLIC_MMHG = 180
     const val SEVERE_DIASTOLIC_MMHG = 120
+
+    // Either number can trigger this conservative app boundary. Symptoms must
+    // not be hidden behind a requirement to wait for another measurement.
+    const val SEVERE_READING_GUIDANCE =
+        "At or above 180 systolic OR 120 diastolic: if you have chest pain, " +
+            "shortness of breath, sudden weakness or numbness, vision changes, " +
+            "difficulty speaking, or other emergency symptoms, contact local " +
+            "emergency services immediately. Do not wait for another reading. " +
+            "Without these symptoms, wait at least one minute and repeat the " +
+            "measurement. If either number remains this high, contact a " +
+            "healthcare professional promptly. Do not change medicines yourself."
 }
 
 enum class BpCategory(
@@ -90,14 +101,14 @@ enum class BpCategory(
     ),
     GRADE_3_HYPERTENSION(
         displayName = "Severely elevated",
-        description = "Systolic ≥ 180 or diastolic ≥ 120",
+        description = BloodPressureReference.SEVERE_READING_GUIDANCE,
         systolicRange = "≥ 180",
         diastolicRange = "≥ 120",
         sortOrder = 7
     ),
     HYPERTENSIVE_CRISIS(
         displayName = "Severely elevated reading",
-        description = "Repeat carefully and seek urgent advice, especially with symptoms",
+        description = BloodPressureReference.SEVERE_READING_GUIDANCE,
         systolicRange = "≥ 180",
         diastolicRange = "≥ 120",
         sortOrder = 8
@@ -108,8 +119,8 @@ enum class BpRiskLevel(val displayName: String, val description: String) {
     LOW("Within reference", "One reading is informational; keep a consistent measurement routine."),
     MODERATE("Above or below reference", "Repeat readings on separate occasions and review the trend."),
     HIGH("Higher reading", "Discuss repeated readings with a healthcare professional."),
-    VERY_HIGH("Markedly elevated", "Repeat after resting and seek prompt professional advice."),
-    EMERGENCY("Severely elevated", "If a repeat reading is still ≥180/120 or you have concerning symptoms, seek urgent medical care.")
+    VERY_HIGH("Markedly elevated", BloodPressureReference.SEVERE_READING_GUIDANCE),
+    EMERGENCY("Severely elevated", BloodPressureReference.SEVERE_READING_GUIDANCE)
 }
 data class BloodPressureReading(
     val systolic: Int,

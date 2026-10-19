@@ -49,7 +49,7 @@
 
     <!-- NavGraph Extracted Screens -->
 <string name="health_articles_title">Health Articles</string>
-<string name="health_articles_subtitle">Explore evidence-based learning sections</string>
+<string name="health_articles_subtitle">Explore informational wellness learning sections</string>
 <string name="bp_education_button">Blood Pressure Education</string>
 <string name="hydration_education_button">Hydration Education</string>
 <string name="go_back_button">← Go Back</string>
@@ -152,7 +152,7 @@
 <string name="txt_personal_records">Personal Records</string>
 <string name="txt_profile_complete_all_calculati">✅ Profile complete! All calculations use your data.</string>
 <string name="txt_text_placeholder_3">•</string>
-<string name="txt_complete_your_profile_for_more">Complete your profile for more accurate calculations</string>
+<string name="txt_complete_your_profile_for_more">Add profile details to auto-fill supported calculators</string>
 <string name="txt_profile_completion">Profile Completion</string>
 <string name="txt_recent_achievements">Recent Achievements</string>
 <string name="txt_view_all">View All</string>
@@ -458,7 +458,7 @@
 <string name="txt_understand_your_metabolism_bet">Understand your metabolism better</string>
 <string name="txt_learn_about_bmr">Learn About BMR</string>
 <string name="txt_text_placeholder_24">📚</string>
-<string name="txt_this_formula_requires_your_bod">This formula requires your body fat percentage for accurate results.</string>
+<string name="txt_this_formula_requires_your_bod">This equation requires a body-fat estimate. Its result depends on the quality of that estimate.</string>
 <string name="txt_recommended">⭐ Recommended</string>
 <string name="txt_calculation_formula">Calculation Formula</string>
 <string name="txt_bf">BF%</string>
@@ -583,7 +583,7 @@
 <string name="txt_dose_rate">Dose Rate</string>
 <string name="txt_drug">Drug</string>
 <string name="txt_educational_example">Educational Example</string>
-<string name="txt_many_medications_especially_ch">Many medications — especially chemotherapy drugs, immunosuppressants, and some antibiotics — are dosed based on Body Surface Area rather than weight alone. BSA-based dosing is considered more accurate because it better correlates with metabolic rate and organ function than weight alone.</string>
+<string name="txt_many_medications_especially_ch">Some clinical protocols use body surface area as one input. Medication decisions also depend on the specific protocol, organ function and other clinical information. This app does not calculate medication doses.</string>
 <string name="txt_the_medical_applications_descr">The medical applications described below are for educational purposes ONLY. This information is NOT intended for self-medication, self-diagnosis, or self-treatment. NEVER calculate your own medication doses. ALWAYS follow your doctor\'s instructions and prescriptions.</string>
 <string name="txt_educational_information_only">⚠️ Educational Information Only</string>
 <string name="txt_how_bsa_is_used_in_medical_pra">How BSA is used in medical practice</string>
@@ -805,7 +805,7 @@
 <string name="txt_don_t_know_skip_this_we_ll_use">Don\'t know? Skip this — we\'ll use standard formulas instead. Typical ranges: Men 10-25%, Women 18-35%.</string>
 <string name="txt_text_placeholder_51">%</string>
 <string name="txt_body_fat_percentage">Body Fat Percentage</string>
-<string name="txt_for_more_accurate_calculation_">For more accurate calculation using Katch-McArdle formula</string>
+<string name="txt_for_more_accurate_calculation_">Required when using the Katch-McArdle equation</string>
 <string name="txt_body_fat_optional">Body Fat % (Optional)</string>
 <string name="txt_calculate_my_calories">Calculate My Calories</string>
 <string name="txt_years">years</string>
@@ -885,7 +885,7 @@
 <string name="txt_text_placeholder_57">🚨</string>
 <string name="txt_cons">❌ Cons</string>
 <string name="txt_pros">✅ Pros</string>
-<string name="txt_from_most_to_least_accurate">From most to least accurate:</string>
+<string name="txt_from_most_to_least_accurate">Measurement quality depends on the device, fit, activity and technique:</string>
 <string name="txt_glycogen">Glycogen</string>
 <string name="txt_educational_content_to_help_yo">Educational content to help you train smarter</string>
 <string name="txt_learn_about_heart_rate">Learn About Heart Rate</string>
@@ -905,21 +905,21 @@
 <string name="txt_max_heart_rate">Max Heart Rate</string>
 <string name="txt_text_placeholder_59">*</string>
 <string name="txt_your_known_max_heart_rate">Your Known Max Heart Rate</string>
-<string name="txt_add_resting_heart_rate_for_mor">Add resting heart rate for more accurate zones</string>
+<string name="txt_add_resting_heart_rate_for_mor">Add resting heart rate to use the heart-rate-reserve method</string>
 <string name="txt_how_to_measure">How to measure</string>
 <string name="txt_resting_hr">Resting HR</string>
-<string name="txt_optional_improves_accuracy">(optional, improves accuracy)</string>
+<string name="txt_optional_improves_accuracy">(optional, used for the reserve method)</string>
 <string name="txt_required_for_karvonen">(required for Karvonen)</string>
 <string name="txt_resting_heart_rate_1">Resting Heart Rate</string>
 <string name="txt_designed_for_women_only">Designed for women only</string>
-<string name="txt_gulati_formula_was_developed_s">Gulati formula was developed specifically for women and tends to be more accurate for female heart rate estimation.</string>
+<string name="txt_gulati_formula_was_developed_s">The Gulati equation was developed in a study of women. It remains a population estimate and does not establish your individual maximum heart rate.</string>
 <string name="txt_text_placeholder_60">♀️</string>
 <string name="txt_max_hr_formula">Max HR Formula</string>
 <string name="txt_fitness_level">Fitness Level</string>
 <string name="txt_optional_1">(optional)</string>
 <string name="txt_enter_your_age">Enter your age</string>
 <string name="txt_using_profile_data">Using profile data</string>
-<string name="txt_heart_rate_zones_help_you_exer">Heart rate zones help you exercise at the right intensity for your goals — whether it\'s fat burning, endurance, or peak performance.</string>
+<string name="txt_heart_rate_zones_help_you_exer">Heart-rate zones provide estimated ranges for exercise planning. Your effort, symptoms, medicines and health context matter; a zone does not guarantee a fitness outcome.</string>
 <string name="txt_got_it_2">Got it!</string>
 <string name="txt_normal_resting_heart_rate_rang">Resting heart-rate reference ranges</string>
 <string name="txt_count_beats_for_15_seconds_and">Count beats for 15 seconds and multiply by 4. Less accurate but faster.</string>
@@ -992,7 +992,7 @@
 <string name="txt_athletes_may_have_ideal_weight">Athletes may have ideal weights outside standard ranges due to higher muscle mass. Standard IBW formulas may not be appropriate for competitive athletes. Consult a sports medicine professional.</string>
 <string name="txt_ideal_weight_varies_by_activit">Ideal weight varies by activity</string>
 <string name="txt_sport_specific_weight_notes">Sport-Specific Weight Notes</string>
-<string name="txt_this_is_an_estimation_based_on">This is an estimation based on BMI-derived formulas. For accurate body composition, consider DEXA scan or bioimpedance analysis.</string>
+<string name="txt_this_is_an_estimation_based_on">This is a BMI-derived estimate, not a measurement of body composition. A qualified professional can explain measurement options and their limitations.</string>
 <string name="txt_estimated_weight_minus_body_fa">Estimated weight minus body fat</string>
 <string name="txt_lean_body_weight">Lean Body Weight</string>
 <string name="txt_used_by_healthcare_providers_f">Some clinicians use this type of estimate in medication-dosing calculations when weight is substantially above an IBW estimate. It is not a weight goal; never adjust medication from this value.</string>
@@ -1008,7 +1008,7 @@
 <string name="txt_related_calculators_1">Related Calculators</string>
 <string name="txt_this_information_is_for_educat_1">This information is for educational purposes only and should not replace professional medical advice. Ideal body weight is an estimate and may not be appropriate for everyone. Always consult a healthcare provider for personalized guidance.</string>
 <string name="txt_remember_frame_size_explains_w">Remember: Frame size explains why two people of the same height can have different healthy weights. One size truly doesn\'t fit all!</string>
-<string name="txt_recommendation_focus_on_the_bm">Recommendation: Focus on the BMI-based healthy weight range rather than any single formula\'s exact number. A range is more realistic and practical than a specific number.</string>
+<string name="txt_recommendation_focus_on_the_bm">The BMI-derived range is a population reference, not a personal target. Discuss goals with a qualified professional when needed.</string>
 <string name="txt_a_muscular_person_may_weigh_si">A muscular person may weigh significantly more than their calculated IBW and be in excellent health. Conversely, someone at their IBW could have poor health markers.</string>
 <string name="txt_learn_about_ideal_body_weight">Learn About Ideal Body Weight</string>
 <string name="txt_complete">complete</string>
@@ -1062,7 +1062,7 @@
 <string name="txt_modifiable_risk_factors">Modifiable Risk Factors</string>
 <string name="txt_these_factors_you_cannot_chang">These factors you cannot change, but knowing them helps you stay vigilant:</string>
 <string name="txt_non_modifiable_risk_factors">Non-Modifiable Risk Factors</string>
-<string name="txt_evidence_based_information_to_">Evidence-based information to help you understand and manage your health</string>
+<string name="txt_evidence_based_information_to_">General information about metabolic reference criteria and their limits</string>
 <string name="txt_learn_about_metabolic_syndrome">Learn About Metabolic Syndrome</string>
 <string name="txt_this_is_not_a_diagnosis_only_a">This is not a diagnosis. Only a healthcare professional can diagnose and treat metabolic syndrome.</string>
 <string name="txt_medical_consultation_recommend">Medical Consultation Recommended</string>
@@ -1249,7 +1249,7 @@
 <string name="txt_reality">REALITY</string>
 <string name="txt_factors_that_increase_your_nee">📈 Factors That Increase Your Needs:</string>
 <string name="txt_general_guidelines">📋 General Guidelines</string>
-<string name="txt_evidence_based_information_to__1">Evidence-based information to help you stay healthy and hydrated</string>
+<string name="txt_evidence_based_information_to__1">General hydration information and individual considerations</string>
 <string name="txt_text_placeholder_76">💧📖</string>
 <string name="txt_hydration_guide">Hydration Guide</string>
 <string name="txt_badge_unlocked">🎉 Badge Unlocked!</string>
@@ -1343,7 +1343,7 @@
 <string name="txt_waist_measurements_can_vary_by">Waist measurements can vary by 2-4 cm throughout the day due to food, water, and bloating.</string>
 <string name="txt_best_first_thing_in_the_mornin">Best: First thing in the morning</string>
 <string name="txt_text_placeholder_86">🌅</string>
-<string name="txt_note_results_vary_based_on_sta">Note: Results vary based on starting point, genetics, and adherence. A safe rate is 1-2 cm per month.</string>
+<string name="txt_note_results_vary_based_on_sta">There is no universal safe rate of waist change. Measurements vary with technique and personal context; seek advice about unexpected or concerning changes.</string>
 <string name="txt_expected_timeline_for_waist_re">Expected Timeline for Waist Reduction</string>
 <string name="txt_combined_bmi_whr_assessment">Combined BMI + WHR Assessment</string>
 <string name="txt_risk_level">Risk Level</string>
@@ -1382,7 +1382,7 @@
 <string name="txt_measurement_summary">Measurement Summary</string>
 <string name="txt_tap_to_enter_height_or_add_it_">Tap to enter height or add it in your profile</string>
 <string name="txt_add_your_height_to_calculate_w">Add your height to calculate WHtR</string>
-<string name="txt_keep_your_waist_to_less_than_h">Keep your waist to less than half your height for optimal health.</string>
+<string name="txt_keep_your_waist_to_less_than_h">A waist-to-height ratio of 0.5 is a screening reference, not a personal health target or diagnosis.</string>
 <string name="txt_at_risk_0_5">At Risk (≥0.5)</string>
 <string name="txt_normal_0_5">Normal (&lt;0.5)</string>
 <string name="txt_waist_to_height_ratio_whtr">Waist-to-Height Ratio (WHtR)</string>

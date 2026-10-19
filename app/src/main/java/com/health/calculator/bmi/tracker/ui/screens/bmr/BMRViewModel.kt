@@ -20,6 +20,7 @@ import com.health.calculator.bmi.tracker.data.model.BMRTrendStats
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.health.calculator.bmi.tracker.core.util.DecimalInput
 import org.json.JSONObject
 import com.health.calculator.bmi.tracker.data.calculator.BMRValidation
 import com.health.calculator.bmi.tracker.data.preferences.BMRLastValuePreferences
@@ -187,7 +188,7 @@ class BMRViewModel @Inject constructor(
 
     fun updateWeight(text: String) {
         val currentState = _inputState.value
-        val parsed = text.toFloatOrNull() ?: 0f
+        val parsed = DecimalInput.parse(text) ?: 0f
         val weightKg = if (currentState.isUnitKg) parsed else parsed / 2.20462f
 
         _inputState.value = currentState.copy(
@@ -205,7 +206,7 @@ class BMRViewModel @Inject constructor(
 
     fun updateHeight(text: String) {
         val currentState = _inputState.value
-        val parsed = text.toFloatOrNull() ?: 0f
+        val parsed = DecimalInput.parse(text) ?: 0f
         val heightCm = if (currentState.isUnitCm) parsed else parsed * 2.54f
 
         _inputState.value = currentState.copy(
@@ -289,7 +290,7 @@ class BMRViewModel @Inject constructor(
     }
 
     fun updateBodyFat(text: String) {
-        val parsed = text.toFloatOrNull() ?: 0f
+        val parsed = DecimalInput.parse(text) ?: 0f
         _inputState.value = _inputState.value.copy(
             bodyFatText = text,
             bodyFatPercentage = parsed
@@ -372,8 +373,8 @@ class BMRViewModel @Inject constructor(
         val newIsKg = !current.isUnitKg
 
         val convertedText = if (current.weightKg > 0) {
-            if (newIsKg) String.format("%.1f", current.weightKg)
-            else String.format("%.1f", current.weightKg * 2.20462f)
+            if (newIsKg) DecimalInput.format(current.weightKg)
+            else DecimalInput.format(current.weightKg * 2.20462f)
         } else ""
 
         _inputState.value = current.copy(
@@ -389,7 +390,7 @@ class BMRViewModel @Inject constructor(
         if (newIsCm) {
             _inputState.value = current.copy(
                 isUnitCm = true,
-                heightText = if (current.heightCm > 0) String.format("%.0f", current.heightCm) else ""
+                heightText = if (current.heightCm > 0) DecimalInput.format(current.heightCm, 0) else ""
             )
         } else {
             val totalInches = current.heightCm / 2.54f
@@ -420,12 +421,12 @@ class BMRViewModel @Inject constructor(
         if (weightKg <= 0 && heightCm <= 0 && age <= 0) return
 
         val weightText = if (weightKg > 0) {
-            if (isUnitKg) String.format("%.1f", weightKg)
-            else String.format("%.1f", weightKg * 2.20462f)
+            if (isUnitKg) DecimalInput.format(weightKg)
+            else DecimalInput.format(weightKg * 2.20462f)
         } else ""
 
         val heightText = if (heightCm > 0 && isUnitCm) {
-            String.format("%.0f", heightCm)
+            DecimalInput.format(heightCm, 0)
         } else ""
 
         val totalInches = heightCm / 2.54f

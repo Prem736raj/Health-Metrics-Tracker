@@ -14,7 +14,7 @@ object StoreListingPolicy {
         "Spot changes without diagnosis",
         "Connect steps only when you choose",
         "Review your week and share selected sections",
-        "Ask general wellness questions — context is optional"
+        "Choose connections, reminders and optional analytics"
     )
 
     private val titleAndShortDescriptionBannedPhrases = listOf(

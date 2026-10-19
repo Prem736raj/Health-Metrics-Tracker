@@ -1,8 +1,23 @@
 # Production Release Checklist
 
-Updated: 2026-09-28
+> **19 October 2026 verification:** A new private upload key was created for this **first**
+> release, and the signed AAB was built and validated locally. Full release lint
+> now passes with 0 errors, 885 warnings and 1 hint; the 12 polished screenshot
+> hashes match their validation records. See the
+> [first-upload handoff](audit/FIRST_PLAY_UPLOAD_HANDOFF_2026-10-18.md) for the
+> current artifact hash, signing certificate, screenshots, tests and remaining
+> Play Console/device obligations. The older unsigned/pre-signing evidence
+> below is historical.
 
-This checklist covers every step from signed AAB to staged Play Store rollout.
+> 5 October 2026: the [current Play readiness audit](audit/PLAY_STORE_READINESS_2026-10-05.md)
+> and [claims/suggestions ledger](audit/CLAIMS_AND_SUGGESTIONS_2026-10-05.md)
+> supersede the historical test counts and completion claims below. Use
+> `bundlePlayRelease` for distribution; an unsigned validation bundle is not a Play upload.
+
+
+Updated: 2026-10-19 (first-upload instructions and full-lint result; historical evidence below is dated)
+
+This checklist covers every step from signed AAB to the first Play Store release and later updates.
 Items are ordered by dependency. Do not skip items unless explicitly noted.
 
 Current local pre-signing evidence (28 September): debug and release JVM suites
@@ -54,7 +69,7 @@ until the owner supplies the existing/new Play upload-key credentials.
 
 - [ ] Run the full gate:
       ```
-      ./gradlew clean test lintRelease bundleRelease --stacktrace
+      ./gradlew test lintRelease bundlePlayRelease --stacktrace
       ```
 - [ ] Verify the AAB exists at `app/build/outputs/bundle/release/app-release.aab`.
 - [ ] Validate with bundletool (optional but recommended):
@@ -166,11 +181,12 @@ until the owner supplies the existing/new Play upload-key credentials.
 
 - [ ] Upload R8 mapping file to Play Console → App Bundle Explorer.
 - [ ] Create a managed production release.
-- [ ] Set staged rollout percentage:
-      - Start at 1%
-      - After 48h with no critical issues: 5%
-      - After 1 week: 25%
-      - After 2 weeks: 100%
+- [ ] For the first production release, select the intended countries and regions.
+      Percentage-based staged rollout is available for updates, not the first release.
+      Complete closed testing and production-access requirements first, if applicable.
+- [ ] For later updates, consider a staged rollout and monitor Android Vitals
+      before increasing its percentage. See the
+      [Google Play rollout guide](https://support.google.com/googleplay/android-developer/answer/6346149).
 - [ ] Write release notes (see `docs/ASO_LAUNCH_PLAN.md` draft).
 - [ ] Submit for review.
 

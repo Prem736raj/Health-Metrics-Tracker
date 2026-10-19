@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.data.model.WeightTrendDirection
 import com.health.calculator.bmi.tracker.data.model.WeightStatistics
@@ -21,6 +22,7 @@ import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import java.text.SimpleDateFormat
 import java.util.*
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun WeightStatisticsCard(
     statistics: WeightStatistics,
@@ -41,10 +43,10 @@ fun WeightStatisticsCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
                     text = stringResource(R.string.txt_weight_statistics),
@@ -72,7 +74,10 @@ fun WeightStatisticsCard(
                     label = {
                         Text(
                             statistics.trendDirection.label,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis
                         )
                     },
                     colors = AssistChipDefaults.assistChipColors(
@@ -166,7 +171,7 @@ fun WeightStatisticsCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${statistics.totalEntries} entries",
+                    text = "${statistics.totalEntries} ${if (statistics.totalEntries == 1) "entry" else "entries"}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

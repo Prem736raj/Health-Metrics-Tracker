@@ -221,7 +221,7 @@ private fun WhyHydrationMattersSection() {
             "Your brain is about 75% water. Dehydration can impair concentration, memory, and mood. Studies show that even 1-2% dehydration can affect cognitive performance and increase anxiety."
         ),
         BenefitItem("✨", "Skin Health",
-            "Proper hydration helps maintain skin elasticity and can reduce the appearance of wrinkles. While water alone won't cure skin conditions, chronic dehydration can make your skin look dull and dry."
+            "Fluid balance is part of normal body function. Drinking extra water does not guarantee fewer wrinkles or treat a skin condition. Follow appropriate care advice for persistent skin concerns."
         ),
         BenefitItem("🫀", "Heart & Circulation",
             "Water helps maintain blood volume and supports healthy circulation. When dehydrated, your heart has to work harder to pump blood, which can increase heart rate and lower blood pressure."
@@ -230,13 +230,13 @@ private fun WhyHydrationMattersSection() {
             "Water is crucial for proper digestion. It helps break down food, absorb nutrients, and prevent constipation. Adequate hydration also supports your body's metabolic processes."
         ),
         BenefitItem("🦴", "Joint Lubrication",
-            "The cartilage in joints and spinal discs is about 80% water. Proper hydration keeps joints lubricated, reducing friction and helping prevent joint pain and discomfort."
+            "The cartilage in joints and spinal discs is about 80% water. Water supports normal tissue function; drinking more water is not a treatment for joint pain."
         ),
         BenefitItem("🌡️", "Temperature Regulation",
             "Your body uses water (through sweat) to regulate temperature. Without adequate hydration, your body can't cool itself effectively, increasing the risk of heat-related illnesses."
         ),
         BenefitItem("🫘", "Kidney Function",
-            "Kidneys need water to filter waste from the blood and produce urine. Adequate hydration reduces the risk of kidney stones and urinary tract infections. Dark urine often signals that you need more water."
+            "Kidneys need water to filter waste from the blood and produce urine. Fluid needs depend on kidney function and your care plan. Urine color can change with foods, medicines and illness; it is not a diagnostic test."
         ),
         BenefitItem("🛡️", "Immune Support",
             "Water helps carry oxygen to cells, including immune cells, and supports the lymphatic system. Proper hydration helps your body fight off illness more effectively."
@@ -626,10 +626,10 @@ private fun OverhydrationSection() {
 
             val cautions = listOf(
                 "🏃" to "During marathon/endurance events — don't force excessive drinking",
-                "⏰" to "Don't drink large amounts in short time (>1L per hour sustained)",
-                "🧂" to "If you sweat a lot, replace electrolytes too, not just water",
+                "⏰" to "Avoid rapidly drinking large volumes; a fixed hourly amount is not a safety guarantee",
+                "🧂" to "For prolonged heavy sweating, discuss a suitable fluid and electrolyte plan",
                 "💊" to "Certain medications can affect water balance — consult your doctor",
-                "📏" to "General safe upper limit: ~3-4L per day for most adults"
+                "📏" to "There is no universal safe daily fluid limit; follow any prescribed restriction"
             )
 
             cautions.forEach { (icon, text) ->
@@ -679,10 +679,10 @@ private fun ExerciseHydrationSection() {
                 timeframe = "2-3 hours before exercise",
                 color = FeatureColors.WaterDeep,
                 recommendations = listOf(
-                    "💧 Drink 400-600ml (2-3 cups) of water",
-                    "⏰ 15-20 minutes before: drink another 200-300ml",
+                    "💧 Start comfortably hydrated; needs vary with activity and conditions",
+                    "⏰ Sip if needed rather than forcing a fixed amount",
                     "🚽 Allow time for bathroom visit before starting",
-                    "⚡ Start your workout well-hydrated for best performance"
+                    "⚡ Follow any medical fluid restriction or individual exercise plan"
                 )
             )
 
@@ -693,11 +693,11 @@ private fun ExerciseHydrationSection() {
                 timeframe = "During exercise",
                 color = HealthColors.Healthy,
                 recommendations = listOf(
-                    "💧 Drink 150-250ml every 15-20 minutes",
+                    "💧 Take regular opportunities to drink according to your needs",
                     "⏱️ For workouts over 60 min: consider sports drinks",
                     "🧂 For intense/long sessions: add electrolytes",
-                    "📏 Don't wait until you're thirsty — drink on schedule",
-                    "🌡️ In hot weather: increase intake by 50%"
+                    "📏 Avoid forcing fluid to meet an app goal; thirst and an individual plan provide context",
+                    "🌡️ Heat can increase fluid needs; a fixed percentage is not suitable for everyone"
                 )
             )
 
@@ -708,9 +708,9 @@ private fun ExerciseHydrationSection() {
                 timeframe = "Post-exercise recovery",
                 color = HealthColors.Caution,
                 recommendations = listOf(
-                    "⚖️ Drink 1.25-1.5L for every 1kg of body weight lost",
+                    "⚖️ Body-weight changes can help a qualified professional assess sweat losses",
                     "⏰ Rehydrate gradually over 2-4 hours",
-                    "🧂 Include sodium to help retention (salty snack or electrolyte drink)",
+                    "🧂 Fluid and electrolyte needs vary; follow your care plan if restrictions apply",
                     "🥛 Milk and chocolate milk are excellent post-workout beverages",
                     "🍌 Eat water-rich foods to support recovery"
                 )
@@ -867,12 +867,12 @@ private fun SpecialNeedsSection() {
                 marker = "🤰",
                 title = "Pregnancy",
                 color = HealthColors.Severe,
-                additionalMl = "Context +300ml/day",
+                additionalMl = "Individual guidance",
                 details = listOf(
-                    "The app's +300ml is a planning reference, not a prescription",
+                    "This app does not add a fixed pregnancy fluid allowance",
                     "Water helps form amniotic fluid",
                     "Supports increased blood volume (up to 50% more)",
-                    "Helps prevent constipation and UTIs",
+                    "Fluid needs during pregnancy should be discussed with your maternity team",
                     "Morning sickness? Try small, frequent sips",
                     "Discuss hydration, nausea or swelling with your maternity team"
                 )
@@ -883,9 +883,9 @@ private fun SpecialNeedsSection() {
                 marker = "🤱",
                 title = "Breastfeeding",
                 color = FeatureColors.BpDeep,
-                additionalMl = "Context +700ml/day",
+                additionalMl = "Individual guidance",
                 details = listOf(
-                    "The app's +700ml is a planning reference, not a prescription",
+                    "This app does not add a fixed breastfeeding fluid allowance",
                     "Breast milk is about 87% water",
                     "Drink a glass of water each time you nurse",
                     "Watch for signs of dehydration in yourself",

@@ -353,7 +353,8 @@ fun NavGraph(
                 onNavigateToWeight = { navController.navigate(Screen.WeightTracking.route) { launchSingleTop = true } },
                 onNavigateToHealthConnections = { navController.navigate(Screen.HealthConnections.route) { launchSingleTop = true } },
                 onNavigateToCalculators = { navController.navigate(Screen.Calculators.route) { launchSingleTop = true } },
-                onNavigateToTrack = { navController.navigate(Screen.Track.route) { launchSingleTop = true } }
+                onNavigateToTrack = { navController.navigate(Screen.Track.route) { launchSingleTop = true } },
+                onNavigateToFoodLog = { navController.navigate(Screen.FoodLog.route) { launchSingleTop = true } }
             )
         }
 

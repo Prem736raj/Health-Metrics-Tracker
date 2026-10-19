@@ -24,7 +24,7 @@ import com.health.calculator.bmi.tracker.ui.components.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun WeightTrackingScreen(
     viewModel: WeightTrackingViewModel,
@@ -120,12 +120,11 @@ fun WeightTrackingScreen(
             // Trend Graph
             item {
                 Column {
-                    Row(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.txt_history_trends),
@@ -134,12 +133,12 @@ fun WeightTrackingScreen(
                         )
 
                         // Time Filter Chips
-                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             WeightTimeFilter.values().take(3).forEach { filter ->
                                 FilterChip(
                                     selected = uiState.timeFilter == filter,
                                     onClick = { viewModel.onTimeFilterChange(filter) },
-                                    label = { Text(filter.label, style = MaterialTheme.typography.labelSmall) }
+                                    label = { Text(filter.label, style = MaterialTheme.typography.labelSmall, maxLines = 1, softWrap = false) }
                                 )
                             }
                         }
@@ -250,7 +249,7 @@ private fun ComparisonRow(
         val display = if (useMetric) value else value * 2.20462
         String.format(Locale.getDefault(), "%.1f %s", display, unit)
     }
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text("$label vs previous", style = MaterialTheme.typography.bodyMedium)
         if (comparison == null) {
             Text("Need more logs", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

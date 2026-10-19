@@ -486,7 +486,7 @@ private fun SafetyWarningCard(result: CalorieResult) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Your goal of ${"%.0f".format(result.goalCalories)} kcal/day is below the recommended minimum of ${"%.0f".format(result.minimumCalories)} kcal/day for ${result.gender.lowercase()}s. We've adjusted your target to ${"%.0f".format(result.safeGoalCalories)} kcal/day for safety.",
+                    text = "Your goal of ${"%.0f".format(result.goalCalories)} kcal/day is below the app's planning minimum of ${"%.0f".format(result.minimumCalories)} kcal/day. The displayed estimate is adjusted to ${"%.0f".format(result.safeGoalCalories)} kcal/day. This is not a clinical recommendation or a guarantee of safe, adequate intake. Ask a qualified professional about restrictive diets or health-related nutrition needs.",
                     style = MaterialTheme.typography.bodySmall,
                     color = HealthColors.Danger.copy(alpha = 0.9f),
                     lineHeight = 18.sp
@@ -594,7 +594,7 @@ private fun PrimaryCalorieCard(result: CalorieResult) {
                     color = HealthColors.Danger.copy(alpha = 0.12f)
                 ) {
                     Text(
-                        text = "Adjusted from ${"%.0f".format(result.goalCalories)} to ${"%.0f".format(result.safeGoalCalories)} kcal (safety floor)",
+                        text = "Adjusted from ${"%.0f".format(result.goalCalories)} to ${"%.0f".format(result.safeGoalCalories)} kcal (app planning minimum). This minimum does not establish a safe or adequate intake for you.",
                         style = MaterialTheme.typography.labelSmall,
                         color = HealthColors.Danger,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -606,8 +606,8 @@ private fun PrimaryCalorieCard(result: CalorieResult) {
             if (!result.isMaintenance) {
                 Spacer(modifier = Modifier.height(4.dp))
                 val adjText = if (result.isDeficit)
-                    "${abs(result.goalAdjustment)} cal deficit from maintenance"
-                else "${result.goalAdjustment} cal surplus over maintenance"
+                    "${abs(result.dailyDeficitOrSurplus)} kcal below estimated maintenance"
+                else "${result.dailyDeficitOrSurplus} kcal above estimated maintenance"
                 Text(
                     text = adjText,
                     style = MaterialTheme.typography.bodySmall,
@@ -794,7 +794,7 @@ private fun ProjectedOutcomeCard(result: CalorieResult) {
                     contentDescription = null, tint = projColor, modifier = Modifier.size(22.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.txt_projected_outcome), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+                Text("Energy-balance illustration", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
             }
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -805,7 +805,7 @@ private fun ProjectedOutcomeCard(result: CalorieResult) {
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
-                        text = "At ${"%.0f".format(result.safeGoalCalories)} kcal/day, you may $action approximately:",
+                        text = "Using the displayed intake and a fixed 7,700 kcal/kg convention gives this $action illustration. It is not a weight-change prediction; actual outcomes vary:",
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
@@ -821,7 +821,7 @@ private fun ProjectedOutcomeCard(result: CalorieResult) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (result.isDeficit && abs(result.goalAdjustment) >= 1000) {
+            if (result.isDeficit && abs(result.dailyDeficitOrSurplus) >= 1000) {
                 Surface(
                     shape = RoundedCornerShape(8.dp),
                     color = CalorieVisualColors.deficit.copy(alpha = 0.1f)
@@ -887,7 +887,7 @@ private fun FormulaDetailsCard(result: CalorieResult) {
                     DetailRow("Activity-adjusted TDEE", "${"%.0f".format(result.tdee)} kcal")
                     DetailRow("Illustrative TEF (included)", "${"%.0f".format(result.tef)} kcal")
                     DetailRow("TDEE used for planning", "${"%.0f".format(result.tdee)} kcal")
-                    DetailRow("Goal Adjustment", "${if (result.goalAdjustment >= 0) "+" else ""}${result.goalAdjustment} kcal")
+                    DetailRow("Requested Adjustment", "${if (result.goalAdjustment >= 0) "+" else ""}${result.goalAdjustment} kcal")
                     DetailRow("Final Target", "${"%.0f".format(result.safeGoalCalories)} kcal")
                     HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                     DetailRow("Weight", "${"%.1f".format(result.weightKg)} kg")

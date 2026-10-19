@@ -31,12 +31,13 @@ fun HealthOverviewSection(
     onLogWeight: () -> Unit,
     onViewTrends: () -> Unit,
     onMetricClick: (String, String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    scrollable: Boolean = true
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
+            .then(if (scrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier)
             .padding(16.dp)
     ) {
         Text(

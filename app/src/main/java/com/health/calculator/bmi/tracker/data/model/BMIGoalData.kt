@@ -15,30 +15,31 @@ data class BMIGoalData(
         get() = targetWeight - currentWeight
 
     val isWeightLoss: Boolean
-        get() = weightChangeNeeded < 0
+        get() = if (isGoalSet && startingWeight.isFinite() && startingWeight > 0f) targetWeight < startingWeight else weightChangeNeeded < 0
 
     val isWeightGain: Boolean
-        get() = weightChangeNeeded > 0
+        get() = if (isGoalSet && startingWeight.isFinite() && startingWeight > 0f) targetWeight > startingWeight else weightChangeNeeded > 0
 
     val isGoalReached: Boolean
-        get() = if (isWeightLoss) currentWeight <= targetWeight
+        get() = if (!isGoalSet || !currentWeight.isFinite() || !targetWeight.isFinite() || currentWeight <= 0f || targetWeight <= 0f) false
+        else if (isWeightLoss) currentWeight <= targetWeight
         else if (isWeightGain) currentWeight >= targetWeight
-        else true
+        else kotlin.math.abs(currentWeight - targetWeight) < 0.1f
 
     val absoluteWeightChange: Float
         get() = kotlin.math.abs(weightChangeNeeded)
 
-    // Safe rate: loss 0.5-1 kg/week, gain 0.25-0.5 kg/week
+    // Illustrative planning paces, not universal safe rates or predictions.
     val estimatedWeeksMin: Int
         get() {
             val ratePerWeek = if (isWeightLoss) 1.0f else 0.5f
-            return kotlin.math.ceil(absoluteWeightChange / ratePerWeek.toDouble()).toInt()
+            return kotlin.math.ceil(remainingWeight / ratePerWeek.toDouble()).toInt()
         }
 
     val estimatedWeeksMax: Int
         get() {
             val ratePerWeek = if (isWeightLoss) 0.5f else 0.25f
-            return kotlin.math.ceil(absoluteWeightChange / ratePerWeek.toDouble()).toInt()
+            return kotlin.math.ceil(remainingWeight / ratePerWeek.toDouble()).toInt()
         }
 
     val estimatedMonthsMin: Float
@@ -49,18 +50,14 @@ data class BMIGoalData(
 
     val progressPercentage: Float
         get() {
-            if (!isGoalSet || startingWeight == targetWeight) return 0f
-            val totalChange = kotlin.math.abs(startingWeight - targetWeight)
-            val achieved = kotlin.math.abs(startingWeight - currentWeight)
-            // Only count progress in the right direction
-            val isCorrectDirection = if (isWeightLoss) currentWeight < startingWeight
-            else currentWeight > startingWeight
-            if (!isCorrectDirection && achieved > 0.1f) return 0f
-            return ((achieved / totalChange) * 100f).coerceIn(0f, 100f)
+            if (!isGoalSet || listOf(startingWeight, currentWeight, targetWeight).any { !it.isFinite() || it <= 0f }) return 0f
+            val totalChange = targetWeight - startingWeight
+            if (totalChange == 0f) return if (isGoalReached) 100f else 0f
+            return (((currentWeight - startingWeight) / totalChange) * 100f).coerceIn(0f, 100f)
         }
 
     val remainingWeight: Float
-        get() = absoluteWeightChange
+        get() = if (isGoalReached) 0f else absoluteWeightChange.takeIf { it.isFinite() } ?: 0f
 
     companion object {
         const val NORMAL_BMI_LOW = 18.5f

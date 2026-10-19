@@ -120,6 +120,7 @@ fun HomeScreen(
     onNavigateToHealthConnections: () -> Unit,
     onNavigateToCalculators: () -> Unit,
     onNavigateToTrack: () -> Unit,
+    onNavigateToFoodLog: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
     searchViewModel: HomeSearchViewModel = hiltViewModel()
 ) {
@@ -139,8 +140,9 @@ fun HomeScreen(
             "bmr_calculator" -> onNavigateToBmr()
             "blood_pressure_calculator", "blood_pressure_checker", "bp_calculator" -> onNavigateToBp()
             "whr_calculator" -> onNavigateToWhr()
-            "water_calculator", "water_intake_calculator" -> onNavigateToWater()
+            "water_calculator", "water_intake_calculator", "water_tracker" -> onNavigateToWater()
             "calorie_calculator" -> onNavigateToCalorie()
+            "food_log" -> onNavigateToFoodLog()
             "heart_rate_calculator", "heart_rate_zone_calculator" -> onNavigateToHeartRate()
             "metabolic_syndrome", "metabolic_syndrome_checker" -> onNavigateToMetabolic()
             "bsa_calculator" -> onNavigateToBsa()

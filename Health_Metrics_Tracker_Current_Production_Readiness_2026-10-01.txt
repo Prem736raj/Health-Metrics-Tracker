@@ -1,3 +1,5 @@
+HISTORICAL SNAPSHOT: superseded by docs/audit/PLAY_STORE_READINESS_2026-10-05.md and its claims ledger. This file does not establish current Play approval.
+
 HEALTH METRICS TRACKER
 CURRENT PRODUCTION READINESS RE-CHECK
 

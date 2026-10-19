@@ -1,0 +1,200 @@
+{
+  "allPass": true,
+  "count": 12,
+  "recommendedCount": 8,
+  "uniqueCaptures": 12,
+  "assets": [
+    {
+      "id": "01-home",
+      "title": "Your wellness, at a glance",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 1020026,
+      "sourceSha256": "c5bc0368d51164642868d2b614b4998c4895105efbd8e554d3e0007aa286fa45",
+      "finalSha256": "2b0fe582fb0c3d7295f6fc3696a44c0edfb4d67926f5912729cb815544e1aee9",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Health Metrics Tracker home dashboard with daily tracking cards and a wellness consistency overview."
+    },
+    {
+      "id": "02-water",
+      "title": "Make hydration a habit",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 866347,
+      "sourceSha256": "4b95eed4d7f037eda855b8a953255d8e1b903a9dd2df12065515d62cec942feb",
+      "finalSha256": "c9a040cab0e0890fe48e3b05f2d45179ee2a5c06e68d2388e501d48f22ddf411",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Water Tracker showing sample water intake against a daily goal, with hydration tools and a learning guide."
+    },
+    {
+      "id": "03-weight",
+      "title": "See your weight over time",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 887934,
+      "sourceSha256": "0ccd94042b39d6e8cbac13265f819c26250bd9b192456df9a275ec523742b956",
+      "finalSha256": "10d1884b1251a2583e26553ce0da783d5f3e62aba4c439efa903d02d2da9af67",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Weight Tracking with sample measurements, current and starting weight, and comparisons over time."
+    },
+    {
+      "id": "04-food",
+      "title": "Keep a simple food diary",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 872663,
+      "sourceSha256": "20601a854a665932635734a62784a8acfe9296e50ce796fb9ade8e0a4228752c",
+      "finalSha256": "ed4ea3a005e54376c51de634a3ac73dc9feb84ff2ed0f40e1b52cf7bee9579a7",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Food Log showing sample calories, protein, carbs and fat, with quick-add food presets."
+    },
+    {
+      "id": "05-blood-pressure",
+      "title": "Record blood pressure",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 910033,
+      "sourceSha256": "9c7fda4b39ef753f8e7b10a4d5f5928803706ecafe129c5ce02a94e46386d01a",
+      "finalSha256": "568925814b86afe9c82c197315fcf0a1594098a5ad1e14f4bcd20727a81b1c9f",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Blood pressure journal listing sample manual readings with dates, pulse values and notes."
+    },
+    {
+      "id": "06-calculators",
+      "title": "Explore your health tools",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 947552,
+      "sourceSha256": "02570e5dacf0757568006c7ddc7488f77d1d7a4f109d29911c28430f366f47ae",
+      "finalSha256": "5c040852049764e2bf6aae72848b56a531b58059eda7551b325c031a57585fb3",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Calculator collection with body composition, hydration and other educational wellness tools."
+    },
+    {
+      "id": "07-bmi",
+      "title": "Understand your BMI",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 871075,
+      "sourceSha256": "a693701ca3c7f3b56595fbcc55e2f80f1499f6622f093c113bf348e86f66b013",
+      "finalSha256": "deb92bc7a62d5a30f4c6c1e2d09639ca44cf61aa4e708848127be4b3f2201425",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "BMI result for sample adult measurements, showing an estimate and adult BMI reference categories."
+    },
+    {
+      "id": "08-pressure-trends",
+      "title": "Follow your recorded trends",
+      "recommended": true,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 825301,
+      "sourceSha256": "942660880b836cf66c64bff72985a7ec52f3efd224402513bf40ff954c6d46c0",
+      "finalSha256": "ec31ad3207f08bd9efdb7ad72b2d770906c7309b79da8b933dca8aad6dca062d",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Blood pressure trends displaying a chart and averages from synthetic journal readings."
+    },
+    {
+      "id": "09-insights",
+      "title": "Notice your daily patterns",
+      "recommended": false,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 1100216,
+      "sourceSha256": "8abe50ccf33e835162b1efda23317c4c87f3db6ce2dc3662681aae37c2f431b9",
+      "finalSha256": "8bbc0a4098fb4f349fa96cc9a07c7756faf97a870495d45def62acfae763aafb",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Insights screen with summaries and observations based on sample wellness check-ins."
+    },
+    {
+      "id": "10-history",
+      "title": "Revisit your calculations",
+      "recommended": false,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 783679,
+      "sourceSha256": "053faa9655b1305f5910e5860e3888568bc10f3c4e763e43ce8201b192a95900",
+      "finalSha256": "03558cec4936a768da4545332d6e390b64794b737d3e3b42c42db3887d817b44",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Calculator history with a saved sample BMI calculation and tools to review previous results."
+    },
+    {
+      "id": "11-export",
+      "title": "Your records, ready to share",
+      "recommended": false,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 880298,
+      "sourceSha256": "afba25541360103182633228e8554692855e15b51d5d63886fd0d51b68e31be8",
+      "finalSha256": "3d9f7d603932a5ad775d354340d7b6c58289fdab061fe5f1a62e7b7d9ab3771c",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "History export options with file formats and controls for choosing which records to export."
+    },
+    {
+      "id": "12-settings",
+      "title": "Make it feel like yours",
+      "recommended": false,
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "mode": "RGB, 24-bit PNG",
+      "bytes": 930069,
+      "sourceSha256": "2b681d4a592a778329a532e62b9457dc7ae04a20241041c54af6f1301442fee7",
+      "finalSha256": "b01127a5223b36e4ad68bad0133a44ac8c4e8ec8ebd434d452f399addaa55aea",
+      "originalPixelsPreserved": true,
+      "passes": true,
+      "altText": "Settings screen with metric units, appearance options, plant companion and optional reminder controls."
+    }
+  ]
+}

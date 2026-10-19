@@ -1,0 +1,102 @@
+[
+  {
+    "title": "YOUR WELLNESS IN FOCUS",
+    "video": "01-your-wellness-overview.mp4",
+    "screenshots": [
+      "01-home.png",
+      "02-water.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "MAKE HYDRATION A HABIT",
+    "video": "02-hydration-habits.mp4",
+    "screenshots": [
+      "02-water.png",
+      "01-home.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "SEE YOUR PROGRESS",
+    "video": "03-weight-journey.mp4",
+    "screenshots": [
+      "03-weight.png",
+      "01-home.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "FOOD LOGGING, SIMPLIFIED",
+    "video": "04-food-diary.mp4",
+    "screenshots": [
+      "04-food.png",
+      "01-home.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "EVERY READING MATTERS",
+    "video": "05-blood-pressure.mp4",
+    "screenshots": [
+      "05-blood-pressure.png",
+      "08-pressure-trends.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "TOOLS FOR EVERYDAY LIFE",
+    "video": "06-wellness-calculators.mp4",
+    "screenshots": [
+      "06-calculators.png",
+      "07-bmi.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "UNDERSTAND YOUR BMI",
+    "video": "07-understand-your-bmi.mp4",
+    "screenshots": [
+      "07-bmi.png",
+      "06-calculators.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "SPOT THE PATTERNS",
+    "video": "08-visualize-bp-trends.mp4",
+    "screenshots": [
+      "08-pressure-trends.png",
+      "05-blood-pressure.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "YOUR RECORDS, READY TO GO",
+    "video": "09-export-your-records.mp4",
+    "screenshots": [
+      "11-export.png",
+      "05-blood-pressure.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  },
+  {
+    "title": "MAKE IT YOURS",
+    "video": "10-personalize-your-app.mp4",
+    "screenshots": [
+      "12-settings.png",
+      "02-water.png"
+    ],
+    "duration_seconds": 12.71,
+    "format": "1080x1920 H.264 + AAC"
+  }
+]

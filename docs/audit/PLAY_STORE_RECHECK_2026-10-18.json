@@ -1,0 +1,359 @@
+{
+  "checkedDate": "2026-10-18",
+  "timezone": "Asia/Kolkata",
+  "firstUploadConfirmed": true,
+  "releaseReady": false,
+  "tests": {
+    "testDebugUnitTest": {
+      "tests": 219,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "latestReport": "2026-10-18T22:26:16.207784",
+      "fresh": true
+    },
+    "testReleaseUnitTest": {
+      "tests": 219,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "latestReport": "2026-10-18T22:27:14.112405",
+      "fresh": true
+    }
+  },
+  "lint": {
+    "debug": {
+      "counts": {
+        "Warning": 895,
+        "Hint": 1
+      },
+      "reportTime": "2026-10-18T22:34:52.204307",
+      "fresh": true,
+      "categories": {
+        "DefaultLocale": 214,
+        "OldTargetApi": 1,
+        "UnusedAttribute": 38,
+        "AndroidGradlePluginVersion": 2,
+        "GradleDependency": 23,
+        "NewerVersionAvailable": 6,
+        "ComposableNaming": 1,
+        "ModifierFactoryExtensionFunction": 1,
+        "ModifierParameter": 18,
+        "UseCompatLoadingForDrawables": 1,
+        "PluralsCandidate": 3,
+        "DataExtractionRules": 1,
+        "ObsoleteSdkInt": 23,
+        "UseCompoundDrawables": 2,
+        "AutoboxingStateCreation": 1,
+        "DisableBaselineAlignment": 6,
+        "NestedWeights": 2,
+        "Overdraw": 2,
+        "UnusedResources": 211,
+        "UseOfNonLambdaOffsetOverload": 5,
+        "TypographyDashes": 6,
+        "TypographyEllipsis": 20,
+        "IconLocation": 3,
+        "SmallSp": 31,
+        "UseKtx": 172,
+        "UseTomlInstead": 4,
+        "ContentDescription": 9,
+        "SetTextI18n": 1,
+        "HardcodedText": 87,
+        "RtlSymmetry": 2
+      }
+    },
+    "release": {
+      "counts": {
+        "Warning": 895,
+        "Hint": 1
+      },
+      "reportTime": "2026-10-06T01:23:26.938556",
+      "fresh": false,
+      "categories": {
+        "DefaultLocale": 214,
+        "OldTargetApi": 1,
+        "UnusedAttribute": 38,
+        "AndroidGradlePluginVersion": 2,
+        "GradleDependency": 23,
+        "NewerVersionAvailable": 6,
+        "ComposableNaming": 1,
+        "ModifierFactoryExtensionFunction": 1,
+        "ModifierParameter": 18,
+        "UseCompatLoadingForDrawables": 1,
+        "PluralsCandidate": 3,
+        "DataExtractionRules": 1,
+        "ObsoleteSdkInt": 23,
+        "UseCompoundDrawables": 2,
+        "AutoboxingStateCreation": 1,
+        "DisableBaselineAlignment": 6,
+        "NestedWeights": 2,
+        "Overdraw": 2,
+        "UnusedResources": 211,
+        "UseOfNonLambdaOffsetOverload": 5,
+        "TypographyDashes": 6,
+        "TypographyEllipsis": 20,
+        "IconLocation": 3,
+        "SmallSp": 31,
+        "UseKtx": 172,
+        "UseTomlInstead": 4,
+        "ContentDescription": 9,
+        "SetTextI18n": 1,
+        "HardcodedText": 87,
+        "RtlSymmetry": 2
+      }
+    }
+  },
+  "artifacts": {
+    "aab": {
+      "path": "app/build/outputs/bundle/release/app-release.aab",
+      "bytes": 16540758,
+      "sha256": "d76cc0f9143138093a4096ffc7712ba444d0bc02802b6ed15525be392b2971e9",
+      "lastModified": "2026-10-06T01:25:12.000273"
+    },
+    "releaseApk": {
+      "path": "app/build/outputs/apk/release/app-release-unsigned.apk",
+      "bytes": 9087562,
+      "sha256": "719b645d4abfea61706993df3566b4601c6403c3733e76ebccac340d9ac5f905",
+      "lastModified": "2026-10-06T01:25:09.188573"
+    }
+  },
+  "limitations": [
+    "Complete rebuild and fresh release lint were not completed under severe host memory pressure. The agent stopped the verification JVMs; no app compile failure is established.",
+    "No instrumentation or minified runtime test was rerun in this session. Prior device results are historical, not fresh.",
+    "Play Console, Firebase server settings, analytics network traffic and real Health Connect provider were not inspected."
+  ],
+  "bundleSignatureObservation": "no manifest.\n\njar is unsigned.",
+  "native": {
+    "artifact": "P:\\Projects\\health\\app\\build\\outputs\\bundle\\release\\app-release.aab",
+    "bytes": 16540758,
+    "bundle_has_jar_signature_marker": false,
+    "native_libraries": [
+      {
+        "path": "base/lib/arm64-v8a/libandroidx.graphics.path.so",
+        "load_segment_alignments": [
+          16384,
+          16384,
+          16384
+        ],
+        "requires_16kb": true,
+        "passes_16kb_elf_check": true
+      },
+      {
+        "path": "base/lib/arm64-v8a/libdatastore_shared_counter.so",
+        "load_segment_alignments": [
+          16384,
+          16384,
+          16384
+        ],
+        "requires_16kb": true,
+        "passes_16kb_elf_check": true
+      },
+      {
+        "path": "base/lib/armeabi-v7a/libandroidx.graphics.path.so",
+        "load_segment_alignments": [
+          16384,
+          16384,
+          16384
+        ],
+        "requires_16kb": false,
+        "passes_16kb_elf_check": null
+      },
+      {
+        "path": "base/lib/armeabi-v7a/libdatastore_shared_counter.so",
+        "load_segment_alignments": [
+          16384,
+          16384
+        ],
+        "requires_16kb": false,
+        "passes_16kb_elf_check": null
+      },
+      {
+        "path": "base/lib/x86/libandroidx.graphics.path.so",
+        "load_segment_alignments": [
+          16384,
+          16384,
+          16384
+        ],
+        "requires_16kb": false,
+        "passes_16kb_elf_check": null
+      },
+      {
+        "path": "base/lib/x86/libdatastore_shared_counter.so",
+        "load_segment_alignments": [
+          16384,
+          16384
+        ],
+        "requires_16kb": false,
+        "passes_16kb_elf_check": null
+      },
+      {
+        "path": "base/lib/x86_64/libandroidx.graphics.path.so",
+        "load_segment_alignments": [
+          16384,
+          16384,
+          16384
+        ],
+        "requires_16kb": true,
+        "passes_16kb_elf_check": true
+      },
+      {
+        "path": "base/lib/x86_64/libdatastore_shared_counter.so",
+        "load_segment_alignments": [
+          16384,
+          16384
+        ],
+        "requires_16kb": true,
+        "passes_16kb_elf_check": true
+      }
+    ],
+    "all_required_libraries_pass_16kb_elf_check": true,
+    "limitations": "ELF alignment only. APK ZIP alignment, signature validity, Play signing identity and device behavior need separate checks."
+  },
+  "publicLinksAndAssets": {
+    "publicLinks": [
+      {
+        "url": "https://prem736raj.github.io/Health-Metrics-Tracker/privacy.html",
+        "status": 200,
+        "bytes": 5206,
+        "sameAsLocal": false
+      },
+      {
+        "url": "https://prem736raj.github.io/Health-Metrics-Tracker/terms.html",
+        "status": 200,
+        "bytes": 3308,
+        "sameAsLocal": false
+      }
+    ],
+    "screenshotCount": 12,
+    "allScreenshotChecksPass": true,
+    "screenshots": [
+      {
+        "id": "01-home",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 1020026,
+        "unchanged": true
+      },
+      {
+        "id": "02-water",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 866347,
+        "unchanged": true
+      },
+      {
+        "id": "03-weight",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 887934,
+        "unchanged": true
+      },
+      {
+        "id": "04-food",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 872663,
+        "unchanged": true
+      },
+      {
+        "id": "05-blood-pressure",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 910033,
+        "unchanged": true
+      },
+      {
+        "id": "06-calculators",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 947552,
+        "unchanged": true
+      },
+      {
+        "id": "07-bmi",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 871075,
+        "unchanged": true
+      },
+      {
+        "id": "08-pressure-trends",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 825301,
+        "unchanged": true
+      },
+      {
+        "id": "09-insights",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 1100216,
+        "unchanged": true
+      },
+      {
+        "id": "10-history",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 783679,
+        "unchanged": true
+      },
+      {
+        "id": "11-export",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 880298,
+        "unchanged": true
+      },
+      {
+        "id": "12-settings",
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "rgb24": true,
+        "bytes": 930069,
+        "unchanged": true
+      }
+    ]
+  },
+  "sourceChangesFromPreviousSnapshot": [],
+  "findings": [
+    "Unsigned distribution bundle",
+    "Stale published privacy policy and terms",
+    "Reproduced default-locale decimal round-trip defect in water calculator",
+    "Incomplete fresh release/device verification due host memory constraints"
+  ]
+}

@@ -26,17 +26,17 @@ These listings show demand for BMI, weight, calorie, water and trend language, b
 
 ### App name
 
-`Health Metrics Tracker` (22 characters; keep the requested product name and the existing application ID `com.healthmetrics.tracker`).
+`Health Metrics Tracker: BMI` (27 characters; keeps the established product name prominent, adds the high-intent BMI calculator term, and retains application ID `com.healthmetrics.tracker`).
 
 ### Short description
 
-`Track weight, water, steps and wellness insights with helpful calculators`
+`BMI calculator, weight tracker, water log and optional Health Connect steps`
 
-This is 73 characters and describes the primary value without a ranking, price, urgency, medical or unsupported accuracy claim.
+This is 75 characters. It leads with BMI calculator and weight tracker, names water logging, and qualifies Health Connect steps as optional. It avoids ranking, price, urgency, medical or unsupported accuracy claims.
 
 ### Full description
 
-Health Metrics Tracker is a calm personal wellness companion for recording the information you choose to track and understanding it over time.
+Health Metrics Tracker is a personal health and wellness tracker with a BMI calculator, weight tracking, water logging and helpful health calculators. Record the metrics you choose and understand everyday patterns over time.
 
 Use quick check-ins for:
 
@@ -64,7 +64,7 @@ Your choices stay in your hands:
 - You choose what to include when exporting or sharing a report
 - Privacy Policy, Terms and data deletion controls are available in the app
 
-Health Metrics Tracker is for informational wellness use. It is not a medical device and does not replace a qualified healthcare professional. If you have a health concern, seek advice from an appropriate professional. Do not use an app estimate to make an urgent or medication decision.
+Health Metrics Tracker is for informational wellness use. It is not a medical device and does not diagnose, treat, cure or prevent any medical condition. It does not replace a qualified healthcare professional. If you have a health concern, seek advice from an appropriate professional. Do not use an app estimate to make an urgent or medication decision.
 
 ### Feature bullets for graphics and web copy
 
@@ -112,7 +112,7 @@ Prepare phone screenshots with synthetic demo data, consistent blue-green brandi
 5. Insights — “Spot changes without diagnosis”
 6. Health Connect — “Connect steps only when you choose”
 7. Weekly report — “Review your week and share selected sections”
-8. Family profiles — “Track health independently for each family member”
+8. Privacy settings — “Choose connections, reminders and optional analytics”
 
 Use the first two screenshots to explain the product in search previews. Do not show a concerning reading, medication suggestion, fake testimonial, before/after body claim or “perfect score.”
 

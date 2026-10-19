@@ -65,6 +65,13 @@ fun HistoryScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(uiState.errorMessage) {
+        uiState.errorMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            viewModel.clearErrorMessage()
+        }
+    }
+
     // Handle export progress/completion snackbars
     LaunchedEffect(uiState.exportProgress) {
         val progress = uiState.exportProgress

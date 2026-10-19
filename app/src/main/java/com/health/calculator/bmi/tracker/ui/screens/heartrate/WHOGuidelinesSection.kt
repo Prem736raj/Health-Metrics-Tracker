@@ -8,6 +8,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -63,11 +65,6 @@ fun WHOGuidelinesSection(
     modifier: Modifier = Modifier
 ) {
     val guideline = remember(age) { WHOExerciseGuidelinesEngine.getGuidelineForAge(age) }
-    val weeklyPlan = remember(selectedGoalName, fitnessLevel, age) {
-        WHOExerciseGuidelinesEngine.generateWeeklyPlan(selectedGoalName, fitnessLevel, age)
-    }
-
-    var expandedSection by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -101,13 +98,6 @@ fun WHOGuidelinesSection(
 
         // Zone-to-intensity mapping
         ZoneIntensityMappingCard(zones = zones)
-
-        // Weekly Plan
-        WeeklyPlanCard(
-            plan = weeklyPlan,
-            isExpanded = expandedSection == 1,
-            onToggle = { expandedSection = if (expandedSection == 1) -1 else 1 }
-        )
 
         // Weekly exercise tracker
         WeeklyExerciseTracker(
@@ -325,368 +315,14 @@ private fun TargetCard(
 
 @Composable
 private fun ZoneIntensityMappingCard(zones: List<HeartRateZone>) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.txt_zone_who_intensity_mapping),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-
-            // Moderate section
-            IntensityGroup(
-                label = "Moderate Intensity",
-                emoji = "🟢",
-                color = HealthColors.Healthy,
-                zones = zones.filter { it.zoneNumber in 1..3 },
-                description = "Counts toward 150-300 min/week target"
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            HorizontalDivider(
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // Vigorous section
-            IntensityGroup(
-                label = "Vigorous Intensity",
-                emoji = "🔴",
-                color = HealthColors.Danger,
-                zones = zones.filter { it.zoneNumber in 4..5 },
-                description = "1 min vigorous = 2 min moderate equivalent"
-            )
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Recognizing exercise intensity", style = MaterialTheme.typography.titleSmall)
+            Text("For a relative effort check, moderate activity lets you talk but not sing. During vigorous activity, you can say only a few words before pausing for breath.")
+            Text("These estimated heart-rate zones do not establish intensity or verify that you met an activity guideline. Medicines, fitness, and health conditions can change your heart-rate response.")
         }
     }
 }
-
-@Composable
-private fun IntensityGroup(
-    label: String,
-    emoji: String,
-    color: Color,
-    zones: List<HeartRateZone>,
-    description: String
-) {
-    Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = heartRateGuidelineIcon(emoji),
-                contentDescription = null,
-                tint = color,
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = color
-            )
-        }
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        zones.forEach { zone ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, top = 2.dp, bottom = 2.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(8.dp)
-                        .clip(CircleShape)
-                        .background(zone.color)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Zone ${zone.zoneNumber} — ${zone.zoneName}",
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = "${zone.bpmLow}-${zone.bpmHigh} BPM",
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = zone.color
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = description,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f),
-            modifier = Modifier.padding(start = 24.dp)
-        )
-    }
-}
-
-// ============================================================
-// WEEKLY PLAN CARD
-// ============================================================
-
-@Composable
-private fun WeeklyPlanCard(
-    plan: WeeklyPlan,
-    isExpanded: Boolean,
-    onToggle: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onToggle() },
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(18.dp)
-        ) {
-            // Header
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = heartRateGuidelineIcon(plan.goalEmoji),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
-                        Text(
-                            text = stringResource(R.string.txt_weekly_plan),
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = plan.planName,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-                Icon(
-                    imageVector = if (isExpanded) Icons.Default.ExpandLess
-                    else Icons.Default.ExpandMore,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Summary stats
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                MiniStat(
-                    value = "${plan.totalActiveMin}",
-                    label = "Total min",
-                    emoji = "⏱️"
-                )
-                MiniStat(
-                    value = "${plan.totalModerateMin}",
-                    label = "Moderate",
-                    emoji = "🟢"
-                )
-                MiniStat(
-                    value = "${plan.totalVigorousMin}",
-                    label = "Vigorous",
-                    emoji = "🔴"
-                )
-                MiniStat(
-                    value = "${plan.days.count { it.isRestDay }}",
-                    label = "Rest days",
-                    emoji = "😴"
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // WHO compliance
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = if (plan.meetsWHOGuideline) HealthColors.Healthy.copy(alpha = 0.1f)
-                else HealthColors.Warning.copy(alpha = 0.1f)
-            ) {
-                Text(
-                    text = plan.whoComplianceNote,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Medium,
-                    color = if (plan.meetsWHOGuideline) HealthColors.Healthy else HealthColors.Warning,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-                )
-            }
-
-            // Expanded day-by-day plan
-            AnimatedVisibility(
-                visible = isExpanded,
-                enter = expandVertically(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                ) + fadeIn(),
-                exit = shrinkVertically() + fadeOut()
-            ) {
-                Column(modifier = Modifier.padding(top = 14.dp)) {
-                    HorizontalDivider(
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f),
-                        modifier = Modifier.padding(bottom = 10.dp)
-                    )
-
-                    plan.days.forEach { day ->
-                        DayPlanRow(day = day)
-                        if (day.dayName != "Sunday") {
-                            Spacer(modifier = Modifier.height(6.dp))
-                        }
-                    }
-                }
-            }
-
-            if (!isExpanded) {
-                Text(
-                    text = stringResource(R.string.txt_tap_to_see_day_by_day_plan),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun MiniStat(value: String, label: String, emoji: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(
-            imageVector = heartRateGuidelineIcon(emoji),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(18.dp)
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-            fontSize = 10.sp
-        )
-    }
-}
-
-@Composable
-private fun DayPlanRow(day: WeeklyPlanDay) {
-    val bgColor = if (day.isRestDay)
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-    else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f)
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Day name
-            Icon(
-                imageVector = heartRateGuidelineIcon(day.emoji),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(22.dp).width(30.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = day.dayName,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold
-                )
-                if (day.isRestDay) {
-                    Text(
-                        text = stringResource(R.string.txt_rest_recovery),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
-                } else {
-                    Text(
-                        text = day.activitySuggestion,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                    )
-                }
-            }
-
-            if (!day.isRestDay) {
-                Column(horizontalAlignment = Alignment.End) {
-                    Surface(
-                        shape = RoundedCornerShape(6.dp),
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                    ) {
-                        Text(
-                            text = day.zoneFocus,
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = "${day.durationMinutes} min",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
-                }
-            }
-        }
-    }
-}
-
-// ============================================================
-// WEEKLY EXERCISE TRACKER
-// ============================================================
 
 @Composable
 fun WeeklyExerciseTracker(
@@ -794,7 +430,7 @@ fun WeeklyExerciseTracker(
                 ) {
                     Text(
                         text = if (progress >= 1f)
-                            "You've met the WHO weekly exercise target."
+                            "Your logged intensity and duration reach the guideline reference. This is not a fitness or health assessment."
                         else
                             "${targetMin - totalEquivalent} more moderate-equivalent minutes to reach the WHO target",
                         style = MaterialTheme.typography.labelSmall,
@@ -1010,7 +646,7 @@ fun ExerciseLogDialog(
     var activityNote by remember { mutableStateOf("") }
 
     val selectedZoneData = zones.getOrNull(selectedZone)
-    val intensity = WHOExerciseGuidelinesEngine.getZoneIntensity(selectedZone + 1)
+    var intensity by remember { mutableStateOf<ExerciseIntensity?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -1018,20 +654,21 @@ fun ExerciseLogDialog(
             Button(
                 onClick = {
                     val dur = duration.toIntOrNull() ?: 0
-                    if (dur > 0 && selectedZoneData != null) {
+                    val selectedIntensity = intensity
+                    if (dur > 0 && selectedZoneData != null && selectedIntensity != null) {
                         onLog(
                             ExerciseLogEntry(
                                 dayOfWeek = java.time.LocalDate.now().dayOfWeek.value,
                                 durationMinutes = dur,
                                 zoneNumber = selectedZoneData.zoneNumber,
                                 zoneName = selectedZoneData.zoneName,
-                                intensity = intensity,
+                                intensity = selectedIntensity,
                                 activityNote = activityNote
                             )
                         )
                     }
                 },
-                enabled = (duration.toIntOrNull() ?: 0) > 0,
+                enabled = (duration.toIntOrNull() ?: 0) > 0 && intensity != null,
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(stringResource(R.string.txt_log_session))
@@ -1047,7 +684,19 @@ fun ExerciseLogDialog(
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Text("Choose the intensity you experienced. Estimated heart-rate zones do not establish exercise intensity.")
+                Text("Moderate: you can talk but not sing. Vigorous: you can say only a few words before pausing for breath. Light activity does not count as moderate or vigorous time here.")
+                ExerciseIntensity.entries.forEach { choice ->
+                    FilterChip(
+                        selected = intensity == choice,
+                        onClick = { intensity = choice },
+                        label = { Text(choice.label) }
+                    )
+                }
                 // Zone selector
                 Text(
                     text = stringResource(R.string.txt_select_zone),
@@ -1107,7 +756,7 @@ fun ExerciseLogDialog(
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
-                                text = "${zone.zoneName} • ${zone.bpmLow}-${zone.bpmHigh} BPM • ${intensity.label}",
+                                text = "${zone.zoneName} • ${zone.bpmLow}-${zone.bpmHigh} BPM • estimated range",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = zone.color
                             )

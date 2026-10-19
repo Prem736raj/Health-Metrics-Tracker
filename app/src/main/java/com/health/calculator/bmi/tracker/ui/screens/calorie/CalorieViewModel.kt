@@ -123,7 +123,7 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
         GoalOption("lose_moderate", "Lose Weight - Moderate", "~0.5 kg/week (1.1 lbs) • 500 cal deficit", -500, -0.5, "📉", 0xFFFF9800),
         GoalOption("lose_slow", "Lose Weight - Slow", "~0.25 kg/week (0.55 lbs) • 250 cal deficit", -250, -0.25, "🐢", 0xFFFFC107),
         GoalOption("maintain", "Maintain Weight", "Keep your current weight • No adjustment", 0, 0.0, "⚖️", 0xFF4CAF50),
-        GoalOption("gain_lean", "Gain Weight - Lean", "~0.25 kg/week (0.55 lbs) • 250 cal surplus", 250, 0.25, "📈", 0xFF2196F3),
+        GoalOption("gain_lean", "Gain Weight - Slow", "~0.25 kg/week (0.55 lbs) • 250 cal surplus", 250, 0.25, "📈", 0xFF2196F3),
         GoalOption("gain_moderate", "Gain Weight - Moderate", "~0.5 kg/week (1.1 lbs) • 500 cal surplus", 500, 0.5, "🏋️", 0xFF673AB7)
     )
 
@@ -236,15 +236,18 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
     fun validate(): Boolean {
         val s = _uiState.value
         val wKg = getWeightInKg()
-        if (wKg == null || wKg < 20 || wKg > 350) { _uiState.value = s.copy(errorMessage = "Please enter a valid weight (20-350 kg)"); return false }
+        if (wKg == null || !wKg.isFinite() || wKg < 20 || wKg > 350) { _uiState.value = s.copy(errorMessage = "Please enter a valid weight (20-350 kg)"); return false }
         val hCm = getHeightInCm()
-        if (hCm == null || hCm < 50 || hCm > 300) { _uiState.value = s.copy(errorMessage = "Please enter a valid height (50-300 cm)"); return false }
+        if (hCm == null || !hCm.isFinite() || hCm < 50 || hCm > 300) { _uiState.value = s.copy(errorMessage = "Please enter a valid height (50-300 cm)"); return false }
         val age = s.age.toIntOrNull()
         if (age == null || age !in 18..120) { _uiState.value = s.copy(errorMessage = "This adult estimate supports ages 18-120 years"); return false }
-        if (s.selectedActivityLevel.isBlank()) { _uiState.value = s.copy(errorMessage = "Please select your activity level"); return false }
+        if (activityLevels.none { it.id == s.selectedActivityLevel }) { _uiState.value = s.copy(errorMessage = "Please select your activity level"); return false }
         val bf = s.bodyFatPercent.toDoubleOrNull()
         if (s.bodyFatPercent.isNotBlank() && bf == null) { _uiState.value = s.copy(errorMessage = "Enter body fat as a number or leave it blank"); return false }
-        if (bf != null && (bf < 2 || bf > 75)) { _uiState.value = s.copy(errorMessage = "Body fat should be between 2-75%"); return false }
+        if (bf != null && (!bf.isFinite() || bf < 2 || bf > 75)) { _uiState.value = s.copy(errorMessage = "Body fat should be between 2-75%"); return false }
+        if (goalOptions.none { it.id == s.selectedGoal } || dietPresets.none { it.id == s.selectedDietPresetId }) {
+            _uiState.value = s.copy(errorMessage = "Please select a goal and a macro pattern"); return false
+        }
         return true
     }
 
@@ -259,70 +262,74 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
         val goal = goalOptions.find { it.id == s.selectedGoal }!!
 
         viewModelScope.launch {
-            val result = calculator.calculate(
-                weightKg = weightKg, heightCm = heightCm, age = age,
-                gender = s.gender, bodyFatPercent = bodyFat,
-                activityMultiplier = activity.multiplier,
-                activityLevelName = activity.name,
-                goalAdjustment = goal.calorieAdjustment,
-                goalName = goal.name,
-                weeklyChangeKg = goal.weeklyChangeKg
-            )
+            try {
+                val result = calculator.calculate(
+                    weightKg = weightKg, heightCm = heightCm, age = age,
+                    gender = s.gender, bodyFatPercent = bodyFat,
+                    activityMultiplier = activity.multiplier,
+                    activityLevelName = activity.name,
+                    goalAdjustment = goal.calorieAdjustment,
+                    goalName = goal.name,
+                    weeklyChangeKg = goal.weeklyChangeKg
+                )
 
-            // Calculate initial macros based on selected preset
-            val preset = dietPresets.find { it.id == s.selectedDietPresetId }!!
-            val macroResult = macroCalculator.calculateFromPercentages(
-                totalCalories = result.safeGoalCalories,
-                carbPercent = preset.carbPercent,
-                proteinPercent = preset.proteinPercent,
-                fatPercent = preset.fatPercent,
-                weightKg = weightKg,
-                presetName = preset.name,
-                numberOfMeals = s.numberOfMeals
-            )
+                // Calculate initial macros based on selected preset
+                val preset = dietPresets.find { it.id == s.selectedDietPresetId }!!
+                val macroResult = macroCalculator.calculateFromPercentages(
+                    totalCalories = result.safeGoalCalories,
+                    carbPercent = preset.carbPercent,
+                    proteinPercent = preset.proteinPercent,
+                    fatPercent = preset.fatPercent,
+                    weightKg = weightKg,
+                    presetName = preset.name,
+                    numberOfMeals = s.numberOfMeals
+                )
 
-            val proteinRecommendation = macroCalculator.getProteinRecommendationText(
-                activity.id, goal.name
-            )
+                val proteinRecommendation = macroCalculator.getProteinRecommendationText(
+                    activity.id, goal.name
+                )
 
-            // Create meal plan
-            val mealPlan = mealPlanningUseCase.createMealPlan(
-                totalCalories = result.safeGoalCalories,
-                proteinGrams = macroResult.proteinGrams,
-                carbGrams = macroResult.carbGrams,
-                fatGrams = macroResult.fatGrams,
-                mealCount = s.selectedMealCount,
-                customSplits = if (s.selectedMealCount == s.customMealSplits.size) s.customMealSplits else null
-            )
+                // Create meal plan
+                val mealPlan = mealPlanningUseCase.createMealPlan(
+                    totalCalories = result.safeGoalCalories,
+                    proteinGrams = macroResult.proteinGrams,
+                    carbGrams = macroResult.carbGrams,
+                    fatGrams = macroResult.fatGrams,
+                    mealCount = s.selectedMealCount,
+                    customSplits = if (s.selectedMealCount == s.customMealSplits.size) s.customMealSplits else null
+                )
 
-            // Create IF plan
-            val ifPlan = mealPlanningUseCase.createIFPlan(
-                mealPlan = mealPlan,
-                ifType = s.ifType,
-                windowStartHour = s.ifWindowStart
-            )
+                // Create IF plan
+                val ifPlan = mealPlanningUseCase.createIFPlan(
+                    mealPlan = mealPlan,
+                    ifType = s.ifType,
+                    windowStartHour = s.ifWindowStart
+                )
 
-            // Create workout nutrition
-            val workoutNutrition = mealPlanningUseCase.createWorkoutNutrition(
-                totalCalories = result.safeGoalCalories,
-                proteinGrams = macroResult.proteinGrams,
-                carbGrams = macroResult.carbGrams,
-                fatGrams = macroResult.fatGrams,
-                workoutTime = s.workoutTime,
-                enabled = s.workoutNutritionEnabled
-            )
+                // Create workout nutrition
+                val workoutNutrition = mealPlanningUseCase.createWorkoutNutrition(
+                    totalCalories = result.safeGoalCalories,
+                    proteinGrams = macroResult.proteinGrams,
+                    carbGrams = macroResult.carbGrams,
+                    fatGrams = macroResult.fatGrams,
+                    workoutTime = s.workoutTime,
+                    enabled = s.workoutNutritionEnabled
+                )
 
-            _uiState.value = s.copy(
-                result = result,
-                showResult = true,
-                errorMessage = null,
-                isSaved = false,
-                macroResult = macroResult,
-                proteinRecommendationText = proteinRecommendation,
-                mealPlan = mealPlan,
-                ifPlan = ifPlan,
-                workoutNutrition = workoutNutrition
-            )
+                _uiState.value = s.copy(
+                    result = result,
+                    showResult = true,
+                    errorMessage = null,
+                    isSaved = false,
+                    macroResult = macroResult,
+                    proteinRecommendationText = proteinRecommendation,
+                    mealPlan = mealPlan,
+                    ifPlan = ifPlan,
+                    workoutNutrition = workoutNutrition
+                )
+            } catch (_: IllegalArgumentException) {
+                _uiState.value = _uiState.value.copy(errorMessage = "These inputs cannot produce a supported energy or meal estimate. Review your measurements and planning choices.")
+            }
         }
     }
 
@@ -442,6 +449,10 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
         val s = _uiState.value
         val result = s.result ?: return
         val macro = s.macroResult ?: return
+        if (splits.size != s.selectedMealCount || splits.any { !it.isFinite() || it !in 0f..100f } || kotlin.math.abs(splits.sum() - 100f) >= 0.01f) {
+            _uiState.value = s.copy(errorMessage = "Meal shares must total 100 percent.")
+            return
+        }
 
         val mealPlan = mealPlanningUseCase.createMealPlan(
             totalCalories = result.safeGoalCalories,
@@ -546,7 +557,7 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
             goalName = r.goalName, activityLevel = r.activityLevelName,
             formulaUsed = r.bmrFormulaUsed, weightKg = r.weightKg,
             heightCm = r.heightCm, age = r.age, gender = r.gender,
-            bodyFatPercent = r.bodyFatPercent, weeklyChangeKg = r.weeklyChangeKg
+            bodyFatPercent = r.bodyFatPercent, weeklyChangeKg = r.effectiveGoalAdjustment * 7.0 / 7700.0
         ))
 
         // Save to main unified history
@@ -563,7 +574,7 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
                 put("age", r.age)
                 put("gender", r.gender)
                 put("bodyFatPercent", r.bodyFatPercent ?: -1.0)
-                put("weeklyChangeKg", r.weeklyChangeKg)
+                put("weeklyChangeKg", r.effectiveGoalAdjustment * 7.0 / 7700.0)
                 if (m != null) {
                     put("proteinGrams", m.proteinGrams)
                     put("carbGrams", m.carbGrams)
@@ -629,7 +640,7 @@ class CalorieViewModel @Inject constructor(application: Application) : AndroidVi
         lines.add("💡 Stats:")
         lines.add("TDEE: ${"%.0f".format(r.tdee)} kcal | BMR: ${"%.0f".format(r.usedBmr)} kcal")
         if (!r.isMaintenance) {
-            lines.add("Projected: ${"%.2f".format(r.weeklyChangeDisplay)} kg/week")
+            lines.add("Energy-balance illustration: ${"%.2f".format(r.weeklyChangeDisplay)} kg/week using 7,700 kcal/kg; not a weight-change prediction.")
         }
         lines.add("")
         lines.add(ExportDisclosurePolicy.shareFooter())

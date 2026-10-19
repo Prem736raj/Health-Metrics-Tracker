@@ -17,10 +17,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 35
-    env:
-      GRADLE_OPTS: >-
-        -Dorg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=768m
-        -XX:+UseParallelGC -Dfile.encoding=UTF-8
 
     steps:
     - name: Checkout Repository
@@ -51,6 +47,9 @@ jobs:
     - name: Build Release App Bundle
       run: ./gradlew bundleRelease --stacktrace
 
+    - name: Check native library page alignment
+      run: python3 tools/verify_release_artifact.py app/build/outputs/bundle/release/app-release.aab
+
     - name: Upload verification reports and artifacts
       if: always()
       uses: actions/upload-artifact@v4
@@ -67,10 +66,6 @@ jobs:
   instrumented-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      GRADLE_OPTS: >-
-        -Dorg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=768m
-        -XX:+UseParallelGC -Dfile.encoding=UTF-8
 
     steps:
     - name: Checkout Repository

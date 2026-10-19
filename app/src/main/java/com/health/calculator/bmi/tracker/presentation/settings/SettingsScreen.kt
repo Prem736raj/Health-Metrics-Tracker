@@ -713,7 +713,7 @@ fun SettingsScreen(
             icon = Icons.Filled.Delete,
             iconColor = WarningOrange,
             title = "Clear All History?",
-            message = "This will permanently delete all your calculation history and records. Your profile data and settings will be kept.\n\nThis action cannot be undone.",
+            message = "This will permanently delete calculator history. Separate weight, blood-pressure, water and food logs, your profile and settings will be kept. To reset all local app data, use Clear All Data.\n\nThis action cannot be undone.",
             confirmText = "Clear History",
             confirmColor = WarningOrange,
             onConfirm = { viewModel.confirmClearHistory() },
@@ -1063,7 +1063,7 @@ private fun MedicalDisclaimerCard() {
                 text = """
 This app provides health, fitness, and wellness information for educational and informational purposes only.
 
-Results from calculators, trackers, wellness scores, recommendations, and AI features are estimates and must not be interpreted as medical diagnoses.
+Results from calculators, trackers, wellness scores, and recommendations are estimates and must not be interpreted as medical diagnoses.
 
 This app is not a medical device and does not replace professional medical advice, diagnosis, treatment, or emergency care.
 

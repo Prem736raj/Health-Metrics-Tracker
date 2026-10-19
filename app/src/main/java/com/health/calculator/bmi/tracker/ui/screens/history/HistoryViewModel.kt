@@ -15,6 +15,8 @@ import com.health.calculator.bmi.tracker.data.model.toDisplayEntry
 import com.health.calculator.bmi.tracker.data.repository.HistoryRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import java.text.SimpleDateFormat
 import java.util.*
 import com.health.calculator.bmi.tracker.data.management.DataCleanupManager
@@ -39,7 +41,8 @@ data class HistoryUiState(
     val showExportSheet: Boolean = false,
     val showScheduleDialog: Boolean = false,
     val undoableDelete: UndoableDelete? = null,
-    val showUndoSnackbar: Boolean = false
+    val showUndoSnackbar: Boolean = false,
+    val errorMessage: String? = null
 )
 
 sealed interface HistoryDialogState {
@@ -68,6 +71,20 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    private fun launchSafely(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch {
+        try {
+            block()
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (_: Exception) {
+            _uiState.update { it.copy(isLoading = false, errorMessage = "History operation could not be completed. Please try again.") }
+        }
+    }
+
+    fun clearErrorMessage() {
+        _uiState.update { it.copy(errorMessage = null) }
+    }
 
     init {
         loadHistory()
@@ -157,6 +174,10 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
 
             grouped
         }
+        .catch { error ->
+            if (error is CancellationException) throw error
+            _uiState.update { it.copy(isLoading = false, errorMessage = "History could not be loaded. Reopen the screen to retry.") }
+        }
         .onEach { groups ->
             _uiState.update { it.copy(groupedEntries = groups, isLoading = false) }
         }
@@ -178,7 +199,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
     }
 
     private fun loadCategories() {
-        viewModelScope.launch {
+        launchSafely {
             database.historyDao().getDistinctCategories().collect { categories ->
                 _uiState.update { it.copy(availableCategories = categories) }
             }
@@ -240,7 +261,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
     fun confirmDelete() {
         val dialog = _uiState.value.dialogState
         if (dialog is HistoryDialogState.ConfirmDelete) {
-            viewModelScope.launch {
+            launchSafely {
                 val ids = dialog.ids
                 if (ids.size == 1) {
                     val id = ids.first()
@@ -258,7 +279,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
                         _uiState.update { it.copy(dialogState = HistoryDialogState.None) }
                     }
                 } else {
-                    ids.forEach { repository.deleteEntry(it) }
+                    repository.deleteEntries(ids.toList())
                     _uiState.update { it.copy(dialogState = HistoryDialogState.None) }
                 }
                 deselectAll()
@@ -268,7 +289,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
 
     fun undoDelete() {
         val undoable = _uiState.value.undoableDelete ?: return
-        viewModelScope.launch {
+        launchSafely {
             cleanupManager.restoreEntry(undoable.entryData)
             _uiState.update { it.copy(undoableDelete = null, showUndoSnackbar = false) }
         }
@@ -287,7 +308,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
     }
 
     fun saveNote(id: Long, note: String) {
-        viewModelScope.launch {
+        launchSafely {
             repository.updateNote(id, note)
             _uiState.update { it.copy(dialogState = HistoryDialogState.None) }
         }
@@ -332,7 +353,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
     }
 
     fun saveHistoryEntry(entry: HistoryEntry) {
-        viewModelScope.launch {
+        launchSafely {
             repository.addEntry(entry)
         }
     }
@@ -347,7 +368,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
     }
 
     fun startExport(config: ExportConfig) {
-        viewModelScope.launch {
+        launchSafely {
             val finalEntries = when {
                 _uiState.value.isSelectionMode -> {
                     val selectedIds = _uiState.value.selectedIds
@@ -368,7 +389,7 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
                 }
             }
 
-            if (finalEntries.isEmpty()) return@launch
+            if (finalEntries.isEmpty()) return@launchSafely
 
             exportManager.exportData(finalEntries, config)
             _uiState.update {
@@ -391,14 +412,14 @@ class HistoryViewModel @Inject constructor(application: Application) : AndroidVi
     }
 
     fun generateAndShareReportCard(card: HealthReportCard) {
-        viewModelScope.launch {
+        launchSafely {
             val uri = exportManager.generateShareImage(card)
             uri?.let { exportManager.shareImage(it) }
         }
     }
 
     fun updateSchedule(schedule: ExportSchedule) {
-        viewModelScope.launch {
+        launchSafely {
             scheduleManager.updateSchedule(schedule)
             _uiState.update { it.copy(showScheduleDialog = false) }
         }

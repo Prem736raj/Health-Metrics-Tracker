@@ -16,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -165,10 +167,10 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .verticalScroll(rememberScrollState())
             ) {
-            // Keep the identity/edit affordance in the first viewport. It used
-            // to live inside the scrollable My Info pane, so on compact devices
-            // only the top of the avatar was visible beneath the tabs.
+            // Identity, completion, tabs and editable content share one scroll
+            // surface so large text cannot consume the form's entire viewport.
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -227,7 +229,7 @@ fun ProfileScreen(
             }
 
             // Content
-            Box(modifier = Modifier.weight(1f)) {
+            Box(modifier = Modifier.fillMaxWidth()) {
                 AnimatedContent(
                     targetState = uiState.selectedTab,
                     transitionSpec = {
@@ -255,7 +257,8 @@ fun ProfileScreen(
                                 onActivityLevelClick = viewModel::showActivityLevelPicker,
                                 onHealthGoalsClick = viewModel::showHealthGoalsPicker,
                                 onFrameSizeClick = viewModel::showFrameSizePicker,
-                                onEthnicityClick = viewModel::showEthnicityPicker
+                                onEthnicityClick = viewModel::showEthnicityPicker,
+                                scrollable = false
                             )
                         }
                         ProfileTab.HEALTH_OVERVIEW -> {
@@ -268,7 +271,8 @@ fun ProfileScreen(
                                 useMetric = uiState.profile.useMetricSystem,
                                 onLogWeight = { viewModel.showWeightLogDialog() },
                                 onViewTrends = onViewWeightTrends,
-                                onMetricClick = { route, _ -> onNavigateToMetric(route) }
+                                onMetricClick = { route, _ -> onNavigateToMetric(route) },
+                                scrollable = false
                             )
                         }
                     }

@@ -30,6 +30,10 @@ class CalorieCalculatorUseCase {
         require(bodyFatPercent == null || (bodyFatPercent.isFinite() && bodyFatPercent in 2.0..75.0)) {
             "Body fat percentage must be between 2 and 75"
         }
+        require(gender.equals("Male", ignoreCase = true) || gender.equals("Female", ignoreCase = true)) {
+            "Select a supported equation sex"
+        }
+        require(weeklyChangeKg.isFinite()) { "Weekly change must be finite" }
 
         val isMale = gender.equals("Male", ignoreCase = true)
 
@@ -57,9 +61,14 @@ class CalorieCalculatorUseCase {
             formulaUsed = "Mifflin-St Jeor"
         }
 
+        require(usedBmr.isFinite() && usedBmr > 0.0) {
+            "These inputs are outside the useful range of this energy equation"
+        }
+
         // Activity multipliers are conventional estimates of total daily
         // expenditure. Adding TEF again would double-count digestion.
         val tdee = usedBmr * activityMultiplier
+        require(tdee.isFinite() && tdee > 0.0) { "Energy estimate is outside the supported range" }
 
         // Show an illustrative TEF component without adding it a second time.
         val tef = tdee * 0.10
@@ -67,7 +76,7 @@ class CalorieCalculatorUseCase {
         // 6. Goal calories
         val rawGoalCalories = tdee + goalAdjustment
 
-        // 7. Safety floor
+        // Conservative app planning floor, not a clinical safety guarantee.
         val minimumCalories = if (isMale) MINIMUM_MALE_CALORIES else MINIMUM_FEMALE_CALORIES
         val isBelowMinimum = rawGoalCalories < minimumCalories
         val safeGoalCalories = rawGoalCalories.coerceAtLeast(minimumCalories)

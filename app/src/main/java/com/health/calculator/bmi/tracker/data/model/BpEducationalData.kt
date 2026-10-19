@@ -97,7 +97,7 @@ object BpEducationalContent {
             BpEducationalItem.BulletPoint(
                 "📊",
                 "High Diastolic",
-                "Suggests your blood vessels aren't relaxing properly between heartbeats. More common in younger adults and indicates increased resistance in smaller blood vessels."
+                "A higher diastolic value describes the pressure between beats. This app cannot identify its cause; repeat measurements and professional interpretation matter."
             ),
 
             BpEducationalItem.HighlightBox(
@@ -164,7 +164,7 @@ object BpEducationalContent {
             BpEducationalItem.NumberedStep(
                 4, "💪",
                 "Position Your Arm Correctly",
-                "Rest your arm on a flat surface (like a table) so that the cuff on your upper arm is at the same level as your heart. Roll up your sleeve – don't measure over clothing. Use the same arm each time (left arm is generally recommended)."
+                "Rest your arm on a flat surface (like a table) so that the cuff on your upper arm is at the same level as your heart. Roll up your sleeve – don't measure over clothing. Use the arm recommended by your healthcare professional, and follow the monitor instructions."
             ),
 
             BpEducationalItem.NumberedStep(
@@ -190,13 +190,13 @@ object BpEducationalContent {
             BpEducationalItem.NumberedStep(
                 8, "⏰",
                 "Measure at the Same Time Daily",
-                "Blood pressure fluctuates throughout the day. For consistent tracking, measure at the same times each day. Morning (within 1 hour of waking, before medication) and evening (before bed) are ideal."
+                "Blood pressure fluctuates throughout the day. For consistent tracking, measure at the same times each day. Ask your care team about timing in relation to your medicines. Do not delay or change prescribed medicine to take a reading."
             ),
 
             BpEducationalItem.NumberedStep(
                 9, "📊",
                 "Keep a Log",
-                "Record every reading with the date, time, and any relevant notes (like 'after exercise' or 'felt stressed'). This log is invaluable for your doctor. This app does this automatically for you!"
+                "Record every reading with the date, time, and any relevant notes (like 'after exercise' or 'felt stressed'). This log is invaluable for your doctor. Enter measured values in the app; the phone does not measure blood pressure."
             ),
 
             BpEducationalItem.HighlightBox(
@@ -278,7 +278,7 @@ object BpEducationalContent {
             BpEducationalItem.BulletPoint(
                 "🍷",
                 "Excessive Alcohol",
-                "More than 2 drinks daily for men or 1 for women can raise blood pressure. Heavy drinking can also reduce the effectiveness of BP medications. Moderate consumption (or none) is recommended."
+                "Alcohol can raise blood pressure and interact with medicines. If you do not drink, do not start for health benefits. If you drink, discuss appropriate limits with a professional."
             ),
 
             BpEducationalItem.BulletPoint(
@@ -307,7 +307,7 @@ object BpEducationalContent {
             BpEducationalItem.BulletPoint(
                 "📅",
                 "Age",
-                "Blood pressure tends to increase with age. The risk rises significantly after 55 for women and 45 for men. Arterial stiffness naturally increases over time, leading to higher systolic pressure."
+                "Blood pressure tends to increase with age. Age-related patterns differ between people and populations. Arterial stiffness naturally increases over time, leading to higher systolic pressure."
             ),
 
             BpEducationalItem.BulletPoint(
@@ -319,7 +319,7 @@ object BpEducationalContent {
             BpEducationalItem.BulletPoint(
                 "🌍",
                 "Race & Ethnicity",
-                "Hypertension is more prevalent and often more severe in people of African descent. It also tends to develop earlier and respond differently to certain medications. South Asian populations also face elevated risk."
+                "Population studies report differences related to ancestry, environment, access to care and other factors. Group averages do not determine an individual diagnosis or treatment."
             ),
 
             BpEducationalItem.BulletPoint(
@@ -362,42 +362,44 @@ object BpEducationalContent {
                 HighlightType.SUCCESS
             ),
 
+            BpEducationalItem.Paragraph("DASH is an example eating pattern, not an individualized meal plan. Portions depend on energy needs. If you have kidney disease, take medicines affecting potassium, or follow a restricted diet, ask your care team before changing potassium, salt substitutes or fluids."),
+
             BpEducationalItem.Heading("Key Principles"),
 
             BpEducationalItem.BulletPoint(
                 "🥬",
                 "More Fruits & Vegetables",
-                "Aim for 4-5 servings of each daily. They're rich in potassium, magnesium, and fiber — all of which help lower blood pressure. Fresh, frozen, and canned (no salt added) all count."
+                "Serving needs vary with energy requirements and personal context. They're rich in potassium, magnesium, and fiber — all of which help lower blood pressure. Fresh, frozen, and canned (no salt added) all count."
             ),
 
             BpEducationalItem.BulletPoint(
                 "🌾",
                 "Whole Grains",
-                "6-8 servings daily. Choose whole wheat bread, brown rice, oatmeal, and whole grain pasta over refined grains. Whole grains provide fiber and nutrients that support cardiovascular health."
+                "Choose portions that suit your needs. Choose whole wheat bread, brown rice, oatmeal, and whole grain pasta over refined grains. Whole grains provide fiber and nutrients that support cardiovascular health."
             ),
 
             BpEducationalItem.BulletPoint(
                 "🥛",
                 "Low-Fat Dairy",
-                "2-3 servings daily. Low-fat milk, yogurt, and cheese provide calcium and vitamin D. Studies show dairy's calcium specifically helps regulate blood pressure."
+                "If suitable for you, low-fat milk, yogurt, and cheese provide calcium and vitamin D. Adapt choices for allergies, intolerances and your care plan."
             ),
 
             BpEducationalItem.BulletPoint(
                 "🐟",
                 "Lean Proteins",
-                "Up to 6 servings daily. Choose fish (especially fatty fish like salmon), skinless poultry, and plant proteins like beans and lentils. Limit red meat to 1-2 times per week."
+                "Choose suitable portions of varied protein foods. Choose fish (especially fatty fish like salmon), skinless poultry, and plant proteins like beans and lentils. Consider your dietary needs, preferences and professional advice."
             ),
 
             BpEducationalItem.BulletPoint(
                 "🥜",
                 "Nuts, Seeds & Legumes",
-                "4-5 servings per week. Almonds, walnuts, sunflower seeds, kidney beans, and lentils are excellent choices. They provide magnesium, potassium, and healthy fats."
+                "Include suitable portions when they fit your dietary needs. Almonds, walnuts, sunflower seeds, kidney beans, and lentils are excellent choices. They provide magnesium, potassium, and healthy fats."
             ),
 
             BpEducationalItem.BulletPoint(
                 "🫒",
                 "Healthy Fats",
-                "2-3 servings daily. Use olive oil, avocado, and canola oil. Limit saturated fat to less than 6% of calories. Avoid trans fats entirely."
+                "Choose suitable portions of olive oil, avocado, and canola oil. Dietary fat targets depend on the overall eating pattern and individual advice. Avoid trans fats entirely."
             ),
 
             BpEducationalItem.DividerItem(),
@@ -407,7 +409,7 @@ object BpEducationalContent {
             BpEducationalItem.BulletPoint(
                 "🧂",
                 "Sodium",
-                "Standard DASH: Less than 2,300 mg/day. Low-sodium DASH: Less than 1,500 mg/day. The low-sodium version can lower BP by an additional 3-4 mmHg."
+                "DASH examples include different sodium levels. A personal target depends on your health and care plan; do not expect a fixed change in blood pressure."
             ),
 
             BpEducationalItem.BulletPoint(
@@ -488,7 +490,7 @@ object BpEducationalContent {
 
             BpEducationalItem.MythBuster(
                 myth = "\"Only old people get high blood pressure.\"",
-                fact = "While the risk increases with age, hypertension affects people of ALL ages. About 1 in 4 adults aged 20-44 has elevated blood pressure. Childhood obesity, sedentary lifestyles, high-sodium diets, and stress are causing hypertension to appear in increasingly younger populations. Even children can have high blood pressure."
+                fact = "High blood pressure can occur in younger adults as well as older adults. Age alone cannot determine whether a reading needs attention. A qualified professional should interpret repeated readings and symptoms. Children need age-specific assessment; this app uses adult reference categories."
             ),
 
             BpEducationalItem.MythBuster(
@@ -503,17 +505,17 @@ object BpEducationalContent {
 
             BpEducationalItem.MythBuster(
                 myth = "\"If high blood pressure ran in my family, there's nothing I can do.\"",
-                fact = "Genetics is just one risk factor. Even with a strong family history, lifestyle changes can significantly reduce your risk or delay onset. Regular exercise, a healthy diet, maintaining a healthy weight, limiting alcohol, and managing stress can lower blood pressure by 10-20+ mmHg — often more than a single medication."
+                fact = "Family history is one part of the picture. Activity, food choices, sleep and avoiding tobacco can support wellbeing, but effects vary and do not replace prescribed treatment. Review repeated readings with a healthcare professional."
             ),
 
             BpEducationalItem.MythBuster(
                 myth = "\"Home blood pressure monitors aren't accurate.\"",
-                fact = "Modern validated home blood pressure monitors are very accurate and are actually recommended by medical professionals. Home readings can be MORE representative of your true blood pressure than clinic readings because they're taken in your natural environment, avoiding 'white coat syndrome.' The key is to use a validated, upper-arm monitor and follow proper measurement technique."
+                fact = "A validated upper-arm monitor with the correct cuff size can provide useful home readings. Device quality, fit, technique and timing affect results. Home and clinic readings may differ; share the log and monitor with your care team."
             ),
 
             BpEducationalItem.MythBuster(
                 myth = "\"Red wine is good for blood pressure.\"",
-                fact = "While moderate red wine consumption has been associated with some cardiovascular benefits (likely from antioxidants), alcohol — including wine — actually RAISES blood pressure. The risks of alcohol on blood pressure outweigh any potential benefits. If you don't drink, there's no reason to start for heart health. Better alternatives include grape juice and berries."
+                fact = "Alcohol, including wine, can raise blood pressure. Do not start drinking for heart-health benefits. Discuss alcohol use and possible medicine interactions with your healthcare professional."
             ),
 
             BpEducationalItem.MythBuster(

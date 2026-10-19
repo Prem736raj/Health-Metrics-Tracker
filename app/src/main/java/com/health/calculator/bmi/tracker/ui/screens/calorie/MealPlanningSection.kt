@@ -67,6 +67,14 @@ fun MealPlanningSection(
         }
 
         // Meal Count Selector
+        Text(
+            "Optional planning examples, not a prescribed diet. Meal ideas and calories are approximate. " +
+                "Fasting may be unsuitable during pregnancy or breastfeeding, with an eating-disorder history, " +
+                "or with conditions or medicines affected by meal timing. Seek individual advice when needed. " +
+                "Workout portions are part of your daily total, not extra meals to add on top.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         MealCountSelector(
             selectedCount = selectedMealCount,
             onCountChanged = onMealCountChanged

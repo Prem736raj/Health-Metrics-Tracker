@@ -1,0 +1,153 @@
+{
+  "voice": "en-US-AvaNeural",
+  "resolution": "1080x1920",
+  "fps": 24,
+  "short_videos": [
+    {
+      "video": "01-your-wellness-overview-logo-vo.mp4",
+      "narration": "Meet Health Metrics Tracker. See your daily wellness overview and keep the habits that matter together.",
+      "source": "01-your-wellness-overview.mp4"
+    },
+    {
+      "video": "02-hydration-habits-logo-vo.mp4",
+      "narration": "Build a better hydration routine. Log your water intake, review your goal, and celebrate every small step.",
+      "source": "02-hydration-habits.mp4"
+    },
+    {
+      "video": "03-weight-journey-logo-vo.mp4",
+      "narration": "Follow your weight journey with clarity. Record your entries and see how your progress changes over time.",
+      "source": "03-weight-journey.mp4"
+    },
+    {
+      "video": "04-food-diary-logo-vo.mp4",
+      "narration": "Make food logging part of your day. Keep a diary of meals, calories, and key nutrients in one place.",
+      "source": "04-food-diary.mp4"
+    },
+    {
+      "video": "05-blood-pressure-logo-vo.mp4",
+      "narration": "Keep your blood pressure readings organized. Add a record and revisit previous entries whenever you need them.",
+      "source": "05-blood-pressure.mp4"
+    },
+    {
+      "video": "06-wellness-calculators-logo-vo.mp4",
+      "narration": "Explore practical wellness calculators in Health Metrics Tracker. Choose a tool and review its results in moments.",
+      "source": "06-wellness-calculators.mp4"
+    },
+    {
+      "video": "07-understand-your-bmi-logo-vo.mp4",
+      "narration": "See your body mass index and its reference range. A simple way to understand one wellness measurement.",
+      "source": "07-understand-your-bmi.mp4"
+    },
+    {
+      "video": "08-visualize-bp-trends-logo-vo.mp4",
+      "narration": "Turn recorded blood pressure readings into a visual timeline. Spot changes and review patterns over time.",
+      "source": "08-visualize-bp-trends.mp4"
+    },
+    {
+      "video": "09-export-your-records-logo-vo.mp4",
+      "narration": "Take your tracking records with you. Explore available PDF, CSV, and JSON export options inside the app.",
+      "source": "09-export-your-records.mp4"
+    },
+    {
+      "video": "10-personalize-your-app-logo-vo.mp4",
+      "narration": "Make Health Metrics Tracker fit your routine. Adjust preferences and choose reminders that work for you.",
+      "source": "10-personalize-your-app.mp4"
+    }
+  ],
+  "complete_tour": {
+    "video": "11-health-metrics-tracker-complete-tour-logo.mp4",
+    "duration_seconds": 96.7,
+    "screenshots": [
+      "01-home.png",
+      "01-home.png",
+      "02-water.png",
+      "03-weight.png",
+      "04-food.png",
+      "05-blood-pressure.png",
+      "06-calculators.png",
+      "07-bmi.png",
+      "08-pressure-trends.png",
+      "09-insights.png",
+      "10-history.png",
+      "11-export.png",
+      "12-settings.png",
+      "01-home.png"
+    ],
+    "feature_screenshots_unique": 12,
+    "scenes": [
+      {
+        "title": "INTRODUCTION",
+        "image": "01-home.png",
+        "narration": "Meet Health Metrics Tracker, a simple home for your daily wellness routine."
+      },
+      {
+        "title": "WELLNESS DASHBOARD",
+        "image": "01-home.png",
+        "narration": "Open the dashboard to see your daily trackers and wellness overview together."
+      },
+      {
+        "title": "WATER TRACKING",
+        "image": "02-water.png",
+        "narration": "Log your water intake and see how you're progressing toward your daily hydration goal."
+      },
+      {
+        "title": "WEIGHT JOURNEY",
+        "image": "03-weight.png",
+        "narration": "Record your weight, review your history, and understand changes across your journey."
+      },
+      {
+        "title": "FOOD DIARY",
+        "image": "04-food.png",
+        "narration": "Keep a food diary with calories and macronutrients to understand your everyday meals."
+      },
+      {
+        "title": "BLOOD PRESSURE LOG",
+        "image": "05-blood-pressure.png",
+        "narration": "Save blood pressure readings and revisit your previous records in one organized place."
+      },
+      {
+        "title": "WELLNESS CALCULATORS",
+        "image": "06-calculators.png",
+        "narration": "Explore the available wellness calculators and choose the one that fits your needs."
+      },
+      {
+        "title": "BMI CALCULATOR",
+        "image": "07-bmi.png",
+        "narration": "Calculate your body mass index and view the reference categories alongside your result."
+      },
+      {
+        "title": "PRESSURE TRENDS",
+        "image": "08-pressure-trends.png",
+        "narration": "Explore charts of your recorded blood pressure readings and follow changes over time."
+      },
+      {
+        "title": "WELLNESS INSIGHTS",
+        "image": "09-insights.png",
+        "narration": "Explore wellness insights based on your check-ins and the information you've recorded."
+      },
+      {
+        "title": "CALCULATION HISTORY",
+        "image": "10-history.png",
+        "narration": "Go back to past calculations and revisit the results you've already saved."
+      },
+      {
+        "title": "EXPORT YOUR DATA",
+        "image": "11-export.png",
+        "narration": "Explore PDF, CSV, and JSON export options for the records you choose to keep."
+      },
+      {
+        "title": "SETTINGS AND REMINDERS",
+        "image": "12-settings.png",
+        "narration": "Customize app preferences and manage reminders to make tracking work for you."
+      },
+      {
+        "title": "TRACK YOUR DAY",
+        "image": "01-home.png",
+        "narration": "Health Metrics Tracker. Track your day, review your progress, and stay engaged with your habits."
+      }
+    ]
+  },
+  "brand_logo": "health-metrics-app-logo.png",
+  "branding_update": "Replaced all generic + symbols used as campaign logos in top bars, feature cards and end slates with the supplied app artwork. Original app screenshots remain untouched.",
+  "original_audio_preserved": true
+}

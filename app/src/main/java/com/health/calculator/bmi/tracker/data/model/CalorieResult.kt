@@ -31,16 +31,19 @@ data class CalorieResult(
     val activityPercent: Float get() = ((activityCalories / tdee) * 100).toFloat()
     val tefPercent: Float get() = ((tef / tdee) * 100).toFloat()
 
-    val dailyDeficitOrSurplus: Int get() = goalAdjustment
-    val isDeficit: Boolean get() = goalAdjustment < 0
-    val isSurplus: Boolean get() = goalAdjustment > 0
-    val isMaintenance: Boolean get() = goalAdjustment == 0
+    /** Derived from the displayed intake after the app planning minimum is applied. */
+    val effectiveGoalAdjustment: Double get() = safeGoalCalories - tdee
+    val dailyDeficitOrSurplus: Int get() = kotlin.math.round(effectiveGoalAdjustment).toInt()
+    val isDeficit: Boolean get() = effectiveGoalAdjustment < -0.5
+    val isSurplus: Boolean get() = effectiveGoalAdjustment > 0.5
+    val isMaintenance: Boolean get() = !isDeficit && !isSurplus
 
-    val weeklyChangeDisplay: Double get() = kotlin.math.abs(weeklyChangeKg)
-    val monthlyChangeKg: Double get() = kotlin.math.abs(weeklyChangeKg * 4.33)
+    // A fixed energy-balance illustration, not a physiological prediction.
+    val weeklyChangeDisplay: Double get() = kotlin.math.abs(effectiveGoalAdjustment * 7.0 / 7700.0)
+    val monthlyChangeKg: Double get() = weeklyChangeDisplay * 4.33
 
-    val caloriesPerHour: Double get() = goalCalories / 24.0
-    val caloriesPerMeal3: Double get() = goalCalories / 3.0
-    val caloriesPerMeal4: Double get() = goalCalories / 4.0
-    val caloriesPerMeal5: Double get() = goalCalories / 5.0
+    val caloriesPerHour: Double get() = safeGoalCalories / 24.0
+    val caloriesPerMeal3: Double get() = safeGoalCalories / 3.0
+    val caloriesPerMeal4: Double get() = safeGoalCalories / 4.0
+    val caloriesPerMeal5: Double get() = safeGoalCalories / 5.0
 }

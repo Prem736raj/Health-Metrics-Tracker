@@ -7,6 +7,27 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class BMIGoalDataTest {
+    @Test fun passingALossOrGainTargetDoesNotReverseTheGoalDirection() {
+        val loss = BMIGoalData(startingWeight = 80f, currentWeight = 69f, targetWeight = 70f, isGoalSet = true)
+        assertTrue(loss.isWeightLoss)
+        assertTrue(loss.isGoalReached)
+        assertEquals(100f, loss.progressPercentage, 0f)
+        assertEquals(0f, loss.remainingWeight, 0f)
+        assertEquals(0, loss.estimatedWeeksMax)
+        val gain = BMIGoalData(startingWeight = 60f, currentWeight = 71f, targetWeight = 70f, isGoalSet = true)
+        assertTrue(gain.isWeightGain)
+        assertTrue(gain.isGoalReached)
+        assertEquals(100f, gain.progressPercentage, 0f)
+    }
+
+    @Test fun wrongDirectionAndMissingDataDoNotShowCompletedProgress() {
+        val loss = BMIGoalData(startingWeight = 80f, currentWeight = 81f, targetWeight = 70f, isGoalSet = true)
+        assertFalse(loss.isGoalReached)
+        assertEquals(0f, loss.progressPercentage, 0f)
+        assertFalse(BMIGoalData().isGoalReached)
+        assertEquals(0f, loss.copy(currentWeight = Float.NaN).progressPercentage, 0f)
+    }
+
     @Test
     fun targetWeightUsesMetricBmiFormula() {
         // 21.7 at 180 cm = 21.7 * 1.8².

@@ -710,7 +710,7 @@ private fun AccurateTrackingTipsContent() {
             Triple("🥤", "Track All Beverages",
                 "Liquid calories are often completely overlooked:\n• Juice: ~110 kcal/cup\n• Coffee with cream & sugar: ~50-150 kcal\n• Smoothies: 200-600 kcal\n• Alcohol: 100-250 kcal/drink\n\nDrink water or unsweetened beverages to reduce hidden calories."),
             Triple("📊", "Be Honest With Yourself",
-                "Research consistently shows people underreport food intake by 20-50%. Common mistakes:\n• Estimating smaller portions than actual\n• Forgetting snacks and tastes while cooking\n• Not counting 'just a few' chips or bites\n\nAccurate tracking (even if imperfect) is far more valuable than inaccurate tracking."),
+                "It can be easy to miss or estimate food portions when logging from memory. Common mistakes:\n• Estimating smaller portions than actual\n• Forgetting snacks and tastes while cooking\n• Not counting 'just a few' chips or bites\n\nAccurate tracking (even if imperfect) is far more valuable than inaccurate tracking."),
             Triple("🔄", "Consistency Beats Perfection",
                 "You don't need a perfect day every day. Consistent, honest tracking that's occasionally off is more useful than sporadic perfect tracking. Aim for 80-90% accuracy consistently rather than 100% occasionally."),
             Triple("🍽️", "Weigh Food Before Cooking",

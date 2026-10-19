@@ -33,3 +33,12 @@ for a qualified professional.
 - Heart-rate zone percentages are estimates; talk-test guidance and personal
   goals should take priority over a fixed number, and symptoms warrant stopping
   activity and seeking appropriate professional advice.
+
+## October claim corrections
+
+The [5 October claims/suggestions review](audit/CLAIMS_AND_SUGGESTIONS_2026-10-05.md)
+records revised BP urgency, hydration, BSA and exercise copy. WHO activity ranges
+are public guidance, not an automatically generated individual workout plan.
+The exercise journal now uses the user's intensity selection with talk-test
+context. Saved older intensity labels remain recorded values, not independently
+verified activity classifications.

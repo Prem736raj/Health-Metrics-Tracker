@@ -1,0 +1,172 @@
+{
+  "audit_started": "2026-10-05",
+  "recorded_at_utc": "2026-10-05T20:03:11.984459+00:00",
+  "status": "Local verification passed; production upload has outstanding owner, policy and device gates.",
+  "application_id": "com.healthmetrics.tracker",
+  "version_name": "1.0.1",
+  "version_code": 2,
+  "min_sdk": 26,
+  "target_sdk": 36,
+  "main_kotlin_files": 504,
+  "main_kotlin_xml_source_sha256": "26abfc5dd50ff99129b90c8ae2f83f70ad253d950d1e330f971ef1b13479a44b",
+  "navigation_test_source_sha256": "126950a3a710c5ae161ed101b07556f8046ee0f7f92aa41204db5d011c396ab0",
+  "unit_tests": {
+    "testDebugUnitTest": {
+      "tests": 219,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testReleaseUnitTest": {
+      "tests": 219,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lint": {
+    "debug": {
+      "severity": {
+        "Warning": 895,
+        "Hint": 1
+      },
+      "top_categories": {
+        "DefaultLocale": 214,
+        "UnusedResources": 211,
+        "UseKtx": 172,
+        "HardcodedText": 87,
+        "UnusedAttribute": 38,
+        "SmallSp": 31
+      }
+    },
+    "release": {
+      "severity": {
+        "Warning": 895,
+        "Hint": 1
+      },
+      "top_categories": {
+        "DefaultLocale": 214,
+        "UnusedResources": 211,
+        "UseKtx": 172,
+        "HardcodedText": 87,
+        "UnusedAttribute": 38,
+        "SmallSp": 31
+      }
+    }
+  },
+  "final_combined_gradle_duration": "9m 56s",
+  "instrumentation": {
+    "tests": 30,
+    "failures": 0,
+    "device": "audit34 / API 34 / x86_64 / 4096-byte pages",
+    "primary_destinations_per_mode": 40,
+    "modes": [
+      "LIGHT / 1x Compose text",
+      "DARK / 2x Compose text"
+    ],
+    "screenshots": 82,
+    "foreground_window_checked": true
+  },
+  "artifact_checks": {
+    "native_library_count": 8,
+    "required_64bit_elf_alignment": "PASS",
+    "apk_zipalign_16kb": "PASS",
+    "bundletool_validation": "PASS",
+    "bundle_config": "PAGE_ALIGNMENT_16K",
+    "play_upload_signed": false,
+    "missing_signing_gate": "Expected failure before release-bundle packaging",
+    "minified_release_launch": "QA copy signed with Android debug certificate; four cold routes passed on API 34; populated weight header reviewed at OS font scale 2x",
+    "final_device_app_crash_anr_events": 0
+  },
+  "store_assets": {
+    "assets": [
+      {
+        "path": "R:\\New folder\\docs\\play_store_icon_512.png",
+        "width": 512,
+        "height": 512,
+        "bit_depth": 8,
+        "color_type": 6,
+        "bytes": 315262,
+        "passes": true,
+        "requirement": "512x512, 32-bit PNG with alpha, maximum 1024 KB"
+      },
+      {
+        "path": "R:\\New folder\\docs\\store\\feature-graphic-1024x500.png",
+        "width": 1024,
+        "height": 500,
+        "bit_depth": 8,
+        "color_type": 2,
+        "bytes": 867028,
+        "passes": true,
+        "requirement": "1024x500, 24-bit PNG without alpha"
+      },
+      {
+        "path": "R:\\New folder\\docs\\store\\screenshots\\01-home-api34-dark.png",
+        "width": 1080,
+        "height": 1920,
+        "bit_depth": 8,
+        "color_type": 2,
+        "bytes": 277406,
+        "passes": true,
+        "requirement": "24-bit PNG without alpha; each side 320..3840 px; long side at most twice the short side"
+      },
+      {
+        "path": "R:\\New folder\\docs\\store\\screenshots\\02-weight-api34-dark.png",
+        "width": 1080,
+        "height": 1920,
+        "bit_depth": 8,
+        "color_type": 2,
+        "bytes": 155419,
+        "passes": true,
+        "requirement": "24-bit PNG without alpha; each side 320..3840 px; long side at most twice the short side"
+      }
+    ],
+    "screenshots": 2,
+    "passes_all_technical_checks": true,
+    "limitations": "Technical file checks only. Review current UI, marketing claims and the final Console preview separately."
+  },
+  "artifacts": {
+    "unsigned_release_aab": {
+      "path": "app/build/outputs/bundle/release/app-release.aab",
+      "bytes": 16540758,
+      "sha256": "d76cc0f9143138093a4096ffc7712ba444d0bc02802b6ed15525be392b2971e9"
+    },
+    "unsigned_release_apk": {
+      "path": "app/build/outputs/apk/release/app-release-unsigned.apk",
+      "bytes": 9087562,
+      "sha256": "719b645d4abfea61706993df3566b4601c6403c3733e76ebccac340d9ac5f905"
+    },
+    "debug_apk": {
+      "path": "app/build/outputs/apk/debug/app-debug.apk",
+      "bytes": 36711562,
+      "sha256": "a504c5f4d9929ba66f9a971afcf2ca6c2b2c59ca9f7ff3716d31f408838aa266"
+    },
+    "instrumentation_apk": {
+      "path": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "bytes": 2002893,
+      "sha256": "64dba4579fcbc48facb05122a84126e68cb18aac3e5574e83abc42991c3a26b5"
+    }
+  },
+  "local_evidence": [
+    "scratch/play-readiness-complete-verification.log",
+    "scratch/play-readiness-final-cached-gate.log",
+    "scratch/play-device-verified-tests.log",
+    "scratch/play-final-aab-elf.json",
+    "scratch/play-final-zipalign.log",
+    "scratch/play-final-bundle-validation.log",
+    "scratch/play-final-bundle-config.json",
+    "scratch/play-signing-gate.log",
+    "scratch/play-minified-launch.log",
+    "scratch/play-release-qa-verified",
+    "scratch/play-final-store-assets.json",
+    "scratch/play-final-device-events.log",
+    "scratch/play-minified-weight-large-after.png"
+  ],
+  "limits": [
+    "Unsigned artifacts are engineering outputs, not Play uploads.",
+    "No full journey / all educational accordion / clinical validation claim.",
+    "No 16KB-runtime, real Health Connect, TalkBack, wider API/OEM or production network test.",
+    "Public privacy update and Console declarations remain outstanding.",
+    "895 lint warnings remain in each build variant."
+  ]
+}

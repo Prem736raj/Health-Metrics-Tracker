@@ -1,6 +1,7 @@
 package com.health.calculator.bmi.tracker.domain.usecase
 
 import com.health.calculator.bmi.tracker.data.model.*
+import kotlin.math.abs
 
 class MealPlanningUseCase {
 
@@ -55,10 +56,16 @@ class MealPlanningUseCase {
         mealCount: Int,
         customSplits: List<Float>? = null
     ): MealPlan {
-        val distribution = mealDistributions[mealCount]
-            ?: mealDistributions[3]!! // Default to 3 meals
+        require(totalCalories.isFinite() && totalCalories > 0.0) { "Calories must be positive and finite" }
+        require(listOf(proteinGrams, carbGrams, fatGrams).all { it.isFinite() && it >= 0.0 }) {
+            "Macro amounts must be finite and non-negative"
+        }
+        val distribution = requireNotNull(mealDistributions[mealCount]) { "Choose between 2 and 6 meals" }
 
         val splits = customSplits ?: distribution.splits
+        require(splits.size == mealCount && splits.all { it.isFinite() && it in 0f..100f } && abs(splits.sum() - 100f) < 0.01f) {
+            "Meal shares must match the meal count and total 100 percent"
+        }
         val isCustom = customSplits != null
 
         val meals = splits.mapIndexed { index, percent ->
@@ -100,6 +107,8 @@ class MealPlanningUseCase {
         ifType: String,
         windowStartHour: Int = 12
     ): IntermittentFastingPlan {
+        require(ifType in listOf("none", "16:8", "18:6", "20:4")) { "Unsupported meal window" }
+        require(windowStartHour in 0..23) { "Start hour must be between 0 and 23" }
         val (fastingHours, eatingHours) = when (ifType) {
             "16:8" -> 16 to 8
             "18:6" -> 18 to 6
@@ -170,11 +179,16 @@ class MealPlanningUseCase {
             )
         }
 
+        require(totalCalories.isFinite() && totalCalories > 0.0) { "Calories must be positive and finite" }
+        require(listOf(proteinGrams, carbGrams, fatGrams).all { it.isFinite() && it >= 0.0 }) {
+            "Macro amounts must be finite and non-negative"
+        }
+
         // Pre-workout: 15% of daily calories, higher carbs, moderate protein
         val preCalories = totalCalories * 0.15
         val preProtein = proteinGrams * 0.15
-        val preCarbs = carbGrams * 0.20 // Higher carbs for energy
-        val preFat = fatGrams * 0.10 // Lower fat for faster digestion
+        val preCarbs = carbGrams * 0.15
+        val preFat = fatGrams * 0.15
 
         val preMeal = MealSlot(
             name = "pre_workout",
@@ -190,9 +204,9 @@ class MealPlanningUseCase {
 
         // Post-workout: 20% of daily calories, high protein + carbs for recovery
         val postCalories = totalCalories * 0.20
-        val postProtein = proteinGrams * 0.25 // Higher protein for recovery
-        val postCarbs = carbGrams * 0.25 // Higher carbs to replenish glycogen
-        val postFat = fatGrams * 0.10 // Lower fat
+        val postProtein = proteinGrams * 0.20
+        val postCarbs = carbGrams * 0.20
+        val postFat = fatGrams * 0.20
 
         val postMeal = MealSlot(
             name = "post_workout",
@@ -202,7 +216,7 @@ class MealPlanningUseCase {
             proteinGrams = postProtein,
             carbGrams = postCarbs,
             fatGrams = postFat,
-            suggestedTime = "Within 1 hour after workout",
+            suggestedTime = "After activity, when it suits your routine",
             mealIdeas = getPostWorkoutMealIdeas(postCalories.toInt())
         )
 
@@ -212,7 +226,7 @@ class MealPlanningUseCase {
             preWorkoutMeal = preMeal,
             postWorkoutMeal = postMeal,
             preWorkoutTiming = "1-2 hours before",
-            postWorkoutTiming = "Within 1 hour after"
+            postWorkoutTiming = "After activity, when it suits your routine"
         )
     }
 
@@ -349,15 +363,15 @@ class MealPlanningUseCase {
         return when {
             calories < 300 -> listOf(
                 MealIdea("Light snack option", calories, "🍽️"),
-                MealIdea("Fresh fruit + nuts", calories - 50, "🍇")
+                MealIdea("Fresh fruit + nuts", (calories - 50).coerceAtLeast(0), "🍇")
             )
             calories < 500 -> listOf(
                 MealIdea("Balanced mini meal", calories, "🍽️"),
-                MealIdea("Protein + veggies", calories - 50, "🥗")
+                MealIdea("Protein + veggies", (calories - 50).coerceAtLeast(0), "🥗")
             )
             else -> listOf(
                 MealIdea("Full balanced meal", calories, "🍽️"),
-                MealIdea("Protein + carbs + veggies", calories - 50, "🥙")
+                MealIdea("Protein + carbs + veggies", (calories - 50).coerceAtLeast(0), "🥙")
             )
         }
     }

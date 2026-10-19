@@ -232,7 +232,7 @@ object SmartRecommendationEngine {
                     id = "water_almost",
                     emoji = "🎯",
                     title = "Almost There!",
-                    message = "You're $remaining% away from your water goal. Just a bit more to go!",
+                    message = "Your log is $remaining% below the selected water target. Record what you drank; you do not need to drink more just to complete a goal.",
                     actionLabel = "Log More",
                     actionRoute = "water_intake_calculator",
                     priority = RecommendationPriority.LOW,
@@ -251,7 +251,7 @@ object SmartRecommendationEngine {
                     title = "Track Your Meals",
                     message = "Log what you eat to stay on track with your nutrition goals.",
                     actionLabel = "Log Food",
-                    actionRoute = "calorie_calculator",
+                    actionRoute = "food_log",
                     priority = RecommendationPriority.MEDIUM,
                     type = RecommendationType.CALORIE_REMINDER,
                     color = CalculatorColors.DailyCalorie
@@ -284,15 +284,15 @@ object SmartRecommendationEngine {
         // 10. Goal close to achievement
         if (context.currentWeight != null && context.goalWeight != null) {
             val diff = kotlin.math.abs(context.currentWeight - context.goalWeight)
-            if (diff <= 2f && diff > 0 && isNotDismissed("goal_close")) {
+            if (diff <= 2f && diff > 0.5f && isNotDismissed("goal_close")) {
                 recommendations.add(
                     SmartRecommendation(
                         id = "goal_close",
                         emoji = "🏆",
-                        title = "Almost at Your Goal!",
-                        message = "You're only ${"%.1f".format(diff)} kg away from your goal weight. Keep going!",
+                        title = "Near Your Selected Goal",
+                        message = "Your latest entry differs from your selected goal by ${"%.1f".format(diff)} kg. Review the trend and decide whether this goal still suits you.",
                         actionLabel = "View Progress",
-                        actionRoute = "bmi_calculator",
+                        actionRoute = "weight_tracking",
                         priority = RecommendationPriority.CELEBRATION,
                         type = RecommendationType.GOAL_PROGRESS,
                         color = HealthColors.Healthy
@@ -309,10 +309,10 @@ object SmartRecommendationEngine {
                     SmartRecommendation(
                         id = "goal_achieved",
                         emoji = "🎉",
-                        title = "Congratulations!",
-                        message = "You've reached your goal weight! Amazing work! Set a new goal to keep progressing.",
-                        actionLabel = "Update Goal",
-                        actionRoute = "profile",
+                        title = "Near Your Selected Goal",
+                        message = "Your latest entry is within 0.5 kg of your selected goal. Review the trend and decide whether this goal still suits you.",
+                        actionLabel = "Review Goal",
+                        actionRoute = "weight_tracking",
                         priority = RecommendationPriority.CELEBRATION,
                         type = RecommendationType.GOAL_PROGRESS,
                         color = HealthColors.Healthy
@@ -345,7 +345,7 @@ object SmartRecommendationEngine {
                     id = "hr_never",
                     emoji = "❤️",
                     title = "Discover Your Heart Rate Zones",
-                    message = "Optimize your workouts by training in the right heart rate zones.",
+                    message = "Explore estimated effort ranges alongside the talk test. These are not personal safety limits.",
                     actionLabel = "Calculate Zones",
                     actionRoute = "heart_rate_zone_calculator",
                     priority = RecommendationPriority.LOW,

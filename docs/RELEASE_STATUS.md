@@ -1,5 +1,19 @@
 # Release status
 
+> **Current checkpoint (19 October 2026):** the first-upload signed AAB now
+> exists and passes signature, bundletool and ZIP/ELF alignment checks. Full
+> release lint passes with zero errors (885 warnings, 1 hint), and all 12
+> polished Play listing screenshots match their recorded hashes.
+> See [the first-upload handoff](audit/FIRST_PLAY_UPLOAD_HANDOFF_2026-10-18.md)
+> for its hash, tested source limitations and the still-open Play Console and
+> device gates. The historical unsigned-bundle status below is superseded.
+
+> 5 October 2026: the [current Play readiness audit](audit/PLAY_STORE_READINESS_2026-10-05.md)
+> and [claims/suggestions ledger](audit/CLAIMS_AND_SUGGESTIONS_2026-10-05.md)
+> supersede the historical test counts and completion claims below. Use
+> `bundlePlayRelease` for distribution; an unsigned validation bundle is not a Play upload.
+
+
 > Current audit notice (29 September 2026): this document contains historical
 > checkpoints, not proof that all code-fixable issues are closed. The source-backed
 > [production audit](audit/PRODUCTION_AUDIT_2026-09-19.md) supersedes broad completion

@@ -54,7 +54,7 @@ object BpRecommendationsProvider {
             BpCategory.HIGH_NORMAL -> Quad("📋", "One or both numbers are in a Stage 1 reference range. Review the technique and trend.", BpGuidanceTone.CAUTIOUS, "Repeat on separate days")
             BpCategory.ISOLATED_SYSTOLIC -> Quad("📋", "The top number is elevated while the bottom number is below 90. Confirm with repeat readings.", BpGuidanceTone.CAUTIOUS, "Repeat on separate days")
             BpCategory.GRADE_1_HYPERTENSION, BpCategory.GRADE_2_HYPERTENSION -> Quad("🩺", "This reading is in a Stage 2 reference range. Recheck carefully and discuss repeated results with a professional.", BpGuidanceTone.CONCERNED, "Follow a clinician's advice")
-            BpCategory.GRADE_3_HYPERTENSION, BpCategory.HYPERTENSIVE_CRISIS -> Quad("⚠️", "This reading is markedly elevated. Sit quietly, repeat it with a validated cuff, and seek prompt medical advice if it remains high or symptoms are present.", BpGuidanceTone.URGENT, "Repeat promptly; follow professional advice")
+            BpCategory.GRADE_3_HYPERTENSION, BpCategory.HYPERTENSIVE_CRISIS -> Quad("⚠️", "This reading is markedly elevated. Emergency symptoms need immediate help; do not wait to repeat a reading if symptoms are present.", BpGuidanceTone.URGENT, "With emergency symptoms: seek help immediately. Otherwise repeat after at least one minute.")
             BpCategory.HYPOTENSION -> Quad("💙", "This reading is below the usual adult reference range. Symptoms and repeated readings provide important context.", BpGuidanceTone.INFORMATIONAL, "Repeat when rested or as advised")
         }
 
@@ -80,7 +80,7 @@ object BpRecommendationsProvider {
         }
 
         val doctorAdvice = when {
-            isSeverelyElevated -> "If a careful repeat is still at or above ${BloodPressureReference.SEVERE_SYSTOLIC_MMHG}/${BloodPressureReference.SEVERE_DIASTOLIC_MMHG} mmHg, or you have concerning symptoms, seek urgent medical care or local emergency services."
+            isSeverelyElevated -> BloodPressureReference.SEVERE_READING_GUIDANCE
             isAboveReference -> "Discuss a pattern of elevated readings with a qualified healthcare professional; do not infer a diagnosis from this screen."
             category == BpCategory.HYPOTENSION -> "Discuss repeated low readings or symptoms such as dizziness or fainting with a qualified healthcare professional."
             else -> null
@@ -96,7 +96,7 @@ object BpRecommendationsProvider {
             exerciseTips = lifestyle.drop(2),
             healthRisks = riskContext,
             doctorAdvice = doctorAdvice,
-            urgencyNote = if (isSeverelyElevated) "Repeat after resting and seek prompt care if it remains high or symptoms are present." else null
+            urgencyNote = if (isSeverelyElevated) BloodPressureReference.SEVERE_READING_GUIDANCE else null
         )
     }
 

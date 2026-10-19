@@ -251,6 +251,22 @@ tasks.register("verifyPlayReleaseSigning") {
                 "RELEASE_STORE_PASSWORD, RELEASE_KEY_ALIAS and RELEASE_KEY_PASSWORD " +
                 "as Gradle properties or environment variables."
         }
+        check(file(requireNotNull(releaseStoreFilePath)).isFile) {
+            "The configured release keystore file does not exist."
+        }
     }
+}
+
+// Validation builds may remain unsigned, but this distribution entry point
+// always checks owner-supplied credentials before producing the Play bundle.
+tasks.register("bundlePlayRelease") {
+    group = "build"
+    description = "Builds a Play release bundle only with configured release signing."
+    dependsOn("verifyPlayReleaseSigning", "bundleRelease")
+}
+tasks.matching {
+    it.name in setOf("packageReleaseBundle", "signReleaseBundle", "bundleRelease")
+}.configureEach {
+    mustRunAfter("verifyPlayReleaseSigning")
 }
 

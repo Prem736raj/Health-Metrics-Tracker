@@ -89,21 +89,21 @@ fun HealthConnectionsScreen(
                 .padding(padding)
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            ConnectionHeader(state.healthConnectionMap)
-
-            HealthConnectAccessCard(
-                state = healthConnectState,
-                onConnect = { feature ->
-                    permissionLauncher.launch(HealthConnectPermissionPolicy.permissionsFor(feature))
-                },
-                onSync = healthConnectViewModel::syncHealthConnectData
-            )
-
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                item { ConnectionHeader(state.healthConnectionMap) }
+                item {
+                    HealthConnectAccessCard(
+                        state = healthConnectState,
+                        onConnect = { feature ->
+                            permissionLauncher.launch(HealthConnectPermissionPolicy.permissionsFor(feature))
+                        },
+                        onSync = healthConnectViewModel::syncHealthConnectData
+                    )
+                }
                 if (healthConnectState.healthConnectStepHistory.isNotEmpty()) {
                     item {
                         StepHistorySummary(

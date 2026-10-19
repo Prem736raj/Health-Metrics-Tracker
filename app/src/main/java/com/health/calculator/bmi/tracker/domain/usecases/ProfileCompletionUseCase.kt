@@ -32,13 +32,13 @@ class ProfileCompletionUseCase @javax.inject.Inject constructor() {
 
         val suggestions = mutableListOf<String>()
         if ("Height" in missing || "Weight" in missing) {
-            suggestions.add("Add height and weight for accurate BMI calculation")
+            suggestions.add("Add height and weight for a BMI estimate")
         }
         if ("Date of Birth" in missing) {
-            suggestions.add("Add your birthdate for age-adjusted health metrics")
+            suggestions.add("Add your birthdate for supported age-based estimates")
         }
         if ("Activity Level" in missing) {
-            suggestions.add("Set activity level for accurate calorie calculations")
+            suggestions.add("Set activity level for calorie estimates")
         }
         if ("Health Goals" in missing) {
             suggestions.add("Select health goals to personalize your plan")

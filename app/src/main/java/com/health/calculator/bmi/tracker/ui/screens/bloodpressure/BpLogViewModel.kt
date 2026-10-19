@@ -11,6 +11,8 @@ import com.health.calculator.bmi.tracker.data.model.*
 import com.health.calculator.bmi.tracker.data.repository.BloodPressureRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 
 data class BpLogDetailState(
     val entity: BloodPressureEntity? = null,
@@ -28,7 +30,8 @@ data class BpLogUiState(
     val showNoteDialog: Boolean = false,
     val editingNoteId: Long? = null,
     val editingNoteText: String = "",
-    val readingsCount: Int = 0
+    val readingsCount: Int = 0,
+    val errorMessage: String? = null
 )
 
 @HiltViewModel
@@ -40,12 +43,26 @@ class BpLogViewModel @Inject constructor(application: Application) : AndroidView
     private val _uiState = MutableStateFlow(BpLogUiState())
     val uiState: StateFlow<BpLogUiState> = _uiState.asStateFlow()
 
+    private fun launchSafely(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch {
+        try {
+            block()
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (_: Exception) {
+            _uiState.update { it.copy(isLoading = false, errorMessage = "Blood-pressure operation could not be completed. Please try again.") }
+        }
+    }
+
+    fun clearErrorMessage() {
+        _uiState.update { it.copy(errorMessage = null) }
+    }
+
     init {
         loadReadings()
     }
 
     private fun loadReadings() {
-        viewModelScope.launch {
+        launchSafely {
             repository.allMainReadings.collect { entities ->
                 _uiState.update {
                     it.copy(
@@ -59,7 +76,7 @@ class BpLogViewModel @Inject constructor(application: Application) : AndroidView
     }
 
     fun onReadingClicked(entity: BloodPressureEntity) {
-        viewModelScope.launch {
+        launchSafely {
             val groupReadings = entity.averageGroupId?.let {
                 repository.getReadingsByGroupId(it)
             } ?: emptyList()
@@ -94,7 +111,7 @@ class BpLogViewModel @Inject constructor(application: Application) : AndroidView
 
     fun onConfirmDelete() {
         val entity = _uiState.value.deletingEntity ?: return
-        viewModelScope.launch {
+        launchSafely {
             repository.deleteReadingWithGroup(entity)
             _uiState.update {
                 it.copy(
@@ -130,7 +147,7 @@ class BpLogViewModel @Inject constructor(application: Application) : AndroidView
         val id = _uiState.value.editingNoteId ?: return
         val note = _uiState.value.editingNoteText
 
-        viewModelScope.launch {
+        launchSafely {
             repository.updateNote(id, note)
             _uiState.update {
                 it.copy(

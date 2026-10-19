@@ -5,8 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import android.app.Application
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
@@ -18,6 +16,7 @@ import com.health.calculator.bmi.tracker.data.model.WaterIntakeCalculation
 import com.health.calculator.bmi.tracker.data.model.WaterIntakeCalculator
 import com.health.calculator.bmi.tracker.data.repository.WaterIntakeRepository
 import kotlinx.coroutines.launch
+import com.health.calculator.bmi.tracker.core.util.DecimalInput
 
 @HiltViewModel
 class WaterIntakeViewModel @Inject constructor(
@@ -64,14 +63,14 @@ class WaterIntakeViewModel @Inject constructor(
     }
 
     fun toggleUnit() {
-        val currentWeight = weightValue.toFloatOrNull()
+        val currentWeight = DecimalInput.parse(weightValue)
         if (currentWeight != null) {
             weightValue = if (isMetric) {
                 // kg to lbs
-                String.format("%.1f", currentWeight * 2.20462f)
+                DecimalInput.format(currentWeight * 2.20462f)
             } else {
                 // lbs to kg
-                String.format("%.1f", currentWeight / 2.20462f)
+                DecimalInput.format(currentWeight / 2.20462f)
             }
         }
         isMetric = !isMetric
@@ -109,9 +108,9 @@ class WaterIntakeViewModel @Inject constructor(
         var loaded = false
         profileWeight?.let {
             weightValue = if (profileIsMetric) {
-                String.format("%.1f", it)
+                DecimalInput.format(it)
             } else {
-                String.format("%.1f", it * 2.20462f)
+                DecimalInput.format(it * 2.20462f)
             }
             isMetric = profileIsMetric
             loaded = true
@@ -136,7 +135,7 @@ class WaterIntakeViewModel @Inject constructor(
     fun validate(): Boolean {
         var isValid = true
 
-        val weight = weightValue.toFloatOrNull()
+        val weight = DecimalInput.parse(weightValue)
         if (weight == null || weight <= 0) {
             weightError = "Please enter a valid weight"
             isValid = false
@@ -163,7 +162,7 @@ class WaterIntakeViewModel @Inject constructor(
     fun calculate() {
         if (!validate()) return
 
-        val weight = weightValue.toFloat()
+        val weight = requireNotNull(DecimalInput.parse(weightValue))
         val weightKg = if (isMetric) weight else weight / 2.20462f
         val age = ageValue.toInt()
 

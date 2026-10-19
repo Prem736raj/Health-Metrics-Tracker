@@ -1,0 +1,13 @@
+filename,recommended,alt_text
+"01-home.png",true,"Health Metrics Tracker home dashboard with daily tracking cards and a wellness consistency overview."
+"02-water.png",true,"Water Tracker showing sample water intake against a daily goal, with hydration tools and a learning guide."
+"03-weight.png",true,"Weight Tracking with sample measurements, current and starting weight, and comparisons over time."
+"04-food.png",true,"Food Log showing sample calories, protein, carbs and fat, with quick-add food presets."
+"05-blood-pressure.png",true,"Blood pressure journal listing sample manual readings with dates, pulse values and notes."
+"06-calculators.png",true,"Calculator collection with body composition, hydration and other educational wellness tools."
+"07-bmi.png",true,"BMI result for sample adult measurements, showing an estimate and adult BMI reference categories."
+"08-pressure-trends.png",true,"Blood pressure trends displaying a chart and averages from synthetic journal readings."
+"09-insights.png",false,"Insights screen with summaries and observations based on sample wellness check-ins."
+"10-history.png",false,"Calculator history with a saved sample BMI calculation and tools to review previous results."
+"11-export.png",false,"History export options with file formats and controls for choosing which records to export."
+"12-settings.png",false,"Settings screen with metric units, appearance options, plant companion and optional reminder controls."

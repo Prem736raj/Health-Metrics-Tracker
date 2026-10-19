@@ -148,7 +148,7 @@ fun BSAResultScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 FormulaRecommendationCard()
                 Spacer(modifier = Modifier.height(16.dp))
-                BSAMedicalApplicationsSection(bsa = result.primaryBSA)
+                BSAMedicalApplicationsSection()
                 Spacer(modifier = Modifier.height(24.dp))
                 ActionButtons(isSaved = isSaved, onSave = onSave, onRecalculate = onRecalculate, onShare = onShare)
             }

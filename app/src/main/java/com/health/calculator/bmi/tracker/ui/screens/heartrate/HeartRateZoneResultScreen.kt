@@ -252,17 +252,8 @@ fun HeartRateZoneResultScreen(
                         )
                     }
 
-                    val calorieBurns = remember(result, weightKg) {
-                        HeartRateZoneRecommendationEngine.estimateCaloriesPerZone(
-                            weightKg = weightKg,
-                            zones = result.zones
-                        )
-                    }
-
                     ZoneRecommendationsSection(
                         recommendations = recommendations,
-                        calorieBurns = calorieBurns,
-                        fitnessLevel = result.fitnessLevel,
                         onGoalSelected = { goalName ->
                             selectedGoalName = goalName
                         }

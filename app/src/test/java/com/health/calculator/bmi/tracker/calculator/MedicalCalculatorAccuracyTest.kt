@@ -41,6 +41,31 @@ import org.junit.Test
 
 class MedicalCalculatorAccuracyTest {
     @Test
+    fun calorieIllustrationUsesTheDisplayedIntakeAfterPlanningMinimum() {
+        val result = CalorieCalculatorUseCase().calculate(50.0, 150.0, 60, "Female", null, 1.2, "Sedentary", -750, "Loss", -0.75)
+        assertTrue(result.isBelowMinimum)
+        val actualDifference = result.safeGoalCalories - result.tdee
+        assertEquals(actualDifference, result.effectiveGoalAdjustment, 0.0001)
+        assertEquals(kotlin.math.abs(actualDifference * 7.0 / 7700.0), result.weeklyChangeDisplay, 0.0001)
+        assertEquals(result.safeGoalCalories / 3.0, result.caloriesPerMeal3, 0.0001)
+        assertTrue(result.weeklyChangeDisplay < 0.1)
+    }
+
+    @Test
+    fun calorieEquationRejectsUnsupportedSexInvalidChangeAndNonPositiveEnergy() {
+        val calculator = CalorieCalculatorUseCase()
+        fun calculate(sex: String = "Male", change: Double = 0.0, weight: Double = 70.0, height: Double = 175.0, age: Int = 30) =
+            calculator.calculate(weight, height, age, sex, null, 1.2, "Sedentary", 0, "Maintain", change)
+        listOf<() -> Unit>(
+            { calculate(sex = "unknown") },
+            { calculate(change = Double.NaN) },
+            { calculate(weight = 20.0, height = 50.0, age = 120) }
+        ).forEach { invalid ->
+            org.junit.Assert.assertThrows(IllegalArgumentException::class.java) { invalid() }
+        }
+    }
+
+    @Test
     fun bmiUsesAdultFormulaAndBoundaries() {
         val result = BmiCalculator.calculate(75.0, 180.0)
         assertNotNull(result)

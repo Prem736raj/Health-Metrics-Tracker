@@ -192,19 +192,12 @@ private fun UnderstandingHeartRateSection() {
 
             // RHR by age table
             ContentBlock(
-                title = "Normal Resting Heart Rate by Age",
+                title = "Adult Resting Heart Rate Context",
                 emoji = "📋"
             ) {
                 val ageRanges = listOf(
-                    Triple("Newborn (0-1 mo)", "70-190 BPM", HealthColors.Danger),
-                    Triple("Infant (1-12 mo)", "80-160 BPM", HealthColors.Caution),
-                    Triple("Toddler (1-3 yr)", "80-130 BPM", HealthColors.Warning),
-                    Triple("Child (3-5 yr)", "80-120 BPM", HealthColors.Warning),
-                    Triple("Child (6-12 yr)", "70-110 BPM", HealthColors.Healthy),
-                    Triple("Teen (13-17 yr)", "60-100 BPM", HealthColors.Healthy),
-                    Triple("Adult (18-64 yr)", "60-100 BPM", HealthColors.Good),
-                    Triple("Senior (65+ yr)", "60-100 BPM", FeatureColors.StepsStart),
-                    Triple("Athlete", "40-60 BPM", FeatureColors.StepsDeep)
+                    Triple("Most adults at rest", "60–100 BPM", HealthColors.Info),
+                    Triple("Some trained adults", "May be lower", HealthColors.Info)
                 )
 
                 Card(
@@ -257,234 +250,34 @@ private fun UnderstandingHeartRateSection() {
 @Composable
 private fun HeartRateTrainingSection() {
     var isExpanded by remember { mutableStateOf(false) }
-
     EducationalCard(
         emoji = "🏋️",
-        title = "Heart Rate Training Explained",
-        subtitle = "Why training in zones matters and the science behind it",
+        title = "Using Estimated Training Zones",
+        subtitle = "Combine estimates with how the activity feels",
         color = HealthColors.Healthy,
         isExpanded = isExpanded,
         onToggle = { isExpanded = !isExpanded }
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            // Why zones matter
             ContentBlock(
-                title = "Why Training in Zones Matters",
+                title = "A guide to effort",
                 emoji = "🎯",
-                content = "Training in specific heart rate zones allows you to target different physiological " +
-                        "adaptations. Without zones, most people either train too hard (risking burnout and injury) " +
-                        "or too easy (limiting progress). Zones give you a roadmap for effective, sustainable training."
+                content = "Age-based heart-rate equations describe population averages. Your actual maximum and response to activity can differ. Medicines, illness, heat and training affect readings. These zones are not personal safety limits."
             )
-
-            // Fuel sources by zone
             ContentBlock(
-                title = "How Your Body Fuels Each Zone",
-                emoji = "⛽"
-            ) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FuelSourceCard(
-                        zone = "Zone 1-2",
-                        zoneLabel = "Recovery / Fat Burn",
-                        fatPercent = 85,
-                        glycogenPercent = 15,
-                        description = "Your body primarily burns fat as fuel. This is sustainable for long periods. " +
-                                "Fat is an almost unlimited energy source — even lean people have tens of thousands of calories stored as fat.",
-                        fatColor = HealthColors.Warning,
-                        glycogenColor = FeatureColors.StepsStart
-                    )
-                    FuelSourceCard(
-                        zone = "Zone 3",
-                        zoneLabel = "Aerobic",
-                        fatPercent = 50,
-                        glycogenPercent = 50,
-                        description = "An even mix of fat and carbohydrates (glycogen). This is the sweet spot " +
-                                "for building cardiovascular endurance without depleting your energy stores too quickly.",
-                        fatColor = HealthColors.Warning,
-                        glycogenColor = FeatureColors.StepsStart
-                    )
-                    FuelSourceCard(
-                        zone = "Zone 4",
-                        zoneLabel = "Anaerobic",
-                        fatPercent = 15,
-                        glycogenPercent = 85,
-                        description = "Mostly glycogen (stored carbs). Your body can't deliver oxygen fast enough, " +
-                                "so it switches to anaerobic metabolism. Lactic acid builds up — this is why it burns.",
-                        fatColor = HealthColors.Warning,
-                        glycogenColor = FeatureColors.StepsStart
-                    )
-                    FuelSourceCard(
-                        zone = "Zone 5",
-                        zoneLabel = "VO₂ Max",
-                        fatPercent = 5,
-                        glycogenPercent = 95,
-                        description = "Almost entirely glycogen and phosphocreatine. Sustainable for only 1-3 minutes. " +
-                                "This zone pushes your absolute physiological limits.",
-                        fatColor = HealthColors.Warning,
-                        glycogenColor = FeatureColors.StepsStart
-                    )
-                }
-            }
-
-            // Why not always Zone 5
-            ContentBlock(
-                title = "Why You Shouldn't Always Train in Zone 5",
-                emoji = "⚠️"
-            ) {
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = HealthColors.Caution.copy(alpha = 0.06f)
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(14.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        val reasons = listOf(
-                            "Overtraining — Your body may not recover from daily Zone 5 sessions, leading to fatigue, sleep disruption, or decreased performance",
-                            "Injury risk — High intensity can increase the risk of muscle, tendon, and joint injuries",
-                            "Diminishing returns — More Zone 5 does not always mean more fitness; an easier aerobic base still matters",
-                            "Burnout — Constantly pushing your limits can be mentally exhausting and unsustainable long-term",
-                            "Heart stress — Excessive high-intensity training may place additional stress on the heart",
-                            "Training balance — Many endurance programs use mostly easy sessions with a smaller amount of hard work; individual plans vary"
-                        )
-                        reasons.forEach { reason ->
-                            Text(
-                                text = reason,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-                                lineHeight = 17.sp
-                            )
-                        }
-                    }
-                }
-            }
-
-            // The 80/20 rule
-            ContentBlock(
-                title = "The 80/20 Rule of Training",
-                emoji = "📊",
-                content = "A commonly used training distribution is:\n\n" +
-                        "• 80% of training in Zone 1-3 (easy to moderate)\n" +
-                        "• 20% of training in Zone 4-5 (hard to maximum)\n\n" +
-                        "This \"polarized\" approach can build an aerobic base while retaining some high-intensity work. " +
-                        "It is a general example, not a prescription; adjust intensity to your experience and health."
+                title = "Use the talk test too",
+                emoji = "💬",
+                content = "During moderate activity you can usually talk but not sing; vigorous activity makes sustained conversation harder. Build gradually at an effort that fits your abilities and follow any individual exercise advice."
             )
-        }
-    }
-}
-
-@Composable
-private fun FuelSourceCard(
-    zone: String,
-    zoneLabel: String,
-    fatPercent: Int,
-    glycogenPercent: Int,
-    description: String,
-    fatColor: Color,
-    glycogenColor: Color
-) {
-    Card(
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "$zone — $zoneLabel",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            // Fuel bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(fatPercent.toFloat().coerceAtLeast(1f))
-                        .fillMaxHeight()
-                        .background(fatColor.copy(alpha = 0.7f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (fatPercent >= 20) {
-                        Text(
-                            text = "${fatPercent}% fat",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontSize = 8.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                    }
-                }
-                Box(
-                    modifier = Modifier
-                        .weight(glycogenPercent.toFloat().coerceAtLeast(1f))
-                        .fillMaxHeight()
-                        .background(glycogenColor.copy(alpha = 0.7f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (glycogenPercent >= 20) {
-                        Text(
-                            text = "${glycogenPercent}% carbs",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontSize = 8.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            // Legend
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(fatColor)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(stringResource(R.string.txt_fat), style = MaterialTheme.typography.labelSmall, fontSize = 9.sp)
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(glycogenColor)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(stringResource(R.string.txt_glycogen), style = MaterialTheme.typography.labelSmall, fontSize = 9.sp)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = description,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                lineHeight = 15.sp
+            ContentBlock(
+                title = "Fuel use varies",
+                emoji = "⛽",
+                content = "The body uses a changing mix of fuels during exercise. Heart rate alone cannot determine a percentage of fat or carbohydrate burned, or predict body-fat loss. This app does not measure fuel use or oxygen consumption."
+            )
+            ContentBlock(
+                title = "Choose a manageable routine",
+                emoji = "📋",
+                content = "There is no universal split of easy and hard training for every person. Recovery, experience, goals and health context matter. Ask a qualified professional about suitable activity if you have symptoms or a condition affecting exercise."
             )
         }
     }
@@ -497,325 +290,30 @@ private fun FuelSourceCard(
 @Composable
 private fun MonitoringMethodsSection() {
     var isExpanded by remember { mutableStateOf(false) }
-
     EducationalCard(
         emoji = "⌚",
         title = "How to Monitor Heart Rate",
-        subtitle = "Compare different methods and find what works for you",
+        subtitle = "The app uses values you enter; it does not measure your pulse",
         color = FeatureColors.StepsStart,
         isExpanded = isExpanded,
         onToggle = { isExpanded = !isExpanded }
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            val methods = listOf(
-                MonitorMethod(
-                    emoji = "✋",
-                    name = "Manual Pulse Check",
-                    accuracy = "Low-Medium",
-                    accuracyStars = 2,
-                    cost = "Free",
-                    pros = listOf(
-                        "No equipment needed",
-                        "Available anytime, anywhere",
-                        "Good for resting HR checks"
-                    ),
-                    cons = listOf(
-                        "Difficult during exercise",
-                        "Counting errors common",
-                        "No continuous monitoring",
-                        "Can't check zones in real-time"
-                    ),
-                    tip = "Best for: Quick resting HR checks, especially first thing in the morning",
-                    color = MaterialTheme.colorScheme.outline
-                ),
-                MonitorMethod(
-                    emoji = "📟",
-                    name = "Chest Strap Monitor",
-                    accuracy = "Very High",
-                    accuracyStars = 5,
-                    cost = "$$",
-                    pros = listOf(
-                        "Often a practical consumer option; accuracy varies",
-                        "Real-time continuous monitoring",
-                        "Works during all activities",
-                        "Reliable in all conditions",
-                        "Connects to most fitness apps"
-                    ),
-                    cons = listOf(
-                        "Can be uncomfortable initially",
-                        "Needs to be wet for good contact",
-                        "Extra piece of equipment",
-                        "Battery replacement needed"
-                    ),
-                    tip = "Best for: Serious training, racing, and anyone wanting precise zone data",
-                    color = HealthColors.Healthy
-                ),
-                MonitorMethod(
-                    emoji = "⌚",
-                    name = "Wrist-Based (Smartwatch)",
-                    accuracy = "Medium-High",
-                    accuracyStars = 3,
-                    cost = "$$$",
-                    pros = listOf(
-                        "Convenient — already on your wrist",
-                        "Continuous 24/7 monitoring",
-                        "Tracks trends, sleep, and recovery",
-                        "GPS and other fitness features",
-                        "No extra gear needed"
-                    ),
-                    cons = listOf(
-                        "Less accurate during intense exercise",
-                        "Affected by movement and sweat",
-                        "Lag in detecting rapid HR changes",
-                        "Tattoos may affect accuracy",
-                        "Needs charging"
-                    ),
-                    tip = "Best for: Daily monitoring, general fitness tracking, and casual training",
-                    color = FeatureColors.StepsStart
-                ),
-                MonitorMethod(
-                    emoji = "🎧",
-                    name = "HR-Monitoring Earbuds",
-                    accuracy = "Medium-High",
-                    accuracyStars = 3,
-                    cost = "$$$",
-                    pros = listOf(
-                        "Dual-purpose: music + HR monitoring",
-                        "Good accuracy from in-ear optical sensor",
-                        "Comfortable for most activities",
-                        "No wrist needed"
-                    ),
-                    cons = listOf(
-                        "Limited device compatibility",
-                        "Falls out during intense exercise",
-                        "Battery life concerns",
-                        "Fewer options available"
-                    ),
-                    tip = "Best for: Runners and gym-goers who always use earbuds anyway",
-                    color = HealthColors.Severe
-                ),
-                MonitorMethod(
-                    emoji = "💍",
-                    name = "Smart Ring",
-                    accuracy = "Medium",
-                    accuracyStars = 3,
-                    cost = "$$$",
-                    pros = listOf(
-                        "Very discreet and comfortable",
-                        "Good for 24/7 resting HR tracking",
-                        "Excellent sleep tracking",
-                        "Long battery life"
-                    ),
-                    cons = listOf(
-                        "Not great during exercise",
-                        "Limited real-time display",
-                        "Sizing can be tricky",
-                        "Fewer features than smartwatches"
-                    ),
-                    tip = "Best for: Resting HR tracking, sleep analysis, and daily monitoring",
-                    color = HealthColors.Caution
-                )
-            )
-
-            methods.forEach { method ->
-                MonitorMethodCard(method = method)
-            }
-
-            // Accuracy comparison summary
             ContentBlock(
-                title = "Quick Accuracy Comparison",
-                emoji = "📊"
-            ) {
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                    )
-                ) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(
-                            text = stringResource(R.string.txt_from_most_to_least_accurate),
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(bottom = 6.dp)
-                        )
-                        val ranking = listOf(
-                            "1. Chest strap — Often a high-accuracy consumer option; fit and device quality matter",
-                            "2. Smartwatch — Useful for trends, with accuracy varying by device and activity",
-                            "3. HR earbuds — Optical readings vary by fit, device, and movement",
-                            "4. Smart ring — Often better suited to resting trends than live exercise readings",
-                            "5. Manual — Depends on timing and counting technique"
-                        )
-                        ranking.forEach { item ->
-                            Text(
-                                text = item,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                                lineHeight = 18.sp,
-                                modifier = Modifier.padding(vertical = 2.dp)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-data class MonitorMethod(
-    val emoji: String,
-    val name: String,
-    val accuracy: String,
-    val accuracyStars: Int,
-    val cost: String,
-    val pros: List<String>,
-    val cons: List<String>,
-    val tip: String,
-    val color: Color
-)
-
-@Composable
-private fun MonitorMethodCard(method: MonitorMethod) {
-    var showDetails by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { showDetails = !showDetails },
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = method.color.copy(alpha = 0.04f)
-        ),
-        border = if (showDetails) androidx.compose.foundation.BorderStroke(
-            1.dp, method.color.copy(alpha = 0.2f)
-        ) else null
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = heartRateEducationIcon(method.emoji),
-                    contentDescription = null,
-                    tint = method.color,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = method.name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Stars
-                        Text(
-                            text = stringResource(R.string.txt_text_placeholder_22).repeat(method.accuracyStars) + "☆".repeat(5 - method.accuracyStars),
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = method.cost,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                        )
-                    }
-                }
-                Icon(
-                    imageVector = if (showDetails) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-
-            AnimatedVisibility(
-                visible = showDetails,
-                enter = expandVertically(spring(dampingRatio = 0.8f, stiffness = 300f)) + fadeIn(),
-                exit = shrinkVertically() + fadeOut()
-            ) {
-                Column(modifier = Modifier.padding(top = 10.dp)) {
-                    HorizontalDivider(color = method.color.copy(alpha = 0.1f))
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        // Pros
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(R.string.txt_pros),
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = HealthColors.Healthy
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            method.pros.forEach { pro ->
-                                Text(
-                                    text = "• $pro",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
-                                    lineHeight = 15.sp
-                                )
-                            }
-                        }
-
-                        // Cons
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(R.string.txt_cons),
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = HealthColors.Danger
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            method.cons.forEach { con ->
-                                Text(
-                                    text = "• $con",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
-                                    lineHeight = 15.sp
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Surface(
-                        shape = RoundedCornerShape(8.dp),
-                        color = method.color.copy(alpha = 0.08f)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Lightbulb,
-                                contentDescription = null,
-                                tint = method.color,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = method.tip,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = method.color,
-                                fontWeight = FontWeight.Medium,
-                                lineHeight = 14.sp
-                            )
-                        }
-                    }
-                }
-            }
+                title = "Manual pulse check",
+                emoji = "✋",
+                content = "When rested, use two fingers at the thumb side of your wrist and count beats over a full minute. Timing and counting affect the result. A manual check does not provide continuous monitoring."
+            )
+            ContentBlock(
+                title = "Wearable readings",
+                emoji = "⌚",
+                content = "Chest straps and optical wearables can provide exercise or resting trends. Quality varies by device, fit, movement and activity. Follow the device instructions; this app does not certify or rank their accuracy."
+            )
+            ContentBlock(
+                title = "Keep the context",
+                emoji = "📋",
+                content = "Compare readings taken in similar conditions. A consumer reading cannot diagnose a heart condition. Unexpected readings or symptoms need professional advice, regardless of an estimated training zone."
+            )
         }
     }
 }
@@ -1013,14 +511,9 @@ private fun HeartRateMythsSection() {
             MythCard(
                 mythNumber = 1,
                 myth = "\"The fat burning zone is the best zone for weight loss\"",
-                verdict = "Partially True",
+                verdict = "No universal best zone",
                 verdictColor = HealthColors.Caution,
-                explanation = "Zone 2 does burn a higher PERCENTAGE of calories from fat (~60% vs ~35% in Zone 4). " +
-                        "However, higher-intensity zones burn MORE TOTAL CALORIES per minute. " +
-                        "For weight loss, total calorie burn matters most.\n\n" +
-                        "The best approach? A mix of both: Zone 2 for longer sessions (more total fat burned) " +
-                        "and Zone 4-5 HIIT for short, high-calorie-burn sessions (plus EPOC — excess post-exercise oxygen consumption " +
-                        "keeps burning calories for hours after)."
+                explanation = "Heart rate alone does not show how much fat or carbohydrate you burn. Fuel use and energy expenditure vary with the person, activity and conditions. No estimated zone guarantees body-fat loss; choose manageable activity that fits your goals and health."
             )
 
             MythCard(
@@ -1028,11 +521,7 @@ private fun HeartRateMythsSection() {
                 myth = "\"Higher heart rate always means a better workout\"",
                 verdict = "False",
                 verdictColor = HealthColors.Danger,
-                explanation = "A \"better\" workout depends on your goal. If your goal is endurance, " +
-                        "a long Zone 2 session is far more effective than a short Zone 5 burst.\n\n" +
-                        "Training too hard too often leads to overtraining, injury, and burnout. " +
-                        "Elite athletes spend 80% of their time in Zone 2 — not Zone 5. " +
-                        "A good workout is one that matches your training goal for that day."
+                explanation = "A higher reading is not automatically a better workout. Appropriate effort depends on your experience, goals, recovery and health. A manageable routine can include easier activity; there is no universal training split for everyone."
             )
 
             MythCard(
@@ -1040,12 +529,7 @@ private fun HeartRateMythsSection() {
                 myth = "\"220 minus age gives your exact max heart rate\"",
                 verdict = "Approximation Only",
                 verdictColor = HealthColors.Caution,
-                explanation = "The 220-age formula was never meant to be precise for individuals. " +
-                        "It's a population average with a standard deviation of ±10-12 BPM.\n\n" +
-                        "That means a 30-year-old might have a true MHR anywhere from 178 to 202, not exactly 190. " +
-                        "Newer formulas like Tanaka (208 - 0.7 × age) are slightly more accurate, " +
-                        "but the only way to know your true MHR is through a supervised max-effort test.\n\n" +
-                        "For most people, the estimate is close enough for zone-based training."
+                explanation = "Age equations estimate population averages, not an individual maximum. Different equations can give different values, and none guarantees a safe exercise limit. Do not perform a maximum-effort test on your own to confirm an app estimate."
             )
 
             MythCard(
@@ -1053,10 +537,7 @@ private fun HeartRateMythsSection() {
                 myth = "\"If my heart rate is low, I'm not working hard enough\"",
                 verdict = "False",
                 verdictColor = HealthColors.Danger,
-                explanation = "Fit individuals have lower heart rates at the same effort level because their hearts " +
-                        "are more efficient (pumping more blood per beat). A well-trained runner may run at 130 BPM " +
-                        "while an untrained person walks at 130 BPM.\n\n" +
-                        "Focus on YOUR zones relative to YOUR max heart rate, not someone else's numbers."
+                explanation = "Heart-rate response differs between people and can be affected by medicines, conditions and training. Use perceived effort and professional advice alongside estimates rather than comparing your reading with someone else."
             )
 
             MythCard(
@@ -1064,10 +545,7 @@ private fun HeartRateMythsSection() {
                 myth = "\"You should always exercise at the same heart rate\"",
                 verdict = "False",
                 verdictColor = HealthColors.Danger,
-                explanation = "Varying intensity is key to fitness gains. Your body adapts to repetitive stimuli. " +
-                        "Training only in Zone 3 will lead to a plateau.\n\n" +
-                        "A well-designed program includes easy days (Zone 1-2), moderate days (Zone 3), " +
-                        "and hard days (Zone 4-5) for maximum adaptation and progress."
+                explanation = "A suitable routine depends on your experience, recovery and health. You do not need to reach every zone or add high-intensity work to meet an app target. Review an exercise plan with a qualified professional when needed."
             )
         }
     }

@@ -5,7 +5,7 @@ trends, and using educational health calculators. Core tracking is local; Health
 Connect and product analytics are optional integrations.
 
 **Release status:** under active verification. A successful build is not proof of
-medical accuracy or Play Store approval. See the [current production audit](docs/audit/PRODUCTION_AUDIT_2026-09-19.md)
+medical accuracy or Play Store approval. See the [current production audit](docs/audit/PLAY_STORE_READINESS_2026-10-05.md)
 for verified results, implemented fixes and remaining release gates.
 
 Audit navigation: [readiness report](docs/audit/READINESS_REPORT.md) ·
@@ -25,14 +25,14 @@ Audit navigation: [readiness report](docs/audit/READINESS_REPORT.md) ·
 These are source-implemented capabilities, not a claim that every journey has
 passed device testing. The food diary has manual entries and presets, not a
 barcode scanner or comprehensive nutrition database. No account, cloud restore,
-subscription or advertising flow is implemented. Multi-profile family tracking
-lets household members maintain separate health records.
+subscription or advertising flow is implemented. Family tracking is currently disabled because core health records are not
+scoped to separate profiles.
 
 ## Requirements and local build
 
 - Android 8.0 / API 26 or newer to run the app.
 - JDK 17, Android SDK Platform 36, and a compatible Android Studio installation.
-- Gradle 8.13 via the checked-in wrapper; AGP 8.13.2 and Kotlin 2.0.21.
+- Gradle 9.6.0 via the checked-in wrapper; AGP 9.4.1 and Kotlin 2.2.10.
 - Set your SDK location in ignored `local.properties`, or configure the SDK through
   Android Studio. Never commit machine paths or signing credentials.
 
@@ -47,7 +47,7 @@ On Windows use `gradlew.bat`. Release packaging without credentials produces an
 **unsigned validation artifact**, not an upload-ready release. Supply
 `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, and
 `RELEASE_KEY_PASSWORD` as environment variables or private Gradle properties.
-Run `verifyPlayReleaseSigning` before building a distribution artifact. Do not
+Run `bundlePlayRelease` to verify signing configuration and build a distribution artifact. Do not
 put signing material in this repository.
 
 The included Firebase client configuration is not a server credential. To develop
@@ -57,7 +57,7 @@ the correct application ID and signing certificates.
 ## Architecture
 
 Single `:app` module using Kotlin, Jetpack Compose/Material 3, Navigation, Hilt,
-Room v16, DataStore, SharedPreferences, WorkManager and Android alarm APIs.
+Room 2.7.1 (schema v16), DataStore, SharedPreferences, WorkManager and Android alarm APIs.
 
 | Directory | Responsibility |
 |---|---|
