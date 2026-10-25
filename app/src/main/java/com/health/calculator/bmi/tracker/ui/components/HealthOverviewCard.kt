@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -88,13 +89,13 @@ fun HealthOverviewCard(
                 Text(
                     text = metric.category,
                     style = MaterialTheme.typography.labelSmall,
-                    color = categoryColor,
+                    color = AppColors.text(categoryColor),
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
                     text = formatRelativeTime(metric.lastUpdated),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                 )
             }
 

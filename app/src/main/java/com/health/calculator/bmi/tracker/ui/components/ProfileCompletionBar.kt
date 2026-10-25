@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -48,7 +49,7 @@ fun ProfileCompletionBar(
         modifier = modifier.fillMaxWidth(),
         shape = MetricTileShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.38f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.38f))
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.62f))
     ) {
@@ -108,7 +109,7 @@ fun ProfileCompletionBar(
                         Text(
                             text = stringResource(R.string.txt_text_placeholder_3),
                             style = MaterialTheme.typography.bodySmall,
-                            color = progressColor,
+                            color = AppColors.text(progressColor),
                             modifier = Modifier.padding(end = 6.dp)
                         )
                         Text(

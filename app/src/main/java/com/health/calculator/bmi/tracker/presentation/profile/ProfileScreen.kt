@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import com.health.calculator.bmi.tracker.ui.components.*
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.theme.DarkRoles
 import java.io.File
 import java.io.FileOutputStream
 
@@ -144,7 +146,11 @@ fun ProfileScreen(
                         }
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
+                    scrolledContainerColor = if (AppColors.isDark) DarkRoles.Level1 else MaterialTheme.colorScheme.surfaceContainer
+                )
             )
         }
     ) { padding ->
@@ -155,8 +161,8 @@ fun ProfileScreen(
                     Brush.verticalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.background,
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.12f)
+                            if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                            if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.12f)
                         )
                     )
                 )
@@ -177,7 +183,7 @@ fun ProfileScreen(
             ) {
                 ProfilePictureSection(
                     profilePictureUri = uiState.profile.profilePictureUri,
-                    initials = uiState.profile.name.ifBlank { "U" }.take(1),
+                    initials = uiState.profile.name.trim().take(1),
                     onEditClick = viewModel::showImagePickerDialog
                 )
                 Text(
@@ -208,7 +214,7 @@ fun ProfileScreen(
             // Tabs
             TabRow(
                 selectedTabIndex = uiState.selectedTab.ordinal,
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.primary,
                 indicator = { tabPositions ->
                     TabRowDefaults.SecondaryIndicator(
