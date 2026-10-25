@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -165,11 +166,13 @@ fun BmiEducationContent(
 
 @Composable
 private fun EducationHeader() {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = EducationAccent.copy(alpha = 0.05f)
+            containerColor = AppColors.surface(EducationAccent.copy(alpha = 0.05f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -185,7 +188,7 @@ private fun EducationHeader() {
                     .clip(RoundedCornerShape(12.dp))
                     .background(
                         Brush.linearGradient(
-                            colors = listOf(
+                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                 EducationAccent.copy(alpha = 0.15f),
                                 EducationAccentLight.copy(alpha = 0.08f)
                             )
@@ -196,7 +199,7 @@ private fun EducationHeader() {
                 Icon(
                     imageVector = Icons.Filled.MenuBook,
                     contentDescription = null,
-                    tint = EducationAccent,
+                    tint = AppColors.icon(EducationAccent),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -214,7 +217,7 @@ private fun EducationHeader() {
                 Text(
                     text = stringResource(R.string.txt_understand_your_results_and_wh),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                     lineHeight = 18.sp
                 )
             }
@@ -244,7 +247,7 @@ private fun ExpandableEducationCard(
             ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -271,7 +274,7 @@ private fun ExpandableEducationCard(
                     Icon(
                         imageVector = section.icon,
                         contentDescription = null,
-                        tint = section.iconColor,
+                        tint = AppColors.icon(section.iconColor),
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -290,7 +293,7 @@ private fun ExpandableEducationCard(
                 Icon(
                     imageVector = Icons.Filled.ExpandMore,
                     contentDescription = if (isExpanded) "Collapse" else "Expand",
-                    tint = section.iconColor.copy(alpha = 0.6f),
+                    tint = AppColors.secondaryText(section.iconColor.copy(alpha = 0.6f)),
                     modifier = Modifier
                         .size(22.dp)
                         .rotate(expandRotation)
@@ -384,7 +387,7 @@ private fun HowCalculatedContent() {
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
             colors = CardDefaults.cardColors(
-                containerColor = HealthColors.BelowNormal.copy(alpha = 0.06f)
+                containerColor = AppColors.surface(HealthColors.BelowNormal.copy(alpha = 0.06f))
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -419,7 +422,7 @@ private fun HowCalculatedContent() {
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -457,7 +460,7 @@ private fun HowCalculatedContent() {
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -524,7 +527,7 @@ private fun CategoriesContent() {
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -540,7 +543,7 @@ private fun CategoriesContent() {
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                         modifier = Modifier.weight(1.1f)
                     )
                     Text(
@@ -548,7 +551,7 @@ private fun CategoriesContent() {
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                         modifier = Modifier.weight(0.7f),
                         textAlign = TextAlign.Center
                     )
@@ -557,7 +560,7 @@ private fun CategoriesContent() {
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                         modifier = Modifier.weight(0.7f),
                         textAlign = TextAlign.End
                     )
@@ -619,7 +622,7 @@ private fun CategoriesContent() {
                             text = cat.risk,
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Medium,
-                                fontSize = 11.sp
+                                fontSize = 12.sp
                             ),
                             color = cat.color,
                             modifier = Modifier.weight(0.7f),
@@ -713,7 +716,7 @@ private fun LimitationsContent() {
                         Text(
                             text = item.description,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
                             lineHeight = 18.sp
                         )
                     }
@@ -844,7 +847,7 @@ private fun TipsContent() {
                         Text(
                             text = tip.description,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
                             lineHeight = 18.sp
                         )
                     }
@@ -910,7 +913,7 @@ private fun WhenDoctorContent() {
                         Text(
                             text = trigger.text,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)),
                             lineHeight = 18.sp
                         )
                     }
@@ -949,7 +952,7 @@ private fun WhenDoctorContent() {
                     Text(
                         text = stringResource(R.string.txt_a_healthcare_professional_can_),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
                         lineHeight = 18.sp
                     )
                 }
@@ -965,7 +968,7 @@ private fun ContentText(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)),
         lineHeight = 22.sp
     )
 }
@@ -977,7 +980,7 @@ private fun HighlightBox(
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = EducationAccent.copy(alpha = 0.04f),
+        color = AppColors.surface(EducationAccent.copy(alpha = 0.04f)),
         border = androidx.compose.foundation.BorderStroke(
             0.5.dp, EducationAccent.copy(alpha = 0.12f)
         )
@@ -989,7 +992,7 @@ private fun HighlightBox(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = EducationAccent,
+                tint = AppColors.icon(EducationAccent),
                 modifier = Modifier
                     .size(18.dp)
                     .padding(top = 1.dp)
@@ -998,7 +1001,7 @@ private fun HighlightBox(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
                 lineHeight = 18.sp
             )
         }
@@ -1014,7 +1017,7 @@ private fun KeyPoint(
         Text(
             text = stringResource(R.string.txt_text_placeholder_3),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-            color = EducationAccent,
+            color = AppColors.text(EducationAccent),
             modifier = Modifier.padding(end = 8.dp)
         )
         Text(
@@ -1025,7 +1028,7 @@ private fun KeyPoint(
                 append(value)
             },
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
             lineHeight = 18.sp
         )
     }
@@ -1039,14 +1042,15 @@ private fun EducationDisclaimer() {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.1f))
+            .background(AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.1f)))
+            .then(if (AppColors.isDark) Modifier.border(1.dp, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.WarningOutline, RoundedCornerShape(12.dp)) else Modifier)
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.Top
     ) {
         Icon(
             imageVector = Icons.Outlined.Info,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.error.copy(alpha = 0.5f),
+            tint = AppColors.icon(MaterialTheme.colorScheme.error.copy(alpha = 0.5f)),
             modifier = Modifier
                 .size(14.dp)
                 .offset { IntOffset(0, 4) }
@@ -1054,8 +1058,8 @@ private fun EducationDisclaimer() {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(R.string.txt_this_educational_content_is_fo_2),
-            style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
             lineHeight = 16.sp
         )
     }
