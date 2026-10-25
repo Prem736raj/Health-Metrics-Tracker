@@ -53,20 +53,20 @@ val InversePrimaryLight = Color(0xFFD0BCFF)
 
 // ─── DARK SCHEME ───────────────────────────────────────────────────────
 
-val PrimaryDark = Color(0xFFD0BCFF)          // Soft lilac — glows on dark surfaces
-val OnPrimaryDark = Color(0xFF381E72)
-val PrimaryContainerDark = Color(0xFF4F378B)
-val OnPrimaryContainerDark = Color(0xFFEDE4FF)
+val PrimaryDark = Color(0xFFCDBDFF)          // Soft lilac — glows on dark surfaces
+val OnPrimaryDark = Color(0xFF2A1A5E)
+val PrimaryContainerDark = Color(0xFF26213B)
+val OnPrimaryContainerDark = Color(0xFFEDE9F7)
 
-val SecondaryDark = Color(0xFF70EFDE)        // Electric mint — pops beautifully
-val OnSecondaryDark = Color(0xFF003731)
-val SecondaryContainerDark = Color(0xFF005048)
-val OnSecondaryContainerDark = Color(0xFFCCFFF6)
+val SecondaryDark = Color(0xFFCDBDFF)        // Electric mint — pops beautifully
+val OnSecondaryDark = Color(0xFF2A1A5E)
+val SecondaryContainerDark = Color(0xFF26213B)
+val OnSecondaryContainerDark = Color(0xFFEDE9F7)
 
-val TertiaryDark = Color(0xFFFFB4AB)         // Peach coral — warm even in dark
-val OnTertiaryDark = Color(0xFF561E19)
-val TertiaryContainerDark = Color(0xFF73342D)
-val OnTertiaryContainerDark = Color(0xFFFFDAD6)
+val TertiaryDark = Color(0xFFCDBDFF)         // Peach coral — warm even in dark
+val OnTertiaryDark = Color(0xFF2A1A5E)
+val TertiaryContainerDark = Color(0xFF26213B)
+val OnTertiaryContainerDark = Color(0xFFEDE9F7)
 
 val ErrorDark = Color(0xFFFFB4AB)
 val OnErrorDark = Color(0xFF690005)
@@ -74,11 +74,11 @@ val ErrorContainerDark = Color(0xFF93000A)
 val OnErrorContainerDark = Color(0xFFFFDAD6)
 
 val BackgroundDark = Color(0xFF0F0D1A)       // Deep space violet — rich, not boring gray
-val OnBackgroundDark = Color(0xFFE6E1E5)
-val SurfaceDark = Color(0xFF1C1B2E)          // Dark purple-slate
-val OnSurfaceDark = Color(0xFFE6E1E5)
-val SurfaceVariantDark = Color(0xFF2A2840)
-val OnSurfaceVariantDark = Color(0xFFCAC4D0)
+val OnBackgroundDark = Color(0xFFEDE9F7)
+val SurfaceDark = Color(0xFF181526)          // Dark purple-slate
+val OnSurfaceDark = Color(0xFFEDE9F7)
+val SurfaceVariantDark = Color(0xFF1F1B30)
+val OnSurfaceVariantDark = Color(0xFFB8B2CC)
 val SurfaceTintDark = PrimaryDark
 val InverseSurfaceDark = Color(0xFFE6E1E5)
 val InverseOnSurfaceDark = Color(0xFF313033)
@@ -86,8 +86,8 @@ val InversePrimaryDark = PrimaryLight
 
 val OutlineLight = Color(0xFF79747E)
 val OutlineVariantLight = Color(0xFFE0DCE4)
-val OutlineDark = Color(0xFF938F99)
-val OutlineVariantDark = Color(0xFF49454F)
+val OutlineDark = Color(0xFF8A849E)
+val OutlineVariantDark = Color(0xFF3A3452)
 val ScrimLight = Color(0xFF000000)
 val ScrimDark = Color(0xFF000000)
 
@@ -163,7 +163,7 @@ object WellnessPalette {
     val WarmAccentLight = Color(0xFFF97316)
     val WarmAccentDark = Color(0xFFFB923C)
     val QuietBorderLight = Color(0xFFE0DCE4)
-    val QuietBorderDark = Color(0xFF49454F)
+    val QuietBorderDark = Color(0xFF3A3452)
 
     // The single hero surface has a vibrant, modern wellness gradient.
     val HeroStart = Color(0xFF6C3CE1) // Rich Violet matching primary
@@ -171,9 +171,9 @@ object WellnessPalette {
     val OnHero = Color(0xFFFFFFFF)
 
     val MetricSurfaceLight = Color(0xFFF7F4FC)
-    val MetricSurfaceDark = Color(0xFF242239)
+    val MetricSurfaceDark = Color(0xFF1F1B30)
     val QuietSurfaceLight = Color(0xFFFFFFFF)
-    val QuietSurfaceDark = Color(0xFF1C1B2E)
+    val QuietSurfaceDark = Color(0xFF181526)
 }
 
 /** Semantic colors for interpretation, never as the only signal of meaning. */
@@ -256,3 +256,18 @@ val HealthOrange = HealthColors.Caution
 val HealthRed = HealthColors.Danger
 val HealthBlue = HealthColors.Info
 val HealthTeal = HealthColors.BelowNormal
+
+/** Dark-only extended roles. Existing light expressions are passed through by AppColors. */
+object DarkRoles {
+    val Level1 = Color(0xFF181526)
+    val Level2 = Color(0xFF1F1B30)
+    val Level3 = Color(0xFF26213B)
+    val Text = Color(0xFFEDE9F7)
+    val SecondaryText = Color(0xFFB8B2CC)
+    val DisabledText = Color(0xFF8E88A3)
+    val SubtleOutline = Color(0xFF3A3452)
+    // Functional boundaries need 3:1; subtle outlines are decorative only.
+    val FunctionalOutline = Color(0xFF8A849E)
+    val Accent = Color(0xFFCDBDFF)
+    val WarningOutline = Color(0xFFFBBF24)
+}
