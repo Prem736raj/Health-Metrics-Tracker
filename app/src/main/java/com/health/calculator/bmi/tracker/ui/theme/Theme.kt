@@ -73,6 +73,13 @@ private val LightColorScheme = lightColorScheme(
 // ============================================================================
 
 private val DarkColorScheme = darkColorScheme(
+    surfaceDim = BackgroundDark,
+    surfaceBright = DarkRoles.Level3,
+    surfaceContainerLowest = BackgroundDark,
+    surfaceContainerLow = DarkRoles.Level1,
+    surfaceContainer = DarkRoles.Level2,
+    surfaceContainerHigh = DarkRoles.Level3,
+    surfaceContainerHighest = DarkRoles.Level3,
     // Primary
     primary = PrimaryDark,
     onPrimary = OnPrimaryDark,
