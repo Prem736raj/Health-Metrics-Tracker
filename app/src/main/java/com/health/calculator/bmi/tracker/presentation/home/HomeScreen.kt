@@ -1,11 +1,14 @@
 package com.health.calculator.bmi.tracker.presentation.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -382,8 +385,8 @@ private fun WellnessScoreCard(
                     progress = { animatedProgress },
                     modifier = Modifier.size(82.dp),
                     strokeWidth = 8.dp,
-                    color = WellnessPalette.OnHero,
-                    trackColor = WellnessPalette.OnHero.copy(alpha = 0.25f)
+                    color = AppColors.accent(WellnessPalette.OnHero),
+                    trackColor = AppColors.surface(WellnessPalette.OnHero.copy(alpha = 0.25f), 3)
                 )
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
@@ -395,7 +398,7 @@ private fun WellnessScoreCard(
                     Text(
                         "/100",
                         style = MaterialTheme.typography.labelSmall,
-                        color = WellnessPalette.OnHero.copy(alpha = 0.85f),
+                        color = AppColors.secondaryText(WellnessPalette.OnHero.copy(alpha = 0.85f)),
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -404,14 +407,14 @@ private fun WellnessScoreCard(
             Column(modifier = Modifier.weight(1f)) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = WellnessPalette.OnHero.copy(alpha = 0.22f),
+                    color = AppColors.surface(WellnessPalette.OnHero.copy(alpha = 0.22f), 3),
                     border = BorderStroke(1.dp, WellnessPalette.OnHero.copy(alpha = 0.35f))
                 ) {
                     Text(
                         text = result.category.label,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = WellnessPalette.OnHero,
+                        color = AppColors.text(WellnessPalette.OnHero),
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
                     )
                 }
@@ -430,18 +433,18 @@ private fun WellnessScoreCard(
                         "Record at least two metrics to build your consistency score."
                     },
                     style = MaterialTheme.typography.bodySmall,
-                    color = WellnessPalette.OnHero.copy(alpha = 0.88f)
+                    color = AppColors.secondaryText(WellnessPalette.OnHero.copy(alpha = 0.88f))
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
                     text = "Informational only • not clinically validated",
                     style = MaterialTheme.typography.labelSmall,
-                    color = WellnessPalette.OnHero.copy(alpha = 0.65f)
+                    color = AppColors.secondaryText(WellnessPalette.OnHero.copy(alpha = 0.65f))
                 )
             }
             Surface(
                 shape = CircleShape,
-                color = WellnessPalette.OnHero.copy(alpha = 0.22f),
+                color = AppColors.surface(WellnessPalette.OnHero.copy(alpha = 0.22f), 3),
                 border = BorderStroke(1.dp, WellnessPalette.OnHero.copy(alpha = 0.35f)),
                 modifier = Modifier.size(34.dp)
             ) {
@@ -449,7 +452,7 @@ private fun WellnessScoreCard(
                     Icon(
                         Icons.Default.ChevronRight,
                         contentDescription = "View Wellness Score details",
-                        tint = WellnessPalette.OnHero,
+                        tint = AppColors.icon(WellnessPalette.OnHero),
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -475,7 +478,7 @@ private fun DailyMetricsSection(
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SectionHeading(title = "Today's Trackers", subtitle = "Small daily check-ins create powerful healthy habits")
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(modifier = Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             DailyMetricCard(
                 icon = Icons.Outlined.DirectionsWalk,
                 label = "Steps",
@@ -492,7 +495,7 @@ private fun DailyMetricsSection(
                 progress = null,
                 onClick = onOpenSteps,
                 accent = FeatureColors.StepsDeep,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).fillMaxHeight()
             )
             DailyMetricCard(
                 icon = Icons.Outlined.WaterDrop,
@@ -508,10 +511,10 @@ private fun DailyMetricsSection(
                 },
                 onClick = onOpenWater,
                 accent = FeatureColors.WaterDeep,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).fillMaxHeight()
             )
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(modifier = Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             DailyMetricCard(
                 icon = Icons.Outlined.MonitorWeight,
                 label = "Weight",
@@ -520,7 +523,7 @@ private fun DailyMetricsSection(
                 progress = null,
                 onClick = onOpenWeight,
                 accent = FeatureColors.WeightDeep,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).fillMaxHeight()
             )
             DailyMetricCard(
                 icon = Icons.Outlined.LocalDining,
@@ -536,7 +539,7 @@ private fun DailyMetricsSection(
                 },
                 onClick = onOpenCalories,
                 accent = FeatureColors.CalorieDeep,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).fillMaxHeight()
             )
         }
     }
@@ -785,9 +788,9 @@ private fun InsightPreviewSection(
                     shape = RoundedCornerShape(14.dp),
                     contentPadding = PaddingValues(vertical = 12.dp)
                 ) {
-                    Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp), tint = WellnessPalette.OnHero)
+                    Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp), tint = if (AppColors.isDark) MaterialTheme.colorScheme.onPrimary else WellnessPalette.OnHero)
                     Spacer(Modifier.width(8.dp))
-                    Text("Open AI Wellness Assistant", fontWeight = FontWeight.Bold, color = WellnessPalette.OnHero)
+                    Text("Open AI Wellness Assistant", fontWeight = FontWeight.Bold, color = if (AppColors.isDark) MaterialTheme.colorScheme.onPrimary else WellnessPalette.OnHero)
                 }
             }
         }
@@ -833,7 +836,7 @@ private fun QuickActionsSection(
                             shadowElevation = 2.dp
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Icon(action.icon, contentDescription = action.label, tint = WellnessPalette.OnHero, modifier = Modifier.size(20.dp))
+                                Icon(action.icon, contentDescription = action.label, tint = AppColors.icon(WellnessPalette.OnHero), modifier = Modifier.size(20.dp))
                             }
                         }
                         Text(
@@ -894,7 +897,7 @@ private fun RelevantCalculatorsCard(
                     onClick = onOpenBmi,
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(14.dp),
-                    color = FeatureColors.BmiDeep.copy(alpha = 0.10f),
+                    color = AppColors.surface(FeatureColors.BmiDeep.copy(alpha = 0.10f), 2),
                     border = BorderStroke(1.dp, FeatureColors.BmiDeep.copy(alpha = 0.30f))
                 ) {
                     Row(
@@ -902,15 +905,15 @@ private fun RelevantCalculatorsCard(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(Icons.Default.Calculate, contentDescription = null, tint = FeatureColors.BmiDeep, modifier = Modifier.size(20.dp))
-                        Text("BMI", fontWeight = FontWeight.Bold, color = FeatureColors.BmiDeep)
+                        Icon(Icons.Default.Calculate, contentDescription = null, tint = AppColors.icon(FeatureColors.BmiDeep), modifier = Modifier.size(20.dp))
+                        Text("BMI", fontWeight = FontWeight.Bold, color = AppColors.text(FeatureColors.BmiDeep))
                     }
                 }
                 Surface(
                     onClick = onOpenCalories,
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(14.dp),
-                    color = FeatureColors.CalorieDeep.copy(alpha = 0.10f),
+                    color = AppColors.surface(FeatureColors.CalorieDeep.copy(alpha = 0.10f), 2),
                     border = BorderStroke(1.dp, FeatureColors.CalorieDeep.copy(alpha = 0.30f))
                 ) {
                     Row(
@@ -918,8 +921,8 @@ private fun RelevantCalculatorsCard(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(Icons.Outlined.LocalDining, contentDescription = null, tint = FeatureColors.CalorieDeep, modifier = Modifier.size(20.dp))
-                        Text("Daily energy", fontWeight = FontWeight.Bold, color = FeatureColors.CalorieDeep)
+                        Icon(Icons.Outlined.LocalDining, contentDescription = null, tint = AppColors.icon(FeatureColors.CalorieDeep), modifier = Modifier.size(20.dp))
+                        Text("Daily energy", fontWeight = FontWeight.Bold, color = AppColors.text(FeatureColors.CalorieDeep))
                     }
                 }
             }

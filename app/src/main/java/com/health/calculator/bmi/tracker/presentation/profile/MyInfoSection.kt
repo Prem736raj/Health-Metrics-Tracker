@@ -68,7 +68,7 @@ fun MyInfoSection(
 
         InfoItem(
             label = "Date of Birth",
-            value = profile.dateOfBirthMillis?.let { 
+            value = profile.dateOfBirthMillis?.let {
                 SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(it))
             } ?: "Not set",
             icon = Icons.Default.Cake,
@@ -153,7 +153,7 @@ fun MyInfoSection(
             onClick = onActivityLevelClick
         )
 
-        val goalsText = if (profile.healthGoals.isEmpty()) "Not set" 
+        val goalsText = if (profile.healthGoals.isEmpty()) "Not set"
                         else profile.healthGoals.joinToString(", ") { it.displayName }
         InfoItem(
             label = "Health Goals",

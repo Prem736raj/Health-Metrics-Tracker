@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -93,7 +94,7 @@ fun IBWGoalPlanScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                 )
             ) {
                 Row(
@@ -199,7 +200,7 @@ fun IBWGoalPlanScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = HealthColors.Healthy.copy(alpha = 0.1f)
+                        containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.1f))
                     )
                 ) {
                     Row(
@@ -217,12 +218,12 @@ fun IBWGoalPlanScreen(
                             Text(
                                 stringResource(R.string.txt_you_re_already_at_your_ideal_w),
                                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                                color = HealthColors.Healthy
+                                color = AppColors.text(HealthColors.Healthy)
                             )
                             Text(
                                 stringResource(R.string.txt_focus_on_maintaining_your_curr),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = HealthColors.Healthy.copy(alpha = 0.8f)
+                                color = AppColors.text(HealthColors.Healthy.copy(alpha = 0.8f))
                             )
                         }
                     }
@@ -236,7 +237,7 @@ fun IBWGoalPlanScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f))
                 )
             ) {
                 Row(
@@ -252,7 +253,7 @@ fun IBWGoalPlanScreen(
                     Text(
                         stringResource(R.string.txt_enter_your_current_weight_in_t),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = AppColors.text(MaterialTheme.colorScheme.tertiary)
                     )
                 }
             }
@@ -310,9 +311,9 @@ private fun GoalOptionsList(
                     ),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = if (isSelected)
+                    containerColor = AppColors.surface(if (isSelected)
                         MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                    else MaterialTheme.colorScheme.surface
+                    else MaterialTheme.colorScheme.surface)
                 ),
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = if (isSelected) 4.dp else 1.dp
@@ -341,7 +342,7 @@ private fun GoalOptionsList(
                             Text(
                                 text = description,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                             )
                         }
                     }
@@ -350,8 +351,8 @@ private fun GoalOptionsList(
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = if (isSelected) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurface
+                        color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onSurface)
                     )
                 }
             }
@@ -372,9 +373,9 @@ private fun GoalOptionsList(
                 ),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = if (isCustomSelected)
+                containerColor = AppColors.surface(if (isCustomSelected)
                     MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                else MaterialTheme.colorScheme.surface
+                else MaterialTheme.colorScheme.surface)
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = if (isCustomSelected) 4.dp else 1.dp
@@ -401,7 +402,7 @@ private fun GoalOptionsList(
                         Text(
                             text = stringResource(R.string.txt_enter_your_own_target_weight),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                         )
                     }
                 }
@@ -493,9 +494,9 @@ private fun WeightChangePlanSection(
                         ),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (isSelected)
+                        containerColor = AppColors.surface(if (isSelected)
                             MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                        else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                        else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                     )
                 ) {
                     Column(
@@ -535,7 +536,7 @@ private fun WeightChangePlanSection(
                                                         horizontal = 6.dp,
                                                         vertical = 2.dp
                                                     ),
-                                                    fontSize = 8.sp
+                                                    fontSize = 12.sp
                                                 )
                                             }
                                         }
@@ -543,7 +544,7 @@ private fun WeightChangePlanSection(
                                     Text(
                                         text = option.label,
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                                     )
                                 }
                             }
@@ -613,7 +614,7 @@ private fun DetailRow(
         Text(
             text = "$label: ",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
         Text(
             text = value,
@@ -664,9 +665,9 @@ fun ExistingGoalProgressCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isReached)
+            containerColor = AppColors.surface(if (isReached)
                 HealthColors.Healthy.copy(alpha = 0.1f)
-            else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -691,9 +692,9 @@ fun ExistingGoalProgressCard(
                 Text(
                     text = if (isReached) "Goal Reached!" else "Your Goal Progress",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = if (isReached) HealthColors.Healthy else MaterialTheme.colorScheme.primary
+                    color = AppColors.text(if (isReached) HealthColors.Healthy else MaterialTheme.colorScheme.primary)
                 )
-                IconButton(onClick = onClearGoal, modifier = Modifier.size(24.dp)) {
+                IconButton(onClick = onClearGoal, modifier = Modifier.size(48.dp)) {
                     Icon(
                         Icons.Default.Close,
                         contentDescription = "Clear goal",
@@ -760,7 +761,7 @@ fun ExistingGoalProgressCard(
                     Text(
                         text = stringResource(R.string.txt_complete),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -796,7 +797,7 @@ fun ExistingGoalProgressCard(
                         text = "${"%.1f".format(remaining)} $unit remaining to reach your goal",
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                     )
                 }
             }
@@ -855,7 +856,7 @@ private fun WeightInfoColumn(label: String, value: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
         )
         Text(
             text = value,

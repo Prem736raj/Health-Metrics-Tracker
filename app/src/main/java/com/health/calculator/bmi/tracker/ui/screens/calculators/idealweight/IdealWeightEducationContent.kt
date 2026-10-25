@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.idealweight
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -21,7 +22,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun IdealWeightEducationContent() {
     val scrollState = rememberScrollState()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,25 +34,25 @@ fun IdealWeightEducationContent() {
             content = "Ideal Body Weight (IBW) is a target weight derived from scientific formulas based on height and gender. It was originally developed to determine dosage for medications but has since become a popular benchmark for assessing weight health.",
             icon = Icons.Outlined.Lightbulb
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         EducationSection(
             title = "Which Formula is Best?",
             content = "While four formulas are provided (Devine, Robinson, Miller, and Hamwi), the Devine Formula is the most widely used in clinical settings. Robinson and Miller are considered more modern updates, and Hamwi is often used in social settings. Most people find that all formulas yield results within a few kilograms of each other.",
             icon = Icons.Outlined.Functions
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         EducationSection(
             title = "BMI Healthy Range",
             content = "The World Health Organization (WHO) defines a healthy BMI as being between 18.5 and 25.0. Our calculator also provides this range as a broader alternative to fixed-point IBW formulas, giving you more flexibility in your fitness goals.",
             icon = Icons.Outlined.CheckCircle
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         EducationSection(
             title = "Limitations of IBW",
             content = "IBW formulas only consider height and gender. They do not account for muscle mass, bone density, or body fat percentage. Athletes and people with high muscle mass may find the results suggest a weight that is too low for their actual healthy state.",
@@ -59,13 +60,13 @@ fun IdealWeightEducationContent() {
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // Disclaimer
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
             )
         ) {
             Row(modifier = Modifier.padding(12.dp)) {

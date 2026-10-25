@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -47,7 +48,7 @@ fun AddProfileDialog(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
@@ -81,9 +82,9 @@ fun AddProfileDialog(
                         )
                     }
                 }
-                
+
                 Spacer(modifier = Modifier.height(20.dp))
-                
+
                 // Live Preview
                 Box(
                     modifier = Modifier
@@ -103,7 +104,7 @@ fun AddProfileDialog(
                         ) {
                             Text(
                                 text = name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
-                                color = Color.White,
+                                color = AppColors.text(Color.White),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp
                             )
@@ -191,7 +192,7 @@ fun ProfileShareDialog(
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
-                
+
                 Text(
                     stringResource(R.string.txt_choose_what_data_to_include_in),
                     style = MaterialTheme.typography.bodySmall,

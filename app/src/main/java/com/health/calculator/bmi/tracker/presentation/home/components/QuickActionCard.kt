@@ -2,6 +2,8 @@
 
 package com.health.calculator.bmi.tracker.presentation.home.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -83,11 +85,11 @@ fun QuickActionCard(
             ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isDark) {
+            containerColor = AppColors.surface(if (isDark) {
                 color.copy(alpha = 0.12f)
             } else {
                 color.copy(alpha = 0.06f)
-            }
+            })
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

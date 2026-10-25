@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.splash
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -78,6 +79,8 @@ private val SplashTealLight = InversePrimaryLight
 fun SplashScreen(
     onSplashComplete: () -> Unit
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     // ── Animation States ──────────────────────────────────────────────────
     val logoScale = remember { Animatable(0f) }
     val titleAlpha = remember { Animatable(0f) }
@@ -162,7 +165,7 @@ fun SplashScreen(
             .alpha(screenAlpha)
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(
+                    colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                         MaterialTheme.colorScheme.background,
                         MaterialTheme.colorScheme.background,
                         SplashTeal.copy(alpha = 0.03f)
@@ -200,7 +203,7 @@ fun SplashScreen(
                         .clip(CircleShape)
                         .background(
                             Brush.radialGradient(
-                                colors = listOf(
+                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                     SplashTeal.copy(alpha = 0.08f),
                                     SplashTeal.copy(alpha = 0.02f),
                                     Color.Transparent
@@ -217,7 +220,7 @@ fun SplashScreen(
                         .clip(CircleShape)
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(
+                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                     SplashTeal.copy(alpha = 0.12f),
                                     SplashTealDark.copy(alpha = 0.08f)
                                 )
@@ -226,7 +229,7 @@ fun SplashScreen(
                         .border(
                             width = 1.5.dp,
                             brush = Brush.verticalGradient(
-                                colors = listOf(
+                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                     SplashTealLight.copy(alpha = 0.4f),
                                     SplashTeal.copy(alpha = 0.2f)
                                 )
@@ -258,7 +261,7 @@ fun SplashScreen(
             Text(
                 text = stringResource(R.string.txt_your_personal_health_companion),
                 style = MaterialTheme.typography.bodyLarge,
-                color = SplashTeal.copy(alpha = 0.8f),
+                color = AppColors.text(SplashTeal.copy(alpha = 0.8f)),
                 modifier = Modifier.alpha(subtitleAlpha.value)
             )
 
@@ -274,7 +277,7 @@ fun SplashScreen(
         Text(
             text = stringResource(R.string.txt_for_educational_purposes_only),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 32.dp)

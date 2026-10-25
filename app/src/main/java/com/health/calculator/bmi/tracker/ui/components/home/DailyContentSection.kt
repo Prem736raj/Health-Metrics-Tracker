@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +39,7 @@ fun DailyTipCard(
     Card(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
         ),
         modifier = modifier.fillMaxWidth()
     ) {
@@ -60,9 +61,9 @@ fun DailyTipCard(
                     modifier = Modifier.size(28.dp)
                 )
             }
-            
+
             Spacer(modifier = Modifier.width(16.dp))
-            
+
             Column {
                 Text(
                     text = "Daily ${tip.category.displayName} Tip",
@@ -124,7 +125,7 @@ fun MotivationalQuoteCard(
                 tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                 modifier = Modifier.size(48.dp)
             )
-            
+
             Text(
                 text = quote.quote,
                 style = MaterialTheme.typography.headlineSmall.copy(
@@ -136,7 +137,7 @@ fun MotivationalQuoteCard(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -147,7 +148,7 @@ fun MotivationalQuoteCard(
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                
+
                 IconButton(onClick = onFavoriteToggle) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,

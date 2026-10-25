@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.onboarding
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
@@ -162,7 +163,7 @@ fun OnboardingScreen(
                     AnimatedVisibility(visible = !isLastPage, enter = fadeIn(tween(200)), exit = fadeOut(tween(200)), modifier = Modifier.fillMaxWidth()) {
                         Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), contentAlignment = Alignment.CenterEnd) {
                             TextButton(onClick = onComplete) {
-                                Text(stringResource(R.string.txt_skip), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                Text(stringResource(R.string.txt_skip), style = MaterialTheme.typography.labelLarge, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)))
                             }
                         }
                     }
@@ -244,13 +245,13 @@ private fun OnboardingPageContent(
                     ),
                     label = "decor_${pageIndex}_$index"
                 )
-                Icon(icon, null, tint = accentColor.copy(alpha = 0.65f), modifier = Modifier.size(22.dp).align(Alignment.Center).offset(x.dp, (y - decorFloat).dp).alpha(0.5f))
+                Icon(icon, null, tint = AppColors.icon(accentColor.copy(alpha = 0.65f)), modifier = Modifier.size(22.dp).align(Alignment.Center).offset(x.dp, (y - decorFloat).dp).alpha(if (AppColors.isDark) 1f else 0.5f))
             }
             Box(modifier = Modifier.size(outerIllustrationSize).clip(CircleShape).background(Brush.radialGradient(listOf(accentColor.copy(alpha = 0.15f), accentColor.copy(alpha = 0.03f), Color.Transparent))))
             Box(
                 modifier = Modifier.size(innerIllustrationSize).clip(CircleShape)
-                    .background(Brush.verticalGradient(listOf(accentColor.copy(alpha = 0.1f), accentColor.copy(alpha = 0.04f))))
-                    .border(1.5.dp, accentColor.copy(alpha = 0.2f), CircleShape),
+                    .background(Brush.verticalGradient(listOf(accentColor.copy(alpha = if (AppColors.isDark) 0.18f else 0.1f), accentColor.copy(alpha = if (AppColors.isDark) 0.12f else 0.04f))))
+                    .border(1.5.dp, accentColor.copy(alpha = if (AppColors.isDark) 0.75f else 0.2f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(page.icon, null, tint = accentColor, modifier = Modifier.size(illustrationIconSize).padding(bottom = floatY.dp))
@@ -264,7 +265,7 @@ private fun OnboardingPageContent(
         Spacer(modifier = Modifier.height(10.dp))
         Text(stringResource(page.subtitleRes), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold, letterSpacing = 0.5.sp), color = accentColor, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(stringResource(page.descriptionRes), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), textAlign = TextAlign.Center, lineHeight = 24.sp, modifier = Modifier.padding(horizontal = 8.dp))
+        Text(stringResource(page.descriptionRes), style = MaterialTheme.typography.bodyLarge, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)), textAlign = TextAlign.Center, lineHeight = 24.sp, modifier = Modifier.padding(horizontal = 8.dp))
 
         if (isActionPage) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -339,8 +340,7 @@ private fun BottomSection(
                         Text(selectedActionLabel?.let { stringResource(R.string.onboarding_start_with_action, it) } ?: stringResource(R.string.onboarding_explore_home), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
                     }
                 }
-                TextButton(onClick = onComplete) { Text(stringResource(R.string.onboarding_explore_home_first)) }
-                if (selectedAction == null) TextButton(onClick = onSetUpProfile) { Text(stringResource(R.string.onboarding_set_up_profile_instead)) }
+                TextButton(onClick = onSetUpProfile) { Text(stringResource(R.string.onboarding_set_up_profile_instead)) }
             }
         }
         AnimatedVisibility(visible = !isLastPage, enter = fadeIn(tween(300)), exit = fadeOut(tween(200))) {

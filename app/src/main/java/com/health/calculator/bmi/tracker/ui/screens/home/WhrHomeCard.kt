@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -53,8 +54,8 @@ fun WhrHomeCardContent(
             Text(
                 stringResource(R.string.txt_last_whr),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                fontSize = 10.sp
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                fontSize = 12.sp
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -64,7 +65,7 @@ fun WhrHomeCardContent(
                     String.format("%.2f", lastEntry.whr),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = animatedColor
+                    color = AppColors.text(animatedColor)
                 )
                 Box(
                     modifier = Modifier
@@ -97,8 +98,8 @@ fun WhrHomeCardContent(
                     lastEntry.category.label,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = animatedColor,
-                    fontSize = 10.sp
+                    color = AppColors.text(animatedColor),
+                    fontSize = 12.sp
                 )
             }
         }

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -110,7 +111,7 @@ fun ActivityReferenceSection(
                 Text(
                     text = stringResource(R.string.txt_personalized_bpm_ranges_for_co),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
         }
@@ -186,7 +187,7 @@ fun ActivityReferenceSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
             )
         ) {
             Row(
@@ -205,7 +206,7 @@ fun ActivityReferenceSection(
                             "Actual heart rate during activities varies based on fitness level, technique, " +
                             "environment, and individual physiology. Calorie estimates are approximate.",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                     lineHeight = 15.sp
                 )
             }
@@ -305,7 +306,7 @@ private fun CategorySection(
                         Text(
                             text = "${activities.size} activities",
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         )
                     }
                 }
@@ -358,6 +359,8 @@ private fun ActivityCard(
     personalizedActivity: PersonalizedActivity,
     index: Int
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val activity = personalizedActivity.activity
     var showDetails by remember { mutableStateOf(false) }
 
@@ -367,7 +370,7 @@ private fun ActivityCard(
             .clickable { showDetails = !showDetails },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = personalizedActivity.zoneColor.copy(alpha = 0.04f)
+            containerColor = AppColors.surface(personalizedActivity.zoneColor.copy(alpha = 0.04f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -387,7 +390,7 @@ private fun ActivityCard(
                         .clip(CircleShape)
                         .background(
                             Brush.linearGradient(
-                                colors = listOf(
+                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                     personalizedActivity.zoneColor.copy(alpha = 0.15f),
                                     personalizedActivity.zoneColorEnd.copy(alpha = 0.15f)
                                 )
@@ -441,15 +444,15 @@ private fun ActivityCard(
                             else "${personalizedActivity.bpmLow}-${personalizedActivity.bpmHigh}",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.ExtraBold,
-                            color = personalizedActivity.zoneColor
+                            color = AppColors.text(personalizedActivity.zoneColor)
                         )
                     }
 
                     Text(
                         text = stringResource(R.string.txt_bpm_1),
                         style = MaterialTheme.typography.labelSmall,
-                        fontSize = 9.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        fontSize = 12.sp,
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                     )
 
                     Spacer(modifier = Modifier.height(2.dp))
@@ -467,14 +470,14 @@ private fun ActivityCard(
                             text = personalizedActivity.caloriesPer30Min.toString(),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = FeatureColors.CalorieDeep
+                            color = AppColors.text(FeatureColors.CalorieDeep)
                         )
                     }
                     Text(
                         text = stringResource(R.string.txt_cal_30m),
                         style = MaterialTheme.typography.labelSmall,
-                        fontSize = 8.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)
+                        fontSize = 12.sp,
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f))
                     )
                 }
             }
@@ -499,7 +502,7 @@ private fun ActivityCard(
                     Text(
                         text = activity.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                         lineHeight = 17.sp
                     )
 
@@ -547,9 +550,9 @@ private fun ZoneBadge(text: String, color: Color) {
             text = text,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
-            color = color,
+            color = AppColors.text(color),
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-            fontSize = 10.sp
+            fontSize = 12.sp
         )
     }
 }
@@ -564,7 +567,7 @@ private fun DetailChip(
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.06f))
         )
     ) {
         Column(
@@ -581,14 +584,14 @@ private fun DetailChip(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                fontSize = 9.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                fontSize = 12.sp,
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = color,
+                color = AppColors.text(color),
                 textAlign = TextAlign.Center
             )
         }
@@ -612,20 +615,20 @@ private fun CalorieDurationRow(
                 Text(
                     text = "${minutes}m",
                     style = MaterialTheme.typography.labelSmall,
-                    fontSize = 9.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                    fontSize = 12.sp,
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                 )
                 Text(
                     text = "$cal",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = zoneColor
+                    color = AppColors.text(zoneColor)
                 )
                 Text(
                     text = stringResource(R.string.txt_cal),
                     style = MaterialTheme.typography.labelSmall,
-                    fontSize = 8.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)
+                    fontSize = 12.sp,
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f))
                 )
             }
         }
@@ -642,7 +645,7 @@ private fun EmptySearchResult(query: String) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -667,7 +670,7 @@ private fun EmptySearchResult(query: String) {
             Text(
                 text = stringResource(R.string.txt_try_a_different_search_term),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             )
         }
     }

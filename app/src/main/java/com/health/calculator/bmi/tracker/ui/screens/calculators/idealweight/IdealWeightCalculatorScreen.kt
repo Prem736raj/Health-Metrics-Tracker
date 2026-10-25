@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.idealweight
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -101,10 +103,10 @@ fun IdealWeightCalculatorScreen(
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface
+                        containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                     )
                 )
-                
+
                 TabRow(
                     selectedTabIndex = selectedTab,
                     containerColor = MaterialTheme.colorScheme.surface,
@@ -121,11 +123,11 @@ fun IdealWeightCalculatorScreen(
                     tabs.forEachIndexed { index, title ->
                         Tab(
                             selected = selectedTab == index,
-                            onClick = { 
+                            onClick = {
                                 haptic.lightTap()
-                                selectedTab = index 
+                                selectedTab = index
                             },
-                            text = { 
+                            text = {
                                 Text(
                                     text = title,
                                     style = MaterialTheme.typography.titleSmall,

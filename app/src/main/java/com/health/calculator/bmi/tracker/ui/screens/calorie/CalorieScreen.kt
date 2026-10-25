@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -53,7 +55,7 @@ fun CalorieScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -124,7 +126,7 @@ fun CalorieScreen(
                         val result = uiState.result
                         val macros = uiState.macroResult
                         if (result != null) {
-                            val route = Screen.FoodLog.route + 
+                            val route = Screen.FoodLog.route +
                                 "?calories=${result.safeGoalCalories.toFloat()}" +
                                 "&protein=${macros?.proteinGrams?.toFloat() ?: 0f}" +
                                 "&carbs=${macros?.carbGrams?.toFloat() ?: 0f}" +

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -69,7 +70,7 @@ fun WeightTrendGraph(
 
     val textMeasurer = rememberTextMeasurer()
     val labelStyle = TextStyle(
-        fontSize = 10.sp,
+        fontSize = 12.sp,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 
@@ -262,7 +263,7 @@ fun WeightTrendGraph(
 
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
                         ),
                         shape = RoundedCornerShape(8.dp)
                     ) {
@@ -296,7 +297,7 @@ private fun NotEnoughDataCard(entryCount: Int, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         )
     ) {
         Column(

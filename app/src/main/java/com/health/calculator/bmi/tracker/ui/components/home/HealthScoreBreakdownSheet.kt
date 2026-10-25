@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -72,7 +73,7 @@ fun HealthScoreBreakdownSheet(
                     Text(
                         text = "${healthScore.totalScore}/100 — ${healthScore.category.label}",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = healthScore.category.color,
+                        color = AppColors.text(healthScore.category.color),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -94,7 +95,7 @@ fun HealthScoreBreakdownSheet(
             Card(
                 shape = RoundedCornerShape(14.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 )
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -108,7 +109,7 @@ fun HealthScoreBreakdownSheet(
                         text = "Your Wellness Score reflects whether ${healthScore.availableMetrics} of ${healthScore.totalMetrics} selected metrics were recorded or logged. " +
                                 "It is a custom informational consistency measure—not a clinical score or diagnosis.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                         lineHeight = 17.sp
                     )
 
@@ -133,13 +134,13 @@ fun HealthScoreBreakdownSheet(
                             Text(
                                 text = metric,
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                             )
                             Text(
                                 text = points,
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                             )
                         }
                     }
@@ -180,8 +181,8 @@ private fun ScoreComponentCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (component.hasData) statusColor.copy(alpha = 0.04f)
-            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(if (component.hasData) statusColor.copy(alpha = 0.04f)
+            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Row(
@@ -217,7 +218,7 @@ private fun ScoreComponentCard(
                 Text(
                     text = component.statusMessage,
                     style = MaterialTheme.typography.labelSmall,
-                    color = statusColor,
+                    color = AppColors.text(statusColor),
                     fontWeight = FontWeight.Medium
                 )
 
@@ -251,13 +252,13 @@ private fun ScoreComponentCard(
                         text = "+${component.points}",
                         style = WellnessMetricTextStyle,
                         fontWeight = FontWeight.ExtraBold,
-                        color = statusColor
+                        color = AppColors.text(statusColor)
                     )
                     Text(
                         text = "/${component.maxPoints} pts",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                        fontSize = 10.sp
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                        fontSize = 12.sp
                     )
                 } else {
                     Surface(

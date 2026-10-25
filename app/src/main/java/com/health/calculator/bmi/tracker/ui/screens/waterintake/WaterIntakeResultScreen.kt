@@ -1,6 +1,7 @@
 // ui/screens/waterintake/WaterIntakeResultScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.data.export.ExportDisclosurePolicy
@@ -171,7 +172,7 @@ fun WaterIntakeResultScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -291,7 +292,7 @@ fun WaterIntakeResultScreen(
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = HealthColors.Healthy
+                        containerColor = AppColors.surface(HealthColors.Healthy)
                     ),
                     elevation = CardDefaults.cardElevation(8.dp)
                 ) {
@@ -301,7 +302,7 @@ fun WaterIntakeResultScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(Icons.Default.Check, null, tint = Color.White, modifier = Modifier.size(20.dp))
-                        Text(stringResource(R.string.txt_goal_saved_successfully), color = Color.White, fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.txt_goal_saved_successfully), color = AppColors.text(Color.White), fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -314,7 +315,7 @@ private fun InformationalDisclaimerCard(text: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f))
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -342,6 +343,8 @@ private fun InformationalDisclaimerCard(text: String) {
 
 @Composable
 private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val fillFraction = (result.recommendedIntakeMl.toFloat() / 4000f).coerceIn(0.2f, 1f)
 
     // Animate fill level
@@ -381,7 +384,7 @@ private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             FeatureColors.WaterDeep,
                             FeatureColors.WaterStart,
                             FeatureColors.WaterEnd
@@ -398,7 +401,7 @@ private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
             ) {
                 Text(
                     text = stringResource(R.string.txt_your_daily_water_goal),
-                    color = Color.White.copy(alpha = 0.9f),
+                    color = AppColors.text(Color.White.copy(alpha = 0.9f)),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -423,13 +426,13 @@ private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
                     ) {
                         Text(
                             text = String.format("%.1f", animatedLiters),
-                            color = Color.White,
+                            color = AppColors.text(Color.White),
                             fontSize = 36.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
                         Text(
                             text = stringResource(R.string.txt_liters),
-                            color = Color.White.copy(alpha = 0.9f),
+                            color = AppColors.text(Color.White.copy(alpha = 0.9f)),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -439,7 +442,7 @@ private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
                 // Subtitle
                 Text(
                     text = "${result.recommendedIntakeMl} ml per day",
-                    color = Color.White.copy(alpha = 0.85f),
+                    color = AppColors.text(Color.White.copy(alpha = 0.85f)),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -462,7 +465,7 @@ private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
                     )
                     Text(
                         text = motivationText,
-                        color = Color.White.copy(alpha = 0.8f),
+                        color = AppColors.text(Color.White.copy(alpha = 0.8f)),
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
@@ -715,8 +718,8 @@ private fun UnitItem(value: String, unit: String, icon: ImageVector) {
         )
         Text(
             text = unit,
-            fontSize = 11.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            fontSize = 12.sp,
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
     }
 }
@@ -779,7 +782,7 @@ private fun GlassesVisualizationCard(result: WaterIntakeCalculation) {
             Text(
                 text = stringResource(R.string.txt_each_glass_250_ml_8_5_fl_oz),
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             )
 
             // Glass grid
@@ -854,6 +857,8 @@ private fun GlassIcon(filled: Boolean, modifier: Modifier = Modifier) {
 
 @Composable
 private fun HourlyBreakdownCard(result: WaterIntakeCalculation) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val wakingHours = 16
     val hourlyMl = result.recommendedIntakeMl / wakingHours
     val hourlyOz = result.recommendedIntakeOz / wakingHours
@@ -870,7 +875,7 @@ private fun HourlyBreakdownCard(result: WaterIntakeCalculation) {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             MaterialTheme.colorScheme.primaryContainer,
                             MaterialTheme.colorScheme.secondaryContainer
                         )
@@ -903,7 +908,7 @@ private fun HourlyBreakdownCard(result: WaterIntakeCalculation) {
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.88f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surface.copy(alpha = 0.88f))
                     )
                 ) {
                     Row(
@@ -977,13 +982,13 @@ private fun HourlyTimeline(hourlyMl: Int, wakingHours: Int) {
                 )
                 Text(
                     text = time,
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f),
                     fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = "${hourlyMl}ml",
-                    fontSize = 8.sp,
+                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.68f)
                 )
             }
@@ -1169,8 +1174,8 @@ private fun BreakdownRow(
                 )
                 Text(
                     text = detail,
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    fontSize = 12.sp,
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
         }
@@ -1178,7 +1183,7 @@ private fun BreakdownRow(
             text = value,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
-            color = color
+            color = AppColors.text(color)
         )
     }
 }
@@ -1307,7 +1312,7 @@ private fun HydrationTipsCard() {
                         text = tip,
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
                 }
             }

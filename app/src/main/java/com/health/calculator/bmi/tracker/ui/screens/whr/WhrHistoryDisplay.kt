@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.whr
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -65,7 +66,7 @@ fun WhrHistoryEntryCard(
                         showDeleteDialog = false
                     }
                 ) {
-                    Text(stringResource(R.string.txt_delete), color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.txt_delete), color = AppColors.text(MaterialTheme.colorScheme.error))
                 }
             },
             dismissButton = {
@@ -125,7 +126,7 @@ fun WhrHistoryEntryCard(
                                 String.format("%.2f", entry.whr),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
-                                color = riskColor
+                                color = AppColors.text(riskColor)
                             )
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
@@ -136,16 +137,16 @@ fun WhrHistoryEntryCard(
                                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
-                                    color = riskColor,
-                                    fontSize = 10.sp
+                                    color = AppColors.text(riskColor),
+                                    fontSize = 12.sp
                                 )
                             }
                         }
                         Text(
                             stringResource(R.string.txt_waist_to_hip_ratio),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                            fontSize = 11.sp
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            fontSize = 12.sp
                         )
                     }
                 }
@@ -154,14 +155,14 @@ fun WhrHistoryEntryCard(
                     Text(
                         dateFormat.format(Date(entry.timestamp)),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        fontSize = 10.sp
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        fontSize = 12.sp
                     )
                     Text(
                         timeFormat.format(Date(entry.timestamp)),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                        fontSize = 10.sp
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                        fontSize = 12.sp
                     )
                 }
             }
@@ -226,7 +227,7 @@ fun WhrHistoryEntryCard(
                         if (whtr > 0.5f) "At Risk" else "Normal",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = if (whtr > 0.5f) HealthColors.Danger else HealthColors.Healthy
+                        color = AppColors.text(if (whtr > 0.5f) HealthColors.Danger else HealthColors.Healthy)
                     )
                 }
             }
@@ -240,8 +241,8 @@ fun WhrHistoryEntryCard(
                 Text(
                     "${if (entry.gender == Gender.FEMALE) "Female" else "Male"} • ${entry.age} years",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    fontSize = 10.sp
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    fontSize = 12.sp
                 )
 
                 if (showDeleteOption) {
@@ -282,13 +283,13 @@ private fun HistoryDetailItem(
             value,
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 11.sp
+            fontSize = 12.sp
         )
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-            fontSize = 9.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+            fontSize = 12.sp
         )
     }
 }
@@ -365,7 +366,7 @@ private fun DetailRow(
         Text(
             label,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -383,7 +384,7 @@ private fun DetailRow(
                 value,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.SemiBold,
-                color = valueColor ?: MaterialTheme.colorScheme.onSurface
+                color = AppColors.text(valueColor ?: MaterialTheme.colorScheme.onSurface)
             )
         }
     }

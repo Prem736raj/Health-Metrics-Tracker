@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -56,7 +57,7 @@ fun BpQuickLogCard(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f))
             ),
             shape = RoundedCornerShape(14.dp),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f))
@@ -79,7 +80,7 @@ fun BpQuickLogCard(
                         stringResource(R.string.txt_quick_log),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = AppColors.text(MaterialTheme.colorScheme.tertiary)
                     )
                     Text(
                         suggestion.label,
@@ -201,7 +202,7 @@ fun BpEmergencyPulsingAlert(
                 stringResource(R.string.txt_hypertensive_crisis),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.ExtraBold,
-                color = alertColor,
+                color = AppColors.text(alertColor),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -214,7 +215,7 @@ fun BpEmergencyPulsingAlert(
                 // Reading with pulsing border
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = alertContainerColor.copy(alpha = 0.55f)
+                        containerColor = AppColors.surface(alertContainerColor.copy(alpha = 0.55f))
                     ),
                     shape = RoundedCornerShape(16.dp),
                     border = BorderStroke(
@@ -231,13 +232,13 @@ fun BpEmergencyPulsingAlert(
                         Text(
                             stringResource(R.string.txt_your_reading),
                             style = MaterialTheme.typography.labelMedium,
-                            color = alertOnContainerColor.copy(alpha = 0.8f)
+                            color = AppColors.text(alertOnContainerColor.copy(alpha = 0.8f))
                         )
                         Text(
                             "${reading.systolic}/${reading.diastolic} mmHg",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = alertColor
+                            color = AppColors.text(alertColor)
                         )
                     }
                 }
@@ -251,7 +252,7 @@ fun BpEmergencyPulsingAlert(
 
                 // Symptoms to watch
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = warningContainerColor),
+                    colors = CardDefaults.cardColors(containerColor = AppColors.surface(warningContainerColor)),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Column(
@@ -262,7 +263,7 @@ fun BpEmergencyPulsingAlert(
                             stringResource(R.string.txt_seek_emergency_care_if_you_exp),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = warningOnContainerColor
+                            color = AppColors.text(warningOnContainerColor)
                         )
                         listOf(
                             "Severe headache",
@@ -285,7 +286,7 @@ fun BpEmergencyPulsingAlert(
                                 Text(
                                     symptom,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = warningOnContainerColor
+                                    color = AppColors.text(warningOnContainerColor)
                                 )
                             }
                         }
@@ -295,7 +296,7 @@ fun BpEmergencyPulsingAlert(
                 // Local-care guidance card with pulse
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = alertColor.copy(alpha = bgPulse)
+                        containerColor = AppColors.surface(alertColor.copy(alpha = bgPulse))
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -375,7 +376,7 @@ fun BpCategoryReveal(
                 scaleY = scaleAnim
             },
         colors = CardDefaults.cardColors(
-            containerColor = categoryColor.copy(alpha = 0.15f * colorAlpha)
+            containerColor = AppColors.surface(categoryColor.copy(alpha = 0.15f * colorAlpha))
         ),
         shape = RoundedCornerShape(24.dp)
     ) {
@@ -384,7 +385,7 @@ fun BpCategoryReveal(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = categoryColor.copy(alpha = colorAlpha)
+            color = AppColors.text(categoryColor.copy(alpha = colorAlpha))
         )
     }
 }
@@ -404,7 +405,7 @@ fun BpSaveConfirmation(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = HealthColors.Healthy.copy(alpha = 0.12f)
+                containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.12f))
             ),
             shape = RoundedCornerShape(12.dp),
             border = BorderStroke(1.dp, HealthColors.Healthy.copy(alpha = 0.2f))
@@ -434,7 +435,7 @@ fun BpSaveConfirmation(
                     stringResource(R.string.txt_reading_saved_to_bp_log),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = HealthColors.Healthy
+                    color = AppColors.text(HealthColors.Healthy)
                 )
             }
         }
@@ -459,7 +460,7 @@ fun BpEdgeCaseWarning(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer)
             ),
             shape = RoundedCornerShape(10.dp),
             border = BorderStroke(1.dp, HealthColors.Warning.copy(alpha = 0.3f))

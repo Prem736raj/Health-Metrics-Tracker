@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -43,8 +44,8 @@ fun IBWHomeSummaryContent(
             Text(
                 text = "Ideal: $idealDisplay",
                 style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                fontSize = 11.sp
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
+                fontSize = 12.sp
             )
             data.differenceKg?.let { diff ->
                 val absDiff = abs(diff) * factor
@@ -61,8 +62,8 @@ fun IBWHomeSummaryContent(
                 Text(
                     text = diffText,
                     style = MaterialTheme.typography.bodySmall,
-                    color = diffColor,
-                    fontSize = 10.sp
+                    color = AppColors.text(diffColor),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -75,7 +76,7 @@ fun IBWHomeSummaryContent(
                     text = "$frame frame",
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.primary
                 )
             }

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.idealweight
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -45,7 +46,7 @@ fun IdealWeightResultSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -60,9 +61,9 @@ fun IdealWeightResultSection(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                
+
                 Spacer(modifier = Modifier.height(12.dp))
-                
+
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
                         text = String.format(Locale.US, "%.1f", resultData.devine),
@@ -74,15 +75,15 @@ fun IdealWeightResultSection(
                     Text(
                         text = stringResource(R.string.txt_kg),
                         style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                        color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
                         modifier = Modifier.padding(bottom = 12.dp, start = 4.dp)
                     )
                 }
-                
+
                 Text(
                     text = stringResource(R.string.txt_based_on_devine_formula),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -107,7 +108,7 @@ fun IdealWeightResultSection(
                         Text(
                             text = "Adult BMI reference range: ${String.format(Locale.US, "%.1f", resultData.healthyRangeMin)} - ${String.format(Locale.US, "%.1f", resultData.healthyRangeMax)} kg",
                             style = MaterialTheme.typography.labelLarge,
-                            color = HealthColors.Healthy,
+                            color = AppColors.text(HealthColors.Healthy),
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -197,14 +198,14 @@ private fun FormulaRow(label: String, value: Float, isSelected: Boolean = false)
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
             )
         }
         Text(
             text = String.format(Locale.US, "%.1f kg", value),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+            color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
         )
     }
 }

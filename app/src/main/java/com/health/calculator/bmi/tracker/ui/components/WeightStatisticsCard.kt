@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -194,7 +195,7 @@ private fun StatItem(
         modifier = modifier,
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         )
     ) {
         Column(
@@ -211,7 +212,7 @@ private fun StatItem(
                 text = value,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = valueColor ?: MaterialTheme.colorScheme.onSurface
+                color = AppColors.text(valueColor ?: MaterialTheme.colorScheme.onSurface)
             )
         }
     }

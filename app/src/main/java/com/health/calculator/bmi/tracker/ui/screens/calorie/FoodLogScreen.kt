@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -76,7 +77,7 @@ fun FoodLogScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 ),
                 actions = {
                     var showEdu by remember { mutableStateOf(false) }
@@ -279,12 +280,12 @@ private fun DailySummaryCard(log: DailyFoodLog) {
                             fontWeight = FontWeight.Bold,
                             fontSize = 36.sp
                         ),
-                        color = ringColor
+                        color = AppColors.text(ringColor)
                     )
                     Text(
                         "/ ${"%.0f".format(log.targetCalories)} kcal",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -304,7 +305,7 @@ private fun DailySummaryCard(log: DailyFoodLog) {
                     Text(
                         text = statusText,
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = statusColor,
+                        color = AppColors.text(statusColor),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -335,13 +336,13 @@ private fun StatChip(label: String, value: String, color: Color) {
         Text(
             value,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            color = color
+            color = AppColors.text(color)
         )
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-            fontSize = 10.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            fontSize = 12.sp
         )
     }
 }
@@ -420,15 +421,15 @@ private fun MacroProgressBar(
                 Text(
                     "${"%.0f".format(consumed)} / ${"%.0f".format(target)} $unit",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    fontSize = 10.sp
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    fontSize = 12.sp
                 )
             } else {
                 Text(
                     "${"%.0f".format(consumed)} $unit",
                     style = MaterialTheme.typography.labelSmall,
-                    color = color,
-                    fontSize = 10.sp,
+                    color = AppColors.text(color),
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -500,7 +501,7 @@ private fun QuickAddSection(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(stringResource(R.string.txt_add), fontSize = 12.sp)
                     }
-                    IconButton(onClick = onToggle, modifier = Modifier.size(32.dp)) {
+                    IconButton(onClick = onToggle, modifier = Modifier.size(48.dp)) {
                         Icon(
                             if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                             "Toggle",
@@ -522,7 +523,7 @@ private fun QuickAddSection(
                     Text(
                         stringResource(R.string.txt_common_foods),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
 
@@ -538,7 +539,7 @@ private fun QuickAddSection(
                         Text(
                             stringResource(R.string.txt_my_foods),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                             modifier = Modifier.padding(bottom = 6.dp)
                         )
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -592,7 +593,7 @@ private fun PresetChip(
             Text(
                 preset.name.split(" ").first(),
                 style = MaterialTheme.typography.labelSmall,
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.widthIn(max = 64.dp)
@@ -601,7 +602,7 @@ private fun PresetChip(
                 "${"%.0f".format(preset.calories)} cal",
                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = 10.sp
+                fontSize = 12.sp
             )
             onRemove?.let {
                 Icon(
@@ -633,7 +634,7 @@ private fun MealLogSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
             )
         ) {
             Column(
@@ -658,12 +659,12 @@ private fun MealLogSection(
                 Text(
                     stringResource(R.string.txt_no_food_logged_yet),
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
                 Text(
                     stringResource(R.string.txt_tap_to_add_food_or_use_quick_a),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                 )
             }
         }
@@ -734,8 +735,8 @@ private fun FoodEntryRow(entry: FoodEntry, onRemove: () -> Unit) {
                 Text(
                     entry.servingSize,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                    fontSize = 10.sp
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                    fontSize = 12.sp
                 )
             }
             if (entry.proteinGrams > 0 || entry.carbGrams > 0 || entry.fatGrams > 0) {
@@ -752,7 +753,7 @@ private fun FoodEntryRow(entry: FoodEntry, onRemove: () -> Unit) {
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(4.dp))
-        IconButton(onClick = onRemove, modifier = Modifier.size(28.dp)) {
+        IconButton(onClick = onRemove, modifier = Modifier.size(48.dp)) {
             Icon(
                 Icons.Default.Delete, "Remove",
                 modifier = Modifier.size(16.dp),
@@ -817,7 +818,7 @@ private fun AddFoodDialog(
                         FilterChip(
                             selected = uiState.newFoodMealSlot == slot,
                             onClick = { onUpdateMealSlot(slot) },
-                            label = { Text(slot, fontSize = 11.sp) },
+                            label = { Text(slot, fontSize = 12.sp) },
                             shape = RoundedCornerShape(8.dp)
                         )
                     }
@@ -871,7 +872,7 @@ private fun AddFoodDialog(
                 }
 
                 uiState.errorMessage?.let {
-                    Text(it, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+                    Text(it, color = AppColors.text(MaterialTheme.colorScheme.error), fontSize = 12.sp)
                 }
             }
         },
@@ -969,7 +970,7 @@ private fun AddCustomPresetDialog(
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(10.dp),
                         singleLine = true,
-                        suffix = { Text(stringResource(R.string.txt_g), fontSize = 10.sp) }
+                        suffix = { Text(stringResource(R.string.txt_g), fontSize = 12.sp) }
                     )
                     OutlinedTextField(
                         value = uiState.presetCarbs,
@@ -979,7 +980,7 @@ private fun AddCustomPresetDialog(
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(10.dp),
                         singleLine = true,
-                        suffix = { Text(stringResource(R.string.txt_g), fontSize = 10.sp) }
+                        suffix = { Text(stringResource(R.string.txt_g), fontSize = 12.sp) }
                     )
                     OutlinedTextField(
                         value = uiState.presetFat,
@@ -989,7 +990,7 @@ private fun AddCustomPresetDialog(
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(10.dp),
                         singleLine = true,
-                        suffix = { Text(stringResource(R.string.txt_g), fontSize = 10.sp) }
+                        suffix = { Text(stringResource(R.string.txt_g), fontSize = 12.sp) }
                     )
                 }
             }
@@ -1008,9 +1009,9 @@ private fun AddCustomPresetDialog(
 private fun MacroMiniChip(label: String, value: String, color: Color) {
     Surface(shape = RoundedCornerShape(4.dp), color = color.copy(alpha = 0.1f)) {
         Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(label, style = MaterialTheme.typography.labelSmall, color = color, fontSize = 8.sp, fontWeight = FontWeight.Bold)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color), fontSize = 12.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.width(2.dp))
-            Text(value, style = MaterialTheme.typography.labelSmall, color = color.copy(alpha = 0.8f), fontSize = 8.sp)
+            Text(value, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color.copy(alpha = 0.8f)), fontSize = 12.sp)
         }
     }
 }

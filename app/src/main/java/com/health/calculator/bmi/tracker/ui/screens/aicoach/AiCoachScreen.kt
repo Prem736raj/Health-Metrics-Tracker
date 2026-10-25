@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.aicoach
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -102,7 +103,7 @@ fun AiCoachScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
@@ -192,9 +193,9 @@ fun AiCoachScreen(
                         ),
                         maxLines = 3
                     )
-                    
+
                     Spacer(modifier = Modifier.width(8.dp))
-                    
+
                     IconButton(
                         onClick = {
                             if (viewModel.sendMessage(inputText)) inputText = ""
@@ -319,7 +320,7 @@ fun MessageBubble(message: ChatMessage) {
                     SelectionContainer {
                         Text(
                             text = annotatedString,
-                            color = textColor,
+                            color = AppColors.text(textColor),
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }

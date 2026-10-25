@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -110,7 +112,7 @@ fun BpResultSection(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         // Multi-reading controls
         if (isMultiReadingMode && !showAverageResult) {
             Row(
@@ -244,7 +246,7 @@ private fun BpReadingCard(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = categoryColor.copy(alpha = 0.08f)
+                containerColor = AppColors.surface(categoryColor.copy(alpha = 0.08f))
             ),
             shape = RoundedCornerShape(20.dp),
             border = BorderStroke(1.5.dp, categoryColor.copy(alpha = 0.3f))
@@ -267,14 +269,14 @@ private fun BpReadingCard(
                             fontSize = 56.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = HealthColors.Danger
+                        color = AppColors.text(HealthColors.Danger)
                     )
                     Text(
                         stringResource(R.string.txt_text_placeholder_14),
                         style = MaterialTheme.typography.displayMedium.copy(
                             fontWeight = FontWeight.Light
                         ),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
                         modifier = Modifier.padding(horizontal = 4.dp).padding(bottom = 6.dp)
                     )
                     Text(
@@ -283,14 +285,14 @@ private fun BpReadingCard(
                             fontSize = 56.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = HealthColors.Good
+                        color = AppColors.text(HealthColors.Good)
                     )
                 }
 
                 Text(
                     stringResource(R.string.txt_mmhg_1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                     fontWeight = FontWeight.Medium
                 )
 
@@ -299,7 +301,7 @@ private fun BpReadingCard(
                 // Category badge
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = categoryColor.copy(alpha = 0.15f)
+                        containerColor = AppColors.surface(categoryColor.copy(alpha = 0.15f))
                     ),
                     shape = RoundedCornerShape(24.dp)
                 ) {
@@ -308,14 +310,14 @@ private fun BpReadingCard(
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = categoryColor
+                        color = AppColors.text(categoryColor)
                     )
                 }
 
                 Text(
                     reading.category.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                     textAlign = TextAlign.Center
                 )
 
@@ -373,7 +375,7 @@ private fun BpInfoChip(
         Text(
             text,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
         )
     }
 }
@@ -459,6 +461,7 @@ private fun BpSemiCircularGauge(
 
     val density = LocalDensity.current
     val textColor = MaterialTheme.colorScheme.onSurface
+    val darkAxis = AppColors.isDark
     val lowLabel = stringResource(R.string.txt_low)
     val highLabel = stringResource(R.string.txt_high)
 
@@ -551,8 +554,8 @@ private fun BpSemiCircularGauge(
 
         // Labels at ends
         val labelPaint = android.graphics.Paint().apply {
-            color = textColor.copy(alpha = 0.5f).hashCode()
-            textSize = with(density) { 10.sp.toPx() }
+            color = (if (darkAxis) textColor.toArgb() else textColor.copy(alpha = 0.5f).hashCode())
+            textSize = with(density) { 12.sp.toPx() }
             textAlign = android.graphics.Paint.Align.CENTER
         }
 
@@ -669,10 +672,10 @@ private fun BpCategoryScaleCard(currentCategory: BpCategory) {
                                         )
                                     else
                                         MaterialTheme.typography.bodySmall,
-                                    color = if (isCurrentCategory) color
+                                    color = AppColors.text(if (isCurrentCategory) color
                                     else MaterialTheme.colorScheme.onSurface.copy(
                                         alpha = animatedAlpha
-                                    )
+                                    ))
                                 )
                             }
                         }
@@ -682,20 +685,20 @@ private fun BpCategoryScaleCard(currentCategory: BpCategory) {
                             Text(
                                 "SYS ${category.systolicRange}",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = if (isCurrentCategory) color
+                                color = AppColors.text(if (isCurrentCategory) color
                                 else MaterialTheme.colorScheme.onSurface.copy(
                                     alpha = animatedAlpha * 0.7f
-                                ),
+                                )),
                                 fontWeight = if (isCurrentCategory) FontWeight.SemiBold
                                 else FontWeight.Normal
                             )
                             Text(
                                 "DIA ${category.diastolicRange}",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = if (isCurrentCategory) color
+                                color = AppColors.text(if (isCurrentCategory) color
                                 else MaterialTheme.colorScheme.onSurface.copy(
                                     alpha = animatedAlpha * 0.7f
-                                ),
+                                )),
                                 fontWeight = if (isCurrentCategory) FontWeight.SemiBold
                                 else FontWeight.Normal
                             )
@@ -741,7 +744,7 @@ private fun BpRiskLevelCard(riskLevel: BpRiskLevel) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = riskColor.copy(alpha = 0.08f)
+                containerColor = AppColors.surface(riskColor.copy(alpha = 0.08f))
             ),
             shape = RoundedCornerShape(16.dp),
             border = BorderStroke(1.dp, riskColor.copy(alpha = 0.25f))
@@ -773,20 +776,20 @@ private fun BpRiskLevelCard(riskLevel: BpRiskLevel) {
                     Text(
                         stringResource(R.string.txt_risk_assessment),
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         riskLevel.displayName,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = riskColor
+                        color = AppColors.text(riskColor)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         riskLevel.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
                     )
                 }
             }
@@ -841,7 +844,7 @@ fun BpEmergencyDialog(
                 // Reading
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f))
                     ),
                     shape = RoundedCornerShape(16.dp),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.35f))
@@ -876,7 +879,7 @@ fun BpEmergencyDialog(
                 // Symptoms warning
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f))
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {

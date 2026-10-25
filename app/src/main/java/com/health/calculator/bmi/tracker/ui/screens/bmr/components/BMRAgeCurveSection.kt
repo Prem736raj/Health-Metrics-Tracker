@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRAgeCurveSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -153,7 +154,7 @@ fun BMRAgeCurveSection(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f))
                     )
                 ) {
                     Row(
@@ -183,7 +184,7 @@ fun BMRAgeCurveSection(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                     )
                 ) {
                     Row(
@@ -232,8 +233,8 @@ fun BMRAgeCurveSection(
                     Text(
                     text = stringResource(R.string.txt_bmr_decreases_approximately_1_),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                        fontSize = 10.sp,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                        fontSize = 12.sp,
                         lineHeight = 14.sp
                     )
                 }
@@ -254,7 +255,7 @@ private fun ComparisonStatCard(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.06f))
         ),
         border = androidx.compose.foundation.BorderStroke(0.5.dp, color.copy(alpha = 0.15f))
     ) {
@@ -267,7 +268,7 @@ private fun ComparisonStatCard(
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                fontSize = 9.sp,
+                fontSize = 12.sp,
                 lineHeight = 12.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -275,13 +276,13 @@ private fun ComparisonStatCard(
                 text = value,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = unit,
                 style = MaterialTheme.typography.labelSmall,
-                color = color.copy(alpha = 0.7f),
-                fontSize = 10.sp
+                color = AppColors.text(color.copy(alpha = 0.7f)),
+                fontSize = 12.sp
             )
         }
     }
@@ -301,7 +302,7 @@ private fun ChartLegendDot(color: Color, label: String) {
             text = label,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 10.sp
+            fontSize = 12.sp
         )
     }
 }
@@ -381,7 +382,7 @@ private fun BMRAgeCurveChart(
             // Label
             val labelResult = textMeasurer.measure(
                 text = "${bmrVal.toInt()}",
-                style = TextStyle(fontSize = 9.sp, color = labelColor)
+                style = TextStyle(fontSize = 12.sp, color = labelColor)
             )
             drawText(
                 textLayoutResult = labelResult,
@@ -400,7 +401,7 @@ private fun BMRAgeCurveChart(
             )
             val ageLabel = textMeasurer.measure(
                 text = "$age",
-                style = TextStyle(fontSize = 9.sp, color = labelColor)
+                style = TextStyle(fontSize = 12.sp, color = labelColor)
             )
             drawText(
                 textLayoutResult = ageLabel,
@@ -495,7 +496,7 @@ private fun BMRAgeCurveChart(
         val youLabel = textMeasurer.measure(
             text = "You: ${userBMR.toInt()}",
             style = TextStyle(
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = userDotColor
             )

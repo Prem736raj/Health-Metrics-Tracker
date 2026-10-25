@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/BMRCalculatorScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -198,7 +199,7 @@ fun BMRCalculatorScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         },
@@ -428,7 +429,7 @@ fun BMRCalculatorScreen(
                                     .padding(top = 6.dp),
                                 shape = RoundedCornerShape(8.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
+                                    containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f))
                                 )
                             ) {
                                 Row(modifier = Modifier.padding(8.dp)) {
@@ -443,7 +444,7 @@ fun BMRCalculatorScreen(
                                         text = stringResource(R.string.txt_the_who_fao_unu_equation_prima),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                        fontSize = 11.sp,
+                                        fontSize = 12.sp,
                                         lineHeight = 15.sp
                                     )
                                 }
@@ -766,7 +767,7 @@ fun BMRCalculatorScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                         )
                     ) {
                         Row(modifier = Modifier.padding(12.dp)) {
@@ -783,9 +784,9 @@ fun BMRCalculatorScreen(
                                         "are for informational purposes only and should not replace " +
                                         "professional medical or nutritional advice.",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                                 lineHeight = 16.sp,
-                                fontSize = 11.sp
+                                fontSize = 12.sp
                             )
                         }
                     }
@@ -809,7 +810,7 @@ private fun BMRExplanationHeader() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
         )
     ) {
         Row(
@@ -981,7 +982,7 @@ private fun GenderChip(
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = contentColor
+                color = AppColors.text(contentColor)
             )
         }
     }
@@ -1015,7 +1016,7 @@ private fun BMRQuickInfoCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

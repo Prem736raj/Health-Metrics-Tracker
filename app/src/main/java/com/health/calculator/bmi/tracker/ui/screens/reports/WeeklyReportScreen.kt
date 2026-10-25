@@ -1,6 +1,7 @@
 // ui/screens/reports/WeeklyReportScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.reports
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -220,6 +221,8 @@ fun WeeklyReportScreen(
 
 @Composable
 private fun WeeklyRhythmCard(grade: String, message: String, weekStart: Long, weekEnd: Long) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val dateFmt = SimpleDateFormat("MMM d", Locale.getDefault())
     val dateRange = "${dateFmt.format(Date(weekStart))} – ${dateFmt.format(Date(weekEnd))}"
 
@@ -237,7 +240,7 @@ private fun WeeklyRhythmCard(grade: String, message: String, weekStart: Long, we
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(accentColor.copy(alpha = 0.15f), accentColor.copy(alpha = 0.05f))
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(accentColor.copy(alpha = 0.15f), accentColor.copy(alpha = 0.05f))
                     ),
                     shape = RoundedCornerShape(20.dp)
                 )
@@ -263,7 +266,7 @@ private fun WeeklyRhythmCard(grade: String, message: String, weekStart: Long, we
                         text = "↻",
                         style = MaterialTheme.typography.displaySmall,
                         fontWeight = FontWeight.Bold,
-                        color = accentColor
+                        color = AppColors.text(accentColor)
                     )
                 }
 
@@ -335,13 +338,13 @@ private fun HealthScoreChangeCard(scoreStart: Int, scoreEnd: Int, change: Int) {
                     Text(
                         text = if (change > 0) "↑" else "↓",
                         style = MaterialTheme.typography.titleLarge,
-                        color = changeColor
+                        color = AppColors.text(changeColor)
                     )
                     Text(
                         text = "${if (change > 0) "+" else ""}$change",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = changeColor
+                        color = AppColors.text(changeColor)
                     )
                     Text(
                         text = stringResource(R.string.txt_vs_last_week),
@@ -405,11 +408,11 @@ private fun MetricSummaryCard(metric: MetricWeeklySummary) {
                 Text(
                     metric.trend.label,
                     style = MaterialTheme.typography.labelSmall,
-                    color = trendColor,
+                    color = AppColors.text(trendColor),
                     fontWeight = FontWeight.Medium
                 )
                 metric.previousValue?.let {
-                    Text("Was: $it", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                    Text("Was: $it", style = MaterialTheme.typography.labelSmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)))
                 }
             }
         }
@@ -421,7 +424,7 @@ private fun HighlightCard(highlight: WeeklyHighlight) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(14.dp),
@@ -447,7 +450,7 @@ private fun NextWeekGoalCard(goal: NextWeekGoal) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.2f))
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.2f)))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(14.dp),
@@ -481,7 +484,7 @@ private fun PreviousReportCard(report: WeeklyReport, onClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(12.dp),
@@ -491,7 +494,7 @@ private fun PreviousReportCard(report: WeeklyReport, onClick: () -> Unit) {
                 modifier = Modifier.size(36.dp).clip(CircleShape).background(accentColor.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Text("↻", fontWeight = FontWeight.Bold, color = accentColor)
+                Text("↻", fontWeight = FontWeight.Bold, color = AppColors.text(accentColor))
             }
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -510,7 +513,7 @@ private fun NoDataCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)))
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(32.dp),

@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRFormulaSelector.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -86,7 +87,7 @@ fun BMRFormulaSelector(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 )
             ) {
                 Row(
@@ -173,7 +174,7 @@ private fun FormulaChip(
                     text = formula.displayName,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                    color = contentColor,
+                    color = AppColors.text(contentColor),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -208,7 +209,7 @@ private fun FormulaChip(
                         if (isSelected) MaterialTheme.colorScheme.onPrimary
                         else HealthColors.Healthy
                     } else contentColor.copy(alpha = 0.7f),
-                    fontSize = 10.sp,
+                    fontSize = 12.sp,
                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)
                 )
             }
@@ -246,7 +247,7 @@ private fun FormulaInfoDialog(
                         Text(
                             text = stringResource(R.string.txt_recommended),
                             style = MaterialTheme.typography.labelSmall,
-                            color = HealthColors.Healthy,
+                            color = AppColors.text(HealthColors.Healthy),
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                         )
@@ -271,7 +272,7 @@ private fun FormulaInfoDialog(
                     Spacer(modifier = Modifier.height(8.dp))
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f))
                         ),
                         shape = RoundedCornerShape(8.dp)
                     ) {

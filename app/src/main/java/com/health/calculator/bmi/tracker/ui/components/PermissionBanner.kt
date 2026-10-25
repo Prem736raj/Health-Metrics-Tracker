@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -21,7 +22,7 @@ fun PermissionBanner(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.7f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.7f))
         ),
         onClick = onRequestPermission
     ) {

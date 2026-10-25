@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -358,7 +359,7 @@ private fun WhoIsAtRiskContent() {
             text = stringResource(R.string.txt_non_modifiable_risk_factors),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
-            color = HealthRed,
+            color = AppColors.text(HealthRed),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -396,7 +397,7 @@ private fun WhoIsAtRiskContent() {
             text = stringResource(R.string.txt_modifiable_risk_factors),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
-            color = HealthGreen,
+            color = AppColors.text(HealthGreen),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -696,7 +697,7 @@ private fun InfoParagraph(text: String) {
 private fun StatHighlightCard(icon: ImageVector, stat: String, description: String) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -758,7 +759,7 @@ private fun AlsoKnownAsChips(names: List<String>) {
 private fun KeyPointCard(title: String, content: String) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -768,7 +769,7 @@ private fun KeyPointCard(title: String, content: String) {
                 text = title,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.tertiary
+                color = AppColors.text(MaterialTheme.colorScheme.tertiary)
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
@@ -793,7 +794,7 @@ private fun StatRow(stats: List<StatItem>) {
                     text = stat.value,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = HealthRed
+                    color = AppColors.text(HealthRed)
                 )
                 Text(
                     text = stat.label,
@@ -820,7 +821,7 @@ private fun RiskFactorDetailCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.05f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.05f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -837,7 +838,7 @@ private fun RiskFactorDetailCard(
                             text = number,
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.ExtraBold,
-                            color = color
+                            color = AppColors.text(color)
                         )
                     }
                 }
@@ -860,7 +861,7 @@ private fun RiskFactorDetailCard(
                     Text(
                         text = threshold,
                         style = MaterialTheme.typography.labelSmall,
-                        color = color
+                        color = AppColors.text(color)
                     )
                 }
             }
@@ -886,7 +887,7 @@ private fun RiskFactorDetailCard(
                         text = stringResource(R.string.txt_why_it_matters),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = color
+                        color = AppColors.text(color)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -942,7 +943,7 @@ private fun TreatmentCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.05f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.05f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -960,7 +961,7 @@ private fun TreatmentCard(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = color
+                    color = AppColors.text(color)
                 )
             }
 
@@ -1002,7 +1003,7 @@ private fun BloodValueCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -1061,7 +1062,7 @@ private fun ValueRangeRow(label: String, value: String, color: Color) {
             text = "$label: ",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color = color,
+            color = AppColors.text(color),
             modifier = Modifier.width(70.dp)
         )
         Text(
@@ -1082,7 +1083,7 @@ data class RetestItem(
 private fun RetestScheduleCard(items: List<RetestItem>) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -1138,7 +1139,7 @@ private fun RetestScheduleCard(items: List<RetestItem>) {
 private fun MedicalDisclaimerCard() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -1159,7 +1160,7 @@ private fun MedicalDisclaimerCard() {
                     text = stringResource(R.string.txt_medical_disclaimer),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.error
+                    color = AppColors.text(MaterialTheme.colorScheme.error)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(

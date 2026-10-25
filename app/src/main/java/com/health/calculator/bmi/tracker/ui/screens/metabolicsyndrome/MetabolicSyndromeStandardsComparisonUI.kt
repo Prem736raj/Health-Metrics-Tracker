@@ -1,6 +1,7 @@
 // File: app/src/main/java/com/health/calculator/bmi/tracker/ui/screens/metabolicsyndrome/MetabolicSyndromeStandardsComparisonUI.kt
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -50,7 +51,7 @@ fun StandardsComparisonSection(
         // Toggle card
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
             ),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
@@ -213,7 +214,7 @@ private fun QuickResultBanner(comparison: MultiStandardComparison) {
                             text = stringResource(R.string.txt_all_three_standards_agree_on_t),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = HealthGreen
+                            color = AppColors.text(HealthGreen)
                         )
                     }
                 }
@@ -240,7 +241,7 @@ private fun QuickResultBanner(comparison: MultiStandardComparison) {
                             text = stringResource(R.string.txt_standards_disagree_see_details),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = HealthOrange
+                            color = AppColors.text(HealthOrange)
                         )
                     }
                 }
@@ -286,7 +287,7 @@ private fun StandardQuickBadge(
             text = name,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
-            color = color
+            color = AppColors.text(color)
         )
         Text(
             text = count,
@@ -301,7 +302,7 @@ private fun StandardQuickBadge(
             },
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
-            color = statusColor
+            color = AppColors.text(statusColor)
         )
     }
 }
@@ -316,7 +317,7 @@ private fun EthnicitySelector(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = HealthTeal.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(HealthTeal.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -334,7 +335,7 @@ private fun EthnicitySelector(
                     text = stringResource(R.string.txt_ethnicity_specific_idf_cutoffs),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = HealthTeal
+                    color = AppColors.text(HealthTeal)
                 )
             }
 
@@ -444,7 +445,7 @@ private fun StandardDetailCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = accentColor.copy(alpha = 0.04f)
+            containerColor = AppColors.surface(accentColor.copy(alpha = 0.04f))
         ),
         shape = RoundedCornerShape(14.dp),
         modifier = Modifier
@@ -506,7 +507,7 @@ private fun StandardDetailCard(
                         },
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.ExtraBold,
-                        color = statusColor,
+                        color = AppColors.text(statusColor),
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                     )
                 }
@@ -578,8 +579,8 @@ private fun StandardDetailCard(
                                                 text = stringResource(R.string.txt_req),
                                                 style = MaterialTheme.typography.labelSmall,
                                                 fontWeight = FontWeight.ExtraBold,
-                                                color = accentColor,
-                                                fontSize = 8.sp,
+                                                color = AppColors.text(accentColor),
+                                                fontSize = 12.sp,
                                                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
                                             )
                                         }
@@ -633,7 +634,7 @@ private fun StandardDetailCard(
 private fun DisagreementNoteCard(note: String) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = HealthOrange.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(HealthOrange.copy(alpha = 0.08f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -651,7 +652,7 @@ private fun DisagreementNoteCard(note: String) {
                     text = stringResource(R.string.txt_why_standards_disagree),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = HealthOrange
+                    color = AppColors.text(HealthOrange)
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -673,7 +674,7 @@ private fun EthnicityWaistCutoffTable() {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
@@ -765,8 +766,8 @@ private fun EthnicityWaistCutoffTable() {
                                     text = cutoff.regions,
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    fontSize = 9.sp,
-                                    lineHeight = 11.sp
+                                    fontSize = 12.sp,
+                                    lineHeight = 12.sp
                                 )
                             }
                             Text(
@@ -796,7 +797,7 @@ private fun EthnicityWaistCutoffTable() {
 private fun WhichStandardNote() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -876,7 +877,7 @@ private fun WhichStandardNote() {
                             text = context.note,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 10.sp
+                            fontSize = 12.sp
                         )
                     }
                 }

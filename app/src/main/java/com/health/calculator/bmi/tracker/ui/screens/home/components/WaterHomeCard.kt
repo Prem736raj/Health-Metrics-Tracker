@@ -1,6 +1,7 @@
 // ui/screens/home/components/WaterHomeCard.kt
 package com.health.calculator.bmi.tracker.ui.screens.home.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -145,7 +146,7 @@ fun WaterHomeCard(
                     ) {
                         Text(
                             stringResource(R.string.txt_daily_water_intake),
-                            color = Color.White,
+                            color = AppColors.text(Color.White),
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
                         )
@@ -164,7 +165,7 @@ fun WaterHomeCard(
                     val goalL = goalMl / 1000f
                     Text(
                         text = "${String.format("%.1f", currentL)}L / ${String.format("%.1f", goalL)}L",
-                        color = Color.White,
+                        color = AppColors.text(Color.White),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp
                     )
@@ -176,7 +177,7 @@ fun WaterHomeCard(
                     ) {
                         Text(
                             text = "${animatedPercentage.toInt()}%",
-                            color = Color.White.copy(alpha = 0.85f),
+                            color = AppColors.text(Color.White.copy(alpha = 0.85f)),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -193,7 +194,7 @@ fun WaterHomeCard(
                                 )
                                 Text(
                                     "$streakDays day${if (streakDays > 1) "s" else ""}",
-                                    color = Color.White.copy(alpha = 0.8f),
+                                    color = AppColors.text(Color.White.copy(alpha = 0.8f)),
                                     fontSize = 12.sp
                                 )
                             }
@@ -210,8 +211,8 @@ fun WaterHomeCard(
                     }
                     Text(
                         text = statusMessage,
-                        color = Color.White.copy(alpha = 0.7f),
-                        fontSize = 11.sp
+                        color = AppColors.text(Color.White.copy(alpha = 0.7f)),
+                        fontSize = 12.sp
                     )
                 }
 
@@ -264,9 +265,9 @@ fun WaterHomeCard(
 
                     Text(
                         "Quick\nAdd",
-                        color = Color.White.copy(alpha = 0.7f),
-                        fontSize = 9.sp,
-                        lineHeight = 11.sp,
+                        color = AppColors.text(Color.White.copy(alpha = 0.7f)),
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -284,13 +285,13 @@ fun WaterHomeCard(
                 ) {
                     Card(
                         shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = HealthColors.Healthy),
+                        colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.Healthy)),
                         elevation = CardDefaults.cardElevation(8.dp)
                     ) {
                         Text(
                             stringResource(R.string.txt_added),
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            color = Color.White,
+                            color = AppColors.text(Color.White),
                             fontWeight = FontWeight.Bold
                         )
                     }

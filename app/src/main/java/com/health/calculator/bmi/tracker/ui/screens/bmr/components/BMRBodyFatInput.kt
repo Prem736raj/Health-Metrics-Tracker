@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRBodyFatInput.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -148,7 +149,7 @@ private fun BodyFatHelpDialog(onDismiss: () -> Unit) {
                 // General ranges
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     ),
                     shape = RoundedCornerShape(10.dp)
                 ) {
@@ -255,14 +256,14 @@ private fun BodyFatRange(label: String, range: String) {
             text = label,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 11.sp
+            fontSize = 12.sp
         )
         Text(
             text = range,
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 11.sp
+            fontSize = 12.sp
         )
     }
 }

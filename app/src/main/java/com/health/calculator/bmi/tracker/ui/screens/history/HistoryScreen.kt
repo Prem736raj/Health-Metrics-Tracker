@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.history
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -124,7 +125,7 @@ fun HistoryScreen(
                             Text(
                                 text = "${uiState.groupedEntries.sumOf { it.entries.size }} records total",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                             )
                         }
                     }
@@ -159,7 +160,11 @@ fun HistoryScreen(
                         }
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
+                    scrolledContainerColor = if (AppColors.isDark) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceContainer
+                )
             )
         }
     ) { paddingValues ->
@@ -324,7 +329,7 @@ fun HistoryScreen(
             ExportBottomSheet(
                 onDismiss = { viewModel.showExportSheet(false) },
                 onExport = viewModel::startExport,
-                onScheduleSettings = { 
+                onScheduleSettings = {
                     viewModel.showExportSheet(false)
                     viewModel.showScheduleDialog(true)
                 },

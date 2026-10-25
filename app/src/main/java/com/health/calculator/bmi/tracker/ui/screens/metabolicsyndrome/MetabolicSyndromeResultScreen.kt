@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -131,7 +132,7 @@ fun MetabolicSyndromeResultScreen(
 
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
             ),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
@@ -179,7 +180,7 @@ fun MetabolicSyndromeResultScreen(
 
         // === Disclaimer ===
         Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+            colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))),
             shape = RoundedCornerShape(12.dp)
         ) {
             Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
@@ -250,7 +251,7 @@ private fun RiskGauge(
                 text = "$criteriaMet/5",
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.ExtraBold,
-                color = riskColor
+                color = AppColors.text(riskColor)
             )
             Text(
                 text = stringResource(R.string.txt_criteria_met_1),
@@ -271,7 +272,7 @@ private fun ScreeningSummaryCard(result: MetabolicSyndromeResult, animationStart
         enter = scaleIn(tween(500, delayMillis = 600)) + fadeIn(tween(500, delayMillis = 600))
     ) {
         Card(
-            colors = CardDefaults.cardColors(containerColor = screeningColor.copy(alpha = 0.1f)),
+            colors = CardDefaults.cardColors(containerColor = AppColors.surface(screeningColor.copy(alpha = 0.1f))),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -288,7 +289,7 @@ private fun ScreeningSummaryCard(result: MetabolicSyndromeResult, animationStart
                         text = "Screening reference: ${result.criteriaMet} of 5 markers",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = screeningColor
+                        color = AppColors.text(screeningColor)
                     )
                     Text(
                         text = "Selected ${result.selectedEthnicity.displayName} waist reference; not a diagnosis",
@@ -313,7 +314,7 @@ private fun CriterionCard(criterion: MetabolicCriterion) {
     )
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = statusColor.copy(alpha = bgAlpha)),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(statusColor.copy(alpha = bgAlpha))),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -334,20 +335,20 @@ private fun CriterionCard(criterion: MetabolicCriterion) {
                     if (criterion.isOnMedication) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Surface(color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f), shape = RoundedCornerShape(4.dp)) {
-                            Text(stringResource(R.string.txt_medicated), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.tertiary, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
+                            Text(stringResource(R.string.txt_medicated), style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.tertiary), modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(2.dp))
                 Text("Your value: ${criterion.userValue}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Threshold: ${criterion.threshold}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
+                Text("Threshold: ${criterion.threshold}", style = MaterialTheme.typography.bodySmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)))
             }
             Surface(color = statusColor.copy(alpha = 0.15f), shape = RoundedCornerShape(8.dp)) {
                 Text(
                     text = if (criterion.isMet) "Marker met" else "Marker not met",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = statusColor,
+                    color = AppColors.text(statusColor),
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                 )
             }
@@ -366,7 +367,7 @@ private fun RiskMessageCard(riskLevel: MetabolicRiskLevel, criteriaMet: Int) {
     }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant)),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -374,7 +375,7 @@ private fun RiskMessageCard(riskLevel: MetabolicRiskLevel, criteriaMet: Int) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(riskLevel.label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = color)
+                Text(riskLevel.label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = AppColors.text(color))
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 20.sp)

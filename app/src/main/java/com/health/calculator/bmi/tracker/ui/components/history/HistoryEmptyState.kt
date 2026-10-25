@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.history
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -62,7 +63,7 @@ fun HistoryEmptyState(
                     "No calculations yet",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                 textAlign = TextAlign.Center
             )
 
@@ -72,7 +73,7 @@ fun HistoryEmptyState(
                 else
                     "Your calculation history will appear here.\nTry a calculator to get started!",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 textAlign = TextAlign.Center
             )
 

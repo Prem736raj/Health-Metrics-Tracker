@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.settings
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -209,7 +210,7 @@ fun DataManagementScreen(
                 Card(
                     shape = RoundedCornerShape(14.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f))
                     ),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.3f))
                 ) {
@@ -227,12 +228,12 @@ fun DataManagementScreen(
                                     stringResource(R.string.txt_delete_everything),
                                     style = MaterialTheme.typography.titleSmall,
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.error
+                                    color = AppColors.text(MaterialTheme.colorScheme.error)
                                 )
                                 Text(
                                     stringResource(R.string.txt_permanently_remove_all_data_an),
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                                 )
                             }
                         }
@@ -338,7 +339,7 @@ private fun StorageCard(storageInfo: StorageInfo, isLoading: Boolean) {
                         Text(
                             stringResource(R.string.txt_total_1),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         )
                     }
                 }
@@ -369,7 +370,7 @@ private fun StorageCard(storageInfo: StorageInfo, isLoading: Boolean) {
                             StorageInfo.formatBytes(bytes),
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                         )
                     }
                 }
@@ -378,7 +379,7 @@ private fun StorageCard(storageInfo: StorageInfo, isLoading: Boolean) {
                     Text(
                         stringResource(R.string.txt_no_significant_data_stored),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -420,7 +421,7 @@ private fun ActionCard(
                 Text(
                     subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
             Icon(
@@ -491,7 +492,7 @@ private fun IntegrityCard(
                             Text(
                                 "Checked ${report.totalEntries} entries",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                             )
                         }
                     }
@@ -515,7 +516,7 @@ private fun IntegrityCard(
                         Text(
                             "✓ ${report.issuesFixed} issues fixed",
                             style = MaterialTheme.typography.labelSmall,
-                            color = HealthColors.Healthy,
+                            color = AppColors.text(HealthColors.Healthy),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -568,7 +569,7 @@ private fun IssueRow(label: String, count: Int, color: Color) {
                 "$count",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = color,
+                color = AppColors.text(color),
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
             )
         }
@@ -636,7 +637,7 @@ private fun CleanupByAgeDialog(
                                 Text(
                                     "~${StorageInfo.formatBytes(p.spaceFreed)} freed",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                                 )
                             }
                         }
@@ -688,7 +689,7 @@ private fun CleanupByCalculatorDialog(
                 Text(
                     stringResource(R.string.txt_select_calculators_to_clear_hi),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
                 Spacer(Modifier.height(8.dp))
 
@@ -770,7 +771,7 @@ private fun DeleteEverythingDialog(
                     else -> "Final Confirmation"
                 },
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.error
+                color = AppColors.text(MaterialTheme.colorScheme.error)
             )
         },
         text = {
@@ -805,14 +806,14 @@ private fun DeleteEverythingDialog(
                         Text(
                             stringResource(R.string.txt_the_app_will_return_to_its_ini),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.error,
+                            color = AppColors.text(MaterialTheme.colorScheme.error),
                             fontWeight = FontWeight.Medium
                         )
                     }
                     1 -> {
                         Card(
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer
+                                containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer)
                             ),
                             shape = RoundedCornerShape(10.dp)
                         ) {
@@ -866,7 +867,7 @@ private fun DeleteEverythingDialog(
                         Text(
                             stringResource(R.string.txt_deleting_all_data),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.error
+                            color = AppColors.text(MaterialTheme.colorScheme.error)
                         )
                     }
                 }

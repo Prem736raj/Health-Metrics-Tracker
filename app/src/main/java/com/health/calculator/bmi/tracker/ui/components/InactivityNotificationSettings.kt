@@ -1,6 +1,7 @@
 // app/src/main/java/com/health/calculator/bmi/tracker/ui/components/InactivityNotificationSettings.kt
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -133,7 +134,7 @@ fun InactivityNotificationSettings(
             Text(
                 stringResource(R.string.txt_earn_streak_freezes_by_reachin),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
             )
         }
     }

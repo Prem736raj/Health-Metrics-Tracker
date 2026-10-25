@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -74,7 +75,7 @@ fun HomeSearchBar(
                 Card(
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                     shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)),
+                    colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surface.copy(alpha = 0.96f))),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)

@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/MacroSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -271,7 +272,7 @@ private fun DietApproachSelector(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 )
             ) {
                 Column(modifier = Modifier.padding(10.dp)) {
@@ -363,10 +364,10 @@ private fun DietChip(
                 text = diet.displayName,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = content,
+                color = AppColors.text(content),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
-                fontSize = 10.sp
+                fontSize = 12.sp
             )
         }
     }
@@ -381,9 +382,9 @@ private fun MacroMiniTag(text: String, color: Color) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
-            color = color,
+            color = AppColors.text(color),
             fontWeight = FontWeight.SemiBold,
-            fontSize = 10.sp,
+            fontSize = 12.sp,
             modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)
         )
     }
@@ -432,7 +433,7 @@ private fun CustomMacroSliders(
                         text = "Total: ${total.roundToInt()}%",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = totalColor,
+                        color = AppColors.text(totalColor),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                     )
                 }
@@ -489,8 +490,8 @@ private fun CustomMacroSliders(
                     Text(
                         text = stringResource(R.string.txt_ratios_should_total_100_adjust),
                         style = MaterialTheme.typography.bodySmall,
-                        color = HealthColors.Caution,
-                        fontSize = 10.sp
+                        color = AppColors.text(HealthColors.Caution),
+                        fontSize = 12.sp
                     )
                 }
             }
@@ -569,7 +570,7 @@ private fun MacroSlider(
                 text = "${percentage.roundToInt()}%",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = color
+                color = AppColors.text(color)
             )
         }
         Slider(
@@ -796,7 +797,7 @@ private fun MacroLegendItem(
                 Text(
                     text = "${percentage.roundToInt()}%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = color,
+                    color = AppColors.text(color),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -804,7 +805,7 @@ private fun MacroLegendItem(
                 text = "${grams.roundToInt()}g  •  ${calories.roundToInt()} kcal",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 11.sp
+                fontSize = 12.sp
             )
         }
     }
@@ -867,7 +868,7 @@ private fun MacroDetailCard(
         modifier = modifier,
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.06f))
         ),
         border = androidx.compose.foundation.BorderStroke(
             1.dp, color.copy(alpha = 0.15f)
@@ -888,7 +889,7 @@ private fun MacroDetailCard(
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = color
+                color = AppColors.text(color)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -910,8 +911,8 @@ private fun MacroDetailCard(
                 Text(
                     text = calPerGram,
                     style = MaterialTheme.typography.labelSmall,
-                    color = color.copy(alpha = 0.8f),
-                    fontSize = 9.sp,
+                    color = AppColors.text(color.copy(alpha = 0.8f)),
+                    fontSize = 12.sp,
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
                 )
             }
@@ -994,7 +995,7 @@ private fun PerMealBreakdownCard(
                                 text = "$count",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                color = fg
+                                color = AppColors.text(fg)
                             )
                         }
                     }
@@ -1008,7 +1009,7 @@ private fun PerMealBreakdownCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
                 )
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
@@ -1100,8 +1101,8 @@ private fun PerMealBreakdownCard(
                 Text(
                     text = stringResource(R.string.txt_tip_these_are_averages_per_mea),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                    fontSize = 10.sp,
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                    fontSize = 12.sp,
                     lineHeight = 14.sp
                 )
             }
@@ -1128,7 +1129,7 @@ private fun PerMealMacroItem(
             text = "${grams.roundToInt()}g",
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Bold,
-            color = color
+            color = AppColors.text(color)
         )
         Text(
             text = label,

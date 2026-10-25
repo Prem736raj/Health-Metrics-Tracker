@@ -348,7 +348,7 @@ fun BmiCalculatorScreen(
                                     onDismissSaveConfirmation = { viewModel.dismissSaveConfirmation() }
                                 )
                             }
-                            
+
                             item(key = "healthRisk") {
                                 BMIHealthRiskSection(
                                     bmi = uiState.bmiResult!!.bmiValue.toFloat(),
@@ -356,7 +356,7 @@ fun BmiCalculatorScreen(
                                     isMale = uiState.bmiResult!!.inputGender == Gender.MALE
                                 )
                             }
-                            
+
                             item(key = "goal") {
                                 BMIGoalSection(
                                     currentBMI = uiState.bmiResult!!.bmiValue.toFloat(),
@@ -433,27 +433,27 @@ private fun BmiInputContent(
     val sliderWeightKg by viewModel.sliderWeightKg.collectAsStateWithLifecycle()
     val sliderHeightCm by viewModel.sliderHeightCm.collectAsStateWithLifecycle()
     val lastUsedInput by viewModel.lastUsedInput.collectAsStateWithLifecycle()
-    
+
     val hapticManager = rememberHapticManager()
-    
+
     val weightShake = rememberShakeController()
     val heightShake = rememberShakeController()
     val ageShake = rememberShakeController()
-    
+
     LaunchedEffect(uiState.validationState.shouldShakeWeight) {
         if (uiState.validationState.shouldShakeWeight) {
             hapticManager.errorPattern()
             weightShake.shake()
         }
     }
-    
+
     LaunchedEffect(uiState.validationState.shouldShakeHeight) {
         if (uiState.validationState.shouldShakeHeight) {
             hapticManager.errorPattern()
             heightShake.shake()
         }
     }
-    
+
     LaunchedEffect(uiState.validationState.shouldShakeAge) {
         if (uiState.validationState.shouldShakeAge) {
             hapticManager.errorPattern()
@@ -560,7 +560,7 @@ private fun BmiInputContent(
 
         InputModeToggle(
             useSliders = useSliders,
-            onToggle = { 
+            onToggle = {
                 viewModel.setUseSliderInput(it)
                 hapticManager.lightTap()
             }
@@ -720,7 +720,7 @@ private fun BmiInputContent(
                 }
             }
         }
-        
+
                 }
             }
 

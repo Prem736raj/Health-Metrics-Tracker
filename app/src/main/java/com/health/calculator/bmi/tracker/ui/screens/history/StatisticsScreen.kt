@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.history
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -36,6 +37,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import java.time.Instant
+import java.time.ZoneId
+import java.time.LocalDate
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.health.calculator.bmi.tracker.data.model.*
 import com.health.calculator.bmi.tracker.ui.theme.HealthColors
@@ -108,7 +114,7 @@ fun OverallStatsCard(stats: OverallStatistics) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f), 2)
         )
     ) {
         Column(
@@ -181,6 +187,8 @@ fun StatItem(label: String, value: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun StreakCard(currentStreak: Int, longestStreak: Int) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp)
@@ -197,7 +205,7 @@ fun StreakCard(currentStreak: Int, longestStreak: Int) {
                     .size(60.dp)
                     .background(
                         brush = Brush.verticalGradient(
-                            colors = listOf(HealthColors.Warning, HealthColors.Caution)
+                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(HealthColors.Warning, HealthColors.Caution)
                         ),
                         shape = CircleShape
                     ),
@@ -217,10 +225,10 @@ fun StreakCard(currentStreak: Int, longestStreak: Int) {
                     style = MaterialTheme.typography.labelMedium
                 )
                 Text(
-                    text = "$currentStreak Days",
+                    text = streakDaysLabel(currentStreak),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = HealthColors.Caution
+                    color = AppColors.text(HealthColors.Caution)
                 )
             }
 
@@ -231,7 +239,7 @@ fun StreakCard(currentStreak: Int, longestStreak: Int) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "$longestStreak Days",
+                    text = streakDaysLabel(longestStreak),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -255,25 +263,36 @@ fun HeatmapMonthCard(month: HeatmapMonth) {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                month.days.forEach { day ->
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(RoundedCornerShape(2.dp))
-                            .background(
-                                color = if (day.count > 0) {
-                                    MaterialTheme.colorScheme.primary.copy(
-                                        alpha = (0.2f + (day.intensity * 0.8f)).coerceAtMost(1.0f)
-                                    )
-                                } else {
-                                    MaterialTheme.colorScheme.surfaceVariant
-                                }
-                            )
-                    )
+            val zone = ZoneId.systemDefault()
+            val first = month.days.firstOrNull()?.let { Instant.ofEpochMilli(it.date).atZone(zone).toLocalDate().withDayOfMonth(1) }
+            if (first != null) {
+                val daysByNumber = month.days.associateBy { it.dayOfMonth }
+                val today = LocalDate.now(zone)
+                Row(Modifier.fillMaxWidth()) {
+                    listOf("M", "T", "W", "T", "F", "S", "S").forEach { label ->
+                        Text(label, Modifier.weight(1f), textAlign = TextAlign.Center, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                calendarWeekCells(first).forEach { week ->
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        week.forEach { cell ->
+                            val number = cell ?: 0
+                            val day = daysByNumber[number]
+                            val date = first.plusDays((number - 1).toLong())
+                            val inMonth = number in 1..first.lengthOfMonth()
+                            Box(
+                                Modifier.weight(1f).aspectRatio(1f).padding(vertical = 2.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(if (!inMonth) Color.Transparent else if ((day?.count ?: 0) > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant)
+                                    .then(if (inMonth && date == today) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp)) else Modifier)
+                                    .semantics { if (inMonth) contentDescription = "$date: ${day?.count ?: 0} calculations${if (date == today) ", today" else ""}" },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (inMonth) Text(number.toString(), style = MaterialTheme.typography.bodySmall,
+                                    color = if ((day?.count ?: 0) > 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -340,11 +359,15 @@ fun TrendChip(percentage: Float, direction: TrendDirection) {
         TrendDirection.DECLINING -> HealthColors.Danger
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
-    val icon = when (direction) {
-        TrendDirection.IMPROVING -> Icons.Outlined.TrendingUp
-        TrendDirection.DECLINING -> Icons.Outlined.TrendingDown
-        TrendDirection.STABLE -> Icons.Outlined.TrendingFlat
-        TrendDirection.FLUCTUATING -> Icons.Filled.SwapVert
+    val icon = when (numericChangeDirection(percentage)) {
+        1 -> Icons.Outlined.TrendingUp
+        -1 -> Icons.Outlined.TrendingDown
+        else -> Icons.Outlined.TrendingFlat
+    }
+    val changeDescription = when {
+        percentage > 0f -> "Increased"
+        percentage < 0f -> "Decreased"
+        else -> "Unchanged"
     }
 
     Surface(
@@ -359,7 +382,7 @@ fun TrendChip(percentage: Float, direction: TrendDirection) {
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = direction.name.lowercase().replace('_', ' '),
+                contentDescription = changeDescription,
                 tint = color,
                 modifier = Modifier.size(16.dp)
             )
@@ -367,7 +390,7 @@ fun TrendChip(percentage: Float, direction: TrendDirection) {
                 text = "${String.format("%.1f", Math.abs(percentage))}%",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = color
+                color = AppColors.text(color)
             )
         }
     }
@@ -399,12 +422,12 @@ fun EmptyTrendsCard() {
             Text(
                 text = stringResource(R.string.txt_keep_calculating_to_see_your_p),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
             )
         }
     }
 }
 
 @Composable
-fun BorderStroke(width: androidx.compose.ui.unit.Dp, color: Color) = 
+fun BorderStroke(width: androidx.compose.ui.unit.Dp, color: Color) =
     androidx.compose.foundation.BorderStroke(width, color)

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -193,7 +194,7 @@ private fun EarnedMilestoneItem(
                     .padding(bottom = if (isLast) 0.dp else 8.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
                 )
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
@@ -295,7 +296,7 @@ private fun LockedMilestoneItem(milestoneType: MilestoneType) {
             Text(
                 text = milestoneType.description,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
             )
         }
     }

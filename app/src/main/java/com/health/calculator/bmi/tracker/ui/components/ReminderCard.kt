@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -29,9 +30,9 @@ fun ReminderCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = if (reminder.isEnabled)
+            containerColor = AppColors.surface(if (reminder.isEnabled)
                 MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -46,9 +47,9 @@ fun ReminderCard(
                         text = reminder.title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = if (reminder.isEnabled)
+                        color = AppColors.secondaryText(if (reminder.isEnabled)
                             MaterialTheme.colorScheme.onSurface
-                        else MaterialTheme.colorScheme.onSurfaceVariant
+                        else MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                     if (reminder.message.isNotEmpty()) {
                         Text(
@@ -59,14 +60,14 @@ fun ReminderCard(
                         )
                     }
                 }
-                
+
                 Switch(
                     checked = reminder.isEnabled,
                     onCheckedChange = { onToggle() },
                     thumbContent = {
                         Icon(
-                            imageVector = if (reminder.isEnabled) 
-                                Icons.Default.Notifications 
+                            imageVector = if (reminder.isEnabled)
+                                Icons.Default.Notifications
                             else Icons.Default.NotificationsOff,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp)
@@ -76,7 +77,7 @@ fun ReminderCard(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -114,7 +115,7 @@ fun ReminderCard(
                     }
                 }
             }
-            
+
             if (reminder.isHighPriority) {
                 Surface(
                     shape = RoundedCornerShape(8.dp),

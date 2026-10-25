@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.whr
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -83,7 +84,7 @@ fun WhrInputScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -178,7 +179,7 @@ fun WhrInputScreen(
                 inputState.waistWarning?.let { warning ->
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f))
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -280,7 +281,7 @@ fun WhrInputScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-            
+
             // Educational Content Link
             OutlinedButton(
                 onClick = onNavigateToEducation,
@@ -314,7 +315,7 @@ fun WhrInputScreen(
 private fun WhrHeaderCard() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -349,7 +350,7 @@ private fun WhrHeaderCard() {
                 Text(
                     stringResource(R.string.txt_measures_body_fat_distribution),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                 )
             }
         }
@@ -360,7 +361,7 @@ private fun WhrHeaderCard() {
 private fun ProfileDataBanner() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(8.dp)
     ) {
@@ -390,7 +391,7 @@ private fun ProfileDataBanner() {
 private fun MeasurementGuideVisual() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -610,8 +611,8 @@ private fun MeasurementLegendItem(
             Text(
                 description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                fontSize = 10.sp
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                fontSize = 12.sp
             )
         }
     }
@@ -621,7 +622,7 @@ private fun MeasurementLegendItem(
 private fun MeasurementTipCard() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -654,7 +655,7 @@ private fun UnitToggleSection(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Row(
@@ -739,7 +740,7 @@ private fun MeasurementInputField(
             Text(
                 helperText,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
             )
             IconButton(
                 onClick = onInfoClick,
@@ -767,7 +768,7 @@ private fun MeasurementInputField(
             placeholder = { Text(placeholder) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             isError = error != null,
-            supportingText = error?.let { { Text(it, color = MaterialTheme.colorScheme.error) } },
+            supportingText = error?.let { { Text(it, color = AppColors.text(MaterialTheme.colorScheme.error)) } },
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth()
@@ -782,7 +783,7 @@ private fun MeasurementGuideCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = accentColor.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(accentColor.copy(alpha = 0.08f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -795,12 +796,12 @@ private fun MeasurementGuideCard(
                 guide.title,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = accentColor
+                color = AppColors.text(accentColor)
             )
             Text(
                 guide.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
             )
             HorizontalDivider(
                 color = accentColor.copy(alpha = 0.2f),
@@ -821,15 +822,15 @@ private fun MeasurementGuideCard(
                                 "${index + 1}",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = accentColor,
-                                fontSize = 10.sp
+                                color = AppColors.text(accentColor),
+                                fontSize = 12.sp
                             )
                         }
                     }
                     Text(
                         step,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
                         lineHeight = 18.sp
                     )
                 }
@@ -904,7 +905,7 @@ private fun GenderOption(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(backgroundColor)),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 2.dp else 0.dp
@@ -928,10 +929,10 @@ private fun GenderOption(
                 label,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = if (isSelected)
+                color = AppColors.text(if (isSelected)
                     MaterialTheme.colorScheme.primary
                 else
-                    MaterialTheme.colorScheme.onSurface
+                    MaterialTheme.colorScheme.onSurface)
             )
         }
     }
@@ -945,7 +946,7 @@ private fun HowToMeasureExpandable(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -1060,7 +1061,7 @@ private fun HowToStep(
             Text(
                 description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                 lineHeight = 18.sp
             )
         }

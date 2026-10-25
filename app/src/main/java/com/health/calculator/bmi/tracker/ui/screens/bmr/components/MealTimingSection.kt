@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/MealTimingSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -252,7 +253,7 @@ private fun PatternSelector(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                 )
             ) {
                 Row(
@@ -277,7 +278,7 @@ private fun PatternSelector(
                             text = pattern.description,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 11.sp
+                            fontSize = 12.sp
                         )
                     }
                 }
@@ -339,8 +340,8 @@ private fun PatternChip(
                 text = pattern.shortName,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = fg,
-                fontSize = 9.sp,
+                color = AppColors.text(fg),
+                fontSize = 12.sp,
                 textAlign = TextAlign.Center,
                 maxLines = 1
             )
@@ -366,7 +367,7 @@ private fun EatingWindowControls(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
         )
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -465,7 +466,7 @@ private fun EatingWindowControls(
                             text = "$customWindowHours hrs",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = HealthColors.Healthy
+                            color = AppColors.text(HealthColors.Healthy)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         FilledTonalIconButton(
@@ -503,7 +504,7 @@ private fun EatingWindowControls(
                             text = "$customMealCount meals",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = HealthColors.Info
+                            color = AppColors.text(HealthColors.Info)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         FilledTonalIconButton(
@@ -620,7 +621,7 @@ private fun DailyTimeline(
                     }
                     val label = textMeasurer.measure(
                         displayH,
-                        TextStyle(fontSize = 9.sp, fontWeight = FontWeight.Medium, color = onSurfaceVariant)
+                        TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Medium, color = onSurfaceVariant)
                     )
                     drawText(
                         label,
@@ -667,7 +668,7 @@ private fun DailyTimeline(
 
             val fastLabel = textMeasurer.measure(
                 "${config.fastingHours}h fast",
-                TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Medium, color = FastingColor)
+                TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Medium, color = FastingColor)
             )
             drawText(fastLabel, topLeft = Offset(centerX - fastLabel.size.width / 2, centerY + 4.dp.toPx()))
         }
@@ -704,7 +705,7 @@ private fun TimelineLegend(color: Color, label: String) {
             text = label,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 9.sp
+            fontSize = 12.sp
         )
     }
 }
@@ -718,7 +719,7 @@ private fun IFWindowSummary(config: MealTimingConfig) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = FastingColor.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(FastingColor.copy(alpha = 0.06f))
         ),
         border = androidx.compose.foundation.BorderStroke(0.5.dp, FastingColor.copy(alpha = 0.15f))
     ) {
@@ -789,7 +790,7 @@ private fun IFWindowChip(
             text = time,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
-            color = color
+            color = AppColors.text(color)
         )
         Surface(
             shape = RoundedCornerShape(4.dp),
@@ -798,7 +799,7 @@ private fun IFWindowChip(
             Text(
                 text = duration,
                 style = MaterialTheme.typography.labelSmall,
-                color = color,
+                color = AppColors.text(color),
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
             )
@@ -865,8 +866,8 @@ private fun MealBreakdownList(meals: List<TimedMealSlot>) {
             Text(
                 text = stringResource(R.string.txt_tip_these_are_suggested_timing),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                fontSize = 10.sp,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                fontSize = 12.sp,
                 lineHeight = 14.sp
             )
         }
@@ -882,7 +883,7 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = dotColor.copy(alpha = 0.04f)
+            containerColor = AppColors.surface(dotColor.copy(alpha = 0.04f))
         ),
         border = androidx.compose.foundation.BorderStroke(0.5.dp, dotColor.copy(alpha = 0.1f))
     ) {
@@ -906,8 +907,8 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
                     text = meal.timeString,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = dotColor,
-                    fontSize = 11.sp
+                    color = AppColors.text(dotColor),
+                    fontSize = 12.sp
                 )
             }
 
@@ -931,8 +932,8 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
                             Text(
                                 text = stringResource(R.string.txt_snack),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = SnackDotColor,
-                                fontSize = 9.sp,
+                                color = AppColors.text(SnackDotColor),
+                                fontSize = 12.sp,
                                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
                             )
                         }
@@ -958,13 +959,13 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
                     text = stringResource(R.string.txt_kcal),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 9.sp
+                    fontSize = 12.sp
                 )
                 Text(
                     text = "${meal.portionPercent.roundToInt()}%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                    fontSize = 9.sp
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -984,16 +985,16 @@ private fun MacroMiniChip(label: String, value: String, color: Color) {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = color,
+                color = AppColors.text(color),
                 fontWeight = FontWeight.Bold,
-                fontSize = 9.sp
+                fontSize = 12.sp
             )
             Spacer(modifier = Modifier.width(2.dp))
             Text(
                 text = value,
                 style = MaterialTheme.typography.labelSmall,
-                color = color.copy(alpha = 0.8f),
-                fontSize = 9.sp
+                color = AppColors.text(color.copy(alpha = 0.8f)),
+                fontSize = 12.sp
             )
         }
     }

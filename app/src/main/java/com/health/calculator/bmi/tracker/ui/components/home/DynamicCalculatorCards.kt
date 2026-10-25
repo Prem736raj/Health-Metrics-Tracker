@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -64,6 +65,8 @@ fun DynamicCalculatorCard(
     progressRing: (@Composable BoxScope.() -> Unit)? = null,
     backgroundImageRes: Int? = null // NEW: Optional background image
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val haptic = LocalHapticFeedback.current
 
     Card(
@@ -94,7 +97,7 @@ fun DynamicCalculatorCard(
                         .fillMaxSize()
                         .background(
                             brush = Brush.verticalGradient(
-                                colors = listOf(
+                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                     Color.Transparent,
                                     MaterialTheme.colorScheme.scrim.copy(alpha = 0.8f)
                                 )
@@ -108,7 +111,7 @@ fun DynamicCalculatorCard(
                         .fillMaxSize()
                         .background(
                             brush = Brush.verticalGradient(
-                                colors = listOf(
+                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                     accentColor.copy(alpha = 0.1f),
                                     MaterialTheme.colorScheme.surface
                                 )
@@ -145,7 +148,7 @@ fun DynamicCalculatorCard(
                                     .clip(RoundedCornerShape(14.dp))
                                     .background(
                                         brush = Brush.radialGradient(
-                                            colors = listOf(
+                                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                                 accentColor.copy(alpha = 0.25f),
                                                 accentColor.copy(alpha = 0.05f)
                                             )
@@ -170,7 +173,7 @@ fun DynamicCalculatorCard(
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = if (backgroundImageRes != null) WellnessPalette.OnHero else MaterialTheme.colorScheme.onSurface,
+                        color = AppColors.text(if (backgroundImageRes != null) WellnessPalette.OnHero else MaterialTheme.colorScheme.onSurface),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -183,7 +186,7 @@ fun DynamicCalculatorCard(
                         Text(
                             text = description,
                             style = MaterialTheme.typography.bodySmall,
-                            color = if (backgroundImageRes != null) WellnessPalette.OnHero.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            color = AppColors.text(if (backgroundImageRes != null) WellnessPalette.OnHero.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             lineHeight = 14.sp
@@ -251,7 +254,7 @@ fun BMICalculatorCard(
                     text = stringResource(R.string.txt_1f).format(lastBMI),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = WellnessPalette.OnHero
+                    color = AppColors.text(WellnessPalette.OnHero)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 // Category
@@ -259,7 +262,7 @@ fun BMICalculatorCard(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.labelMedium,
-                        color = WellnessPalette.OnHero.copy(alpha = 0.8f)
+                        color = AppColors.text(WellnessPalette.OnHero.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -294,20 +297,20 @@ fun BMRCalculatorCard(
                     text = stringResource(R.string.txt_d_1).format(lastBMR),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = CalculatorColors.BMR
+                    color = AppColors.text(CalculatorColors.BMR)
                 )
                 Text(
                     text = stringResource(R.string.txt_cal_day),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
             if (lastTDEE != null) {
                 Text(
                     text = stringResource(R.string.txt_tdee_d_cal).format(lastTDEE),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                    fontSize = 10.sp
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -337,7 +340,7 @@ fun BloodPressureCard(
             else -> HealthColors.Danger
         }
     }
-    val needsAttention = lastSystolic != null && lastDiastolic != null && 
+    val needsAttention = lastSystolic != null && lastDiastolic != null &&
             (lastSystolic >= 140 || lastDiastolic >= 90)
 
     DynamicCalculatorCard(
@@ -364,20 +367,20 @@ fun BloodPressureCard(
                     text = "$lastSystolic/$lastDiastolic",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = WellnessPalette.OnHero
+                    color = AppColors.text(WellnessPalette.OnHero)
                 )
                 Text(
                     text = stringResource(R.string.txt_mmhg),
                     style = MaterialTheme.typography.labelMedium,
-                    color = WellnessPalette.OnHero.copy(alpha = 0.8f)
+                    color = AppColors.text(WellnessPalette.OnHero.copy(alpha = 0.8f))
                 )
             }
             lastCategory?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.labelSmall,
-                    color = WellnessPalette.OnHero.copy(alpha = 0.9f),
-                    fontSize = 11.sp
+                    color = AppColors.text(WellnessPalette.OnHero.copy(alpha = 0.9f)),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -433,15 +436,15 @@ fun WHRCalculatorCard(
                     text = stringResource(R.string.txt_2f).format(lastWHR),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = riskColor
+                    color = AppColors.text(riskColor)
                 )
             }
             lastCategory?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.labelSmall,
-                    color = riskColor.copy(alpha = 0.8f),
-                    fontSize = 10.sp
+                    color = AppColors.text(riskColor.copy(alpha = 0.8f)),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -462,15 +465,15 @@ fun WaterIntakeCard(
     val hasData = goalIntake > 0
     val progress = if (goalIntake > 0) (currentIntake.toFloat() / goalIntake).coerceIn(0f, 1f) else 0f
     val percentage = (progress * 100).toInt()
-    
+
     val progressColor = when {
         progress >= 1f -> HealthColors.Healthy
         progress >= 0.7f -> HealthColors.Good
         progress >= 0.4f -> HealthColors.BelowNormal
         else -> HealthColors.BelowNormal.copy(alpha = 0.7f)
     }
-    
-    val needsAttention = hasData && progress < 0.5f && 
+
+    val needsAttention = hasData && progress < 0.5f &&
             java.time.LocalTime.now().hour >= 14 // After 2 PM
 
     DynamicCalculatorCard(
@@ -496,20 +499,20 @@ fun WaterIntakeCard(
                     text = "$percentage%",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = WellnessPalette.OnHero
+                    color = AppColors.text(WellnessPalette.OnHero)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(R.string.txt_of_goal),
                     style = MaterialTheme.typography.labelMedium,
-                    color = WellnessPalette.OnHero.copy(alpha = 0.8f)
+                    color = AppColors.text(WellnessPalette.OnHero.copy(alpha = 0.8f))
                 )
             }
             Text(
                 text = "${currentIntake}ml / ${goalIntake}ml",
                 style = MaterialTheme.typography.labelSmall,
-                color = WellnessPalette.OnHero.copy(alpha = 0.7f),
-                fontSize = 11.sp
+                color = AppColors.text(WellnessPalette.OnHero.copy(alpha = 0.7f)),
+                fontSize = 12.sp
             )
         }
     )
@@ -602,13 +605,13 @@ fun MetabolicSyndromeCard(
                     text = "$criteriaMet/$totalCriteria",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = riskColor
+                    color = AppColors.text(riskColor)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(R.string.txt_criteria_met),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
             Text(
@@ -618,8 +621,8 @@ fun MetabolicSyndromeCard(
                     else -> "Review flagged criteria"
                 },
                 style = MaterialTheme.typography.labelSmall,
-                color = riskColor.copy(alpha = 0.8f),
-                fontSize = 10.sp
+                color = AppColors.text(riskColor.copy(alpha = 0.8f)),
+                fontSize = 12.sp
             )
         }
     )
@@ -651,12 +654,12 @@ fun BSACalculatorCard(
                     text = stringResource(R.string.txt_2f).format(lastBSA),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = CalculatorColors.BSA
+                    color = AppColors.text(CalculatorColors.BSA)
                 )
                 Text(
                     text = stringResource(R.string.txt_m),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
         }
@@ -678,7 +681,7 @@ fun IBWCalculatorCard(
     val difference = if (idealWeight != null && currentWeight != null) {
         currentWeight - idealWeight
     } else null
-    
+
     val statusColor = remember(difference) {
         when {
             difference == null -> CalculatorColors.IdealWeight
@@ -702,12 +705,12 @@ fun IBWCalculatorCard(
                     text = stringResource(R.string.txt_1f).format(idealWeight),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = statusColor
+                    color = AppColors.text(statusColor)
                 )
                 Text(
                     text = stringResource(R.string.txt_kg_ideal),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
             if (difference != null && currentWeight != null) {
@@ -719,8 +722,8 @@ fun IBWCalculatorCard(
                 Text(
                     text = diffText,
                     style = MaterialTheme.typography.labelSmall,
-                    color = statusColor.copy(alpha = 0.8f),
-                    fontSize = 10.sp
+                    color = AppColors.text(statusColor.copy(alpha = 0.8f)),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -739,18 +742,18 @@ fun CalorieCalculatorCard(
     modifier: Modifier = Modifier
 ) {
     val hasData = targetCalories > 0
-    val progress = if (targetCalories > 0) 
+    val progress = if (targetCalories > 0)
         (consumedCalories.toFloat() / targetCalories).coerceIn(0f, 1.5f) else 0f
     val remaining = targetCalories - consumedCalories
-    
+
     val progressColor = when {
         progress >= 1.2f -> HealthColors.Danger // Over by 20%+
         progress >= 1f -> HealthColors.Healthy // At goal
         progress >= 0.7f -> HealthColors.Good // Close
         else -> HealthColors.Caution // Under
     }
-    
-    val needsAttention = hasData && remaining > 500 && 
+
+    val needsAttention = hasData && remaining > 500 &&
             java.time.LocalTime.now().hour >= 18 // After 6 PM
 
     DynamicCalculatorCard(
@@ -777,12 +780,12 @@ fun CalorieCalculatorCard(
                     text = stringResource(R.string.txt_d_1).format(consumedCalories),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = progressColor
+                    color = AppColors.text(progressColor)
                 )
                 Text(
                     text = stringResource(R.string.txt_d).format(targetCalories),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
             Text(
@@ -792,8 +795,8 @@ fun CalorieCalculatorCard(
                     else -> "${-remaining} cal over"
                 },
                 style = MaterialTheme.typography.labelSmall,
-                color = progressColor.copy(alpha = 0.8f),
-                fontSize = 10.sp
+                color = AppColors.text(progressColor.copy(alpha = 0.8f)),
+                fontSize = 12.sp
             )
         }
     )
@@ -901,20 +904,20 @@ fun HeartRateZonesCard(
                     text = "Max: $maxHR",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = CalculatorColors.HeartRateZone
+                    color = AppColors.text(CalculatorColors.HeartRateZone)
                 )
                 Text(
                     text = stringResource(R.string.txt_bpm),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
             if (restingHR != null) {
                 Text(
                     text = "Resting: $restingHR BPM",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                    fontSize = 10.sp
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                    fontSize = 12.sp
                 )
             }
         }

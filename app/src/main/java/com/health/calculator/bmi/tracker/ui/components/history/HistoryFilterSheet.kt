@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.history
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -109,7 +110,7 @@ fun HistoryFilterSheet(
                     localFilter = HistoryFilter()
                     localSort = HistorySortOption.NEWEST_FIRST
                 }) {
-                    Text(stringResource(R.string.txt_reset_all), color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.txt_reset_all), color = AppColors.text(MaterialTheme.colorScheme.error))
                 }
             }
 
@@ -212,7 +213,7 @@ fun HistoryFilterSheet(
                         Text(
                             text = stringResource(R.string.txt_from),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -244,7 +245,7 @@ fun HistoryFilterSheet(
                         Text(
                             text = stringResource(R.string.txt_to),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -370,7 +371,7 @@ fun ActiveFilterChips(
             Text(
                 text = stringResource(R.string.txt_active_filters),
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
             )
             TextButton(
                 onClick = onClearAll,
@@ -379,7 +380,7 @@ fun ActiveFilterChips(
                 Text(
                     stringResource(R.string.txt_clear_all),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.error
+                    color = AppColors.text(MaterialTheme.colorScheme.error)
                 )
             }
         }

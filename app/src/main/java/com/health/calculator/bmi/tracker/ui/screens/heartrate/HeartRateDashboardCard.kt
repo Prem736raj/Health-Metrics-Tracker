@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -112,7 +113,7 @@ fun HeartRateDashboardCard(
                     Text(
                         text = "Max HR: $maxHR BPM",
                         style = MaterialTheme.typography.bodySmall,
-                        color = FeatureColors.HeartDeep,
+                        color = AppColors.text(FeatureColors.HeartDeep),
                         fontWeight = FontWeight.Medium
                     )
 
@@ -121,10 +122,10 @@ fun HeartRateDashboardCard(
                         Text(
                             text = it,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            fontSize = 10.sp
+                            fontSize = 12.sp
                         )
                     }
 
@@ -151,8 +152,8 @@ fun HeartRateDashboardCard(
                                     text = "Last: Zone $zone",
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = zoneColor,
-                                    fontSize = 10.sp
+                                    color = AppColors.text(zoneColor),
+                                    fontSize = 12.sp
                                 )
                             }
                         }
@@ -161,11 +162,11 @@ fun HeartRateDashboardCard(
                     Text(
                         text = stringResource(R.string.txt_calculate_your_training_zones),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
             }
-            
+
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = null,

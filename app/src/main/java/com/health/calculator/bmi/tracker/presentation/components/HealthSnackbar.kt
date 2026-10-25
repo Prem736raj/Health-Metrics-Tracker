@@ -2,6 +2,8 @@
 
 package com.health.calculator.bmi.tracker.presentation.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -52,7 +54,7 @@ fun HealthSnackbar(
                     Text(
                         text = actionLabel,
                         style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.inversePrimary
+                        color = AppColors.text(MaterialTheme.colorScheme.inversePrimary)
                     )
                 }
             }

@@ -2,6 +2,8 @@
 
 package com.health.calculator.bmi.tracker.presentation.home.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -65,6 +67,8 @@ fun DashboardHeader(
     onSettingsClick: () -> Unit = {},
     onHistoryClick: () -> Unit = {}
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val greeting = remember { DateUtils.getGreeting() }
     val displayName = if (userName.isNullOrBlank()) null else userName
 
@@ -187,7 +191,7 @@ fun DashboardHeader(
                         modifier = Modifier.size(26.dp)
                     )
                 }
-                
+
                 // Notification bell
                 IconButton(
                     onClick = onNotificationClick,
@@ -234,7 +238,7 @@ fun DashboardHeader(
                     .fillMaxWidth()
                     .background(
                         brush = Brush.horizontalGradient(
-                            colors = listOf(
+                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                 MaterialTheme.colorScheme.primary,
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
                             )
@@ -288,13 +292,13 @@ fun DashboardHeader(
                             text = stringResource(R.string.txt_track_your_health),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = AppColors.text(Color.White)
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = stringResource(R.string.txt_use_who_standard_calculators_t),
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color.White.copy(alpha = 0.85f),
+                            color = AppColors.text(Color.White.copy(alpha = 0.85f)),
                             lineHeight = MaterialTheme.typography.bodyMedium.lineHeight
                         )
                     }

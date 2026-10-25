@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -55,7 +56,7 @@ fun RecommendationsSection(
 
     var isExpanded by remember { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
-    
+
     val visibleCount = if (isExpanded) recommendations.size else minOf(3, recommendations.size)
     val hasMore = recommendations.size > 3
 
@@ -82,7 +83,7 @@ fun RecommendationsSection(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-                
+
                 // Count badge
                 if (recommendations.size > 1) {
                     Spacer(modifier = Modifier.width(8.dp))
@@ -104,9 +105,9 @@ fun RecommendationsSection(
             // See all / Show less
             if (hasMore) {
                 TextButton(
-                    onClick = { 
+                    onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        isExpanded = !isExpanded 
+                        isExpanded = !isExpanded
                     }
                 ) {
                     Text(
@@ -163,7 +164,7 @@ fun RecommendationsSection(
                     Text(
                         text = "+${recommendations.size - 3} more recommendations",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(
@@ -191,7 +192,7 @@ private fun RecommendationCard(
     onDismiss: () -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
-    
+
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(index * 80L)
         isVisible = true
@@ -231,7 +232,7 @@ private fun RecommendationCard(
                         Text(
                             text = stringResource(R.string.txt_dismiss),
                             style = MaterialTheme.typography.labelSmall,
-                            color = HealthColors.Danger,
+                            color = AppColors.text(HealthColors.Danger),
                             fontWeight = FontWeight.Medium
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -268,9 +269,9 @@ private fun RecommendationCardContent(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isCelebration) 
+            containerColor = AppColors.surface(if (isCelebration)
                 recommendation.color.copy(alpha = 0.08f)
-            else MaterialTheme.colorScheme.surface
+            else MaterialTheme.colorScheme.surface)
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isCelebration) 0.dp else 2.dp
@@ -330,9 +331,9 @@ private fun RecommendationCardContent(
                                 Text(
                                     text = stringResource(R.string.txt_important),
                                     style = MaterialTheme.typography.labelSmall,
-                                    fontSize = 9.sp,
+                                    fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = HealthColors.Caution,
+                                    color = AppColors.text(HealthColors.Caution),
                                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
                                 )
                             }
@@ -344,7 +345,7 @@ private fun RecommendationCardContent(
                     Text(
                         text = recommendation.message,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)),
                         lineHeight = 17.sp,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -410,7 +411,7 @@ fun NoRecommendationsCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Healthy.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.06f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -432,12 +433,12 @@ fun NoRecommendationsCard(
                     text = stringResource(R.string.txt_you_re_all_caught_up),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = HealthColors.Healthy
+                    color = AppColors.text(HealthColors.Healthy)
                 )
                 Text(
                     text = stringResource(R.string.txt_no_new_recommendations_right_n),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                     lineHeight = 17.sp
                 )
             }

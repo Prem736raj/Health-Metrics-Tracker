@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
@@ -55,7 +56,7 @@ fun CalorieSafetyWarningCard(
         Card(
             modifier = modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
-            colors = CardDefaults.cardColors(containerColor = containerColor),
+            colors = CardDefaults.cardColors(containerColor = AppColors.surface(containerColor)),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Row(
@@ -74,7 +75,7 @@ fun CalorieSafetyWarningCard(
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f)),
                     lineHeight = MaterialTheme.typography.bodySmall.lineHeight
                 )
             }
