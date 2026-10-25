@@ -80,7 +80,7 @@ fun BMIQuickCheckCard(
                         Spacer(modifier = Modifier.height(4.dp))
 
                         val name = profileName?.takeIf { it.isNotBlank() }
-                        val greeting = if (name != null) "Hi \$name!" else "Profile data ready!"
+                        val greeting = if (name != null) "Hi $name!" else "Profile data ready!"
                         Text(
                             text = greeting,
                             style = MaterialTheme.typography.bodySmall,
@@ -222,13 +222,13 @@ fun LastUsedInputCard(
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "Last used (\$timeAgo)",
+                        text = "Last used ($timeAgo)",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "\$weightText  •  \$heightText  •  Age \$age  •  \$genderText",
+                        text = "$weightText  •  $heightText  •  Age $age  •  $genderText",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
@@ -263,10 +263,10 @@ private fun getTimeAgoText(timestamp: Long): String {
 
     return when {
         minutes < 1 -> "just now"
-        minutes < 60 -> "\${minutes}m ago"
-        hours < 24 -> "\${hours}h ago"
-        days < 7 -> "\${days}d ago"
-        days < 30 -> "\${days / 7}w ago"
-        else -> "\${days / 30}mo ago"
+        minutes < 60 -> "${minutes}m ago"
+        hours < 24 -> "${hours}h ago"
+        days < 7 -> "${days}d ago"
+        days < 30 -> "${days / 7}w ago"
+        else -> "${days / 30}mo ago"
     }
 }
