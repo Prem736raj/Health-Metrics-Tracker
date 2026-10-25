@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -282,7 +283,7 @@ private fun ExpandableRiskSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column {
@@ -620,9 +621,9 @@ private fun MedicalDisclaimerCard() {
                     "professional for personalized medical guidance. Never disregard " +
                     "professional medical advice because of information provided here.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
             lineHeight = 16.sp,
-            fontSize = 11.sp
+            fontSize = 12.sp
         )
     }
 }

@@ -38,6 +38,10 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -203,19 +207,19 @@ fun BmiCalculatorScreen(
                             text = stringResource(R.string.txt_bmi_calculator),
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                             maxLines = 1,
-                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Clip
                         )
                         Text(
                             text = if (uiState.showResult) "Your Result"
                                    else if (pagerState.currentPage == 1) "Your BMI History"
                                    else if (pagerState.currentPage == 2) "Educational Content"
-                                   else "Adult BMI reference categories",
+                                   else "Adult reference categories",
                             style = MaterialTheme.typography.labelMedium,
                             maxLines = 1,
-                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                            color = if (uiState.showResult)
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Clip,
+                            color = AppColors.secondaryText(if (uiState.showResult)
                                 uiState.bmiResult?.let { bmiCategoryUiColor(it.category) } ?: FeatureColors.BmiDeep
-                            else FeatureColors.BmiDeep.copy(alpha = 0.8f)
+                            else FeatureColors.BmiDeep.copy(alpha = 0.8f))
                         )
                     }
                 },
@@ -229,7 +233,7 @@ fun BmiCalculatorScreen(
                             }
                         },
                         colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))
                         ),
                         modifier = Modifier.padding(start = 4.dp)
                     ) {
@@ -244,18 +248,7 @@ fun BmiCalculatorScreen(
                         IconButton(onClick = onNavigateToHistory) {
                             Icon(Icons.Default.List, contentDescription = "History")
                         }
-                        IconButton(
-                            onClick = {
-                                focusManager.clearFocus()
-                                viewModel.clearAll()
-                                hapticManager.lightTap()
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.ClearAll,
-                                contentDescription = "Clear all BMI inputs"
-                            )
-                        }
+
                     }
                 },
                 scrollBehavior = scrollBehavior,
@@ -295,13 +288,13 @@ fun BmiCalculatorScreen(
                         TabRow(
                             selectedTabIndex = pagerState.currentPage,
                             containerColor = Color.Transparent,
-                            contentColor = FeatureColors.BmiDeep,
+                            contentColor = AppColors.accent(FeatureColors.BmiDeep),
                             indicator = { tabPositions ->
                                 if (pagerState.currentPage < tabPositions.size) {
                                     TabRowDefaults.SecondaryIndicator(
                                         modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
                                         height = 3.dp,
-                                        color = FeatureColors.BmiDeep
+                                        color = AppColors.accent(FeatureColors.BmiDeep)
                                     )
                                 }
                             },
@@ -330,8 +323,8 @@ fun BmiCalculatorScreen(
                                             )
                                         }
                                     },
-                                    selectedContentColor = FeatureColors.BmiDeep,
-                                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                                    selectedContentColor = AppColors.accent(FeatureColors.BmiDeep),
+                                    unselectedContentColor = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                                 )
                             }
                         }
@@ -545,50 +538,21 @@ private fun BmiInputContent(
 
         // --- Gender Selection ---
         SectionLabel("Gender")
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            GenderSelectButton(
-                gender = Gender.MALE,
-                isSelected = uiState.selectedGender == Gender.MALE,
-                isFromProfile = uiState.genderFromProfile && uiState.selectedGender == Gender.MALE,
-                modifier = Modifier.weight(1f),
-                onClick = { 
-                    viewModel.selectGender(Gender.MALE) 
-                    hapticManager.lightTap()
-                }
-            )
-            GenderSelectButton(
-                gender = Gender.FEMALE,
-                isSelected = uiState.selectedGender == Gender.FEMALE,
-                isFromProfile = uiState.genderFromProfile && uiState.selectedGender == Gender.FEMALE,
-                modifier = Modifier.weight(1f),
-                onClick = { 
-                    viewModel.selectGender(Gender.FEMALE) 
-                    hapticManager.lightTap()
-                }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // --- Age Input ---
-        SectionLabel("Age")
-        FormCard {
-            AnimatedInputField(
-                value = uiState.ageField.text,
-                onValueChange = { viewModel.updateAge(it) },
-                label = "Age (Years)",
-                icon = Icons.Rounded.Person,
-                errorMessage = if (uiState.ageField.isError) uiState.ageField.errorMessage else null,
-                shakeController = ageShake,
-                keyboardType = KeyboardType.NumberPassword,
-                imeAction = ImeAction.Next,
-                onImeAction = { focusManager.moveFocus(FocusDirection.Down) }
-            )
-            if (uiState.ageField.isFromProfile && !uiState.ageField.wasOverridden) {
-                ProfileFieldBadge()
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            listOf(Gender.MALE, Gender.FEMALE).forEachIndexed { index, gender ->
+                SegmentedButton(
+                    selected = uiState.selectedGender == gender,
+                    onClick = { viewModel.selectGender(gender); hapticManager.lightTap() },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = 2),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        activeContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        inactiveContainerColor = MaterialTheme.colorScheme.surface,
+                        inactiveContentColor = MaterialTheme.colorScheme.onSurface,
+                        activeBorderColor = MaterialTheme.colorScheme.primary,
+                        inactiveBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                    )
+                ) { Text(gender.name.lowercase().replaceFirstChar { it.uppercase() }) }
             }
         }
 
@@ -602,6 +566,28 @@ private fun BmiInputContent(
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+
+        // --- Age Input ---
+        FormCard {
+            AnimatedInputField(
+                value = uiState.ageField.text,
+                onValueChange = { viewModel.updateAge(it) },
+                label = "Age",
+                suffix = "years",
+                icon = Icons.Rounded.Person,
+                errorMessage = if (uiState.ageField.isError) uiState.ageField.errorMessage else null,
+                shakeController = ageShake,
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next,
+                onImeAction = { focusManager.moveFocus(FocusDirection.Down) }
+            )
+            if (uiState.ageField.isFromProfile && !uiState.ageField.wasOverridden) {
+                ProfileFieldBadge()
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Keep the two input layouts mutually exclusive. Sliding the entire
         // column in while the previous layout is still composed makes the
@@ -627,7 +613,7 @@ private fun BmiInputContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            SectionLabel("Weight", modifier = Modifier.padding(bottom = 0.dp))
+            SectionLabel("Weight", modifier = Modifier.weight(1f))
             UnitToggle(
                 leftLabel = "kg",
                 rightLabel = "lbs",
@@ -640,7 +626,7 @@ private fun BmiInputContent(
             AnimatedInputField(
                 value = uiState.weightField.text,
                 onValueChange = { viewModel.updateWeight(it) },
-                label = "Your Weight",
+                label = "Weight",
                 icon = Icons.Outlined.MonitorWeight,
                 errorMessage = if (uiState.weightField.isError) uiState.weightField.errorMessage else null,
                 shakeController = weightShake,
@@ -661,7 +647,7 @@ private fun BmiInputContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            SectionLabel("Height", modifier = Modifier.padding(bottom = 0.dp))
+            SectionLabel("Height", modifier = Modifier.weight(1f))
             UnitToggle(
                 leftLabel = "cm",
                 rightLabel = "ft/in",
@@ -675,7 +661,7 @@ private fun BmiInputContent(
                 AnimatedInputField(
                     value = uiState.heightCmField.text,
                     onValueChange = { viewModel.updateHeightCm(it) },
-                    label = "Your Height",
+                    label = "Height",
                     icon = Icons.Outlined.Height,
                     errorMessage = if (uiState.heightCmField.isError) uiState.heightCmField.errorMessage else null,
                     shakeController = heightShake,
@@ -705,7 +691,7 @@ private fun BmiInputContent(
                             errorMessage = if (uiState.heightFeetField.isError) uiState.heightFeetField.errorMessage else null,
                             shakeController = heightShake,
                             suffix = "ft",
-                            keyboardType = KeyboardType.NumberPassword,
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next,
                             onImeAction = { focusManager.moveFocus(FocusDirection.Right) }
                         )
@@ -792,15 +778,8 @@ private fun SectionLabel(text: String, modifier: Modifier = Modifier.padding(bot
 
 @Composable
 private fun FormCard(content: @Composable () -> Unit) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Box(modifier = Modifier.padding(16.dp)) {
-            content()
-        }
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        content()
     }
 }
 
@@ -822,72 +801,6 @@ private fun ProfileFieldBadge() {
 }
 
 @Composable
-private fun GenderSelectButton(
-    gender: Gender,
-    isSelected: Boolean,
-    isFromProfile: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    val containerColor = if (isSelected) {
-        MaterialTheme.colorScheme.primaryContainer
-    } else {
-        MaterialTheme.colorScheme.surface
-    }
-
-    val contentColor = if (isSelected) {
-        MaterialTheme.colorScheme.onPrimaryContainer
-    } else {
-        MaterialTheme.colorScheme.onSurface
-    }
-
-    val borderColor = if (isSelected) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-    }
-
-    Surface(
-        modifier = modifier
-            .height(64.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick
-            ),
-        shape = RoundedCornerShape(16.dp),
-        color = containerColor,
-        border = androidx.compose.foundation.BorderStroke(1.dp, borderColor)
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Person, // Use Person icon
-                    contentDescription = null,
-                    tint = contentColor
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = gender.name.lowercase().replaceFirstChar { it.uppercase() },
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = contentColor
-                )
-            }
-            if (isFromProfile) {
-                Box(modifier = Modifier.align(Alignment.TopEnd)) {
-                    ProfileFieldBadge()
-                }
-            }
-        }
-    }
-}
-
-@Composable
 private fun UnitToggle(
     leftLabel: String,
     rightLabel: String,
@@ -897,7 +810,7 @@ private fun UnitToggle(
     Surface(
         shape = RoundedCornerShape(50),
         color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier.clickable(onClick = onToggle)
+        modifier = Modifier.height(48.dp).clickable(onClick = onToggle)
     ) {
         Row(
             modifier = Modifier.padding(4.dp),

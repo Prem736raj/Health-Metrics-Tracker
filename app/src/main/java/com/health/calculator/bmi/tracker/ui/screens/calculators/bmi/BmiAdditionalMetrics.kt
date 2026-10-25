@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -100,7 +101,7 @@ fun BmiAdditionalMetricsSection(
             ),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -144,8 +145,8 @@ fun BmiAdditionalMetricsSection(
                     )
                     Text(
                         text = stringResource(R.string.txt_bmi_prime_ponderal_index_asian),
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                     )
                 }
 
@@ -261,8 +262,8 @@ private fun BmiPrimeCard(bmiPrime: BmiPrimeResult) {
                 )
                 Text(
                     text = stringResource(R.string.txt_from_optimal_1_0),
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                 )
             }
         }
@@ -273,7 +274,7 @@ private fun BmiPrimeCard(bmiPrime: BmiPrimeResult) {
         Text(
             text = bmiPrime.status.description,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
             lineHeight = 18.sp
         )
 
@@ -291,8 +292,8 @@ private fun BmiPrimeCard(bmiPrime: BmiPrimeResult) {
         ) {
             Text(
                 text = stringResource(R.string.txt_a_bmi_prime_of_1_0_corresponds),
-                style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                 lineHeight = 16.sp,
                 modifier = Modifier.padding(10.dp)
             )
@@ -302,6 +303,8 @@ private fun BmiPrimeCard(bmiPrime: BmiPrimeResult) {
 
 @Composable
 private fun BmiPrimeScale(value: Double, statusColor: Color) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val position = ((value / 1.5).coerceIn(0.0, 1.0)).toFloat()
 
     Column {
@@ -313,7 +316,7 @@ private fun BmiPrimeScale(value: Double, statusColor: Color) {
                 .clip(RoundedCornerShape(4.dp))
                 .background(
                     Brush.horizontalGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             HealthColors.Healthy.copy(alpha = 0.3f),
                             HealthColors.Healthy.copy(alpha = 0.6f),
                             HealthColors.Warning.copy(alpha = 0.6f),
@@ -345,26 +348,26 @@ private fun BmiPrimeScale(value: Double, statusColor: Color) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Text(
                 stringResource(R.string.txt_0),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 stringResource(R.string.txt_0_74),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 stringResource(R.string.txt_1_0),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp, fontWeight = FontWeight.Bold),
                 color = HealthColors.Warning.copy(alpha = 0.7f)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 stringResource(R.string.txt_1_5),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             )
         }
     }
@@ -425,8 +428,8 @@ private fun PonderalIndexCard(ponderalIndex: PonderalIndexResult) {
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     text = stringResource(R.string.txt_normal_range),
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                 )
                 Text(
                     text = stringResource(R.string.txt_11_15_kg_m),
@@ -443,7 +446,7 @@ private fun PonderalIndexCard(ponderalIndex: PonderalIndexResult) {
         Text(
             text = ponderalIndex.status.description,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
             lineHeight = 18.sp
         )
 
@@ -463,8 +466,8 @@ private fun PonderalIndexCard(ponderalIndex: PonderalIndexResult) {
         ) {
             Text(
                 text = stringResource(R.string.txt_unlike_bmi_the_ponderal_index_),
-                style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                 lineHeight = 16.sp,
                 modifier = Modifier.padding(10.dp)
             )
@@ -474,6 +477,8 @@ private fun PonderalIndexCard(ponderalIndex: PonderalIndexResult) {
 
 @Composable
 private fun PonderalIndexScale(value: Double, statusColor: Color) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     // Scale from 8 to 20
     val position = ((value - 8.0) / 12.0).coerceIn(0.0, 1.0).toFloat()
 
@@ -485,7 +490,7 @@ private fun PonderalIndexScale(value: Double, statusColor: Color) {
                 .clip(RoundedCornerShape(4.dp))
                 .background(
                     Brush.horizontalGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             HealthColors.Caution.copy(alpha = 0.4f),
                             HealthColors.Healthy.copy(alpha = 0.5f),
                             HealthColors.Healthy.copy(alpha = 0.5f),
@@ -513,13 +518,13 @@ private fun PonderalIndexScale(value: Double, statusColor: Color) {
         Spacer(modifier = Modifier.height(4.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.txt_8), style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+            Text(stringResource(R.string.txt_8), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
             Spacer(modifier = Modifier.weight(0.25f))
-            Text(stringResource(R.string.txt_11), style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+            Text(stringResource(R.string.txt_11), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
             Spacer(modifier = Modifier.weight(0.33f))
-            Text(stringResource(R.string.txt_15), style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+            Text(stringResource(R.string.txt_15), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
             Spacer(modifier = Modifier.weight(0.42f))
-            Text(stringResource(R.string.txt_20), style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+            Text(stringResource(R.string.txt_20), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
         }
     }
 }
@@ -619,7 +624,7 @@ private fun AsianBmiCard(
                         Text(
                             text = "Adult reference: ${standardCategory.label} • Action-point context: ${asianCategory.label}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
                         )
                     }
                 }
@@ -639,8 +644,8 @@ private fun AsianBmiCard(
         ) {
             Text(
                 text = stringResource(R.string.txt_research_shows_asian_populatio),
-                style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                 lineHeight = 16.sp,
                 modifier = Modifier.padding(10.dp)
             )
@@ -667,7 +672,7 @@ private fun AsianBmiTable(
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                 modifier = Modifier.weight(1f)
             )
             Text(
@@ -675,7 +680,7 @@ private fun AsianBmiTable(
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                 modifier = Modifier.weight(0.7f),
                 textAlign = TextAlign.End
             )
@@ -759,7 +764,7 @@ private fun AsianBmiTable(
                         text = stringResource(R.string.txt_text_placeholder_44),
                         style = MaterialTheme.typography.labelSmall,
                         color = catColor,
-                        fontSize = 10.sp
+                        fontSize = 12.sp
                     )
                 }
             }
@@ -781,7 +786,7 @@ private fun MetricCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -815,8 +820,8 @@ private fun MetricCard(
                     )
                     Text(
                         text = formulaText,
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -851,8 +856,8 @@ private fun InfoNote() {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(R.string.txt_these_additional_metrics_provi),
-            style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
             lineHeight = 16.sp
         )
     }

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -315,7 +316,7 @@ private fun GoalSetterView(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                 )
             ) {
                 Row(
@@ -366,7 +367,7 @@ private fun GoalSetterView(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     )
                 ) {
                     Row(
@@ -856,6 +857,8 @@ private fun AnimatedProgressBar(
     currentBMI: Float,
     targetBMI: Float
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val primaryColor = MaterialTheme.colorScheme.primary
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
 
@@ -874,7 +877,7 @@ private fun AnimatedProgressBar(
                     .clip(RoundedCornerShape(12.dp))
                     .background(
                         brush = Brush.horizontalGradient(
-                            colors = listOf(
+                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                 primaryColor.copy(alpha = 0.7f),
                                 primaryColor
                             )
@@ -962,7 +965,7 @@ private fun GoalReachedCelebration() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Healthy.copy(alpha = 0.15f)
+            containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.15f))
         ),
         border = androidx.compose.foundation.BorderStroke(
             width = 2.dp,

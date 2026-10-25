@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -64,6 +65,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
@@ -138,7 +140,7 @@ fun BmiTrendSection(
                 Text(
                     stringResource(R.string.txt_loading_trend_data),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                 )
             }
         } else if (!trendData.hasEnoughData) {
@@ -190,11 +192,13 @@ fun BmiTrendSection(
 
 @Composable
 private fun TrendHeader(readingsCount: Int) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = TrendAccent.copy(alpha = 0.05f)
+            containerColor = AppColors.surface(TrendAccent.copy(alpha = 0.05f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -210,14 +214,14 @@ private fun TrendHeader(readingsCount: Int) {
                     .clip(RoundedCornerShape(12.dp))
                     .background(
                         Brush.linearGradient(
-                            listOf(TrendAccent.copy(alpha = 0.15f), TrendAccent.copy(alpha = 0.08f))
+                            if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(TrendAccent.copy(alpha = 0.15f), TrendAccent.copy(alpha = 0.08f))
                         )
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     Icons.Outlined.Timeline, null,
-                    tint = TrendAccent,
+                    tint = AppColors.icon(TrendAccent),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -231,7 +235,7 @@ private fun TrendHeader(readingsCount: Int) {
                 Text(
                     "$readingsCount reading${if (readingsCount != 1) "s" else ""} tracked",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                 )
             }
         }
@@ -257,7 +261,7 @@ private fun NotEnoughDataCard(readingsCount: Int) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -278,7 +282,7 @@ private fun NotEnoughDataCard(readingsCount: Int) {
             ) {
                 Icon(
                     Icons.Filled.BarChart, null,
-                    tint = TrendAccent.copy(alpha = 0.5f),
+                    tint = AppColors.icon(TrendAccent).copy(alpha = 0.5f),
                     modifier = Modifier.size(32.dp)
                 )
             }
@@ -300,7 +304,7 @@ private fun NotEnoughDataCard(readingsCount: Int) {
                 else
                     "You have $readingsCount reading so far. Calculate your BMI again later to see how your trend changes over time!",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                 textAlign = TextAlign.Center,
                 lineHeight = 22.sp
             )
@@ -310,7 +314,6 @@ private fun NotEnoughDataCard(readingsCount: Int) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(
                     Icons.Outlined.Timeline to "Track weekly",
-                    Icons.Outlined.TrendingUp to "See trends",
                     Icons.Outlined.Flag to "Set goals"
                 ).forEach { (icon, label) ->
                     Surface(
@@ -325,14 +328,14 @@ private fun NotEnoughDataCard(readingsCount: Int) {
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
-                                tint = TrendAccent.copy(alpha = 0.7f),
+                                tint = AppColors.icon(TrendAccent.copy(alpha = 0.7f)),
                                 modifier = Modifier.size(14.dp)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 label,
-                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-                                color = TrendAccent.copy(alpha = 0.7f)
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                                color = AppColors.text(TrendAccent.copy(alpha = 0.7f))
                             )
                         }
                     }
@@ -401,13 +404,13 @@ private fun ComparisonCard(stats: BmiTrendStats) {
                 Text(
                     text = "$changeText since last check",
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = changeColor
+                    color = AppColors.text(changeColor)
                 )
                 if (timeSince.isNotEmpty()) {
                     Text(
                         text = "Previous: ${String.format("%.1f", stats.previousBmi)} • $timeSince",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -421,7 +424,7 @@ private fun ComparisonCard(stats: BmiTrendStats) {
                 Text(
                     stringResource(R.string.txt_current),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                 )
             }
         }
@@ -456,7 +459,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -491,6 +494,13 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
             // Graph
             val graphHeight = 200.dp
             val surfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+            val darkChart = AppColors.isDark
+            val graphLine = AppColors.accent(GraphLineColor)
+            val sameDateCounts = points.groupingBy { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it.timestamp)) }.eachCount()
+            val xLabels = points.map { point ->
+                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(point.timestamp))
+                if ((sameDateCounts[date] ?: 0) > 1) SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(point.timestamp)) else formatShortDate(point.timestamp)
+            }
 
             Box(
                 modifier = Modifier
@@ -542,10 +552,10 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
 
                     // ── Background Zones ──────────────────────────────
                     val zones = listOf(
-                        Triple(0.0, 18.5, ZoneUnderweight.copy(alpha = 0.06f)),
-                        Triple(18.5, 25.0, ZoneNormal.copy(alpha = 0.08f)),
-                        Triple(25.0, 30.0, ZoneOverweight.copy(alpha = 0.06f)),
-                        Triple(30.0, 50.0, ZoneObese.copy(alpha = 0.05f))
+                        Triple(0.0, 18.5, ZoneUnderweight.copy(alpha = if (darkChart) 0.20f else 0.06f)),
+                        Triple(18.5, 25.0, ZoneNormal.copy(alpha = if (darkChart) 0.18f else 0.08f)),
+                        Triple(25.0, 30.0, ZoneOverweight.copy(alpha = if (darkChart) 0.20f else 0.06f)),
+                        Triple(30.0, 50.0, ZoneObese.copy(alpha = if (darkChart) 0.20f else 0.05f))
                     )
 
                     zones.forEach { (low, high, color) ->
@@ -584,8 +594,8 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                             8f,
                             y + 4f,
                             android.graphics.Paint().apply {
-                                color = surfaceVariant.copy(alpha = 0.4f).hashCode()
-                                textSize = 9.sp.toPx()
+                                color = (if (darkChart) surfaceVariant else surfaceVariant.copy(alpha = 0.4f)).toArgb()
+                                textSize = 12.sp.toPx()
                                 isAntiAlias = true
                             }
                         )
@@ -606,14 +616,14 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                         // Glow effect
                         drawPath(
                             path = linePath,
-                            color = GraphLineColor.copy(alpha = 0.15f),
+                            color = graphLine.copy(alpha = 0.15f),
                             style = Stroke(width = 8.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
                         )
 
                         // Main line
                         drawPath(
                             path = linePath,
-                            color = GraphLineColor,
+                            color = graphLine,
                             style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
                         )
 
@@ -676,14 +686,14 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                     val step = ((points.size - 1).toFloat() / (labelCount - 1).coerceAtLeast(1)).toInt().coerceAtLeast(1)
                     for (i in points.indices step step) {
                         val x = indexToX(i)
-                        val dateStr = formatShortDate(points[i].timestamp)
+                        val dateStr = xLabels[i]
                         drawContext.canvas.nativeCanvas.drawText(
                             dateStr,
                             x - 16f,
                             height - 6f,
                             android.graphics.Paint().apply {
-                                color = surfaceVariant.copy(alpha = 0.4f).hashCode()
-                                textSize = 9.sp.toPx()
+                                color = (if (darkChart) surfaceVariant else surfaceVariant.copy(alpha = 0.4f)).toArgb()
+                                textSize = 12.sp.toPx()
                                 isAntiAlias = true
                                 textAlign = android.graphics.Paint.Align.CENTER
                             }
@@ -715,7 +725,7 @@ private fun LegendDot(color: Color, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(color))
         Spacer(modifier = Modifier.width(4.dp))
-        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)))
     }
 }
 
@@ -724,7 +734,7 @@ private fun ZoneLegend(color: Color, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(modifier = Modifier.size(10.dp, 6.dp).clip(RoundedCornerShape(2.dp)).background(color.copy(alpha = 0.4f)))
         Spacer(modifier = Modifier.width(4.dp))
-        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)))
     }
 }
 
@@ -748,15 +758,15 @@ private fun PointTooltip(point: BmiTrendPoint, onDismiss: () -> Unit) {
                 Text(
                     "BMI ${String.format("%.1f", point.bmiValue)} — ${point.category.label}",
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = catColor
+                    color = AppColors.text(catColor)
                 )
                 Text(
                     "${formatFullDate(point.timestamp)} • ${point.inputSummary}",
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                 )
             }
-            IconButton(onClick = onDismiss, modifier = Modifier.size(24.dp)) {
+            IconButton(onClick = onDismiss, modifier = Modifier.size(48.dp)) {
                 Icon(Icons.Filled.Close, "Dismiss", modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             }
         }
@@ -771,7 +781,7 @@ private fun StatisticsCard(stats: BmiTrendStats) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -823,7 +833,7 @@ private fun StatisticsCard(stats: BmiTrendStats) {
                 Text(
                     "${stats.totalReadings} total readings",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
                 )
             }
         }
@@ -836,13 +846,13 @@ private fun StatItem(label: String, value: String, color: Color) {
         Text(
             value,
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            color = color
+            color = AppColors.text(color)
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
         )
     }
 }
