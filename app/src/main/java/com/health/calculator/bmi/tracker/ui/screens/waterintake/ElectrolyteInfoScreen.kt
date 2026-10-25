@@ -1,6 +1,7 @@
 // ui/screens/waterintake/ElectrolyteInfoScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -105,7 +106,7 @@ fun ElectrolyteInfoScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -215,6 +216,8 @@ fun ElectrolyteInfoScreen(
 
 @Composable
 private fun ElectrolyteHeaderCard() {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -226,7 +229,7 @@ private fun ElectrolyteHeaderCard() {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             FeatureColors.CalorieDeep,
                             FeatureColors.CalorieStart,
                             FeatureColors.CalorieEnd
@@ -247,20 +250,20 @@ private fun ElectrolyteHeaderCard() {
                 ) {
                     Text(
                         stringResource(R.string.txt_beyond_water),
-                        color = Color.White.copy(alpha = 0.9f),
+                        color = AppColors.text(Color.White.copy(alpha = 0.9f)),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
                     Text(
                         stringResource(R.string.txt_understanding_electrolytes),
-                        color = Color.White,
+                        color = AppColors.text(Color.White),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp,
                         lineHeight = 26.sp
                     )
                     Text(
                         stringResource(R.string.txt_learn_when_and_why_your_body_n),
-                        color = Color.White.copy(alpha = 0.85f),
+                        color = AppColors.text(Color.White.copy(alpha = 0.85f)),
                         fontSize = 13.sp,
                         lineHeight = 18.sp
                     )
@@ -327,14 +330,14 @@ private fun BasicElectrolyteInfoCard() {
                         "They're essential for many body functions and are lost through sweat, urine, and other bodily fluids.",
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
             )
 
             // Key point callout
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = HealthColors.Caution.copy(alpha = 0.12f)
+                    containerColor = AppColors.surface(HealthColors.Caution.copy(alpha = 0.12f))
                 )
             ) {
                 Row(
@@ -358,7 +361,7 @@ private fun BasicElectrolyteInfoCard() {
                         },
                         fontSize = 13.sp,
                         lineHeight = 19.sp,
-                        color = HealthColors.Caution
+                        color = AppColors.text(HealthColors.Caution)
                     )
                 }
             }
@@ -389,7 +392,7 @@ private fun BasicElectrolyteInfoCard() {
                     Text(
                         text,
                         fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -499,7 +502,7 @@ private fun ElectrolyteDetailCard(data: ElectrolyteData) {
             .clickable { expanded = !expanded },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = data.color.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(data.color.copy(alpha = 0.08f))
         )
     ) {
         Column(
@@ -537,27 +540,27 @@ private fun ElectrolyteDetailCard(data: ElectrolyteData) {
                             data.name,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = data.color
+                            color = AppColors.text(data.color)
                         )
                         Card(
                             shape = RoundedCornerShape(4.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = data.color.copy(alpha = 0.2f)
+                                containerColor = AppColors.surface(data.color.copy(alpha = 0.2f))
                             )
                         ) {
                             Text(
                                 data.symbol,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = data.color
+                                color = AppColors.text(data.color)
                             )
                         }
                     }
                     Text(
                         "Daily need: ${data.dailyNeed}",
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
 
@@ -588,25 +591,25 @@ private fun ElectrolyteDetailCard(data: ElectrolyteData) {
                         stringResource(R.string.txt_function),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp,
-                        color = data.color
+                        color = AppColors.text(data.color)
                     )
                     Text(
                         data.function,
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
 
                     Text(
                         stringResource(R.string.txt_deficiency_signs),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp,
-                        color = HealthColors.Caution
+                        color = AppColors.text(HealthColors.Caution)
                     )
                     Text(
                         data.deficiencySign,
                         fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                     )
                 }
             }
@@ -654,7 +657,7 @@ private fun WhenToConsiderCard() {
                         "you may need to replace electrolytes as well:",
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
             )
 
             val situations = listOf(
@@ -761,15 +764,15 @@ private fun SituationCard(data: SituationData) {
                 Card(
                     shape = RoundedCornerShape(4.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = priorityColor.copy(alpha = 0.15f)
+                        containerColor = AppColors.surface(priorityColor.copy(alpha = 0.15f))
                     )
                 ) {
                     Text(
                         data.priority,
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        fontSize = 9.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = priorityColor
+                        color = AppColors.text(priorityColor)
                     )
                 }
             }
@@ -783,7 +786,7 @@ private fun SituationCard(data: SituationData) {
                     data.description,
                     fontSize = 12.sp,
                     lineHeight = 17.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                     modifier = Modifier.padding(top = 6.dp)
                 )
             }
@@ -791,8 +794,8 @@ private fun SituationCard(data: SituationData) {
             if (!expanded) {
                 Text(
                     stringResource(R.string.txt_tap_for_details_1),
-                    fontSize = 11.sp,
-                    color = priorityColor.copy(alpha = 0.6f),
+                    fontSize = 12.sp,
+                    color = AppColors.text(priorityColor.copy(alpha = 0.6f)),
                     modifier = Modifier.padding(top = 2.dp)
                 )
             }
@@ -840,7 +843,7 @@ private fun NaturalSourcesCard() {
                         "Here are great food sources for each electrolyte:",
                 fontSize = 13.sp,
                 lineHeight = 19.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
             )
 
             // Sodium
@@ -903,7 +906,7 @@ private fun NaturalSourcesCard() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer)
                 )
             ) {
                 Row(
@@ -955,7 +958,7 @@ private fun FoodSourceRow(
                 electrolyte,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                color = color
+                color = AppColors.text(color)
             )
         }
 
@@ -970,7 +973,7 @@ private fun FoodSourceRow(
                 Card(
                     shape = RoundedCornerShape(10.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = color.copy(alpha = 0.06f)
+                        containerColor = AppColors.surface(color.copy(alpha = 0.06f))
                     )
                 ) {
                     Column(
@@ -986,14 +989,14 @@ private fun FoodSourceRow(
                         )
                         Text(
                             food.name,
-                            fontSize = 11.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             textAlign = TextAlign.Center
                         )
                         Text(
                             food.amount,
-                            fontSize = 9.sp,
-                            color = color.copy(alpha = 0.8f),
+                            fontSize = 12.sp,
+                            color = AppColors.text(color.copy(alpha = 0.8f)),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -1007,6 +1010,8 @@ private fun FoodSourceRow(
 
 @Composable
 private fun DIYElectrolyteDrinksCard() {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val clipboardManager = LocalClipboardManager.current
     val haptic = LocalHapticFeedback.current
     var showCopied by remember { mutableStateOf(false) }
@@ -1029,7 +1034,7 @@ private fun DIYElectrolyteDrinksCard() {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(FeatureColors.StepsStart, FeatureColors.WaterDeep)
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(FeatureColors.StepsStart, FeatureColors.WaterDeep)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 )
@@ -1052,27 +1057,27 @@ private fun DIYElectrolyteDrinksCard() {
                         stringResource(R.string.txt_diy_electrolyte_drink),
                         fontWeight = FontWeight.Bold,
                         fontSize = 17.sp,
-                        color = Color.White
+                        color = AppColors.text(Color.White)
                     )
                 }
 
                 Text(
                     stringResource(R.string.txt_make_your_own_natural_electrol),
                     fontSize = 13.sp,
-                    color = Color.White.copy(alpha = 0.85f)
+                    color = AppColors.text(Color.White.copy(alpha = 0.85f))
                 )
                 Text(
                     "General beverage idea only; this mixture is not a treatment for dehydration and does not replace commercial ORS.",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     lineHeight = 16.sp,
-                    color = Color.White.copy(alpha = 0.78f)
+                    color = AppColors.text(Color.White.copy(alpha = 0.78f))
                 )
 
                 // Recipe card
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White.copy(alpha = 0.15f)
+                        containerColor = AppColors.surface(Color.White.copy(alpha = 0.15f))
                     )
                 ) {
                     Column(
@@ -1085,7 +1090,7 @@ private fun DIYElectrolyteDrinksCard() {
                             stringResource(R.string.txt_homemade_sports_drink),
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = Color.White
+                            color = AppColors.text(Color.White)
                         )
 
                         HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
@@ -1111,7 +1116,7 @@ private fun DIYElectrolyteDrinksCard() {
                                 Text(
                                     text,
                                     fontSize = 13.sp,
-                                    color = Color.White.copy(alpha = 0.9f)
+                                    color = AppColors.text(Color.White.copy(alpha = 0.9f))
                                 )
                             }
                         }
@@ -1121,7 +1126,7 @@ private fun DIYElectrolyteDrinksCard() {
                         Text(
                             stringResource(R.string.txt_mix_all_ingredients_until_diss),
                             fontSize = 12.sp,
-                            color = Color.White.copy(alpha = 0.8f),
+                            color = AppColors.text(Color.White.copy(alpha = 0.8f)),
                             fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
                         )
                     }
@@ -1158,9 +1163,9 @@ private fun DIYElectrolyteDrinksCard() {
                 Text(
                     stringResource(R.string.txt_variations_add_coconut_water_f) +
                             "For a sugar-free version, use a small amount of stevia instead of honey.",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     lineHeight = 16.sp,
-                    color = Color.White.copy(alpha = 0.7f)
+                    color = AppColors.text(Color.White.copy(alpha = 0.7f))
                 )
             }
         }
@@ -1206,7 +1211,7 @@ private fun WHOORSCard() {
             Card(
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = HealthColors.Danger.copy(alpha = 0.10f)
+                    containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.10f))
                 )
             ) {
                 Row(
@@ -1227,7 +1232,7 @@ private fun WHOORSCard() {
                                 "Commercial oral rehydration products follow standardized formulations. The illustration below is not a WHO ORS recipe and is not a substitute for professional advice:",
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = HealthColors.Danger
+                        color = AppColors.text(HealthColors.Danger)
                     )
                 }
             }
@@ -1236,7 +1241,7 @@ private fun WHOORSCard() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = FeatureColors.BmiStart.copy(alpha = 0.10f)
+                    containerColor = AppColors.surface(FeatureColors.BmiStart.copy(alpha = 0.10f))
                 )
             ) {
                 Column(
@@ -1249,16 +1254,16 @@ private fun WHOORSCard() {
                         stringResource(R.string.txt_who_ors_formula_per_1_liter_wa),
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = FeatureColors.BmiDeep
+                        color = AppColors.text(FeatureColors.BmiDeep)
                     )
 
                     HorizontalDivider(color = FeatureColors.BmiDeep.copy(alpha = 0.1f))
 
                     Text(
                         "Use a commercial oral rehydration product for illness-related dehydration. Homemade mixtures can have inaccurate concentrations and are not suitable for severe symptoms.",
-                        fontSize = 11.sp,
+                        fontSize = 12.sp,
                         lineHeight = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                     )
 
                     val ingredients = listOf(
@@ -1288,8 +1293,8 @@ private fun WHOORSCard() {
                                 )
                                 Text(
                                     desc,
-                                    fontSize = 11.sp,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                    fontSize = 12.sp,
+                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                                 )
                             }
                         }
@@ -1302,7 +1307,7 @@ private fun WHOORSCard() {
                                 "Follow the product label or a clinician's instructions; avoid using a fixed volume for everyone.",
                         fontSize = 12.sp,
                         lineHeight = 17.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                     )
                 }
             }
@@ -1331,7 +1336,7 @@ private fun WHOORSCard() {
                         text,
                         fontSize = 12.sp,
                         lineHeight = 17.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                     )
                 }
             }
@@ -1347,7 +1352,7 @@ private fun ElectrolyteImbalanceWarningsCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Warning.copy(alpha = 0.10f)
+            containerColor = AppColors.surface(HealthColors.Warning.copy(alpha = 0.10f))
         ),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -1371,7 +1376,7 @@ private fun ElectrolyteImbalanceWarningsCard() {
                     stringResource(R.string.txt_signs_of_electrolyte_imbalance),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleSmall,
-                    color = HealthColors.Caution
+                    color = AppColors.text(HealthColors.Caution)
                 )
             }
 
@@ -1381,7 +1386,7 @@ private fun ElectrolyteImbalanceWarningsCard() {
                 stringResource(R.string.txt_watch_for_these_warning_signs_),
                 fontSize = 13.sp,
                 lineHeight = 19.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
             )
 
             val warnings = listOf(
@@ -1421,8 +1426,8 @@ private fun ElectrolyteImbalanceWarningsCard() {
                         )
                         Text(
                             detail,
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            fontSize = 12.sp,
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         )
                     }
                 }
@@ -1432,7 +1437,7 @@ private fun ElectrolyteImbalanceWarningsCard() {
             Card(
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = HealthColors.Danger.copy(alpha = 0.12f)
+                    containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.12f))
                 )
             ) {
                 Row(
@@ -1453,7 +1458,7 @@ private fun ElectrolyteImbalanceWarningsCard() {
                                 "loss of consciousness, severe confusion, or significant cardiac irregularities.",
                         fontSize = 12.sp,
                         lineHeight = 17.sp,
-                        color = HealthColors.Danger,
+                        color = AppColors.text(HealthColors.Danger),
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -1470,7 +1475,7 @@ private fun ElectrolyteDisclaimerCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
         )
     ) {
         Row(
@@ -1489,7 +1494,7 @@ private fun ElectrolyteDisclaimerCard() {
                     stringResource(R.string.txt_medical_disclaimer),
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.error
+                    color = AppColors.text(MaterialTheme.colorScheme.error)
                 )
                 Text(
                     stringResource(R.string.txt_this_information_is_for_educat_2) +
@@ -1497,9 +1502,9 @@ private fun ElectrolyteDisclaimerCard() {
                             "People with kidney disease, heart conditions, or on certain medications should consult " +
                             "a healthcare provider before significantly changing electrolyte intake. " +
                             "For severe dehydration, always seek professional medical care.",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     lineHeight = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
         }

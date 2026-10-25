@@ -115,7 +115,7 @@ fun ProfileImagePickerDialog(
             ListItem(
                 headlineContent = { Text(stringResource(R.string.txt_remove_current_picture), color = MaterialTheme.colorScheme.error) },
                 leadingContent = { Icon(Icons.Default.AddPhotoAlternate, null, tint = MaterialTheme.colorScheme.error) },
-                modifier = Modifier.clickable { 
+                modifier = Modifier.clickable {
                     onImageSelected(null)
                     onDismiss()
                 }

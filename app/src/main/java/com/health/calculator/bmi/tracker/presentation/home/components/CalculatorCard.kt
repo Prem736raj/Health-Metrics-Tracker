@@ -2,6 +2,8 @@
 
 package com.health.calculator.bmi.tracker.presentation.home.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -158,7 +160,7 @@ fun CalculatorCard(
             ),
         shape = MetricTileShape,
         colors = CardDefaults.cardColors(
-            containerColor = cardBackgroundColor
+            containerColor = AppColors.surface(cardBackgroundColor)
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
@@ -239,7 +241,7 @@ fun CalculatorCard(
                         text = stringResource(R.string.txt_calculate),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = data.color
+                        color = AppColors.text(data.color)
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Icon(
@@ -325,7 +327,7 @@ fun CalculatorCardWide(
             ),
         shape = MetricTileShape,
         colors = CardDefaults.cardColors(
-            containerColor = cardBackgroundColor
+            containerColor = AppColors.surface(cardBackgroundColor)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -50,7 +51,7 @@ fun MetabolicSyndromeLastResult(
                 text = "${latestRecord.criteriaMet}/5 • ${latestRecord.riskLevel}",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = riskColor
+                color = AppColors.text(riskColor)
             )
         }
     }

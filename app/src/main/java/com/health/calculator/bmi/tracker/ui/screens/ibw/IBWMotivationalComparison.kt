@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -238,8 +239,8 @@ private fun WeightRangeVisual(
         Text(
             "${"%.0f".format(minVal)} $unit",
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-            fontSize = 9.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)),
+            fontSize = 12.sp
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -252,15 +253,15 @@ private fun WeightRangeVisual(
             Text(
                 stringResource(R.string.txt_healthy_range),
                 style = MaterialTheme.typography.labelSmall,
-                color = healthyColor,
-                fontSize = 9.sp
+                color = AppColors.text(healthyColor),
+                fontSize = 12.sp
             )
         }
         Text(
             "${"%.0f".format(maxVal)} $unit",
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-            fontSize = 9.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)),
+            fontSize = 12.sp
         )
     }
 }
@@ -300,9 +301,9 @@ private fun WeightBubble(
                         text = weight,
                         style = MaterialTheme.typography.labelMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            fontSize = 11.sp
+                            fontSize = 12.sp
                         ),
-                        color = color
+                        color = AppColors.text(color)
                     )
                 }
             }
@@ -311,14 +312,14 @@ private fun WeightBubble(
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            fontSize = 10.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+            fontSize = 12.sp
         )
         Text(
             text = unit,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-            fontSize = 8.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)),
+            fontSize = 12.sp
         )
     }
 }
@@ -396,13 +397,13 @@ private fun MotivationalMessageCard(
                 Text(
                     text = content.title,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = content.color
+                    color = AppColors.text(content.color)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = content.message,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                     lineHeight = 18.sp
                 )
             }

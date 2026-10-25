@@ -86,6 +86,8 @@ class StatisticsRepository private constructor(
             val latestValue = latest.resultValue.toDoubleOrNull() ?: return@map null
             val previousValue = previous.resultValue.toDoubleOrNull() ?: return@map null
             
+            if (!latestValue.isFinite() || !previousValue.isFinite()) return@map null
+
             val change = ((latestValue - previousValue) / previousValue.coerceAtLeast(0.1)) * 100
             val direction = when {
                 abs(change) < 1.0 -> TrendDirection.STABLE
@@ -111,7 +113,7 @@ class StatisticsRepository private constructor(
                 .mapValues { it.value.size }
             
             val months = mutableListOf<HeatmapMonth>()
-            val calendar = Calendar.getInstance()
+            val calendar = Calendar.getInstance().apply { set(Calendar.DAY_OF_MONTH, 1) }
             
             // Generate last 6 months
             for (i in 0 until 6) {
@@ -226,7 +228,7 @@ class StatisticsRepository private constructor(
         
         return when (type) {
             CalculatorType.BMI -> {
-                if (value > 25.0) "Consider a balanced diet and regular exercise to reach your target weight."
+                if (value > 25.0) "Continue recording your measurements to observe changes over time."
                 else "Focus on nutritious meals and healthy weight maintenance."
             }
             CalculatorType.WATER_INTAKE -> "Try setting reminders to drink a glass of water every hour."

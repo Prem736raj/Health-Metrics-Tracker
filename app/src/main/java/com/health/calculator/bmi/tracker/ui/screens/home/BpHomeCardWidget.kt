@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -50,12 +51,12 @@ fun BpHomeCardOverlay(
                 "${info.lastSystolic}/${info.lastDiastolic}",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
-                color = categoryColor
+                color = AppColors.text(categoryColor)
             )
             Text(
                 stringResource(R.string.txt_mmhg_1),
                 style = MaterialTheme.typography.labelSmall,
-                color = categoryColor.copy(alpha = 0.6f)
+                color = AppColors.text(categoryColor.copy(alpha = 0.6f))
             )
         }
 
@@ -66,12 +67,12 @@ fun BpHomeCardOverlay(
             Text(
                 info.lastCategory.displayName,
                 style = MaterialTheme.typography.labelSmall,
-                color = categoryColor.copy(alpha = 0.8f)
+                color = AppColors.text(categoryColor.copy(alpha = 0.8f))
             )
             Text(
                 "• ${info.lastReadingTime}",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f))
             )
         }
 
@@ -90,7 +91,7 @@ fun BpHomeCardOverlay(
                 Text(
                     "${info.streakDays}d streak",
                     style = MaterialTheme.typography.labelSmall,
-                    color = HealthColors.Warning.copy(alpha = 0.8f),
+                    color = AppColors.text(HealthColors.Warning.copy(alpha = 0.8f)),
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -123,7 +124,7 @@ fun BpHomeCardOverlay(
                     stringResource(R.string.txt_needs_attention),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = HealthColors.Danger.copy(alpha = pulseAlpha)
+                    color = AppColors.text(HealthColors.Danger.copy(alpha = pulseAlpha))
                 )
             }
         }

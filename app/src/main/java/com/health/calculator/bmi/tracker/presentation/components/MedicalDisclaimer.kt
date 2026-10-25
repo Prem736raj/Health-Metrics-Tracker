@@ -2,6 +2,8 @@
 
 package com.health.calculator.bmi.tracker.presentation.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -53,7 +55,7 @@ fun MedicalDisclaimerShort(
         Text(
             text = AppConstants.MEDICAL_DISCLAIMER_SHORT,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
             textAlign = TextAlign.Start
         )
     }
@@ -77,7 +79,7 @@ fun MedicalDisclaimerFull(
                 .fillMaxWidth()
                 .padding(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
             ),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -95,7 +97,7 @@ fun MedicalDisclaimerFull(
                 Text(
                     text = AppConstants.MEDICAL_DISCLAIMER_FULL,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
                     lineHeight = MaterialTheme.typography.bodyMedium.lineHeight
                 )
             }

@@ -71,7 +71,7 @@ fun HealthOverviewSection(
         HealthOverviewItem(overview.metabolicSyndromeStatus, onMetricClick)
 
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         // Progress Metrics
         Text(
             text = stringResource(R.string.txt_activity_nutrition),

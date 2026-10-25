@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -47,9 +48,9 @@ fun WeightGoalProgressCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (progress.isGoalReached)
+            containerColor = AppColors.surface(if (progress.isGoalReached)
                 HealthColors.Healthy.copy(alpha = 0.1f)
-            else MaterialTheme.colorScheme.surface
+            else MaterialTheme.colorScheme.surface)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -63,8 +64,8 @@ fun WeightGoalProgressCard(
                     text = if (progress.isGoalReached) "Goal reached" else "Goal progress",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (progress.isGoalReached) HealthColors.Healthy
-                    else MaterialTheme.colorScheme.onSurface
+                    color = AppColors.text(if (progress.isGoalReached) HealthColors.Healthy
+                    else MaterialTheme.colorScheme.onSurface)
                 )
 
                 if (progress.isGoalReached) {
@@ -107,7 +108,7 @@ fun WeightGoalProgressCard(
                     text = "${(completion * 100).toInt()}% complete",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = progressColor
+                    color = AppColors.text(progressColor)
                 )
                 if (!progress.isGoalReached) {
                     Text(
@@ -187,7 +188,7 @@ fun WeightGoalProgressCard(
                 Text(
                     text = "Next milestone: $nextMilestone%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                 )
             }
         }
@@ -212,8 +213,8 @@ private fun GoalInfoItem(
             style = if (isHighlighted) MaterialTheme.typography.titleMedium
             else MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Bold,
-            color = if (isHighlighted) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurface
+            color = AppColors.text(if (isHighlighted) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.onSurface)
         )
         Text(
             text = unit,

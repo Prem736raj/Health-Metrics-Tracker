@@ -1,6 +1,7 @@
 // ui/screens/bloodpressure/BpReminderScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import android.Manifest
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
@@ -65,7 +66,7 @@ fun BpReminderScreen(
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface)
             )
         }
     ) { padding ->
@@ -80,7 +81,7 @@ fun BpReminderScreen(
             // Recommendation banner
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -174,7 +175,7 @@ fun BpReminderScreen(
                     Text(
                         stringResource(R.string.txt_set_a_reminder_for_your_next_d),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                     OutlinedButton(
                         onClick = {
@@ -294,7 +295,7 @@ private fun ReminderCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                    Text(description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    Text(description, style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
                 }
                 Switch(
                     checked = isEnabled,

@@ -1,6 +1,7 @@
 // ui/screens/waterintake/WaterEducationScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -72,7 +73,7 @@ fun WaterEducationScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -162,6 +163,8 @@ fun WaterEducationScreen(
 
 @Composable
 private fun EducationHeaderCard() {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -173,7 +176,7 @@ private fun EducationHeaderCard() {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(FeatureColors.WaterStart, FeatureColors.WaterDeep)
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(FeatureColors.WaterStart, FeatureColors.WaterDeep)
                     ),
                     shape = RoundedCornerShape(20.dp)
                 )
@@ -192,7 +195,7 @@ private fun EducationHeaderCard() {
                 )
                 Text(
                     "Everything You Need to\nKnow About Hydration",
-                    color = Color.White,
+                    color = AppColors.text(Color.White),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center,
@@ -200,7 +203,7 @@ private fun EducationHeaderCard() {
                 )
                 Text(
                     stringResource(R.string.txt_evidence_based_information_to__1),
-                    color = Color.White.copy(alpha = 0.8f),
+                    color = AppColors.text(Color.White.copy(alpha = 0.8f)),
                     fontSize = 13.sp,
                     textAlign = TextAlign.Center
                 )
@@ -254,7 +257,7 @@ private fun WhyHydrationMattersSection() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant)
                 ),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -286,11 +289,11 @@ private fun QuickStatItem(value: String, label: String) {
             value,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 22.sp,
-            color = FeatureColors.WaterStart
+            color = AppColors.text(FeatureColors.WaterStart)
         )
         Text(
             label,
-            fontSize = 10.sp,
+            fontSize = 12.sp,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = 14.sp
@@ -389,7 +392,7 @@ private fun HowMuchWaterSection() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = HealthColors.HealthyLight.copy(alpha = 0.75f)
+                    containerColor = AppColors.surface(HealthColors.HealthyLight.copy(alpha = 0.75f))
                 )
             ) {
                 Column(
@@ -398,7 +401,7 @@ private fun HowMuchWaterSection() {
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(stringResource(R.string.txt_general_guidelines), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = FeatureColors.StepsDeep)
+                    Text(stringResource(R.string.txt_general_guidelines), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = AppColors.text(FeatureColors.StepsDeep))
                     HorizontalDivider(color = FeatureColors.StepsDeep.copy(alpha = 0.16f))
 
                     GuidelineRow("📚", "National Academies reference", "Adequate intake includes food and beverages; healthy adults vary by sex, climate, activity, and diet")
@@ -455,7 +458,7 @@ private fun MythBustCard(myth: String, reality: String) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant)
         )
     ) {
         Column(
@@ -474,13 +477,13 @@ private fun MythBustCard(myth: String, reality: String) {
                     tint = HealthColors.Caution,
                     modifier = Modifier.size(20.dp)
                 )
-                Text(stringResource(R.string.txt_myth), fontWeight = FontWeight.ExtraBold, fontSize = 14.sp, color = HealthColors.Caution)
+                Text(stringResource(R.string.txt_myth), fontWeight = FontWeight.ExtraBold, fontSize = 14.sp, color = AppColors.text(HealthColors.Caution))
             }
             Text(
                 myth,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = HealthColors.Caution,
+                color = AppColors.text(HealthColors.Caution),
                 fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
             )
 
@@ -497,7 +500,7 @@ private fun MythBustCard(myth: String, reality: String) {
                     modifier = Modifier.size(20.dp)
                 )
                 Column {
-                    Text(stringResource(R.string.txt_reality), fontWeight = FontWeight.ExtraBold, fontSize = 14.sp, color = HealthColors.Healthy)
+                    Text(stringResource(R.string.txt_reality), fontWeight = FontWeight.ExtraBold, fontSize = 14.sp, color = AppColors.text(HealthColors.Healthy))
                     Spacer(Modifier.height(4.dp))
                     Text(
                         reality,
@@ -547,7 +550,7 @@ private fun OverhydrationSection() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = HealthColors.CautionLight.copy(alpha = 0.75f)
+                    containerColor = AppColors.surface(HealthColors.CautionLight.copy(alpha = 0.75f))
                 )
             ) {
                 Row(
@@ -566,7 +569,7 @@ private fun OverhydrationSection() {
                                 "It's most common in endurance athletes and people who drink excessive amounts quickly.",
                         fontSize = 13.sp,
                         lineHeight = 19.sp,
-                        color = HealthColors.Caution
+                        color = AppColors.text(HealthColors.Caution)
                     )
                 }
             }
@@ -578,7 +581,7 @@ private fun OverhydrationSection() {
                         "water too quickly. Sodium is essential for nerve and muscle function. When diluted, cells can swell, " +
                         "which is particularly dangerous for brain cells.",
                 fontSize = 13.sp, lineHeight = 19.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
             )
 
             // Symptoms
@@ -615,8 +618,8 @@ private fun OverhydrationSection() {
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(name, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
-                        Text(description, fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        Text(description, fontSize = 12.sp,
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
                     }
                 }
             }
@@ -645,7 +648,7 @@ private fun OverhydrationSection() {
                         modifier = Modifier.size(18.dp)
                     )
                     Text(cleanLegacyMarker(text), fontSize = 13.sp, lineHeight = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)))
                 }
             }
 
@@ -719,7 +722,7 @@ private fun ExerciseHydrationSection() {
             // Electrolytes section
             Card(
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = HealthColors.HealthyLight.copy(alpha = 0.7f))
+                colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.HealthyLight.copy(alpha = 0.7f)))
             ) {
                 Column(
                     modifier = Modifier
@@ -727,14 +730,14 @@ private fun ExerciseHydrationSection() {
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(stringResource(R.string.txt_electrolytes_exercise), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = FeatureColors.WeightDeep)
+                    Text(stringResource(R.string.txt_electrolytes_exercise), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = AppColors.text(FeatureColors.WeightDeep))
                     HorizontalDivider(color = FeatureColors.WeightDeep.copy(alpha = 0.16f))
 
                     Text(
                         stringResource(R.string.txt_for_workouts_lasting_over_60_m) +
                                 "You need to replace electrolytes lost through sweat:",
                         fontSize = 13.sp, lineHeight = 19.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
 
                     val electrolytes = listOf(
@@ -760,7 +763,7 @@ private fun ExerciseHydrationSection() {
                             Column {
                                 Text(name, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
                                 Text(desc, fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
                             }
                         }
                     }
@@ -788,7 +791,7 @@ private fun ExercisePhaseCard(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.08f))
         )
     ) {
         Column(
@@ -818,7 +821,7 @@ private fun ExercisePhaseCard(
                         )
                         Text(
                             phase,
-                            color = Color.White,
+                            color = AppColors.text(Color.White),
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp
                         )
@@ -827,7 +830,7 @@ private fun ExercisePhaseCard(
                 Text(
                     timeframe,
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
 
@@ -836,7 +839,7 @@ private fun ExercisePhaseCard(
                     cleanLegacyMarker(rec),
                     fontSize = 13.sp,
                     lineHeight = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }
@@ -859,7 +862,7 @@ private fun SpecialNeedsSection() {
                 stringResource(R.string.txt_certain_conditions_and_situati) +
                         "Always consult your healthcare provider for personalized advice.",
                 fontSize = 13.sp, lineHeight = 19.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
             )
 
             // Pregnancy
@@ -965,7 +968,7 @@ private fun SpecialNeedCard(
             .clickable { expanded = !expanded },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.08f))
         )
     ) {
         Column(
@@ -997,7 +1000,7 @@ private fun SpecialNeedCard(
                         additionalMl,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = color
+                        color = AppColors.text(color)
                     )
                 }
                 val rotation by animateFloatAsState(
@@ -1037,7 +1040,7 @@ private fun SpecialNeedCard(
                             )
                             Text(
                                 detail, fontSize = 13.sp, lineHeight = 18.sp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                             )
                         }
                     }
@@ -1097,15 +1100,15 @@ private fun ExpandableEducationCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         title,
-                        color = Color.White,
+                        color = AppColors.text(Color.White),
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
                     )
                     if (badge != null) {
                         Text(
                             badge,
-                            color = Color.White.copy(alpha = 0.7f),
-                            fontSize = 11.sp
+                            color = AppColors.text(Color.White.copy(alpha = 0.7f)),
+                            fontSize = 12.sp
                         )
                     }
                 }
@@ -1143,7 +1146,7 @@ private fun InfoTipCard(title: String, text: String) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = FeatureColors.WaterStart.copy(alpha = 0.1f)
+            containerColor = AppColors.surface(FeatureColors.WaterStart.copy(alpha = 0.1f))
         )
     ) {
         Row(
@@ -1164,14 +1167,14 @@ private fun InfoTipCard(title: String, text: String) {
                     cleanLegacyMarker(title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    color = FeatureColors.WaterDeep
+                    color = AppColors.text(FeatureColors.WaterDeep)
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
                     cleanLegacyMarker(text),
                     fontSize = 12.sp,
                     lineHeight = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                 )
             }
         }
@@ -1184,7 +1187,7 @@ private fun MedicalDisclaimerCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
         )
     ) {
         Row(
@@ -1203,16 +1206,16 @@ private fun MedicalDisclaimerCard() {
                     stringResource(R.string.txt_medical_disclaimer),
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.error
+                    color = AppColors.text(MaterialTheme.colorScheme.error)
                 )
                 Text(
                     stringResource(R.string.txt_this_information_is_for_educat_3) +
                             "diagnosis, or treatment. Always consult your healthcare provider with questions about hydration " +
                             "and your specific health needs. Individual water requirements can vary significantly based on " +
                             "health conditions and medications.",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     lineHeight = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
         }

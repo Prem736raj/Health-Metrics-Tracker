@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/TDEESection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -195,7 +196,7 @@ private fun ActivityLevelSelector(
                     Text(
                         text = "Profile: ${profileLevel.displayName}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = HealthColors.Healthy,
+                        color = AppColors.text(HealthColors.Healthy),
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -294,10 +295,10 @@ private fun ActivityLevelCard(
                             text = "×${level.multiplier}",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = if (isSelected) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = AppColors.secondaryText(if (isSelected) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant),
                             modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp),
-                            fontSize = 10.sp
+                            fontSize = 12.sp
                         )
                     }
                 }
@@ -306,7 +307,7 @@ private fun ActivityLevelCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                     else MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 11.sp
+                    fontSize = 12.sp
                 )
             }
 
@@ -343,6 +344,8 @@ private fun ActivityLevelCard(
 // ============================================================
 @Composable
 private fun TDEEResultCard(tdeeData: TDEEData) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val animatedTDEE = remember { Animatable(0f) }
     LaunchedEffect(tdeeData.tdee) {
         animatedTDEE.snapTo(0f)
@@ -363,7 +366,7 @@ private fun TDEEResultCard(tdeeData: TDEEData) {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.horizontalGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             MaterialTheme.colorScheme.primary,
                             MaterialTheme.colorScheme.tertiary
                         )
@@ -377,7 +380,7 @@ private fun TDEEResultCard(tdeeData: TDEEData) {
                 Text(
                     text = stringResource(R.string.txt_your_daily_calorie_needs),
                     style = MaterialTheme.typography.labelLarge,
-                    color = WellnessPalette.OnHero.copy(alpha = 0.9f)
+                    color = AppColors.text(WellnessPalette.OnHero.copy(alpha = 0.9f))
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -386,14 +389,14 @@ private fun TDEEResultCard(tdeeData: TDEEData) {
                     text = "${animatedTDEE.value.toInt()}",
                     style = MaterialTheme.typography.displayLarge,
                     fontWeight = FontWeight.Bold,
-                    color = WellnessPalette.OnHero,
+                    color = AppColors.text(WellnessPalette.OnHero),
                     fontSize = 52.sp
                 )
 
                 Text(
                     text = stringResource(R.string.txt_kcal_day),
                     style = MaterialTheme.typography.titleMedium,
-                    color = WellnessPalette.OnHero.copy(alpha = 0.8f)
+                    color = AppColors.text(WellnessPalette.OnHero.copy(alpha = 0.8f))
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -416,7 +419,7 @@ private fun TDEEResultCard(tdeeData: TDEEData) {
                         Text(
                             text = "${tdeeData.activityLevel.displayName} (×${tdeeData.activityLevel.multiplier})",
                             style = MaterialTheme.typography.labelMedium,
-                            color = WellnessPalette.OnHero,
+                            color = AppColors.text(WellnessPalette.OnHero),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -526,7 +529,7 @@ private fun CalorieBreakdownCard(tdeeData: TDEEData) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 )
             ) {
                 Row(
@@ -551,7 +554,7 @@ private fun CalorieBreakdownCard(tdeeData: TDEEData) {
                         text = "${tdeeData.activityLevel.multiplier}",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = AppColors.text(MaterialTheme.colorScheme.tertiary)
                     )
                     Text(
                         text = stringResource(R.string.txt_text_placeholder_34),
@@ -695,7 +698,7 @@ private fun BreakdownLegendItem(
                 text = value,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.SemiBold,
-                color = color
+                color = AppColors.text(color)
             )
         }
     }
@@ -746,13 +749,13 @@ private fun StackedCalorieBar(tdeeData: TDEEData) {
             Text(
                 text = "BMR: ${tdeeData.bmr.toInt()}",
                 style = MaterialTheme.typography.labelSmall,
-                color = primaryColor,
+                color = AppColors.text(primaryColor),
                 fontWeight = FontWeight.Medium
             )
             Text(
                 text = "Activity: +${tdeeData.activityCalories.toInt()}",
                 style = MaterialTheme.typography.labelSmall,
-                color = tertiaryColor,
+                color = AppColors.text(tertiaryColor),
                 fontWeight = FontWeight.Medium
             )
         }
@@ -801,7 +804,7 @@ private fun CalorieGoalsCard(
                 text = stringResource(R.string.txt_tap_any_goal_to_see_details_an),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 11.sp
+                fontSize = 12.sp
             )
 
             Spacer(modifier = Modifier.height(14.dp))
@@ -843,8 +846,8 @@ private fun CalorieGoalsCard(
                             " Actual results vary with individual health, appetite and activity. " +
                             "Very low targets or intentional weight change should be reviewed with a qualified professional.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                    fontSize = 10.sp,
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                    fontSize = 12.sp,
                     lineHeight = 14.sp
                 )
             }
@@ -888,7 +891,7 @@ private fun CalorieGoalItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = containerColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(containerColor)),
         border = if (isExpanded) androidx.compose.foundation.BorderStroke(1.dp, borderColor)
         else null,
         onClick = onClick
@@ -914,7 +917,7 @@ private fun CalorieGoalItem(
                         text = goal.name,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = if (isExpanded) FontWeight.Bold else FontWeight.Medium,
-                        color = if (isExpanded) goalColor else MaterialTheme.colorScheme.onSurface
+                        color = AppColors.text(if (isExpanded) goalColor else MaterialTheme.colorScheme.onSurface)
                     )
                 }
 
@@ -923,14 +926,14 @@ private fun CalorieGoalItem(
                         text = "${goal.dailyCalories.toInt()} kcal",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
-                        color = goalColor
+                        color = AppColors.text(goalColor)
                     )
                     if (goal.calorieAdjustment != 0) {
                         val sign = if (goal.calorieAdjustment > 0) "+" else ""
                         Text(
                             text = "$sign${goal.calorieAdjustment}",
                             style = MaterialTheme.typography.labelSmall,
-                            color = goalColor.copy(alpha = 0.7f)
+                            color = AppColors.text(goalColor.copy(alpha = 0.7f))
                         )
                     }
                 }
@@ -1007,8 +1010,8 @@ private fun CalorieGoalItem(
                                 Text(
                                     text = stringResource(R.string.txt_extreme_deficits_are_not_recom),
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = HealthColors.Danger,
-                                    fontSize = 10.sp,
+                                    color = AppColors.text(HealthColors.Danger),
+                                    fontSize = 12.sp,
                                     lineHeight = 14.sp
                                 )
                             }
@@ -1021,7 +1024,7 @@ private fun CalorieGoalItem(
                         Text(
                             text = stringResource(R.string.txt_minimum_1_200_kcal_day_applied),
                             style = MaterialTheme.typography.labelSmall,
-                            color = HealthColors.Caution,
+                            color = AppColors.text(HealthColors.Caution),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -1052,7 +1055,7 @@ private fun GoalDetailChip(
                 text = value,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = color,
+                color = AppColors.text(color),
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
             )
         }

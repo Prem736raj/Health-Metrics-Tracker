@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -91,7 +92,7 @@ fun WHOGuidelinesSection(
                 Text(
                     text = stringResource(R.string.txt_world_health_organization_phys),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
         }
@@ -127,7 +128,7 @@ private fun WHOGuidelineCard(guideline: WHOGuideline) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Good.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(HealthColors.Good.copy(alpha = 0.06f))
         )
     ) {
         Column(
@@ -156,7 +157,7 @@ private fun WHOGuidelineCard(guideline: WHOGuideline) {
                             text = "${guideline.ageGroup} (${guideline.ageRange})",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = HealthColors.Good
+                            color = AppColors.text(HealthColors.Good)
                         )
                     }
                 }
@@ -210,7 +211,7 @@ private fun WHOGuidelineCard(guideline: WHOGuideline) {
                     text = stringResource(R.string.txt_or),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 TargetCard(
@@ -239,14 +240,14 @@ private fun WHOGuidelineCard(guideline: WHOGuideline) {
                     ) {
                         Text(
                             text = stringResource(R.string.txt_text_placeholder_3),
-                            color = HealthColors.Good,
+                            color = AppColors.text(HealthColors.Good),
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(end = 8.dp, top = 1.dp)
                         )
                         Text(
                             text = rec,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                             lineHeight = 17.sp
                         )
                     }
@@ -260,7 +261,7 @@ private fun WHOGuidelineCard(guideline: WHOGuideline) {
                         Text(
                             text = if (showAllRecs) "Show less" else "Show all recommendations",
                             style = MaterialTheme.typography.labelSmall,
-                            color = HealthColors.Good
+                            color = AppColors.text(HealthColors.Good)
                         )
                     }
                 }
@@ -282,7 +283,7 @@ private fun TargetCard(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.08f))
         )
     ) {
         Column(
@@ -302,18 +303,18 @@ private fun TargetCard(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Medium,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = unit,
                 style = MaterialTheme.typography.labelSmall,
-                color = color.copy(alpha = 0.7f)
+                color = AppColors.text(color.copy(alpha = 0.7f))
             )
         }
     }
@@ -329,7 +330,7 @@ private fun ZoneIntensityMappingCard(zones: List<HeartRateZone>) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         )
     ) {
         Column(
@@ -394,7 +395,7 @@ private fun IntensityGroup(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = color
+                color = AppColors.text(color)
             )
         }
 
@@ -423,7 +424,7 @@ private fun IntensityGroup(
                     text = "${zone.bpmLow}-${zone.bpmHigh} BPM",
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = zone.color
+                    color = AppColors.text(zone.color)
                 )
             }
         }
@@ -433,7 +434,7 @@ private fun IntensityGroup(
         Text(
             text = description,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f),
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)),
             modifier = Modifier.padding(start = 24.dp)
         )
     }
@@ -540,7 +541,7 @@ private fun WeeklyPlanCard(
                     text = plan.whoComplianceNote,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Medium,
-                    color = if (plan.meetsWHOGuideline) HealthColors.Healthy else HealthColors.Warning,
+                    color = AppColors.text(if (plan.meetsWHOGuideline) HealthColors.Healthy else HealthColors.Warning),
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                 )
             }
@@ -575,7 +576,7 @@ private fun WeeklyPlanCard(
                 Text(
                     text = stringResource(R.string.txt_tap_to_see_day_by_day_plan),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
@@ -603,8 +604,8 @@ private fun MiniStat(value: String, label: String, emoji: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-            fontSize = 10.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            fontSize = 12.sp
         )
     }
 }
@@ -618,7 +619,7 @@ private fun DayPlanRow(day: WeeklyPlanDay) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
@@ -646,13 +647,13 @@ private fun DayPlanRow(day: WeeklyPlanDay) {
                     Text(
                         text = stringResource(R.string.txt_rest_recovery),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 } else {
                     Text(
                         text = day.activitySuggestion,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                     )
                 }
             }
@@ -676,7 +677,7 @@ private fun DayPlanRow(day: WeeklyPlanDay) {
                         text = "${day.durationMinutes} min",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -799,7 +800,7 @@ fun WeeklyExerciseTracker(
                             "${targetMin - totalEquivalent} more moderate-equivalent minutes to reach the WHO target",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Medium,
-                        color = if (progress >= 1f) HealthColors.Healthy else HealthColors.Good,
+                        color = AppColors.text(if (progress >= 1f) HealthColors.Healthy else HealthColors.Good),
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                     )
                 }
@@ -898,13 +899,13 @@ private fun WeeklyProgressRing(
                 text = "${(progress * 100).toInt().coerceAtMost(100)}%",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
-                color = ringColor
+                color = AppColors.text(ringColor)
             )
             Text(
                 text = "$totalMin/$targetMin",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                fontSize = 10.sp
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                fontSize = 12.sp
             )
         }
     }
@@ -923,7 +924,7 @@ private fun TrackerStat(emoji: String, label: String, value: String, target: Str
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
             modifier = Modifier.width(64.dp)
         )
         Text(
@@ -934,7 +935,7 @@ private fun TrackerStat(emoji: String, label: String, value: String, target: Str
         Text(
             text = " / $target",
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
         )
     }
 }
@@ -969,7 +970,7 @@ private fun LoggedSessionRow(
                 Text(
                     text = session.activityNote,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
         }
@@ -1076,7 +1077,7 @@ fun ExerciseLogDialog(
                                     Text(
                                         text = "Z${zone.zoneNumber}",
                                         style = MaterialTheme.typography.labelSmall,
-                                        fontSize = 10.sp
+                                        fontSize = 12.sp
                                     )
                                 }
                             },
@@ -1109,7 +1110,7 @@ fun ExerciseLogDialog(
                             Text(
                                 text = "${zone.zoneName} • ${zone.bpmLow}-${zone.bpmHigh} BPM • ${intensity.label}",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = zone.color
+                                color = AppColors.text(zone.color)
                             )
                         }
                     }

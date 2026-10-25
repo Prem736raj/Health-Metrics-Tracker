@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -88,7 +89,7 @@ fun VO2MaxSection(
                 Text(
                     text = stringResource(R.string.txt_estimated_aerobic_capacity_and),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
         }
@@ -117,7 +118,7 @@ private fun NoRestingHRCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         )
     ) {
         Column(
@@ -143,7 +144,7 @@ private fun NoRestingHRCard() {
                 text = stringResource(R.string.txt_to_estimate_your_vo_max) +
                         "Go back and select the Karvonen formula, or enter your resting HR to unlock this feature.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                 textAlign = TextAlign.Center,
                 lineHeight = 18.sp
             )
@@ -166,7 +167,7 @@ private fun NoRestingHRCard() {
                     Text(
                         text = stringResource(R.string.txt_tip_measure_your_pulse_first_t),
                         style = MaterialTheme.typography.labelSmall,
-                        color = HealthColors.Good,
+                        color = AppColors.text(HealthColors.Good),
                         lineHeight = 14.sp
                     )
                 }
@@ -192,7 +193,7 @@ private fun VO2MaxResultCard(result: VO2MaxResult) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = accentColor.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(accentColor.copy(alpha = 0.06f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -234,12 +235,12 @@ private fun VO2MaxResultCard(result: VO2MaxResult) {
                         text = stringResource(R.string.txt_1f).format(animatedVO2),
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.ExtraBold,
-                        color = accentColor
+                        color = AppColors.text(accentColor)
                     )
                     Text(
                         text = stringResource(R.string.txt_ml_kg_min),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -247,7 +248,7 @@ private fun VO2MaxResultCard(result: VO2MaxResult) {
             Text(
                 text = "Informational estimate only. Repeat under similar conditions to look for a personal trend; age and fitness reference bands are not shown because methods vary.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                 textAlign = TextAlign.Center,
                 lineHeight = 17.sp
             )
@@ -258,7 +259,7 @@ private fun VO2MaxResultCard(result: VO2MaxResult) {
             Text(
                 text = result.methodology,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)),
                 textAlign = TextAlign.Center
             )
         }
@@ -282,8 +283,8 @@ private fun StatBubble(legacyIcon: String, value: String, label: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-            fontSize = 10.sp
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+            fontSize = 12.sp
         )
     }
 }
@@ -313,7 +314,7 @@ private fun FitnessAgeCard(result: VO2MaxResult) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = accentColor.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(accentColor.copy(alpha = 0.06f))
         )
     ) {
         Column(
@@ -357,15 +358,15 @@ private fun FitnessAgeCard(result: VO2MaxResult) {
                             else -> "="
                         },
                         fontSize = 24.sp,
-                        color = accentColor
+                        color = AppColors.text(accentColor)
                     )
                     if (ageDiff != 0) {
                         Text(
                             text = "Reference difference: ${kotlin.math.abs(ageDiff)} yrs",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = accentColor,
-                            fontSize = 10.sp
+                            color = AppColors.text(accentColor),
+                            fontSize = 12.sp
                         )
                     }
                 }
@@ -386,13 +387,13 @@ private fun FitnessAgeCard(result: VO2MaxResult) {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = accentColor.copy(alpha = 0.08f)
+                    containerColor = AppColors.surface(accentColor.copy(alpha = 0.08f))
                 )
             ) {
                 Text(
                     text = result.fitnessAgeMessage,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(14.dp),
                     lineHeight = 18.sp
@@ -423,20 +424,20 @@ private fun AgeColumn(
             style = if (isHighlighted) MaterialTheme.typography.headlineMedium
             else MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.ExtraBold,
-            color = color
+            color = AppColors.text(color)
         )
         Text(
             text = stringResource(R.string.txt_years),
             style = MaterialTheme.typography.labelSmall,
-            color = color.copy(alpha = 0.7f)
+            color = AppColors.text(color.copy(alpha = 0.7f))
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Medium,
-            color = color.copy(alpha = 0.6f),
-            fontSize = 10.sp
+            color = AppColors.text(color.copy(alpha = 0.6f)),
+            fontSize = 12.sp
         )
     }
 }
@@ -465,7 +466,7 @@ private fun VO2ClassificationGauge(result: VO2MaxResult) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         )
     ) {
         Column(
@@ -526,8 +527,8 @@ private fun VO2ClassificationGauge(result: VO2MaxResult) {
                                     text = stringResource(R.string.txt_0f).format(result.vo2Max),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.ExtraBold,
-                                    color = Color.White,
-                                    fontSize = 9.sp
+                                    color = AppColors.text(Color.White),
+                                    fontSize = 12.sp
                                 )
                             }
                         }
@@ -537,9 +538,9 @@ private fun VO2ClassificationGauge(result: VO2MaxResult) {
                         Text(
                             text = name,
                             style = MaterialTheme.typography.labelSmall,
-                            fontSize = 8.sp,
-                            color = if (isCurrent) color
-                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                            fontSize = 12.sp,
+                            color = AppColors.text(if (isCurrent) color
+                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
                             fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
                             textAlign = TextAlign.Center,
                             maxLines = 1
@@ -565,7 +566,7 @@ private fun VO2ImprovementSection(result: VO2MaxResult) {
             .clickable { isExpanded = !isExpanded },
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Healthy.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.06f))
         )
     ) {
         Column(
@@ -625,8 +626,8 @@ private fun VO2ImprovementSection(result: VO2MaxResult) {
                     Text(
                         text = "No projection",
                         style = MaterialTheme.typography.labelSmall,
-                        fontSize = 9.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        fontSize = 12.sp,
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                     )
                 }
 
@@ -703,7 +704,7 @@ private fun VO2ImprovementSection(result: VO2MaxResult) {
                 Text(
                     text = stringResource(R.string.txt_tap_for_improvement_tips),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 6.dp),
@@ -725,7 +726,7 @@ private fun ProjectionCard(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.08f))
         )
     ) {
         Column(
@@ -743,19 +744,19 @@ private fun ProjectionCard(
                 text = value,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = unit,
                 style = MaterialTheme.typography.labelSmall,
-                fontSize = 9.sp,
-                color = color.copy(alpha = 0.6f)
+                fontSize = 12.sp,
+                color = AppColors.text(color.copy(alpha = 0.6f))
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             )
         }
     }
@@ -780,7 +781,7 @@ private fun ImprovementTipRow(legacyIcon: String, title: String, description: St
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)),
                 lineHeight = 17.sp
             )
         }
@@ -833,7 +834,7 @@ private fun RecoveryHeartRateSection() {
                         Text(
                             text = stringResource(R.string.txt_how_quickly_your_hr_drops_afte),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         )
                     }
                 }
@@ -851,7 +852,7 @@ private fun RecoveryHeartRateSection() {
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                 )
             ) {
                 Row(
@@ -868,7 +869,7 @@ private fun RecoveryHeartRateSection() {
                     Text(
                         text = stringResource(R.string.txt_a_healthy_heart_should_drop_20),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
                         lineHeight = 16.sp
                     )
                 }
@@ -941,14 +942,14 @@ private fun RecoveryHeartRateSection() {
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary,
-                                    fontSize = 10.sp
+                                    fontSize = 12.sp
                                 )
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = step,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                                 lineHeight = 16.sp
                             )
                         }
@@ -960,14 +961,14 @@ private fun RecoveryHeartRateSection() {
                         text = stringResource(R.string.txt_track_your_recovery_hr_monthly) +
                                 "look for patterns under similar conditions; a single recovery reading is not diagnostic.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                        color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)),
                         lineHeight = 17.sp
                     )
 
                     Text(
                         text = guidelines.firstOrNull()?.referenceNote.orEmpty(),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                         lineHeight = 15.sp,
                         modifier = Modifier.padding(top = 8.dp)
                     )
@@ -978,7 +979,7 @@ private fun RecoveryHeartRateSection() {
                 Text(
                     text = stringResource(R.string.txt_tap_for_recovery_test_guide),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp),
@@ -1012,7 +1013,7 @@ private fun RecoveryGuidelineRow(guideline: RecoveryHRGuideline) {
                     text = guideline.category,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = guideline.color
+                    color = AppColors.text(guideline.color)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Surface(
@@ -1023,16 +1024,16 @@ private fun RecoveryGuidelineRow(guideline: RecoveryHRGuideline) {
                         text = guideline.dropInFirstMinute,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = guideline.color,
+                        color = AppColors.text(guideline.color),
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        fontSize = 10.sp
+                        fontSize = 12.sp
                     )
                 }
             }
             Text(
                 text = guideline.description,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)),
                 lineHeight = 14.sp
             )
         }

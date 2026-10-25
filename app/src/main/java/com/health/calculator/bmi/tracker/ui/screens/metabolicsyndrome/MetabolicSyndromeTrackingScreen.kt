@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -113,7 +115,7 @@ fun MetabolicSyndromeTrackingSection(
 private fun EmptyTrackingState() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -267,7 +269,7 @@ private fun TrendArrowRow(trend: CriterionTrend) {
                     text = trend.trend.label,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = trendColor
+                    color = AppColors.text(trendColor)
                 )
             }
         }
@@ -285,7 +287,7 @@ private fun HistoryComparisonCard(comparison: AssessmentComparison) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = overallColor.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(overallColor.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -357,7 +359,7 @@ private fun HistoryComparisonCard(comparison: AssessmentComparison) {
                         text = comparison.overallTrend.label,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = overallColor
+                        color = AppColors.text(overallColor)
                     )
                 }
 
@@ -379,7 +381,7 @@ private fun HistoryComparisonCard(comparison: AssessmentComparison) {
                                 text = "${comparison.currentCriteriaMet}/5",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = overallColor
+                                color = AppColors.text(overallColor)
                             )
                         }
                     }
@@ -437,12 +439,12 @@ private fun ChangeSummaryChip(label: String, count: Int, color: Color) {
                 text = "$count",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = color.copy(alpha = 0.8f),
+                color = AppColors.text(color.copy(alpha = 0.8f)),
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -500,6 +502,7 @@ private fun CriteriaCountGraph(records: List<MetabolicSyndromeRecord>) {
             val safeZoneColor = HealthGreen.copy(alpha = 0.08f)
             val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
             val textColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val darkAxis = AppColors.isDark
             val density = LocalDensity.current
 
             Canvas(
@@ -561,8 +564,8 @@ private fun CriteriaCountGraph(records: List<MetabolicSyndromeRecord>) {
                         paddingLeft - 20.dp.toPx(),
                         y + 4.dp.toPx(),
                         android.graphics.Paint().apply {
-                            color = textColor.hashCode()
-                            textSize = with(density) { 11.sp.toPx() }
+                            color = (if (darkAxis) textColor.toArgb() else textColor.hashCode())
+                            textSize = with(density) { 12.sp.toPx() }
                             textAlign = android.graphics.Paint.Align.CENTER
                         }
                     )
@@ -641,8 +644,8 @@ private fun CriteriaCountGraph(records: List<MetabolicSyndromeRecord>) {
                                 x,
                                 size.height - 4.dp.toPx(),
                                 android.graphics.Paint().apply {
-                                    color = textColor.hashCode()
-                                    textSize = with(density) { 10.sp.toPx() }
+                                    color = (if (darkAxis) textColor.toArgb() else textColor.hashCode())
+                                    textSize = with(density) { 12.sp.toPx() }
                                     textAlign = android.graphics.Paint.Align.CENTER
                                 }
                             )
@@ -699,7 +702,7 @@ private fun CelebrationCard(normalizedCriteria: List<String>) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = HealthGreen.copy(alpha = 0.1f)
+            containerColor = AppColors.surface(HealthGreen.copy(alpha = 0.1f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -719,7 +722,7 @@ private fun CelebrationCard(normalizedCriteria: List<String>) {
                 text = stringResource(R.string.txt_great_progress),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
-                color = HealthGreen
+                color = AppColors.text(HealthGreen)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -749,7 +752,7 @@ private fun CelebrationCard(normalizedCriteria: List<String>) {
                             text = "$criterion is now normal!",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = HealthGreen
+                            color = AppColors.text(HealthGreen)
                         )
                     }
                 }
@@ -847,7 +850,7 @@ private fun AssessmentTimeline(records: List<MetabolicSyndromeRecord>) {
                             text = if (record.isSyndromePresent) "3+ markers" else "Fewer markers",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = riskColor,
+                            color = AppColors.text(riskColor),
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         )
                     }
@@ -869,7 +872,7 @@ private fun LabReminderCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = HealthBlue.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(HealthBlue.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -962,7 +965,7 @@ private fun LabReminderCard(
 
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = HealthBlue.copy(alpha = 0.08f)
+                            containerColor = AppColors.surface(HealthBlue.copy(alpha = 0.08f))
                         ),
                         shape = RoundedCornerShape(8.dp)
                     ) {
@@ -980,7 +983,7 @@ private fun LabReminderCard(
                                 text = "Next check-up reminder: ${dateFormat.format(reminderDate)}",
                                 style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.Medium,
-                                color = HealthBlue
+                                color = AppColors.text(HealthBlue)
                             )
                         }
                     }

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -213,9 +214,9 @@ private fun DietPresetsSection(
                                 presetColor
                             ) else null,
                             colors = CardDefaults.cardColors(
-                                containerColor = if (isSelected)
+                                containerColor = AppColors.surface(if (isSelected)
                                     presetColor.copy(alpha = 0.1f)
-                                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                             )
                         ) {
                             Column(
@@ -237,8 +238,8 @@ private fun DietPresetsSection(
                                     style = MaterialTheme.typography.labelMedium.copy(
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                                     ),
-                                    color = if (isSelected) presetColor
-                                    else MaterialTheme.colorScheme.onSurface,
+                                    color = AppColors.text(if (isSelected) presetColor
+                                    else MaterialTheme.colorScheme.onSurface),
                                     textAlign = TextAlign.Center,
                                     maxLines = 1
                                 )
@@ -247,15 +248,15 @@ private fun DietPresetsSection(
                                     Text(
                                         text = "${preset.carbPercent}/${preset.proteinPercent}/${preset.fatPercent}",
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                                        fontSize = 9.sp
+                                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                                        fontSize = 12.sp
                                     )
                                 } else {
                                     Text(
                                         text = stringResource(R.string.txt_adjustable),
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                                        fontSize = 9.sp
+                                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                                        fontSize = 12.sp
                                     )
                                 }
                             }
@@ -288,7 +289,7 @@ private fun CustomMacroSliders(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -309,7 +310,7 @@ private fun CustomMacroSliders(
                     Text(
                         text = "Total: $total%",
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = if (isValid) HealthColors.Healthy else HealthColors.Danger,
+                        color = AppColors.text(if (isValid) HealthColors.Healthy else HealthColors.Danger),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
@@ -369,7 +370,7 @@ private fun CustomMacroSliders(
                 Text(
                     text = stringResource(R.string.txt_percentages_must_total_100),
                     style = MaterialTheme.typography.labelSmall,
-                    color = HealthColors.Danger
+                    color = AppColors.text(HealthColors.Danger)
                 )
             }
         }
@@ -410,7 +411,7 @@ private fun MacroSliderRow(
                 Text(
                     text = "$percent%",
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = color,
+                    color = AppColors.text(color),
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                 )
             }
@@ -453,7 +454,7 @@ private fun MacroLegendItem(
         Text(
             text = percent,
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-            color = color
+            color = AppColors.text(color)
         )
     }
 }
@@ -533,7 +534,7 @@ private fun MacroDetailCard(
             .clickable { expanded = !expanded },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.06f))
         )
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -554,13 +555,13 @@ private fun MacroDetailCard(
                         Text(
                             name,
                             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                            color = color
+                            color = AppColors.text(color)
                         )
                         Text(
                             "${"%.0f".format(percent)}% of daily calories",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                            fontSize = 11.sp
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            fontSize = 12.sp
                         )
                     }
                 }
@@ -569,12 +570,12 @@ private fun MacroDetailCard(
                     Text(
                         "${"%.0f".format(grams)}g",
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = color
+                        color = AppColors.text(color)
                     )
                     Text(
                         "${"%.0f".format(calories)} kcal",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -600,7 +601,7 @@ private fun MacroDetailCard(
                             Text(
                                 info,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                             )
                         }
                         Spacer(modifier = Modifier.height(4.dp))
@@ -625,8 +626,8 @@ private fun MacroDetailCard(
                             Text(
                                 recommendation,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = color.copy(alpha = 0.8f),
-                                fontSize = 11.sp,
+                                color = AppColors.text(color.copy(alpha = 0.8f)),
+                                fontSize = 12.sp,
                                 lineHeight = 16.sp
                             )
                         }
@@ -787,7 +788,7 @@ private fun MacroPerMealBar(
             label,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.width(55.dp),
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
         Box(
             modifier = Modifier
@@ -808,7 +809,7 @@ private fun MacroPerMealBar(
         Text(
             "${"%.0f".format(grams)}g",
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-            color = color,
+            color = AppColors.text(color),
             modifier = Modifier.width(40.dp),
             textAlign = TextAlign.End
         )
@@ -828,13 +829,13 @@ private fun QuickRefChip(food: String, macros: String) {
             Text(
                 food,
                 style = MaterialTheme.typography.labelSmall,
-                fontSize = 10.sp
+                fontSize = 12.sp
             )
             Text(
                 macros,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = 9.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold
             )
         }

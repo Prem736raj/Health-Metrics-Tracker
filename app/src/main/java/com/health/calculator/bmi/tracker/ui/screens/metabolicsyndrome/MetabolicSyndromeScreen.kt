@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -82,7 +83,7 @@ fun MetabolicSyndromeScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
@@ -267,7 +268,7 @@ private fun MetabolicSyndromeInputContent(
             val latest = uiState.trackingRecords.first()
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -402,12 +403,12 @@ private fun MetabolicSyndromeInputContent(
             val partial = uiState.partialResult
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = when {
+                    containerColor = AppColors.surface(when {
                         partial.metCount >= 3 -> HealthRed.copy(alpha = 0.08f)
                         partial.metCount >= 2 -> HealthOrange.copy(alpha = 0.08f)
                         partial.metCount >= 1 -> HealthYellow.copy(alpha = 0.08f)
                         else -> HealthGreen.copy(alpha = 0.08f)
-                    }
+                    })
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -632,7 +633,7 @@ fun CriterionInputCard(
             if (error != null) {
                 Text(
                     text = error,
-                    color = MaterialTheme.colorScheme.error,
+                    color = AppColors.text(MaterialTheme.colorScheme.error),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp, top = 4.dp)
                 )
@@ -741,7 +742,7 @@ fun BloodPressureInputCard(
             if (systolicError != null || diastolicError != null) {
                 Text(
                     text = systolicError ?: diastolicError ?: "",
-                    color = MaterialTheme.colorScheme.error,
+                    color = AppColors.text(MaterialTheme.colorScheme.error),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp, top = 4.dp)
                 )

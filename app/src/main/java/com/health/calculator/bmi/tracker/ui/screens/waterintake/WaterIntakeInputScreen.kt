@@ -1,6 +1,7 @@
 // ui/screens/waterintake/WaterIntakeInputScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -130,7 +131,7 @@ fun WaterIntakeInputScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -206,7 +207,7 @@ fun WaterIntakeInputScreen(
                         .clickable { onNavigateToEducation() },
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer)
                     )
                 ) {
                     Row(
@@ -257,6 +258,8 @@ fun WaterIntakeInputScreen(
 
 @Composable
 private fun WaterHeaderCard(waterDropOffset: Float) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -270,7 +273,7 @@ private fun WaterHeaderCard(waterDropOffset: Float) {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             FeatureColors.WaterStart,
                             FeatureColors.WaterDeep
                         )
@@ -290,14 +293,14 @@ private fun WaterHeaderCard(waterDropOffset: Float) {
                 ) {
                     Text(
                         text = "Calculate Your Daily\nWater Needs",
-                        color = Color.White,
+                        color = AppColors.text(Color.White),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         lineHeight = 26.sp
                     )
                     Text(
                         text = stringResource(R.string.txt_proper_hydration_is_essential_),
-                        color = Color.White.copy(alpha = 0.85f),
+                        color = AppColors.text(Color.White.copy(alpha = 0.85f)),
                         fontSize = 13.sp,
                         lineHeight = 18.sp
                     )
@@ -326,7 +329,7 @@ private fun ProfileDataBanner() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer)
         )
     ) {
         Row(
@@ -395,7 +398,7 @@ private fun BodyInfoSection(
                     singleLine = true,
                     isError = viewModel.weightError != null,
                     supportingText = viewModel.weightError?.let { error ->
-                        { Text(error, color = MaterialTheme.colorScheme.error) }
+                        { Text(error, color = AppColors.text(MaterialTheme.colorScheme.error)) }
                     },
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -442,7 +445,7 @@ private fun BodyInfoSection(
                 singleLine = true,
                 isError = viewModel.ageError != null,
                 supportingText = viewModel.ageError?.let { error ->
-                    { Text(error, color = MaterialTheme.colorScheme.error) }
+                    { Text(error, color = AppColors.text(MaterialTheme.colorScheme.error)) }
                 },
                 shape = RoundedCornerShape(12.dp)
             )
@@ -746,7 +749,7 @@ private fun SelectableChipCard(
             )
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(backgroundColor)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (selected) 4.dp else 0.dp
         )
@@ -803,7 +806,7 @@ private fun SelectableOptionRow(
             if (subtitle != null) {
                 Text(
                     text = subtitle,
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 2.dp)
                 )

@@ -1,6 +1,7 @@
 // ui/screens/bloodpressure/BpStreakAndMedicationComponents.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -33,6 +34,8 @@ fun BpStreakCard(
     longestStreak: Int,
     modifier: Modifier = Modifier
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val motivation = BpStreakManager.getMotivationalMessage(currentStreak)
 
     Card(
@@ -54,7 +57,7 @@ fun BpStreakCard(
                     .clip(CircleShape)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(
+                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                 HealthColors.Warning.copy(alpha = 0.2f),
                                 HealthColors.Caution.copy(alpha = 0.2f)
                             )
@@ -73,7 +76,7 @@ fun BpStreakCard(
                         currentStreak.toString(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = HealthColors.Caution
+                        color = AppColors.text(HealthColors.Caution)
                     )
                 }
             }
@@ -87,7 +90,7 @@ fun BpStreakCard(
                 Text(
                     motivation,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
                 if (longestStreak > 0) {
                     Text(
@@ -139,7 +142,7 @@ fun BpMedicationCard(
                     }
                     Column {
                         Text(stringResource(R.string.txt_medication_tracking), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                        Text(stringResource(R.string.txt_tag_readings_with_medication_s), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                        Text(stringResource(R.string.txt_tag_readings_with_medication_s), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)))
                     }
                 }
                 Switch(checked = onMedication, onCheckedChange = onToggle)
@@ -178,7 +181,7 @@ fun BpDoctorSuggestionBanner(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.9f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.9f))
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -268,7 +271,7 @@ fun BpMilestoneCelebrationDialog(
                         streakCount.toString(),
                         style = MaterialTheme.typography.displayMedium,
                         fontWeight = FontWeight.Black,
-                        color = Color.White
+                        color = AppColors.text(Color.White)
                     )
                 }
                 Text(
@@ -281,7 +284,7 @@ fun BpMilestoneCelebrationDialog(
                     stringResource(R.string.txt_you_re_doing_a_great_job_monit),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
         },

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -98,7 +99,7 @@ fun HealthOverviewSection(
                         fontWeight = FontWeight.Bold
                     )
                 }
-                
+
                 if (healthScore.category != HealthScoreCategory.INSUFFICIENT_DATA) {
                     TextButton(onClick = onViewBreakdown) {
                         Text(
@@ -241,12 +242,12 @@ private fun HealthScoreCircle(
                         text = "$animatedScore",
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.ExtraBold,
-                        color = category.color
+                        color = AppColors.text(category.color)
                     )
                     Text(
                         text = stringResource(R.string.txt_100),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                     )
                 } else {
                     Text(
@@ -278,7 +279,7 @@ private fun HealthScoreCircle(
                     text = category.label,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = category.color
+                    color = AppColors.text(category.color)
                 )
             }
 
@@ -287,7 +288,7 @@ private fun HealthScoreCircle(
             Text(
                 text = category.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                 lineHeight = 17.sp
             )
 
@@ -312,7 +313,7 @@ private fun HealthScoreCircle(
                     Text(
                         text = "$availableMetrics of $totalMetrics metrics tracked",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -336,7 +337,7 @@ private fun QuickStatsRow(
             text = stringResource(R.string.txt_quick_stats),
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -368,7 +369,7 @@ private fun QuickStatCard(
             .clickable { onClick() },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = stat.color.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(stat.color.copy(alpha = 0.06f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -406,14 +407,14 @@ private fun QuickStatCard(
                     text = stat.value,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = stat.color
+                    color = AppColors.text(stat.color)
                 )
                 stat.subValue?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.labelSmall,
-                        fontSize = 9.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        fontSize = 12.sp,
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                     )
                 }
             }
@@ -423,8 +424,8 @@ private fun QuickStatCard(
             Text(
                 text = stat.label,
                 style = MaterialTheme.typography.labelSmall,
-                fontSize = 9.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                fontSize = 12.sp,
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -467,7 +468,7 @@ private fun EmptyStatsPrompt() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Row(
@@ -492,7 +493,7 @@ private fun EmptyStatsPrompt() {
                 Text(
                     text = stringResource(R.string.txt_use_the_calculators_below_to_s),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
         }
@@ -537,7 +538,7 @@ private fun LastActivityRow(
                 Text(
                     text = "Last: ${activity.calculatorName} • $timeAgo",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
 

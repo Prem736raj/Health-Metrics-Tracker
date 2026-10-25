@@ -594,7 +594,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                             8f,
                             y + 4f,
                             android.graphics.Paint().apply {
-                                color = (if (darkChart) surfaceVariant else surfaceVariant.copy(alpha = 0.4f)).toArgb()
+                                color = (if (darkChart) surfaceVariant.toArgb() else surfaceVariant.copy(alpha = 0.4f).hashCode())
                                 textSize = 12.sp.toPx()
                                 isAntiAlias = true
                             }
@@ -692,7 +692,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                             x - 16f,
                             height - 6f,
                             android.graphics.Paint().apply {
-                                color = (if (darkChart) surfaceVariant else surfaceVariant.copy(alpha = 0.4f)).toArgb()
+                                color = (if (darkChart) surfaceVariant.toArgb() else surfaceVariant.copy(alpha = 0.4f).hashCode())
                                 textSize = 12.sp.toPx()
                                 isAntiAlias = true
                                 textAlign = android.graphics.Paint.Align.CENTER

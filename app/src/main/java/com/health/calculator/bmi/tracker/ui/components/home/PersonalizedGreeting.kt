@@ -25,9 +25,11 @@ fun PersonalizedGreeting(
     userName: String?,
     modifier: Modifier = Modifier
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
-    
+
     val (greeting, greetingIcon) = when (hour) {
         in 5..11 -> "Good Morning" to Icons.Outlined.WbSunny
         in 12..16 -> "Good Afternoon" to Icons.Outlined.WbSunny
@@ -41,7 +43,7 @@ fun PersonalizedGreeting(
             .clip(RoundedCornerShape(24.dp))
             .background(
                 brush = Brush.horizontalGradient(
-                    colors = listOf(
+                    colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                         MaterialTheme.colorScheme.primaryContainer,
                         MaterialTheme.colorScheme.secondaryContainer
                     )
