@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -31,6 +32,8 @@ fun HealthJourneySummaryCard(
     summary: HealthJourneySummary,
     modifier: Modifier = Modifier
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val primaryColor = MaterialTheme.colorScheme.primary
     val tertiaryColor = MaterialTheme.colorScheme.tertiary
 
@@ -45,7 +48,7 @@ fun HealthJourneySummaryCard(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             primaryColor.copy(alpha = 0.15f),
                             tertiaryColor.copy(alpha = 0.1f)
                         )
@@ -75,7 +78,7 @@ fun HealthJourneySummaryCard(
                         text = formatDuration(summary.daysSinceFirstUse),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
-                        color = primaryColor
+                        color = AppColors.text(primaryColor)
                     )
                     summary.firstUseDate?.let { date ->
                         val sdf = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
@@ -149,8 +152,8 @@ fun HealthJourneySummaryCard(
                             else "Wellness Score consistency changed by ${summary.healthScoreChange} points",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium,
-                            color = if (summary.healthScoreChange > 0) HealthColors.Healthy
-                            else HealthColors.Warning
+                            color = AppColors.text(if (summary.healthScoreChange > 0) HealthColors.Healthy
+                            else HealthColors.Warning)
                         )
                     }
                 }

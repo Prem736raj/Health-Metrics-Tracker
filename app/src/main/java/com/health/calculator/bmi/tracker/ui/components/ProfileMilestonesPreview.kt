@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -55,10 +56,10 @@ fun ProfileMilestonesPreview(
                 .clickable(onClick = onViewAll),
             shape = ActionRowShape,
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.24f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.24f))
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.26f))
+            border = BorderStroke(1.dp, AppColors.outline(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.26f)))
         ) {
             Row(
                 modifier = Modifier
@@ -111,10 +112,10 @@ fun ProfileMilestonesPreview(
             .clickable(onClick = onViewAll),
         shape = InsightCalloutShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.34f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.34f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.32f))
+        border = BorderStroke(1.dp, AppColors.outline(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.32f)))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -211,7 +212,7 @@ fun ProfileMilestonesPreview(
                                 )
                             },
                             colors = AssistChipDefaults.assistChipColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                             ),
                             modifier = Modifier.height(28.dp)
                         )
@@ -239,7 +240,7 @@ fun ProfileMilestonesPreview(
                                 )
                             },
                             colors = AssistChipDefaults.assistChipColors(
-                                containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
+                                containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
                             ),
                             modifier = Modifier.height(28.dp)
                         )

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.presentation.profile
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -201,7 +202,7 @@ private fun InfoItem(
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            iconTint.copy(alpha = 0.08f),
+                            AppColors.surface(iconTint.copy(alpha = 0.08f), 2),
                             MaterialTheme.colorScheme.surface
                         )
                     )
