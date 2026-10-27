@@ -1,7 +1,7 @@
 // ui/screens/bloodpressure/BpRecommendationsScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -162,7 +162,7 @@ private fun RecommendationHeaderCard(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(bgColor)),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, borderColor)
     ) {
@@ -185,13 +185,13 @@ private fun RecommendationHeaderCard(
                         stringResource(R.string.txt_personalized_guidance),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(categoryColor)
+                        color = DetailColors.text(categoryColor)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         message,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -199,7 +199,7 @@ private fun RecommendationHeaderCard(
             // Monitoring frequency badge
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(categoryColor.copy(alpha = 0.1f))
+                    containerColor = DetailColors.surface(categoryColor.copy(alpha = 0.1f))
                 ),
                 shape = RoundedCornerShape(20.dp)
             ) {
@@ -218,7 +218,7 @@ private fun RecommendationHeaderCard(
                         "Recommended monitoring: $monitoringFrequency",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = AppColors.text(categoryColor)
+                        color = DetailColors.text(categoryColor)
                     )
                 }
             }
@@ -250,7 +250,7 @@ private fun UrgencyNoteCard(note: String, tone: BpGuidanceTone) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(bgColor)),
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(
             1.dp,
@@ -272,7 +272,7 @@ private fun UrgencyNoteCard(note: String, tone: BpGuidanceTone) {
                 note,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = if (isEmergency) FontWeight.Bold else FontWeight.Medium,
-                color = AppColors.text(textColor)
+                color = DetailColors.text(textColor)
             )
         }
     }
@@ -328,7 +328,7 @@ private fun ExpandableRecommendationCard(
                     )
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = AppColors.surface(categoryColor.copy(alpha = 0.1f))
+                            containerColor = DetailColors.surface(categoryColor.copy(alpha = 0.1f))
                         ),
                         shape = RoundedCornerShape(10.dp)
                     ) {
@@ -337,7 +337,7 @@ private fun ExpandableRecommendationCard(
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(categoryColor)
+                            color = DetailColors.text(categoryColor)
                         )
                     }
                 }
@@ -351,7 +351,7 @@ private fun ExpandableRecommendationCard(
                     Icons.Filled.KeyboardArrowDown,
                     contentDescription = if (isExpanded) "Collapse" else "Expand",
                     modifier = Modifier.graphicsLayer { rotationZ = rotation },
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -419,7 +419,7 @@ private fun RecommendationItem(recommendation: BpRecommendation) {
             Text(
                 recommendation.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -485,7 +485,7 @@ private fun HealthRisksCard(risks: List<String>, tone: BpGuidanceTone) {
                     Icons.Filled.KeyboardArrowDown,
                     contentDescription = null,
                     modifier = Modifier.graphicsLayer { rotationZ = rotation },
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -523,7 +523,7 @@ private fun HealthRisksCard(risks: List<String>, tone: BpGuidanceTone) {
                             Text(
                                 risk,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                                color = DetailColors.text(DetailColors.Secondary)
                             )
                         }
                     }
@@ -542,7 +542,7 @@ private fun DoctorAdviceCard(advice: String, tone: BpGuidanceTone) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(if (isUrgent) HealthColors.Good.copy(alpha = 0.1f)
+            containerColor = DetailColors.surface(if (isUrgent) HealthColors.Good.copy(alpha = 0.1f)
             else HealthColors.Severe.copy(alpha = 0.08f))
         ),
         shape = RoundedCornerShape(16.dp),
@@ -575,13 +575,13 @@ private fun DoctorAdviceCard(advice: String, tone: BpGuidanceTone) {
                     stringResource(R.string.txt_medical_advice),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(if (isUrgent) HealthColors.Good else HealthColors.Severe)
+                    color = DetailColors.text(if (isUrgent) HealthColors.Good else HealthColors.Severe)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     advice,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -634,7 +634,7 @@ private fun WhiteCoatSyndromeCard() {
                         Text(
                             stringResource(R.string.txt_why_readings_may_differ_at_the),
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -648,7 +648,7 @@ private fun WhiteCoatSyndromeCard() {
                     Icons.Filled.KeyboardArrowDown,
                     contentDescription = null,
                     modifier = Modifier.graphicsLayer { rotationZ = rotation },
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -693,7 +693,7 @@ private fun WhiteCoatSyndromeCard() {
                                 Text(
                                     info.description,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
+                                    color = DetailColors.text(DetailColors.Secondary)
                                 )
                             }
                         }
@@ -711,7 +711,7 @@ private fun MedicalDisclaimerCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -723,7 +723,7 @@ private fun MedicalDisclaimerCard() {
             Icon(
                 Icons.Outlined.Info,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                tint = DetailColors.Secondary,
                 modifier = Modifier.size(18.dp).padding(top = 2.dp)
             )
             Column {
@@ -731,13 +731,13 @@ private fun MedicalDisclaimerCard() {
                     stringResource(R.string.txt_medical_disclaimer),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     stringResource(R.string.txt_this_information_is_for_educat),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }

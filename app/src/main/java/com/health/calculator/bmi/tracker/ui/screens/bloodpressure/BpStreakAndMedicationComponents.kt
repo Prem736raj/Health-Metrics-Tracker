@@ -1,7 +1,7 @@
 // ui/screens/bloodpressure/BpStreakAndMedicationComponents.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -34,7 +34,7 @@ fun BpStreakCard(
     longestStreak: Int,
     modifier: Modifier = Modifier
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val motivation = BpStreakManager.getMotivationalMessage(currentStreak)
 
@@ -57,7 +57,7 @@ fun BpStreakCard(
                     .clip(CircleShape)
                     .background(
                         Brush.verticalGradient(
-                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                            colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(
                                 HealthColors.Warning.copy(alpha = 0.2f),
                                 HealthColors.Caution.copy(alpha = 0.2f)
                             )
@@ -76,7 +76,7 @@ fun BpStreakCard(
                         currentStreak.toString(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(HealthColors.Caution)
+                        color = DetailColors.text(HealthColors.Caution)
                     )
                 }
             }
@@ -90,13 +90,13 @@ fun BpStreakCard(
                 Text(
                     motivation,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 if (longestStreak > 0) {
                     Text(
                         "Best: $longestStreak days",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary),
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -142,7 +142,7 @@ fun BpMedicationCard(
                     }
                     Column {
                         Text(stringResource(R.string.txt_medication_tracking), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                        Text(stringResource(R.string.txt_tag_readings_with_medication_s), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)))
+                        Text(stringResource(R.string.txt_tag_readings_with_medication_s), style = MaterialTheme.typography.bodySmall, color = DetailColors.text(DetailColors.Secondary))
                     }
                 }
                 Switch(checked = onMedication, onCheckedChange = onToggle)
@@ -181,7 +181,7 @@ fun BpDoctorSuggestionBanner(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.9f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.9f))
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -201,12 +201,12 @@ fun BpDoctorSuggestionBanner(
                     stringResource(R.string.txt_recommendation_consult_doctor),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onErrorContainer
+                    color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer)
                 )
                 Text(
                     stringResource(R.string.txt_you_ve_had_multiple_high_readi),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f)
+                    color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f))
                 )
                 Row(
                     modifier = Modifier.padding(top = 12.dp),
@@ -218,10 +218,10 @@ fun BpDoctorSuggestionBanner(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text(stringResource(R.string.txt_set_reminder), color = MaterialTheme.colorScheme.onError, style = MaterialTheme.typography.labelLarge)
+                        Text(stringResource(R.string.txt_set_reminder), color = DetailColors.text(MaterialTheme.colorScheme.onError), style = MaterialTheme.typography.labelLarge)
                     }
                     TextButton(onClick = onDismiss) {
-                        Text(stringResource(R.string.txt_dismiss), color = MaterialTheme.colorScheme.onErrorContainer)
+                        Text(stringResource(R.string.txt_dismiss), color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer))
                     }
                 }
             }
@@ -271,7 +271,7 @@ fun BpMilestoneCelebrationDialog(
                         streakCount.toString(),
                         style = MaterialTheme.typography.displayMedium,
                         fontWeight = FontWeight.Black,
-                        color = AppColors.text(Color.White)
+                        color = DetailColors.text(Color.White)
                     )
                 }
                 Text(
@@ -284,7 +284,7 @@ fun BpMilestoneCelebrationDialog(
                     stringResource(R.string.txt_you_re_doing_a_great_job_monit),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         },

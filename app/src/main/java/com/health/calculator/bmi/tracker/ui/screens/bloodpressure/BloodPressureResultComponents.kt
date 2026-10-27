@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -246,7 +246,7 @@ private fun BpReadingCard(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(categoryColor.copy(alpha = 0.08f))
+                containerColor = DetailColors.surface(categoryColor.copy(alpha = 0.08f))
             ),
             shape = RoundedCornerShape(20.dp),
             border = BorderStroke(1.5.dp, categoryColor.copy(alpha = 0.3f))
@@ -258,41 +258,24 @@ private fun BpReadingCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Reading value
-                Row(
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        "$systolicAnim",
-                        style = MaterialTheme.typography.displayLarge.copy(
-                            fontSize = 56.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = AppColors.text(HealthColors.Danger)
-                    )
-                    Text(
-                        stringResource(R.string.txt_text_placeholder_14),
-                        style = MaterialTheme.typography.displayMedium.copy(
-                            fontWeight = FontWeight.Light
-                        ),
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
-                        modifier = Modifier.padding(horizontal = 4.dp).padding(bottom = 6.dp)
-                    )
-                    Text(
-                        "$diastolicAnim",
-                        style = MaterialTheme.typography.displayLarge.copy(
-                            fontSize = 56.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = AppColors.text(HealthColors.Good)
-                    )
+                // Paired stems align the two measurements without squeezing a slash row.
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(stringResource(R.string.txt_sys), style = MaterialTheme.typography.labelLarge,
+                            color = DetailColors.Secondary)
+                        Text("$systolicAnim", fontSize = 44.sp, fontWeight = FontWeight.Bold, color = DetailColors.Text)
+                    }
+                    Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(stringResource(R.string.txt_dia), style = MaterialTheme.typography.labelLarge,
+                            color = DetailColors.Secondary)
+                        Text("$diastolicAnim", fontSize = 44.sp, fontWeight = FontWeight.Bold, color = DetailColors.Text)
+                    }
                 }
 
                 Text(
                     stringResource(R.string.txt_mmhg_1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontWeight = FontWeight.Medium
                 )
 
@@ -301,7 +284,7 @@ private fun BpReadingCard(
                 // Category badge
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(categoryColor.copy(alpha = 0.15f))
+                        containerColor = DetailColors.surface(categoryColor.copy(alpha = 0.15f))
                     ),
                     shape = RoundedCornerShape(24.dp)
                 ) {
@@ -310,14 +293,14 @@ private fun BpReadingCard(
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(categoryColor)
+                        color = DetailColors.text(categoryColor)
                     )
                 }
 
                 Text(
                     reading.category.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     textAlign = TextAlign.Center
                 )
 
@@ -370,12 +353,12 @@ private fun BpInfoChip(
             icon,
             contentDescription = null,
             modifier = Modifier.size(14.dp),
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            tint = DetailColors.Secondary
         )
         Text(
             text,
             style = MaterialTheme.typography.bodySmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+            color = DetailColors.text(DetailColors.Secondary)
         )
     }
 }
@@ -461,7 +444,7 @@ private fun BpSemiCircularGauge(
 
     val density = LocalDensity.current
     val textColor = MaterialTheme.colorScheme.onSurface
-    val darkAxis = AppColors.isDark
+    val darkAxis = DetailColors.isDark
     val lowLabel = stringResource(R.string.txt_low)
     val highLabel = stringResource(R.string.txt_high)
 
@@ -554,7 +537,7 @@ private fun BpSemiCircularGauge(
 
         // Labels at ends
         val labelPaint = android.graphics.Paint().apply {
-            color = (if (darkAxis) textColor.toArgb() else textColor.copy(alpha = 0.5f).hashCode())
+            color = (if (darkAxis) textColor.toArgb() else textColor.copy(alpha = 0.5f).toArgb())
             textSize = with(density) { 12.sp.toPx() }
             textAlign = android.graphics.Paint.Align.CENTER
         }
@@ -672,7 +655,7 @@ private fun BpCategoryScaleCard(currentCategory: BpCategory) {
                                         )
                                     else
                                         MaterialTheme.typography.bodySmall,
-                                    color = AppColors.text(if (isCurrentCategory) color
+                                    color = DetailColors.text(if (isCurrentCategory) color
                                     else MaterialTheme.colorScheme.onSurface.copy(
                                         alpha = animatedAlpha
                                     ))
@@ -685,7 +668,7 @@ private fun BpCategoryScaleCard(currentCategory: BpCategory) {
                             Text(
                                 "SYS ${category.systolicRange}",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AppColors.text(if (isCurrentCategory) color
+                                color = DetailColors.text(if (isCurrentCategory) color
                                 else MaterialTheme.colorScheme.onSurface.copy(
                                     alpha = animatedAlpha * 0.7f
                                 )),
@@ -695,7 +678,7 @@ private fun BpCategoryScaleCard(currentCategory: BpCategory) {
                             Text(
                                 "DIA ${category.diastolicRange}",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AppColors.text(if (isCurrentCategory) color
+                                color = DetailColors.text(if (isCurrentCategory) color
                                 else MaterialTheme.colorScheme.onSurface.copy(
                                     alpha = animatedAlpha * 0.7f
                                 )),
@@ -744,7 +727,7 @@ private fun BpRiskLevelCard(riskLevel: BpRiskLevel) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(riskColor.copy(alpha = 0.08f))
+                containerColor = DetailColors.surface(riskColor.copy(alpha = 0.08f))
             ),
             shape = RoundedCornerShape(16.dp),
             border = BorderStroke(1.dp, riskColor.copy(alpha = 0.25f))
@@ -776,20 +759,20 @@ private fun BpRiskLevelCard(riskLevel: BpRiskLevel) {
                     Text(
                         stringResource(R.string.txt_risk_assessment),
                         style = MaterialTheme.typography.labelMedium,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         riskLevel.displayName,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(riskColor)
+                        color = DetailColors.text(riskColor)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         riskLevel.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -831,7 +814,7 @@ fun BpEmergencyDialog(
                 stringResource(R.string.txt_hypertensive_crisis),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurface),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -844,7 +827,7 @@ fun BpEmergencyDialog(
                 // Reading
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f))
                     ),
                     shape = RoundedCornerShape(16.dp),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.35f))
@@ -858,13 +841,13 @@ fun BpEmergencyDialog(
                         Text(
                             stringResource(R.string.txt_your_reading),
                             style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f)
+                            color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f))
                         )
                         Text(
                             "${reading.systolic}/${reading.diastolic} mmHg",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onErrorContainer
+                            color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer)
                         )
                     }
                 }
@@ -873,13 +856,13 @@ fun BpEmergencyDialog(
                     stringResource(R.string.txt_this_reading_indicates_a_hyper),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                 )
 
                 // Symptoms warning
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f))
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -891,7 +874,7 @@ fun BpEmergencyDialog(
                             stringResource(R.string.txt_if_you_experience_any_of_these),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                            color = DetailColors.text(MaterialTheme.colorScheme.onTertiaryContainer)
                         )
                         val symptoms = listOf(
                             "Severe headache",
@@ -915,7 +898,7 @@ fun BpEmergencyDialog(
                                 Text(
                                     symptom,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                    color = DetailColors.text(MaterialTheme.colorScheme.onTertiaryContainer)
                                 )
                             }
                         }

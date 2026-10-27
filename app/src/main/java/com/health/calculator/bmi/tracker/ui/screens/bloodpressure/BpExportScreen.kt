@@ -1,7 +1,9 @@
 // ui/screens/bloodpressure/BpExportScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -40,7 +42,7 @@ import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 fun BpExportScreen(
     onNavigateBack: () -> Unit,
     viewModel: BpExportViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.BLOOD_PRESSURE) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
 
@@ -57,7 +59,7 @@ fun BpExportScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -74,7 +76,7 @@ fun BpExportScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
                 ),
                 shape = RoundedCornerShape(16.dp)
             ) {
@@ -161,7 +163,7 @@ fun BpExportScreen(
             // Doctor report info
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthColors.Good.copy(alpha = 0.08f))
+                    containerColor = DetailColors.surface(HealthColors.Good.copy(alpha = 0.08f))
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -179,7 +181,7 @@ fun BpExportScreen(
                     Text(
                         stringResource(R.string.txt_the_doctor_report_includes_you),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(HealthColors.Good.copy(alpha = 0.9f))
+                        color = DetailColors.text(HealthColors.Good.copy(alpha = 0.9f))
                     )
                 }
             }
@@ -227,7 +229,7 @@ fun BpExportScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -235,7 +237,7 @@ fun BpExportScreen(
                         stringResource(R.string.txt_no_readings_to_share_yet_take_),
                         modifier = Modifier.padding(16.dp),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -276,7 +278,7 @@ private fun ExportStatItem(
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+            color = DetailColors.text(DetailColors.Secondary)
         )
     }
 }
@@ -334,7 +336,7 @@ private fun ExportOptionCard(
                     Text(
                         description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }

@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -61,12 +63,13 @@ fun BloodPressureScreen(
     onNavigateToExport: () -> Unit,
     onNavigateToEducation: () -> Unit = {},
     viewModel: BloodPressureViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.BLOOD_PRESSURE) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
+    var showActions by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.showSaveSuccess) {
         if (uiState.showSaveSuccess) {
@@ -102,44 +105,32 @@ fun BloodPressureScreen(
                             com.health.calculator.bmi.tracker.presentation.navigation.CalculatorDestination.BLOOD_PRESSURE
                         )
                     }
-                    IconButton(onClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onNavigateToExport()
-                    }) {
-                        Icon(
-                            Icons.Outlined.FileDownload,
-                            contentDescription = "Export & Share"
-                        )
-                    }
-                    IconButton(onClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onNavigateToTrends()
-                    }) {
-                        Icon(
-                            Icons.Outlined.Timeline,
-                            contentDescription = "View Trends"
-                        )
-                    }
-                    IconButton(onClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onNavigateToLogs()
-                    }) {
-                        Icon(
-                            Icons.Outlined.History,
-                            contentDescription = "View Logs"
-                        )
-                    }
-                    if (uiState.systolic.isNotEmpty() || uiState.diastolic.isNotEmpty()) {
-                        TextButton(onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            viewModel.onClearAll()
-                        }) {
-                            Text(stringResource(R.string.txt_clear_all_1))
+                    Box {
+                        IconButton(onClick = { showActions = true }) {
+                            Icon(Icons.Filled.MoreVert, contentDescription = "Blood pressure actions")
+                        }
+                        DropdownMenu(expanded = showActions, onDismissRequest = { showActions = false }) {
+                            listOf("Export & Share" to onNavigateToExport,
+                                "View Trends" to onNavigateToTrends, "View Logs" to onNavigateToLogs
+                            ).forEach { (label, action) ->
+                                DropdownMenuItem(text = { Text(label) }, onClick = {
+                                    showActions = false
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    action()
+                                })
+                            }
+                            if (uiState.systolic.isNotEmpty() || uiState.diastolic.isNotEmpty()) {
+                                DropdownMenuItem(text = { Text(stringResource(R.string.txt_clear_all_1)) }, onClick = {
+                                    showActions = false
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    viewModel.onClearAll()
+                                })
+                            }
                         }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -262,7 +253,7 @@ fun BloodPressureScreen(
                     Text(
                         stringResource(R.string.txt_learn_about_blood_pressure_how),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -333,7 +324,7 @@ fun BloodPressureScreen(
                     Text(
                         stringResource(R.string.txt_results),
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary),
                         modifier = Modifier.padding(horizontal = 16.dp),
                         fontWeight = FontWeight.Bold
                     )
@@ -427,40 +418,10 @@ fun BloodPressureScreen(
 
 @Composable
 private fun BpHeaderNote() {
-    val enterAnim = remember { MutableTransitionState(false).apply { targetState = true } }
-
-    AnimatedVisibility(
-        visibleState = enterAnim,
-        enter = slideInVertically(initialOffsetY = { -40 }) + fadeIn(
-            animationSpec = tween(500)
-        )
-    ) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
-            ),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Row(
-                modifier = Modifier.padding(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Outlined.Info,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
-                )
-                Text(
-                    stringResource(R.string.txt_enter_your_blood_pressure_read),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-        }
-    }
+    PairedStemHeader(
+        title = stringResource(R.string.txt_blood_pressure),
+        subtitle = stringResource(R.string.txt_enter_your_blood_pressure_read)
+    )
 }
 
 // ─── Emergency Warning Banner ──────────────────────────────────────────────────
@@ -470,7 +431,7 @@ private fun EmergencyWarningBanner() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer)
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer)
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -490,13 +451,13 @@ private fun EmergencyWarningBanner() {
                     stringResource(R.string.txt_emergency_reading_detected),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onErrorContainer
+                    color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer)
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     stringResource(R.string.txt_if_your_reading_is_above_180_1),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onErrorContainer
+                    color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer)
                 )
             }
         }
@@ -507,7 +468,7 @@ private fun EmergencyWarningBanner() {
 
 @Composable
 private fun BpIllustrationCard() {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val enterAnim = remember { MutableTransitionState(false).apply { targetState = true } }
 
@@ -535,7 +496,7 @@ private fun BpIllustrationCard() {
                     stringResource(R.string.txt_understanding_your_reading),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -557,7 +518,7 @@ private fun BpIllustrationCard() {
                                 .clip(CircleShape)
                                 .background(
                                     Brush.verticalGradient(
-                                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(
                                             HealthColors.DangerDark,
                                             HealthColors.Danger
                                         )
@@ -569,13 +530,13 @@ private fun BpIllustrationCard() {
                                 Icon(
                                     Icons.Filled.KeyboardArrowUp,
                                     contentDescription = null,
-                                    tint = Color.White,
+                                    tint = DetailColors.Accent,
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Text(
                                     stringResource(R.string.txt_sys),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(Color.White),
+                                    color = DetailColors.text(Color.White),
                                     fontWeight = FontWeight.Bold
                                 )
                             }
@@ -585,18 +546,18 @@ private fun BpIllustrationCard() {
                             stringResource(R.string.txt_systolic),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = AppColors.text(HealthColors.Danger)
+                            color = DetailColors.text(HealthColors.Danger)
                         )
                         Text(
                             stringResource(R.string.txt_heart_beating),
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             textAlign = TextAlign.Center
                         )
                         Text(
                             stringResource(R.string.txt_top_number),
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -610,7 +571,7 @@ private fun BpIllustrationCard() {
                             stringResource(R.string.txt_text_placeholder_14),
                             style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Light,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
 
@@ -625,7 +586,7 @@ private fun BpIllustrationCard() {
                                 .clip(CircleShape)
                                 .background(
                                     Brush.verticalGradient(
-                                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(
                                             HealthColors.GoodDark,
                                             HealthColors.Good
                                         )
@@ -637,13 +598,13 @@ private fun BpIllustrationCard() {
                                 Icon(
                                     Icons.Filled.KeyboardArrowDown,
                                     contentDescription = null,
-                                    tint = Color.White,
+                                    tint = DetailColors.Accent,
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Text(
                                     stringResource(R.string.txt_dia),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(Color.White),
+                                    color = DetailColors.text(Color.White),
                                     fontWeight = FontWeight.Bold
                                 )
                             }
@@ -653,18 +614,18 @@ private fun BpIllustrationCard() {
                             stringResource(R.string.txt_diastolic),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = AppColors.text(HealthColors.Good)
+                            color = DetailColors.text(HealthColors.Good)
                         )
                         Text(
                             stringResource(R.string.txt_heart_resting),
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             textAlign = TextAlign.Center
                         )
                         Text(
                             stringResource(R.string.txt_bottom_number),
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -782,7 +743,7 @@ private fun BpMainInputCard(
                             placeholder = {
                                 Text(
                                     previousSystolicHint ?: "120",
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
+                                    color = DetailColors.text(DetailColors.Secondary)
                                 )
                             },
                             suffix = { Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall) },
@@ -808,7 +769,7 @@ private fun BpMainInputCard(
                             Text(
                                 systolicError ?: "",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.error),
+                                color = DetailColors.text(MaterialTheme.colorScheme.error),
                                 modifier = Modifier.padding(start = 4.dp, top = 4.dp)
                             )
                         }
@@ -823,7 +784,7 @@ private fun BpMainInputCard(
                             placeholder = {
                                 Text(
                                     previousDiastolicHint ?: "80",
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
+                                    color = DetailColors.text(DetailColors.Secondary)
                                 )
                             },
                             suffix = { Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall) },
@@ -849,7 +810,7 @@ private fun BpMainInputCard(
                             Text(
                                 diastolicError ?: "",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.error),
+                                color = DetailColors.text(MaterialTheme.colorScheme.error),
                                 modifier = Modifier.padding(start = 4.dp, top = 4.dp)
                             )
                         }
@@ -860,7 +821,7 @@ private fun BpMainInputCard(
                 AnimatedVisibility(visible = crossFieldError != null) {
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer)
+                            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer)
                         ),
                         shape = RoundedCornerShape(8.dp)
                     ) {
@@ -878,7 +839,7 @@ private fun BpMainInputCard(
                             Text(
                                 crossFieldError ?: "",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onErrorContainer
+                                color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer)
                             )
                         }
                     }
@@ -894,12 +855,12 @@ private fun BpMainInputCard(
                             Icons.Outlined.Info,
                             contentDescription = null,
                             modifier = Modifier.size(14.dp),
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            tint = DetailColors.Secondary
                         )
                         Text(
                             "Last reading: $previousSystolicHint/$previousDiastolicHint mmHg",
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -975,7 +936,7 @@ private fun BpPulseInputCard(
                     Text(
                         stringResource(R.string.txt_optional),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
 
@@ -986,7 +947,7 @@ private fun BpPulseInputCard(
                     placeholder = {
                         Text(
                             previousPulseHint ?: "72",
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     },
                     suffix = { Text(stringResource(R.string.txt_bpm_1), style = MaterialTheme.typography.bodySmall) },
@@ -1008,7 +969,7 @@ private fun BpPulseInputCard(
                     Text(
                         pulseError ?: "",
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.error),
+                        color = DetailColors.text(MaterialTheme.colorScheme.error),
                         modifier = Modifier.padding(start = 4.dp)
                     )
                 }
@@ -1084,7 +1045,7 @@ private fun BpOptionalDetailsCard(
                         Text(
                             stringResource(R.string.txt_optional),
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
 
@@ -1097,7 +1058,7 @@ private fun BpOptionalDetailsCard(
                         Icons.Filled.KeyboardArrowDown,
                         contentDescription = if (isExpanded) "Collapse" else "Expand",
                         modifier = Modifier.graphicsLayer { rotationZ = rotation },
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        tint = DetailColors.Secondary
                     )
                 }
 
@@ -1118,7 +1079,7 @@ private fun BpOptionalDetailsCard(
                             stringResource(R.string.txt_arm_used),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Medium,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1149,7 +1110,7 @@ private fun BpOptionalDetailsCard(
                             stringResource(R.string.txt_body_position),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Medium,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1183,7 +1144,7 @@ private fun BpOptionalDetailsCard(
                             stringResource(R.string.txt_time_of_day),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Medium,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1215,7 +1176,7 @@ private fun BpOptionalDetailsCard(
                             stringResource(R.string.txt_measurement_time),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Medium,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                         OutlinedCard(
                             onClick = onTimeClicked,
@@ -1247,7 +1208,7 @@ private fun BpOptionalDetailsCard(
                                 Icon(
                                     Icons.Outlined.Edit,
                                     contentDescription = "Edit time",
-                                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                                    tint = DetailColors.Secondary,
                                     modifier = Modifier.size(18.dp)
                                 )
                             }
