@@ -1,5 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.reminders
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -45,6 +48,7 @@ fun RemindersScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    DetailScreenTheme(DetailFeature.REMINDERS) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
@@ -65,6 +69,8 @@ fun RemindersScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface),
                 title = {
                     Column {
                         Text(stringResource(R.string.txt_reminders), fontWeight = FontWeight.Bold)
@@ -320,5 +326,6 @@ fun RemindersScreen(
                 TextButton(onClick = viewModel::dismissPermissionRationale) { Text(stringResource(R.string.txt_not_now)) }
             }
         )
+    }
     }
 }

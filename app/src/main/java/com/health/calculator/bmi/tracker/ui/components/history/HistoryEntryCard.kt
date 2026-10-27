@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.components.history
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.SupportingWrapRow
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -44,11 +46,11 @@ fun HistoryEntryCard(
     val haptic = LocalHapticFeedback.current
 
     val categoryIndicatorColor = when (entry.categoryColor) {
-        CategoryColor.GREEN -> HealthColors.Healthy
-        CategoryColor.YELLOW -> HealthColors.Warning
-        CategoryColor.ORANGE -> HealthColors.Caution
-        CategoryColor.RED -> HealthColors.Danger
-        CategoryColor.BLUE -> HealthColors.Info
+        CategoryColor.GREEN -> if (AppColors.active) AppColors.Success else HealthColors.Healthy
+        CategoryColor.YELLOW -> if (AppColors.active) AppColors.Warning else HealthColors.Warning
+        CategoryColor.ORANGE -> if (AppColors.active) AppColors.Warning else HealthColors.Caution
+        CategoryColor.RED -> if (AppColors.active) AppColors.Danger else HealthColors.Danger
+        CategoryColor.BLUE -> if (AppColors.active) AppColors.Accent else HealthColors.Info
         CategoryColor.GRAY -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
@@ -61,9 +63,11 @@ fun HistoryEntryCard(
                     stiffness = Spring.StiffnessLow
                 )
             ),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(if (AppColors.active) 4.dp else 14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(if (entry.isSelected)
+            containerColor = if (AppColors.active) {
+                if (entry.isSelected) AppColors.SurfaceAlt else AppColors.Surface
+            } else AppColors.surface(if (entry.isSelected)
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
             else
                 MaterialTheme.colorScheme.surface)
@@ -101,7 +105,7 @@ fun HistoryEntryCard(
                     Checkbox(
                         checked = entry.isSelected,
                         onCheckedChange = { onLongPress() },
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(if (AppColors.active) 48.dp else 24.dp),
                         colors = CheckboxDefaults.colors(
                             checkedColor = MaterialTheme.colorScheme.primary
                         )
@@ -134,7 +138,7 @@ fun HistoryEntryCard(
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
+                        maxLines = if (AppColors.active) Int.MAX_VALUE else 1,
                         overflow = TextOverflow.Ellipsis
                     )
 
@@ -155,7 +159,7 @@ fun HistoryEntryCard(
                                 style = MaterialTheme.typography.labelSmall,
                                 color = AppColors.text(categoryIndicatorColor),
                                 fontWeight = FontWeight.Medium,
-                                maxLines = 1,
+                                maxLines = if (AppColors.active) Int.MAX_VALUE else 1,
                                 overflow = TextOverflow.Ellipsis
                             )
                             Spacer(modifier = Modifier.width(8.dp))
@@ -202,7 +206,7 @@ fun HistoryEntryCard(
                         Icon(
                             imageVector = Icons.Default.StickyNote2,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                            tint = if (AppColors.active) AppColors.Secondary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                             modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
@@ -210,7 +214,7 @@ fun HistoryEntryCard(
                             text = note,
                             style = MaterialTheme.typography.labelSmall,
                             color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
-                            maxLines = 1,
+                            maxLines = if (AppColors.active) Int.MAX_VALUE else 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
@@ -227,7 +231,7 @@ fun HistoryEntryCard(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     HorizontalDivider(
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
+                        color = if (AppColors.active) AppColors.Outline else MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -243,7 +247,7 @@ fun HistoryEntryCard(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     // Action buttons
-                    Row(
+                    SupportingWrapRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically

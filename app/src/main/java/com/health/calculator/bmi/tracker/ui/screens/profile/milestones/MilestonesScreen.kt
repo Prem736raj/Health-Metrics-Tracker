@@ -1,5 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.profile.milestones
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -25,6 +28,7 @@ fun MilestonesScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    DetailScreenTheme(DetailFeature.MILESTONES) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -97,5 +101,6 @@ fun MilestonesScreen(
                 onDismissAll = viewModel::dismissAllCelebrations
             )
         }
+    }
     }
 }

@@ -3,6 +3,7 @@ package com.health.calculator.bmi.tracker.ui.components
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -50,6 +51,7 @@ fun ReminderEditDialog(
         Surface(
             modifier = Modifier
                 .fillMaxSize()
+                .then(if (AppColors.active) Modifier.imePadding().navigationBarsPadding() else Modifier)
                 .padding(16.dp),
             shape = MaterialTheme.shapes.large,
             color = MaterialTheme.colorScheme.surface,
@@ -121,11 +123,17 @@ fun ReminderEditDialog(
                             label = { Text(time) },
                             trailingIcon = {
                                 if (times.size > 1) {
-                                    Icon(
-                                        Icons.Default.Cancel,
-                                        "Remove",
-                                        modifier = Modifier.size(16.dp).clickable { onRemoveTime(index) }
-                                    )
+                                    if (AppColors.active) {
+                                        IconButton(onClick = { onRemoveTime(index) }, modifier = Modifier.size(48.dp)) {
+                                            Icon(Icons.Default.Cancel, "Remove $time", modifier = Modifier.size(20.dp))
+                                        }
+                                    } else {
+                                        Icon(
+                                            Icons.Default.Cancel,
+                                            "Remove",
+                                            modifier = Modifier.size(16.dp).clickable { onRemoveTime(index) }
+                                        )
+                                    }
                                 }
                             }
                         )

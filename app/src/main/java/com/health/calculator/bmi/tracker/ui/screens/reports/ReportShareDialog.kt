@@ -5,6 +5,8 @@ import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Assessment
@@ -40,7 +42,7 @@ fun ReportShareDialog(
         icon = { Icon(Icons.Default.Share, null, modifier = Modifier.size(24.dp)) },
         title = { Text(stringResource(R.string.txt_share_report), fontWeight = FontWeight.Bold) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(stringResource(R.string.txt_choose_what_to_include), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
                 Text(
                     "Only selected sections are included. Sharing is optional.",

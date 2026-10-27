@@ -1,7 +1,11 @@
 // app/src/main/java/com/health/calculator/bmi/tracker/ui/screens/welcomeback/WelcomeBackScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.welcomeback
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailHero
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -47,7 +51,7 @@ private fun welcomeMetricIcon(name: String, route: String): ImageVector {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun WelcomeBackScreen(
     viewModel: WelcomeBackViewModel,
@@ -55,9 +59,10 @@ fun WelcomeBackScreen(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    DetailScreenTheme(DetailFeature.WELCOME) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (!uiState.isVisible || uiState.data == null) return
+    if (!uiState.isVisible || uiState.data == null) return@DetailScreenTheme
 
     val data = uiState.data!!
 
@@ -89,22 +94,9 @@ fun WelcomeBackScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = if (data.userName != null) "Welcome back, ${data.userName}!"
-                else "Welcome back!",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = getDaysAwayMessage(data.daysAway),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+            DetailHero(
+                title = if (data.userName != null) "Welcome back, ${data.userName}!" else "Welcome back!",
+                subtitle = getDaysAwayMessage(data.daysAway)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -161,7 +153,7 @@ fun WelcomeBackScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Most used calculators
-            Row(
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -172,7 +164,7 @@ fun WelcomeBackScreen(
                             viewModel.dismiss()
                             onNavigateToCalculator(calc.route)
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.widthIn(min = 136.dp).weight(1f)
                     )
                 }
             }
@@ -205,6 +197,7 @@ fun WelcomeBackScreen(
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
+    }
 }
 
 @Composable
@@ -220,7 +213,7 @@ private fun StreakStatusCard(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = AppColors.surface(if (freezeApplied)
-                HealthColors.Healthy.copy(alpha = 0.1f)
+                AppColors.Success.copy(alpha = 0.1f)
             else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
         )
     ) {
@@ -230,12 +223,12 @@ private fun StreakStatusCard(
                     Icon(
                         imageVector = Icons.Outlined.Shield,
                         contentDescription = null,
-                        tint = HealthColors.Healthy,
+                        tint = AppColors.Success,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
-                        Text(stringResource(R.string.txt_streak_protected), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = AppColors.text(HealthColors.Healthy))
+                        Text(stringResource(R.string.txt_streak_protected), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = AppColors.text(AppColors.Success))
                         Text(stringResource(R.string.txt_your_streak_freeze_kept_your_s), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
@@ -405,11 +398,11 @@ private fun QuickActionButton(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                calculator.name.split(" ").first(),
+                calculator.name,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
-                maxLines = 1
+                minLines = 2
             )
         }
     }

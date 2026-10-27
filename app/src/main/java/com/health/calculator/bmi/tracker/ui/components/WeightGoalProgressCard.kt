@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -37,10 +37,10 @@ fun WeightGoalProgressCard(
     )
 
     val progressColor = when {
-        progress.isGoalReached -> HealthColors.Healthy
-        completion >= 0.75f -> HealthColors.Info
-        completion >= 0.5f -> HealthColors.BelowNormal
-        completion >= 0.25f -> HealthColors.Warning
+        progress.isGoalReached -> (if (AppColors.active) AppColors.Success else HealthColors.Healthy)
+        completion >= 0.75f -> (if (AppColors.active) AppColors.Accent else HealthColors.Info)
+        completion >= 0.5f -> (if (AppColors.active) AppColors.Accent else HealthColors.BelowNormal)
+        completion >= 0.25f -> (if (AppColors.active) AppColors.Warning else HealthColors.Warning)
         else -> MaterialTheme.colorScheme.primary
     }
 
@@ -49,13 +49,13 @@ fun WeightGoalProgressCard(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = AppColors.surface(if (progress.isGoalReached)
-                HealthColors.Healthy.copy(alpha = 0.1f)
+                (if (AppColors.active) AppColors.Success else HealthColors.Healthy).copy(alpha = 0.1f)
             else MaterialTheme.colorScheme.surface)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(
+            SupportingWrapRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -64,7 +64,7 @@ fun WeightGoalProgressCard(
                     text = if (progress.isGoalReached) "Goal reached" else "Goal progress",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(if (progress.isGoalReached) HealthColors.Healthy
+                    color = AppColors.text(if (progress.isGoalReached) (if (AppColors.active) AppColors.Success else HealthColors.Healthy)
                     else MaterialTheme.colorScheme.onSurface)
                 )
 
@@ -72,7 +72,7 @@ fun WeightGoalProgressCard(
                     Icon(
                         imageVector = Icons.Default.EmojiEvents,
                         contentDescription = "Goal reached",
-                        tint = HealthColors.Warning,
+                        tint = (if (AppColors.active) AppColors.Warning else HealthColors.Warning),
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -100,7 +100,7 @@ fun WeightGoalProgressCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Percentage and remaining
-            Row(
+            SupportingWrapRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {

@@ -6,6 +6,8 @@ import com.health.calculator.bmi.tracker.R
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Schedule
@@ -18,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.ui.components.TimePickerDialog
 import java.util.Calendar
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ReportScheduleDialog(
     enabled: Boolean,
@@ -44,20 +46,20 @@ fun ReportScheduleDialog(
         icon = { Icon(Icons.Outlined.Schedule, null, modifier = Modifier.size(28.dp)) },
         title = { Text(stringResource(R.string.txt_weekly_report_schedule), fontWeight = FontWeight.Bold) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(stringResource(R.string.txt_enable_weekly_reports), style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.txt_enable_weekly_reports), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
                     Switch(checked = enabled, onCheckedChange = onToggle)
                 }
 
                 if (enabled) {
                     // Day picker
                     Text(stringResource(R.string.txt_day), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         val days = listOf(
                             Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
                             Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY
@@ -67,7 +69,7 @@ fun ReportScheduleDialog(
                                 selected = d == day,
                                 onClick = { onDayChange(d) },
                                 label = { Text(dayNames[d]?.take(3) ?: "", style = MaterialTheme.typography.labelSmall) },
-                                modifier = Modifier.height(32.dp)
+                                modifier = Modifier.heightIn(min = 48.dp)
                             )
                         }
                     }

@@ -1,6 +1,9 @@
 package com.health.calculator.bmi.tracker.ui.screens.settings
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -11,6 +14,8 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +48,7 @@ fun DataManagementScreen(
     onResetToOnboarding: () -> Unit,
     viewModel: DataManagementViewModel = hiltViewModel()
 ) {
+    DetailScreenTheme(DetailFeature.DATA) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -114,6 +120,8 @@ fun DataManagementScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface),
                 title = { Text(stringResource(R.string.txt_data_management), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
@@ -151,7 +159,7 @@ fun DataManagementScreen(
             item(key = "cleanup_age") {
                 ActionCard(
                     icon = Icons.Default.DateRange,
-                    iconColor = HealthColors.Warning,
+                    iconColor = AppColors.Warning,
                     title = "Clear Old Data",
                     subtitle = "Remove entries older than a specified period",
                     onClick = { viewModel.showCleanupByAge() }
@@ -161,7 +169,7 @@ fun DataManagementScreen(
             item(key = "cleanup_calculator") {
                 ActionCard(
                     icon = Icons.Default.Calculate,
-                    iconColor = HealthColors.Info,
+                    iconColor = AppColors.Accent,
                     title = "Clear by Calculator",
                     subtitle = "Remove history for specific calculators only",
                     onClick = { viewModel.showCleanupByCalculator() }
@@ -171,7 +179,7 @@ fun DataManagementScreen(
             item(key = "cleanup_cache") {
                 ActionCard(
                     icon = Icons.Default.CleaningServices,
-                    iconColor = HealthColors.Healthy,
+                    iconColor = AppColors.Success,
                     title = "Clear Cache",
                     subtitle = "Remove temporary files and cached data (${uiState.storageInfo.cacheFormatted})",
                     onClick = { viewModel.clearCache() }
@@ -259,6 +267,7 @@ fun DataManagementScreen(
             item { Spacer(Modifier.height(40.dp)) }
         }
     }
+    }
 }
 
 @Composable
@@ -274,114 +283,39 @@ private fun SectionLabel(text: String) {
 
 @Composable
 private fun StorageCard(storageInfo: StorageInfo, isLoading: Boolean) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(3.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Card(shape = RoundedCornerShape(6.dp), colors = CardDefaults.cardColors(containerColor = AppColors.Surface)) {
+        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.size(48.dp))
-                Spacer(Modifier.height(8.dp))
+                CircularProgressIndicator()
                 Text(stringResource(R.string.txt_analyzing_storage), style = MaterialTheme.typography.bodySmall)
             } else {
-                // Storage ring
                 val segments = listOf(
-                    Triple("History", storageInfo.historyBytes, HealthColors.Info),
-                    Triple("Cache", storageInfo.cacheBytes, HealthColors.Warning),
-                    Triple("Settings", storageInfo.settingsBytes, HealthColors.Healthy),
-                    Triple("Exports", storageInfo.exportsBytes, MaterialTheme.colorScheme.tertiary),
-                    Triple("Legacy files", storageInfo.backupsBytes, MaterialTheme.colorScheme.error)
+                    Triple("History", storageInfo.historyBytes, AppColors.Accent),
+                    Triple("Cache", storageInfo.cacheBytes, AppColors.Warning),
+                    Triple("Settings", storageInfo.settingsBytes, AppColors.Success),
+                    Triple("Exports", storageInfo.exportsBytes, AppColors.Secondary),
+                    Triple("Legacy files", storageInfo.backupsBytes, AppColors.Danger)
                 ).filter { it.second > 0 }
-                val ringBackground = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
-
-                Box(
-                    modifier = Modifier
-                        .size(140.dp)
-                        .drawBehind {
-                            val strokeWidth = 20f
-                            val radius = size.minDimension / 2 - strokeWidth
-                            var startAngle = -90f
-
-                            // Background ring
-                            drawCircle(
-                                color = ringBackground,
-                                radius = radius,
-                                style = Stroke(width = strokeWidth)
-                            )
-
-                            if (storageInfo.totalBytes > 0) {
-                                segments.forEach { (_, bytes, color) ->
-                                    val sweep = (bytes.toFloat() / storageInfo.totalBytes) * 360f
-                                    drawArc(
-                                        color = color,
-                                        startAngle = startAngle,
-                                        sweepAngle = sweep.coerceAtLeast(2f),
-                                        useCenter = false,
-                                        style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
-                                        topLeft = Offset(strokeWidth/2, strokeWidth/2),
-                                        size = Size(size.width - strokeWidth, size.height - strokeWidth)
-                                    )
-                                    startAngle += sweep
-                                }
-                            }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            storageInfo.totalFormatted,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            stringResource(R.string.txt_total_1),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
-                        )
+                Text(storageInfo.totalFormatted, style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.txt_total_1), style = MaterialTheme.typography.bodySmall, color = AppColors.Secondary)
+                val meterBackground = AppColors.SurfaceAlt
+                Box(Modifier.fillMaxWidth().height(14.dp).clip(RoundedCornerShape(7.dp)).drawBehind {
+                    drawRect(meterBackground)
+                    var x = 0f
+                    if (storageInfo.totalBytes > 0) segments.forEach { (_, bytes, ink) ->
+                        val width = size.width * bytes.toFloat() / storageInfo.totalBytes
+                        drawRect(ink, topLeft = Offset(x, 0f), size = Size(width, size.height))
+                        x += width
+                    }
+                })
+                segments.forEach { (label, bytes, ink) ->
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Box(Modifier.size(10.dp).background(ink, CircleShape))
+                        Text(label, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                        Text(StorageInfo.formatBytes(bytes), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                     }
                 }
-
-                Spacer(Modifier.height(16.dp))
-
-                // Breakdown legend
-                segments.forEach { (label, bytes, color) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 3.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            Modifier
-                                .size(10.dp)
-                                .clip(CircleShape)
-                                .background(color)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            label,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Text(
-                            StorageInfo.formatBytes(bytes),
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Medium,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
-                        )
-                    }
-                }
-
-                if (segments.isEmpty()) {
-                    Text(
-                        stringResource(R.string.txt_no_significant_data_stored),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
-                    )
-                }
+                if (segments.isEmpty()) Text(stringResource(R.string.txt_no_significant_data_stored), style = MaterialTheme.typography.bodySmall, color = AppColors.Secondary)
             }
         }
     }
@@ -427,7 +361,7 @@ private fun ActionCard(
             Icon(
                 Icons.Default.ChevronRight, null,
                 modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                tint = AppColors.secondaryText(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
             )
         }
     }
@@ -448,7 +382,7 @@ private fun IntegrityCard(
                 Icon(
                     Icons.Default.VerifiedUser,
                     null,
-                    tint = if (report.isComplete && report.isHealthy) HealthColors.Healthy
+                    tint = if (report.isComplete && report.isHealthy) AppColors.Success
                     else MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
@@ -467,7 +401,7 @@ private fun IntegrityCard(
             } else if (report.isComplete) {
                 Surface(
                     shape = RoundedCornerShape(10.dp),
-                    color = if (report.isHealthy) HealthColors.Healthy.copy(alpha = 0.10f)
+                    color = if (report.isHealthy) AppColors.Success.copy(alpha = 0.10f)
                     else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f)
                 ) {
                     Row(
@@ -479,7 +413,7 @@ private fun IntegrityCard(
                         Icon(
                             if (report.isHealthy) Icons.Default.CheckCircle else Icons.Default.Error,
                             null,
-                            tint = if (report.isHealthy) HealthColors.Healthy else MaterialTheme.colorScheme.error,
+                            tint = if (report.isHealthy) AppColors.Success else MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(Modifier.width(10.dp))
@@ -505,7 +439,7 @@ private fun IntegrityCard(
                         IssueRow("Corrupted entries", report.corruptedEntries, MaterialTheme.colorScheme.error)
                     }
                     if (report.duplicateEntries > 0) {
-                        IssueRow("Duplicate entries", report.duplicateEntries, HealthColors.Warning)
+                        IssueRow("Duplicate entries", report.duplicateEntries, AppColors.Warning)
                     }
                     if (report.orphanedEntries > 0) {
                         IssueRow("Orphaned entries", report.orphanedEntries, MaterialTheme.colorScheme.outline)
@@ -516,7 +450,7 @@ private fun IntegrityCard(
                         Text(
                             "✓ ${report.issuesFixed} issues fixed",
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(HealthColors.Healthy),
+                            color = AppColors.text(AppColors.Success),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -526,7 +460,7 @@ private fun IntegrityCard(
                     Button(
                         onClick = onFix,
                         shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = HealthColors.Warning),
+                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Accent, contentColor = AppColors.OnAccent),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(Icons.Default.Build, null, Modifier.size(18.dp))
@@ -590,7 +524,7 @@ private fun CleanupByAgeDialog(
         icon = { Icon(Icons.Default.DateRange, null) },
         title = { Text(stringResource(R.string.txt_clear_old_data), fontWeight = FontWeight.Bold) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     stringResource(R.string.txt_delete_history_entries_older_t),
                     style = MaterialTheme.typography.bodyMedium
@@ -622,7 +556,7 @@ private fun CleanupByAgeDialog(
                         color = if (p.entriesAffected > 0)
                             MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f)
                         else
-                            HealthColors.Healthy.copy(alpha = 0.10f)
+                            AppColors.Success.copy(alpha = 0.10f)
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
@@ -685,7 +619,7 @@ private fun CleanupByCalculatorDialog(
         icon = { Icon(Icons.Default.Calculate, null) },
         title = { Text(stringResource(R.string.txt_clear_by_calculator), fontWeight = FontWeight.Bold) },
         text = {
-            Column {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
                 Text(
                     stringResource(R.string.txt_select_calculators_to_clear_hi),
                     style = MaterialTheme.typography.bodySmall,
@@ -775,7 +709,7 @@ private fun DeleteEverythingDialog(
             )
         },
         text = {
-            Column {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
                 when (step) {
                     0 -> {
                         Text(stringResource(R.string.txt_this_will_permanently_delete))

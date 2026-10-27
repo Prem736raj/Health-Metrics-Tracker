@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -52,7 +52,7 @@ fun PersonalRecordsCard(
                 Icon(
                     Icons.Default.EmojiEvents,
                     contentDescription = null,
-                    tint = HealthColors.Warning,
+                    tint = if (AppColors.active) AppColors.Warning else (if (AppColors.active) AppColors.Warning else HealthColors.Warning),
                     modifier = Modifier.size(22.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -135,14 +135,14 @@ private fun PersonalRecordRow(
                     text = recordType.displayName,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
+                    maxLines = if (AppColors.active) Int.MAX_VALUE else 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = recordType.description,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
+                    maxLines = if (AppColors.active) Int.MAX_VALUE else 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
@@ -186,7 +186,7 @@ private fun EmptyRecordsCard(modifier: Modifier = Modifier) {
             Icon(
                 imageVector = Icons.Filled.EmojiEvents,
                 contentDescription = stringResource(R.string.txt_personal_records),
-                tint = HealthColors.Warning,
+                tint = if (AppColors.active) AppColors.Warning else (if (AppColors.active) AppColors.Warning else HealthColors.Warning),
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))

@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -181,7 +181,7 @@ private fun EarnedMilestoneItem(
                         modifier = Modifier
                             .width(2.dp)
                             .height(40.dp)
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
+                            .background(if (AppColors.active) AppColors.Accent else MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
                     )
                 }
             }
@@ -242,7 +242,7 @@ private fun LockedMilestoneItem(milestoneType: MilestoneType) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .alpha(0.5f)
+            .alpha(if (AppColors.active) 1f else 0.5f)
     ) {
         // Timeline connector
         Column(
@@ -267,7 +267,7 @@ private fun LockedMilestoneItem(milestoneType: MilestoneType) {
                 modifier = Modifier
                     .width(1.dp)
                     .height(32.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    .background(if (AppColors.active) AppColors.Outline else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
             )
         }
 

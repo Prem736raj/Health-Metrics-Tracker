@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -24,7 +26,7 @@ fun QuietHoursIndicator(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp)),
-        color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
+        color = if (AppColors.active) AppColors.SurfaceAlt else MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),

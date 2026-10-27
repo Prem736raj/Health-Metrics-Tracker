@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -49,7 +49,7 @@ fun NewRecordCelebrationDialog(
                 Icon(
                     Icons.Default.EmojiEvents,
                     contentDescription = "Trophy",
-                    tint = HealthColors.Warning,
+                    tint = (if (AppColors.active) AppColors.Warning else HealthColors.Warning),
                     modifier = Modifier
                         .size(56.dp)
                         .scale(trophyScale)
