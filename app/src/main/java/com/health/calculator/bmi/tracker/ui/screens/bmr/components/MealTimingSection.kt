@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/MealTimingSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -97,7 +97,7 @@ fun MealTimingSection(
                     Icon(
                         imageVector = Icons.Outlined.Restaurant,
                         contentDescription = null,
-                        tint = HealthColors.Info,
+                        tint = if (AppColors.active) AppColors.Accent else HealthColors.Info,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -110,7 +110,7 @@ fun MealTimingSection(
                         )
                         Text(
                             text = stringResource(R.string.txt_plan_when_and_how_often_to_eat),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -170,6 +170,7 @@ fun MealTimingSection(
 // ============================================================
 // Pattern Selector
 // ============================================================
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PatternSelector(
     selectedPattern: EatingPattern,
@@ -187,14 +188,16 @@ private fun PatternSelector(
         // Regular patterns row
         Text(
             text = stringResource(R.string.txt_regular),
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        Row(
+        FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            maxItemsInEachRow = 2
         ) {
             val regular = listOf(
                 EatingPattern.STANDARD, EatingPattern.THREE_MEALS,
@@ -215,14 +218,16 @@ private fun PatternSelector(
         // IF patterns row
         Text(
             text = stringResource(R.string.txt_intermittent_fasting),
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        Row(
+        FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            maxItemsInEachRow = 2
         ) {
             val ifPatterns = listOf(
                 EatingPattern.IF_16_8, EatingPattern.IF_18_6,
@@ -270,15 +275,15 @@ private fun PatternSelector(
                     Column {
                         Text(
                             text = pattern.displayName,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = pattern.description,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
                     }
                 }
@@ -338,12 +343,12 @@ private fun PatternChip(
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = pattern.shortName,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = AppColors.text(fg),
-                fontSize = 12.sp,
+                color = fg,
+                fontSize = 14.sp,
                 textAlign = TextAlign.Center,
-                maxLines = 1
+                maxLines = 3
             )
         }
     }
@@ -387,7 +392,7 @@ private fun EatingWindowControls(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(R.string.txt_first_meal_at),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -417,7 +422,7 @@ private fun EatingWindowControls(
                             text = "${displayHour}:${String.format("%02d", startMinute)} $amPm",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = AppColors.text(MaterialTheme.colorScheme.primary),
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                         )
                     }
@@ -450,7 +455,7 @@ private fun EatingWindowControls(
                 ) {
                     Text(
                         text = stringResource(R.string.txt_eating_window),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
@@ -488,7 +493,7 @@ private fun EatingWindowControls(
                 ) {
                     Text(
                         text = stringResource(R.string.txt_number_of_meals),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
@@ -621,7 +626,7 @@ private fun DailyTimeline(
                     }
                     val label = textMeasurer.measure(
                         displayH,
-                        TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Medium, color = onSurfaceVariant)
+                        TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium, color = onSurfaceVariant)
                     )
                     drawText(
                         label,
@@ -668,7 +673,7 @@ private fun DailyTimeline(
 
             val fastLabel = textMeasurer.measure(
                 "${config.fastingHours}h fast",
-                TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Medium, color = FastingColor)
+                TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium, color = FastingColor)
             )
             drawText(fastLabel, topLeft = Offset(centerX - fastLabel.size.width / 2, centerY + 4.dp.toPx()))
         }
@@ -703,9 +708,9 @@ private fun TimelineLegend(color: Color, label: String) {
         Spacer(modifier = Modifier.width(3.dp))
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
     }
 }
@@ -783,7 +788,7 @@ private fun IFWindowChip(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
@@ -798,7 +803,7 @@ private fun IFWindowChip(
         ) {
             Text(
                 text = duration,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(color),
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
@@ -865,9 +870,9 @@ private fun MealBreakdownList(meals: List<TimedMealSlot>) {
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = stringResource(R.string.txt_tip_these_are_suggested_timing),
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
-                fontSize = 12.sp,
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+                fontSize = 14.sp,
                 lineHeight = 14.sp
             )
         }
@@ -905,10 +910,10 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = meal.timeString,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                     fontWeight = FontWeight.Bold,
                     color = AppColors.text(dotColor),
-                    fontSize = 12.sp
+                    fontSize = 14.sp
                 )
             }
 
@@ -931,9 +936,9 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
                         ) {
                             Text(
                                 text = stringResource(R.string.txt_snack),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                 color = AppColors.text(SnackDotColor),
-                                fontSize = 12.sp,
+                                fontSize = 14.sp,
                                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
                             )
                         }
@@ -953,19 +958,19 @@ private fun MealCard(meal: TimedMealSlot, index: Int) {
                     text = "${meal.calories.roundToInt()}",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = AppColors.text(MaterialTheme.colorScheme.primary)
                 )
                 Text(
                     text = stringResource(R.string.txt_kcal),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp
+                    fontSize = 14.sp
                 )
                 Text(
                     text = "${meal.portionPercent.roundToInt()}%",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
-                    fontSize = 12.sp
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+                    fontSize = 14.sp
                 )
             }
         }
@@ -984,17 +989,17 @@ private fun MacroMiniChip(label: String, value: String, color: Color) {
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(color),
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
             Spacer(modifier = Modifier.width(2.dp))
             Text(
                 text = value,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(color.copy(alpha = 0.8f)),
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
     }

@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMREducationalSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -79,7 +79,7 @@ fun BMREducationalSection(
                         )
                         Text(
                             text = stringResource(R.string.txt_understand_your_metabolism_bet),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -108,15 +108,15 @@ fun BMREducationalSection(
                     Icon(
                         Icons.Outlined.Info,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(R.string.txt_this_educational_content_is_fo),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
-                        fontSize = 12.sp,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+                        fontSize = 14.sp,
                         lineHeight = 14.sp
                     )
                 }
@@ -230,7 +230,7 @@ private fun ParagraphItem(paragraph: EducationalParagraph) {
 private fun NormalParagraph(paragraph: EducationalParagraph) {
     Text(
         text = paragraph.text,
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurface,
         lineHeight = 18.sp
     )
@@ -249,7 +249,7 @@ private fun BulletParagraph(paragraph: EducationalParagraph) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = paragraph.text,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             lineHeight = 18.sp,
             modifier = Modifier.weight(1f)
@@ -280,7 +280,7 @@ private fun HighlightParagraph(paragraph: EducationalParagraph) {
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = paragraph.text,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Medium,
                 lineHeight = 18.sp
@@ -309,13 +309,13 @@ private fun TipParagraph(paragraph: EducationalParagraph) {
             Icon(
                 imageVector = Icons.Outlined.CheckCircle,
                 contentDescription = null,
-                tint = HealthColors.Healthy,
+                tint = if (AppColors.active) AppColors.Accent else HealthColors.Healthy,
                 modifier = Modifier.size(17.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = paragraph.text,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 lineHeight = 18.sp
             )
@@ -343,13 +343,13 @@ private fun WarningParagraph(paragraph: EducationalParagraph) {
             Icon(
                 imageVector = Icons.Outlined.Warning,
                 contentDescription = null,
-                tint = HealthColors.Caution,
+                tint = if (AppColors.active) AppColors.Accent else HealthColors.Caution,
                 modifier = Modifier.size(17.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = paragraph.text,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 lineHeight = 18.sp
             )
@@ -400,7 +400,7 @@ fun BMRFormulaComparisonSection(
                         )
                         Text(
                             text = stringResource(R.string.txt_why_formulas_give_different_re),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -419,7 +419,7 @@ fun BMRFormulaComparisonSection(
                     Column(modifier = Modifier.padding(12.dp)) {
                         Text(
                             text = stringResource(R.string.txt_different_bmr_formulas_use_dif),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             lineHeight = 18.sp
                         )
@@ -496,21 +496,21 @@ fun BMRFormulaComparisonSection(
                         Icon(
                             imageVector = Icons.Outlined.Lightbulb,
                             contentDescription = null,
-                            tint = HealthColors.Healthy,
+                            tint = if (AppColors.active) AppColors.Accent else HealthColors.Healthy,
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
                             Text(
                                 text = stringResource(R.string.txt_recommendation),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.text(HealthColors.Healthy)
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = stringResource(R.string.txt_the_mifflin_st_jeor_equation_1),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 lineHeight = 18.sp
                             )
@@ -535,10 +535,10 @@ private fun FormulaInsightBullet(text: String) {
         Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            lineHeight = 16.sp,
-            fontSize = 12.sp
+            lineHeight = 20.sp,
+            fontSize = 14.sp
         )
     }
 }
@@ -564,9 +564,9 @@ private fun QuickStatCard(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
             Text(
                 text = value,
@@ -576,9 +576,9 @@ private fun QuickStatCard(
             )
             Text(
                 text = formula,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
     }

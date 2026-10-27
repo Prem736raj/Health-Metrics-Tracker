@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRFormulaSelector.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -103,9 +103,9 @@ fun BMRFormulaSelector(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = formula.description,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        lineHeight = 16.sp
+                        lineHeight = 20.sp
                     )
                 }
             }
@@ -172,12 +172,15 @@ private fun FormulaChip(
             ) {
                 Text(
                     text = formula.displayName,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                    color = AppColors.text(contentColor),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    color = contentColor,
+                    softWrap = true
                 )
+                IconButton(onClick = onInfoClick, modifier = Modifier.size(48.dp)) {
+                    Icon(Icons.Outlined.Info, contentDescription = "About ${formula.displayName}",
+                        tint = contentColor, modifier = Modifier.size(20.dp))
+                }
                 if (formula.requiresBodyFat) {
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(
@@ -203,13 +206,13 @@ private fun FormulaChip(
             ) {
                 Text(
                     text = formula.tag,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                     fontWeight = if (formula.isRecommended) FontWeight.Bold else FontWeight.Normal,
-                    color = if (formula.isRecommended) {
+                    color = AppColors.text(if (formula.isRecommended) {
                         if (isSelected) MaterialTheme.colorScheme.onPrimary
-                        else HealthColors.Healthy
-                    } else contentColor.copy(alpha = 0.7f),
-                    fontSize = 12.sp,
+                        else AppColors.Success
+                    } else contentColor.copy(alpha = 0.7f)),
+                    fontSize = 14.sp,
                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)
                 )
             }
@@ -246,7 +249,7 @@ private fun FormulaInfoDialog(
                     ) {
                         Text(
                             text = stringResource(R.string.txt_recommended),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                             color = AppColors.text(HealthColors.Healthy),
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
@@ -259,7 +262,7 @@ private fun FormulaInfoDialog(
             Column {
                 Text(
                     text = "Year: ${formula.year}",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -286,7 +289,7 @@ private fun FormulaInfoDialog(
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = stringResource(R.string.txt_this_formula_requires_your_bod),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onTertiaryContainer
                             )
                         }

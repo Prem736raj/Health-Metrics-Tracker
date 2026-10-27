@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRTrendSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -38,8 +38,6 @@ import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-private val BMRLineColor = CalculatorColors.BMR
-private val TDEELineColor = HealthColors.Info
 
 private fun bmrInsightIcon(insight: BMRChangeInsight): ImageVector = when (insight) {
     BMRChangeInsight.NO_DATA -> Icons.Outlined.ShowChart
@@ -90,7 +88,7 @@ fun BMRTrendSection(
                         )
                         Text(
                             text = "${stats.totalReadings} reading${if (stats.totalReadings != 1) "s" else ""} recorded",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -112,7 +110,7 @@ fun BMRTrendSection(
                             points = historyPoints,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(220.dp)
+                                .height((240 * androidx.compose.ui.platform.LocalDensity.current.fontScale.coerceAtLeast(1f)).dp)
                         )
 
                         Spacer(modifier = Modifier.height(6.dp))
@@ -170,7 +168,7 @@ private fun EmptyTrendState() {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.txt_save_your_first_bmr_calculatio),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 lineHeight = 18.sp
@@ -181,6 +179,9 @@ private fun EmptyTrendState() {
 
 @Composable
 private fun SingleReadingState(stats: BMRTrendStats) {
+    val restingInk = AppColors.Accent
+    val dailyInk = AppColors.Success
+
     Column {
         // Show current stats
         Row(
@@ -191,14 +192,14 @@ private fun SingleReadingState(stats: BMRTrendStats) {
                 label = "Current BMR",
                 value = "${stats.currentBMR.toInt()}",
                 unit = "kcal/day",
-                color = BMRLineColor,
+                color = restingInk,
                 modifier = Modifier.weight(1f)
             )
             SingleStatCard(
                 label = "Current TDEE",
                 value = "${stats.currentTDEE.toInt()}",
                 unit = "kcal/day",
-                color = TDEELineColor,
+                color = dailyInk,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -225,7 +226,7 @@ private fun SingleReadingState(stats: BMRTrendStats) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_great_start_save_another_bmr_r),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     lineHeight = 18.sp
                 )
@@ -254,7 +255,7 @@ private fun SingleStatCard(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -266,7 +267,7 @@ private fun SingleStatCard(
             )
             Text(
                 text = unit,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(color.copy(alpha = 0.7f))
             )
         }
@@ -336,6 +337,9 @@ private fun BMRTDEEGraph(
     points: List<BMRHistoryPoint>,
     modifier: Modifier = Modifier
 ) {
+    val restingInk = AppColors.Accent
+    val dailyInk = AppColors.Success
+
     var selectedPointIndex by remember { mutableIntStateOf(-1) }
     val textMeasurer = rememberTextMeasurer()
     val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
@@ -368,7 +372,7 @@ private fun BMRTDEEGraph(
         Canvas(
             modifier = modifier.pointerInput(points) {
                 detectTapGestures { offset ->
-                    val paddingLeft = 50.dp.toPx()
+                    val paddingLeft = maxOf(50.dp.toPx(), 14.sp.toPx() * 4.2f)
                     val paddingRight = 16.dp.toPx()
                     val chartWidth = size.width - paddingLeft - paddingRight
 
@@ -381,10 +385,10 @@ private fun BMRTDEEGraph(
                 }
             }
         ) {
-            val paddingLeft = 50.dp.toPx()
+            val paddingLeft = maxOf(50.dp.toPx(), 14.sp.toPx() * 4.2f)
             val paddingRight = 16.dp.toPx()
             val paddingTop = 16.dp.toPx()
-            val paddingBottom = 30.dp.toPx()
+            val paddingBottom = maxOf(30.dp.toPx(), 14.sp.toPx() * 2.4f)
 
             val chartWidth = size.width - paddingLeft - paddingRight
             val chartHeight = size.height - paddingTop - paddingBottom
@@ -411,7 +415,7 @@ private fun BMRTDEEGraph(
 
                 val label = textMeasurer.measure(
                     "${value.toInt()}",
-                    TextStyle(fontSize = 12.sp, color = labelColor)
+                    TextStyle(fontSize = 14.sp, color = labelColor)
                 )
                 drawText(label, topLeft = Offset(2.dp.toPx(), y - label.size.height / 2))
             }
@@ -426,7 +430,7 @@ private fun BMRTDEEGraph(
                     val x = indexToX(i)
                     val dateLabel = textMeasurer.measure(
                         points[i].dateLabel,
-                        TextStyle(fontSize = 12.sp, color = labelColor)
+                        TextStyle(fontSize = 14.sp, color = labelColor)
                     )
                     drawText(
                         dateLabel,
@@ -460,8 +464,8 @@ private fun BMRTDEEGraph(
                 tdeeFillPath.lineTo(indexToX(points.lastIndex), paddingTop + chartHeight)
                 tdeeFillPath.close()
 
-                drawPath(tdeeFillPath, TDEELineColor.copy(alpha = 0.06f))
-                drawPath(tdeePath, TDEELineColor.copy(alpha = 0.5f), style = Stroke(2.dp.toPx(), cap = StrokeCap.Round))
+                drawPath(tdeeFillPath, dailyInk.copy(alpha = 0.06f))
+                drawPath(tdeePath, dailyInk, style = Stroke(2.dp.toPx(), cap = StrokeCap.Round))
 
                 // BMR line
                 val bmrPath = Path()
@@ -484,8 +488,8 @@ private fun BMRTDEEGraph(
                 bmrFillPath.lineTo(indexToX(points.lastIndex), paddingTop + chartHeight)
                 bmrFillPath.close()
 
-                drawPath(bmrFillPath, BMRLineColor.copy(alpha = 0.08f))
-                drawPath(bmrPath, BMRLineColor, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round))
+                drawPath(bmrFillPath, restingInk.copy(alpha = 0.08f))
+                drawPath(bmrPath, restingInk, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round))
             }
 
             // Data points
@@ -497,19 +501,19 @@ private fun BMRTDEEGraph(
                 val dotSize = if (isSelected) 7.dp.toPx() else 4.dp.toPx()
 
                 // TDEE dot
-                drawCircle(TDEELineColor.copy(alpha = 0.4f), dotSize * 0.8f, Offset(x, tdeeY))
+                drawCircle(dailyInk, dotSize * 0.8f, Offset(x, tdeeY))
 
                 // BMR dot
                 if (isSelected) {
-                    drawCircle(BMRLineColor.copy(alpha = 0.2f), dotSize * 2f, Offset(x, bmrY))
+                    drawCircle(restingInk.copy(alpha = 0.2f), dotSize * 2f, Offset(x, bmrY))
                 }
                 drawCircle(surfaceColor, dotSize, Offset(x, bmrY))
-                drawCircle(BMRLineColor, dotSize * 0.7f, Offset(x, bmrY))
+                drawCircle(restingInk, dotSize * 0.7f, Offset(x, bmrY))
 
                 // Vertical guide line when selected
                 if (isSelected) {
                     drawLine(
-                        BMRLineColor.copy(alpha = 0.15f),
+                        restingInk.copy(alpha = 0.15f),
                         Offset(x, paddingTop),
                         Offset(x, paddingTop + chartHeight),
                         1.dp.toPx(),
@@ -521,35 +525,40 @@ private fun BMRTDEEGraph(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PointTooltip(point: BMRHistoryPoint) {
+    val restingInk = AppColors.Accent
+    val dailyInk = AppColors.Success
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.9f))
+            containerColor = AppColors.SurfaceAlt
         )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
                 text = point.dateLabel,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.7f)
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = AppColors.text(AppColors.Secondary)
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Row(
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.spacedBy(18.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                TooltipItem("BMR", "${point.bmr.toInt()} kcal", BMRLineColor)
-                TooltipItem("TDEE", "${point.tdee.toInt()} kcal", TDEELineColor)
-                TooltipItem("Weight", "${String.format(java.util.Locale.getDefault(), "%.1f", point.weightKg)} kg", MaterialTheme.colorScheme.inverseOnSurface)
+                TooltipItem("BMR", "${point.bmr.toInt()} kcal", restingInk)
+                TooltipItem("TDEE", "${point.tdee.toInt()} kcal", dailyInk)
+                TooltipItem("Weight", "${String.format(java.util.Locale.getDefault(), "%.1f", point.weightKg)} kg", AppColors.Text)
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "${point.formulaName} • ${point.activityLevel}",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.5f),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = AppColors.text(AppColors.Secondary),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -562,13 +571,13 @@ private fun TooltipItem(label: String, value: String, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = AppColors.text(color.copy(alpha = 0.8f)),
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
             fontWeight = FontWeight.Bold,
             color = AppColors.text(color)
         )
@@ -577,14 +586,17 @@ private fun TooltipItem(label: String, value: String, color: Color) {
 
 @Composable
 private fun GraphLegend() {
+    val restingInk = AppColors.Accent
+    val dailyInk = AppColors.Success
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LegendDot(color = BMRLineColor, label = "BMR")
+        LegendDot(color = restingInk, label = "BMR")
         Spacer(modifier = Modifier.width(20.dp))
-        LegendDot(color = TDEELineColor, label = "TDEE")
+        LegendDot(color = dailyInk, label = "TDEE")
     }
 }
 
@@ -600,7 +612,7 @@ private fun LegendDot(color: Color, label: String) {
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Medium
         )
@@ -612,6 +624,8 @@ private fun LegendDot(color: Color, label: String) {
 // ============================================================
 @Composable
 private fun TrendStatisticsGrid(stats: BMRTrendStats) {
+    val restingInk = AppColors.Accent
+
     Column {
         Text(
             text = stringResource(R.string.txt_statistics),
@@ -629,7 +643,7 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
                 label = "Current",
                 value = "${stats.currentBMR.toInt()}",
                 unit = "kcal",
-                color = BMRLineColor,
+                color = restingInk,
                 modifier = Modifier.weight(1f)
             )
             TrendStatCard(
@@ -682,7 +696,7 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
                 ) {
                     Text(
                         text = stringResource(R.string.txt_change_from_first_reading),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -699,7 +713,7 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
                         ) {
                             Text(
                                 text = "$sign${stats.changePercentFromFirst.roundToInt()}%",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                 fontWeight = FontWeight.Bold,
                                 color = AppColors.text(changeColor),
                                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
@@ -732,9 +746,9 @@ private fun TrendStatCard(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
@@ -745,9 +759,9 @@ private fun TrendStatCard(
             )
             Text(
                 text = unit,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(color.copy(alpha = 0.6f)),
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
     }
@@ -792,7 +806,7 @@ private fun InsightCard(stats: BMRTrendStats) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = insight.message,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 lineHeight = 18.sp
             )
@@ -818,9 +832,9 @@ private fun InsightCard(stats: BMRTrendStats) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = "Weight changed ${wSign}${String.format(java.util.Locale.getDefault(), "%.1f", stats.weightChange)} kg since last reading",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
                     }
                 }

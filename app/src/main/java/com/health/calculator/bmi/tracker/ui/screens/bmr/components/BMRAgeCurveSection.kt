@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRAgeCurveSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -80,7 +80,7 @@ fun BMRAgeCurveSection(
                         )
                         Text(
                             text = stringResource(R.string.txt_how_your_bmr_compares_with_age),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -125,7 +125,7 @@ fun BMRAgeCurveSection(
                     isMale = isMale,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .height((220 * androidx.compose.ui.platform.LocalDensity.current.fontScale.coerceAtLeast(1f)).dp)
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -170,7 +170,7 @@ fun BMRAgeCurveSection(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = comparisonText,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             lineHeight = 18.sp
                         )
@@ -201,16 +201,16 @@ fun BMRAgeCurveSection(
                         Column {
                             Text(
                                 text = stringResource(R.string.txt_age_metabolism),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = declineText,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                lineHeight = 16.sp
+                                lineHeight = 20.sp
                             )
                         }
                     }
@@ -226,15 +226,15 @@ fun BMRAgeCurveSection(
                     Icon(
                         Icons.Outlined.Info,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                     text = stringResource(R.string.txt_bmr_decreases_approximately_1_),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
-                        fontSize = 12.sp,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+                        fontSize = 14.sp,
                         lineHeight = 14.sp
                     )
                 }
@@ -265,10 +265,10 @@ private fun ComparisonStatCard(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 lineHeight = 12.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -280,9 +280,9 @@ private fun ComparisonStatCard(
             )
             Text(
                 text = unit,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(color.copy(alpha = 0.7f)),
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
     }
@@ -300,9 +300,9 @@ private fun ChartLegendDot(color: Color, label: String) {
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
     }
 }
@@ -318,7 +318,7 @@ private fun BMRAgeCurveChart(
     modifier: Modifier = Modifier
 ) {
     val points = BMRAgeCurveData.ageCurvePoints
-    val curveColor = MaterialTheme.colorScheme.tertiary
+    val curveColor = AppColors.Success
     val userDotColor = MaterialTheme.colorScheme.primary
     val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
     val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -347,10 +347,10 @@ private fun BMRAgeCurveChart(
     }
 
     Canvas(modifier = modifier) {
-        val paddingLeft = 45.dp.toPx()
+        val paddingLeft = maxOf(45.dp.toPx(), 14.sp.toPx() * 4.2f)
         val paddingRight = 16.dp.toPx()
         val paddingTop = 16.dp.toPx()
-        val paddingBottom = 30.dp.toPx()
+        val paddingBottom = maxOf(30.dp.toPx(), 14.sp.toPx() * 2.4f)
 
         val chartWidth = size.width - paddingLeft - paddingRight
         val chartHeight = size.height - paddingTop - paddingBottom
@@ -382,7 +382,7 @@ private fun BMRAgeCurveChart(
             // Label
             val labelResult = textMeasurer.measure(
                 text = "${bmrVal.toInt()}",
-                style = TextStyle(fontSize = 12.sp, color = labelColor)
+                style = TextStyle(fontSize = 14.sp, color = labelColor)
             )
             drawText(
                 textLayoutResult = labelResult,
@@ -401,7 +401,7 @@ private fun BMRAgeCurveChart(
             )
             val ageLabel = textMeasurer.measure(
                 text = "$age",
-                style = TextStyle(fontSize = 12.sp, color = labelColor)
+                style = TextStyle(fontSize = 14.sp, color = labelColor)
             )
             drawText(
                 textLayoutResult = ageLabel,
@@ -496,7 +496,7 @@ private fun BMRAgeCurveChart(
         val youLabel = textMeasurer.measure(
             text = "You: ${userBMR.toInt()}",
             style = TextStyle(
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = userDotColor
             )

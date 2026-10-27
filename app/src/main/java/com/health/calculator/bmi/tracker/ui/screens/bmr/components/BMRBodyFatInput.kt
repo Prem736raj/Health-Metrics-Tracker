@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRBodyFatInput.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -73,8 +73,8 @@ fun BMRBodyFatInput(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = stringResource(R.string.txt_don_t_know_your_body_fat),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppColors.text(MaterialTheme.colorScheme.primary),
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -156,23 +156,23 @@ private fun BodyFatHelpDialog(onDismiss: () -> Unit) {
                     Column(modifier = Modifier.padding(12.dp)) {
                         Text(
                             text = stringResource(R.string.txt_general_body_fat_ranges),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "Broad population references only; they are not a diagnosis or a target.",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            lineHeight = 16.sp
+                            lineHeight = 20.sp
                         )
                         Spacer(modifier = Modifier.height(6.dp))
 
                         Text(
                             text = stringResource(R.string.txt_men),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = AppColors.text(MaterialTheme.colorScheme.primary)
                         )
                         BodyFatRange("Essential Fat", "2-5%")
                         BodyFatRange("Athletes", "6-13%")
@@ -184,9 +184,9 @@ private fun BodyFatHelpDialog(onDismiss: () -> Unit) {
 
                         Text(
                             text = stringResource(R.string.txt_women),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = AppColors.text(MaterialTheme.colorScheme.primary)
                         )
                         BodyFatRange("Essential Fat", "10-13%")
                         BodyFatRange("Athletes", "14-20%")
@@ -200,9 +200,9 @@ private fun BodyFatHelpDialog(onDismiss: () -> Unit) {
 
                 Text(
                     text = stringResource(R.string.txt_tip_if_you_don_t_know_your_bod),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    lineHeight = 16.sp
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppColors.text(MaterialTheme.colorScheme.primary),
+                    lineHeight = 20.sp
                 )
             }
         },
@@ -236,9 +236,9 @@ private fun BodyFatMethod(
             )
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 16.sp
+                lineHeight = 20.sp
             )
         }
     }
@@ -254,16 +254,16 @@ private fun BodyFatRange(label: String, range: String) {
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
         Text(
             text = range,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
     }
 }
