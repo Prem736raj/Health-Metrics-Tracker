@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.data.export.ExportDisclosurePolicy
@@ -95,7 +95,7 @@ fun FormulaComparisonCard(
             .clickable { isExpanded = !isExpanded },
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -126,14 +126,14 @@ fun FormulaComparisonCard(
                         Text(
                             text = stringResource(R.string.txt_mhr_results_from_all_formulas),
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
                 Icon(
                     imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -170,7 +170,7 @@ fun FormulaComparisonCard(
                         text = "$selectedMHR BPM",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary)
                     )
                 }
             }
@@ -206,7 +206,7 @@ fun FormulaComparisonCard(
                     Card(
                         shape = RoundedCornerShape(10.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = AppColors.surface(HealthColors.Good.copy(alpha = 0.06f))
+                            containerColor = DetailColors.surface(HealthColors.Good.copy(alpha = 0.06f))
                         )
                     ) {
                         Row(
@@ -232,7 +232,7 @@ fun FormulaComparisonCard(
                                     append("\n\nAll formulas are estimates. A supervised exercise test is a separate way to assess maximum heart rate when clinically appropriate.")
                                 },
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                                color = DetailColors.text(DetailColors.Secondary),
                                 lineHeight = 15.sp
                             )
                         }
@@ -261,7 +261,7 @@ private fun FormulaComparisonRow(
     val barColor = when {
         isSelected -> MaterialTheme.colorScheme.primary
         isBestForUser -> HealthColors.Healthy
-        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
+        else -> DetailColors.Secondary
     }
 
     Row(
@@ -292,7 +292,7 @@ private fun FormulaComparisonRow(
                     text = it,
                     style = MaterialTheme.typography.labelSmall,
                     fontSize = 12.sp,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -324,7 +324,7 @@ private fun FormulaComparisonRow(
             text = "$mhr",
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.ExtraBold,
-            color = AppColors.text(barColor),
+            color = DetailColors.text(barColor),
             modifier = Modifier.width(36.dp),
             textAlign = TextAlign.End
         )
@@ -451,7 +451,7 @@ private fun EdgeWarningCard(warning: EdgeWarning) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(containerColor)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(containerColor)),
         border = androidx.compose.foundation.BorderStroke(1.dp, borderColor)
     ) {
         Row(
@@ -473,7 +473,7 @@ private fun EdgeWarningCard(warning: EdgeWarning) {
             Text(
                 text = warning.message,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 17.sp
             )
         }
@@ -494,7 +494,7 @@ fun RestingHRTrendCard(
             modifier = modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
             )
         ) {
             Column(
@@ -519,7 +519,7 @@ fun RestingHRTrendCard(
                     text = stringResource(R.string.txt_calculate_your_zones_regularly) +
                             "Compare readings under similar conditions; a trend alone cannot measure fitness.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     textAlign = TextAlign.Center,
                     lineHeight = 17.sp,
                     modifier = Modifier.padding(top = 6.dp)
@@ -609,7 +609,7 @@ fun RestingHRTrendCard(
                     else if (change == 0) "Your resting HR is stable across these readings."
                     else "Your resting HR has increased by $change BPM. Stress, illness, sleep and measurement conditions can affect it.",
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(when {
+                    color = DetailColors.text(when {
                         isImproving -> HealthColors.Healthy
                         change == 0 -> HealthColors.Good
                         else -> HealthColors.Caution
@@ -711,7 +711,7 @@ private fun TrendStat(icon: ImageVector, label: String, value: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+            color = DetailColors.text(DetailColors.Secondary),
             fontSize = 12.sp
         )
     }

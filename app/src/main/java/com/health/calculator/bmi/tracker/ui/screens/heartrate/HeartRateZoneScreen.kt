@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -67,7 +69,7 @@ fun HeartRateZoneScreen(
     profileWeightKg: Float? = null,
     lastRestingHR: Int? = null,
     onCalculate: (HeartRateZoneResult) -> Unit = {}
-) {
+) = DetailScreenTheme(DetailFeature.HEART_RATE) {
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
 
@@ -114,7 +116,7 @@ fun HeartRateZoneScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -355,42 +357,10 @@ fun HeartRateZoneScreen(
 
 @Composable
 private fun HeartRateHeaderCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Animated heart icon
-            PulsingHeartIcon()
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.txt_heart_rate_zones),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.txt_heart_rate_zones_help_you_exer),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
-                    lineHeight = 18.sp
-                )
-            }
-        }
-    }
+    PulseHeader(
+        title = stringResource(R.string.txt_heart_rate_zones),
+        subtitle = stringResource(R.string.txt_heart_rate_zones_help_you_exer)
+    )
 }
 
 @Composable
@@ -457,7 +427,7 @@ private fun ProfileDataBanner(onDismiss: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthColors.Good.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(HealthColors.Good.copy(alpha = 0.08f))
         )
     ) {
         Row(
@@ -476,7 +446,7 @@ private fun ProfileDataBanner(onDismiss: () -> Unit) {
             Text(
                 text = stringResource(R.string.txt_using_profile_data),
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(HealthColors.Good),
+                color = DetailColors.text(HealthColors.Good),
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.weight(1f)
             )
@@ -527,7 +497,7 @@ private fun AgeInputSection(
             },
             isError = error != null,
             supportingText = error?.let {
-                { Text(it, color = AppColors.text(MaterialTheme.colorScheme.error)) }
+                { Text(it, color = DetailColors.text(MaterialTheme.colorScheme.error)) }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
@@ -556,7 +526,7 @@ private fun GenderSelectionSection(
             Text(
                 text = stringResource(R.string.txt_optional_1),
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
 
@@ -662,7 +632,7 @@ private fun FitnessLevelSection(
         Text(
             text = selectedLevel.description,
             style = MaterialTheme.typography.bodySmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+            color = DetailColors.text(DetailColors.Secondary),
             modifier = Modifier.padding(start = 4.dp)
         )
     }
@@ -690,7 +660,7 @@ private fun FormulaSelectionSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -728,7 +698,7 @@ private fun FormulaSelectionSection(
                     .padding(top = 8.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(FeatureColors.BpStart.copy(alpha = 0.08f))
+                    containerColor = DetailColors.surface(FeatureColors.BpStart.copy(alpha = 0.08f))
                 )
             ) {
                 Row(
@@ -745,7 +715,7 @@ private fun FormulaSelectionSection(
                     Text(
                         text = stringResource(R.string.txt_gulati_formula_was_developed_s),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(FeatureColors.BpStart.copy(alpha = 0.9f)),
+                        color = DetailColors.text(FeatureColors.BpStart.copy(alpha = 0.9f)),
                         lineHeight = 16.sp
                     )
                 }
@@ -792,7 +762,7 @@ private fun FormulaOptionItem(
                     text = formula.label,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                    color = AppColors.text(if (isDisabled) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    color = DetailColors.text(if (isDisabled) DetailColors.Secondary
                     else MaterialTheme.colorScheme.onSurface)
                 )
                 if (formula.badge != null) {
@@ -805,7 +775,7 @@ private fun FormulaOptionItem(
                             text = formula.badge,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = AppColors.text(formulaBadgeColor(formula.badge)),
+                            color = DetailColors.text(formulaBadgeColor(formula.badge)),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
@@ -814,14 +784,14 @@ private fun FormulaOptionItem(
             Text(
                 text = formula.formulaText,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(if (isDisabled) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
-                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                color = DetailColors.text(if (isDisabled) DetailColors.Secondary
+                else DetailColors.Secondary)
             )
             if (isDisabled) {
                 Text(
                     text = stringResource(R.string.txt_designed_for_women_only),
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.7f))
+                    color = DetailColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.7f))
                 )
             }
         }
@@ -846,7 +816,7 @@ private fun RestingHRSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(if (isRequired)
+            containerColor = DetailColors.surface(if (isRequired)
                 MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)
             else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
@@ -866,21 +836,21 @@ private fun RestingHRSection(
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(R.string.txt_text_placeholder_59),
-                        color = AppColors.text(MaterialTheme.colorScheme.error),
+                        color = DetailColors.text(MaterialTheme.colorScheme.error),
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(R.string.txt_required_for_karvonen),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary)
                     )
                 } else {
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(R.string.txt_optional_improves_accuracy),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -902,7 +872,7 @@ private fun RestingHRSection(
                 },
                 isError = error != null,
                 supportingText = error?.let {
-                    { Text(it, color = AppColors.text(MaterialTheme.colorScheme.error)) }
+                    { Text(it, color = DetailColors.text(MaterialTheme.colorScheme.error)) }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
@@ -976,7 +946,7 @@ private fun RestingHROptionalHint(onAddRestingHR: () -> Unit) {
         Text(
             text = stringResource(R.string.txt_add_resting_heart_rate_for_mor),
             style = MaterialTheme.typography.bodySmall,
-            color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
+            color = DetailColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
         )
     }
 }
@@ -995,7 +965,7 @@ private fun CustomMaxHRSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -1012,7 +982,7 @@ private fun CustomMaxHRSection(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = stringResource(R.string.txt_text_placeholder_59),
-                    color = AppColors.text(MaterialTheme.colorScheme.error),
+                    color = DetailColors.text(MaterialTheme.colorScheme.error),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -1034,7 +1004,7 @@ private fun CustomMaxHRSection(
                 },
                 isError = error != null,
                 supportingText = error?.let {
-                    { Text(it, color = AppColors.text(MaterialTheme.colorScheme.error)) }
+                    { Text(it, color = DetailColors.text(MaterialTheme.colorScheme.error)) }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
@@ -1046,7 +1016,7 @@ private fun CustomMaxHRSection(
             Text(
                 text = stringResource(R.string.txt_best_determined_through_a_supe),
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 16.sp
             )
         }

@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -86,7 +86,7 @@ fun HeartRateEducationalSection(
                 Text(
                     text = stringResource(R.string.txt_educational_content_to_help_yo),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -211,7 +211,7 @@ private fun UnderstandingHeartRateSection() {
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                     )
                 ) {
                     Column(modifier = Modifier.padding(12.dp)) {
@@ -240,7 +240,7 @@ private fun UnderstandingHeartRateSection() {
                                     text = range,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = AppColors.text(color)
+                                    color = DetailColors.text(color)
                                 )
                             }
                         }
@@ -334,7 +334,7 @@ private fun HeartRateTrainingSection() {
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(HealthColors.Caution.copy(alpha = 0.06f))
+                        containerColor = DetailColors.surface(HealthColors.Caution.copy(alpha = 0.06f))
                     )
                 ) {
                     Column(
@@ -353,7 +353,7 @@ private fun HeartRateTrainingSection() {
                             Text(
                                 text = reason,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)),
+                                color = DetailColors.text(DetailColors.Secondary),
                                 lineHeight = 17.sp
                             )
                         }
@@ -388,7 +388,7 @@ private fun FuelSourceCard(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -410,6 +410,10 @@ private fun FuelSourceCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("${fatPercent}% fat", style = MaterialTheme.typography.labelSmall, color = DetailColors.Text)
+                Text("${glycogenPercent}% carbs", style = MaterialTheme.typography.labelSmall, color = DetailColors.Text)
+            }
             // Fuel bar
             Row(
                 modifier = Modifier
@@ -424,15 +428,7 @@ private fun FuelSourceCard(
                         .background(fatColor.copy(alpha = 0.7f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (fatPercent >= 20) {
-                        Text(
-                            text = "${fatPercent}% fat",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = AppColors.text(Color.White)
-                        )
-                    }
+
                 }
                 Box(
                     modifier = Modifier
@@ -441,15 +437,7 @@ private fun FuelSourceCard(
                         .background(glycogenColor.copy(alpha = 0.7f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (glycogenPercent >= 20) {
-                        Text(
-                            text = "${glycogenPercent}% carbs",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = AppColors.text(Color.White)
-                        )
-                    }
+
                 }
             }
 
@@ -484,7 +472,7 @@ private fun FuelSourceCard(
             Text(
                 text = description,
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 15.sp
             )
         }
@@ -630,7 +618,7 @@ private fun MonitoringMethodsSection() {
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                     )
                 ) {
                     Column(modifier = Modifier.padding(12.dp)) {
@@ -651,7 +639,7 @@ private fun MonitoringMethodsSection() {
                             Text(
                                 text = item,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                                color = DetailColors.text(DetailColors.Secondary),
                                 lineHeight = 18.sp,
                                 modifier = Modifier.padding(vertical = 2.dp)
                             )
@@ -685,7 +673,7 @@ private fun MonitorMethodCard(method: MonitorMethod) {
             .clickable { showDetails = !showDetails },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(method.color.copy(alpha = 0.04f))
+            containerColor = DetailColors.surface(method.color.copy(alpha = 0.04f))
         ),
         border = if (showDetails) androidx.compose.foundation.BorderStroke(
             1.dp, method.color.copy(alpha = 0.2f)
@@ -725,14 +713,14 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                         Text(
                             text = method.cost,
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
                 Icon(
                     imageVector = if (showDetails) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                    tint = DetailColors.Secondary,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -756,14 +744,14 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                                 text = stringResource(R.string.txt_pros),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = AppColors.text(HealthColors.Healthy)
+                                color = DetailColors.text(HealthColors.Healthy)
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             method.pros.forEach { pro ->
                                 Text(
                                     text = "• $pro",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)),
+                                    color = DetailColors.text(DetailColors.Secondary),
                                     lineHeight = 15.sp
                                 )
                             }
@@ -775,14 +763,14 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                                 text = stringResource(R.string.txt_cons),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = AppColors.text(HealthColors.Danger)
+                                color = DetailColors.text(HealthColors.Danger)
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             method.cons.forEach { con ->
                                 Text(
                                     text = "• $con",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)),
+                                    color = DetailColors.text(DetailColors.Secondary),
                                     lineHeight = 15.sp
                                 )
                             }
@@ -809,7 +797,7 @@ private fun MonitorMethodCard(method: MonitorMethod) {
                             Text(
                                 text = method.tip,
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AppColors.text(method.color),
+                                color = DetailColors.text(method.color),
                                 fontWeight = FontWeight.Medium,
                                 lineHeight = 14.sp
                             )
@@ -835,7 +823,7 @@ private fun WarningSignsCard() {
             .clickable { isExpanded = !isExpanded },
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.06f))
+            containerColor = DetailColors.surface(HealthColors.Danger.copy(alpha = 0.06f))
         ),
         border = androidx.compose.foundation.BorderStroke(
             1.dp, HealthColors.Danger.copy(alpha = 0.2f)
@@ -864,12 +852,12 @@ private fun WarningSignsCard() {
                             text = stringResource(R.string.txt_warning_signs_during_exercise),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(HealthColors.Danger)
+                            color = DetailColors.text(HealthColors.Danger)
                         )
                         Text(
                             text = stringResource(R.string.txt_know_when_to_stop_your_safety_),
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(HealthColors.Danger.copy(alpha = 0.7f))
+                            color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.7f))
                         )
                     }
                 }
@@ -886,14 +874,14 @@ private fun WarningSignsCard() {
             Card(
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.08f))
+                    containerColor = DetailColors.surface(HealthColors.Danger.copy(alpha = 0.08f))
                 )
             ) {
                 Text(
                     text = stringResource(R.string.txt_stop_exercising_immediately_if),
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(HealthColors.Danger),
+                    color = DetailColors.text(HealthColors.Danger),
                     modifier = Modifier.padding(10.dp)
                 )
             }
@@ -932,12 +920,12 @@ private fun WarningSignsCard() {
                                     text = cleanLegacyMarker(sign),
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = AppColors.text(HealthColors.Danger)
+                                    color = DetailColors.text(HealthColors.Danger)
                                 )
                                 Text(
                                     text = explanation,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                                    color = DetailColors.text(DetailColors.Secondary),
                                     lineHeight = 14.sp
                                 )
                             }
@@ -950,7 +938,7 @@ private fun WarningSignsCard() {
                     Card(
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = AppColors.surface(HealthColors.Caution.copy(alpha = 0.08f))
+                            containerColor = DetailColors.surface(HealthColors.Caution.copy(alpha = 0.08f))
                         )
                     ) {
                         Column(modifier = Modifier.padding(14.dp)) {
@@ -958,7 +946,7 @@ private fun WarningSignsCard() {
                                 text = stringResource(R.string.txt_consult_a_doctor_before_starti),
                                 style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.Bold,
-                                color = AppColors.text(HealthColors.Caution)
+                                color = DetailColors.text(HealthColors.Caution)
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             val consultReasons = listOf(
@@ -983,7 +971,7 @@ private fun WarningSignsCard() {
                 Text(
                     text = stringResource(R.string.txt_tap_to_read_all_warning_signs),
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(HealthColors.Danger.copy(alpha = 0.5f)),
+                    color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.5f)),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 6.dp),
@@ -1085,7 +1073,7 @@ private fun MythCard(
     Card(
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -1104,7 +1092,7 @@ private fun MythCard(
                             text = "#$mythNumber",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
-                            color = AppColors.text(HealthColors.Severe),
+                            color = DetailColors.text(HealthColors.Severe),
                             fontSize = 12.sp
                         )
                     }
@@ -1115,7 +1103,7 @@ private fun MythCard(
                         text = myth,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Surface(
@@ -1126,7 +1114,7 @@ private fun MythCard(
                             text = "Verdict: $verdict",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(verdictColor),
+                            color = DetailColors.text(verdictColor),
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                         )
                     }
@@ -1138,7 +1126,7 @@ private fun MythCard(
             Text(
                 text = explanation,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 18.sp
             )
         }
@@ -1155,7 +1143,7 @@ private fun MedicalDisclaimerCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         )
     ) {
         Row(
@@ -1177,7 +1165,7 @@ private fun MedicalDisclaimerCard() {
                         "or modifying an exercise program, especially if you have any pre-existing " +
                         "medical conditions.",
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 15.sp
             )
         }
@@ -1240,7 +1228,7 @@ private fun EducationalCard(
                         Text(
                             text = subtitle,
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -1271,7 +1259,7 @@ private fun EducationalCard(
                 Text(
                     text = stringResource(R.string.txt_tap_to_learn_more),
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(color.copy(alpha = 0.4f)),
+                    color = DetailColors.text(color.copy(alpha = 0.4f)),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 6.dp),
@@ -1311,7 +1299,7 @@ private fun ContentBlock(
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 18.sp,
                 modifier = Modifier.padding(start = 24.dp)
             )
@@ -1359,14 +1347,14 @@ private fun HeartRateTypeCard(
                 Text(
                     text = range,
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(color),
+                    color = DetailColors.text(color),
                     fontWeight = FontWeight.Bold
                 )
             }
             Text(
                 text = description,
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 14.sp
             )
         }
@@ -1381,14 +1369,14 @@ private fun BulletPoint(text: String, color: Color) {
     ) {
         Text(
             text = stringResource(R.string.txt_text_placeholder_3),
-            color = AppColors.text(color),
+            color = DetailColors.text(color),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(end = 8.dp, top = 1.dp)
         )
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+            color = DetailColors.text(DetailColors.Secondary),
             lineHeight = 16.sp
         )
     }
