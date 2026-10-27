@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.idealweight
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -46,7 +46,7 @@ fun IdealWeightResultSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -59,7 +59,7 @@ fun IdealWeightResultSection(
                 Text(
                     text = stringResource(R.string.txt_your_ideal_weight),
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -69,13 +69,13 @@ fun IdealWeightResultSection(
                         text = String.format(Locale.US, "%.1f", resultData.devine),
                         style = MaterialTheme.typography.displayLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary),
                         fontSize = 64.sp
                     )
                     Text(
                         text = stringResource(R.string.txt_kg),
                         style = MaterialTheme.typography.headlineMedium,
-                        color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
                         modifier = Modifier.padding(bottom = 12.dp, start = 4.dp)
                     )
                 }
@@ -83,7 +83,7 @@ fun IdealWeightResultSection(
                 Text(
                     text = stringResource(R.string.txt_based_on_devine_formula),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
+                    color = DetailColors.secondaryText(DetailColors.Secondary)
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -108,7 +108,7 @@ fun IdealWeightResultSection(
                         Text(
                             text = "Adult BMI reference range: ${String.format(Locale.US, "%.1f", resultData.healthyRangeMin)} - ${String.format(Locale.US, "%.1f", resultData.healthyRangeMax)} kg",
                             style = MaterialTheme.typography.labelLarge,
-                            color = AppColors.text(HealthColors.Healthy),
+                            color = DetailColors.text(HealthColors.Healthy),
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -198,14 +198,14 @@ private fun FormulaRow(label: String, value: Float, isSelected: Boolean = false)
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
             )
         }
         Text(
             text = String.format(Locale.US, "%.1f kg", value),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+            color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
         )
     }
 }

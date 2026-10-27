@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.idealweight
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
@@ -41,7 +43,7 @@ fun IdealWeightCalculatorScreen(
     profileIsMale: Boolean = true,
     profileUnitCm: Boolean = true,
     viewModel: IdealWeightViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.IDEAL_WEIGHT) {
     val inputState by viewModel.inputState.collectAsStateWithLifecycle()
     val validationState by viewModel.validationState.collectAsStateWithLifecycle()
     val isCalculating by viewModel.isCalculating.collectAsStateWithLifecycle()
@@ -103,7 +105,7 @@ fun IdealWeightCalculatorScreen(
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                        containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                     )
                 )
 
