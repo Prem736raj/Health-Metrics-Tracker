@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -62,7 +64,7 @@ fun MetabolicSyndromeScreen(
     onNavigateBack: () -> Unit,
     onNavigateToCalculator: (String) -> Unit = {},
     viewModel: MetabolicSyndromeViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.METABOLIC) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -83,7 +85,7 @@ fun MetabolicSyndromeScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
@@ -263,12 +265,16 @@ private fun MetabolicSyndromeInputContent(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        FiveBranchHeader(
+            title = stringResource(R.string.txt_metabolic_syndrome),
+            subtitle = "Waist • Blood pressure • Glucose • Triglycerides • HDL"
+        )
         // Quick Insights / Last Assessment Card
         if (uiState.trackingRecords.isNotEmpty()) {
             val latest = uiState.trackingRecords.first()
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -291,14 +297,14 @@ private fun MetabolicSyndromeInputContent(
                         Text(
                             text = "Last Assessment: ${latest.dateTime.take(10)}",
                             style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = "${latest.criteriaMet}/5 Criteria Met • ${latest.riskLevel}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
                         )
                     }
                 }
@@ -403,7 +409,7 @@ private fun MetabolicSyndromeInputContent(
             val partial = uiState.partialResult
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(when {
+                    containerColor = DetailColors.surface(when {
                         partial.metCount >= 3 -> HealthRed.copy(alpha = 0.08f)
                         partial.metCount >= 2 -> HealthOrange.copy(alpha = 0.08f)
                         partial.metCount >= 1 -> HealthYellow.copy(alpha = 0.08f)
@@ -451,7 +457,7 @@ private fun MetabolicSyndromeInputContent(
                                         .clip(CircleShape)
                                         .background(
                                             when {
-                                                !c.isProvided -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                                                !c.isProvided -> DetailColors.Secondary
                                                 c.isMet == true -> HealthRed.copy(alpha = 0.8f)
                                                 else -> HealthGreen.copy(alpha = 0.8f)
                                             }
@@ -466,7 +472,7 @@ private fun MetabolicSyndromeInputContent(
                         Text(
                             text = partial.partialMessage,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                             lineHeight = 14.sp
                         )
                     }
@@ -529,7 +535,7 @@ fun GenderSelectionRow(
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = stringResource(R.string.txt_male),
-                    color = if (isMale) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = DetailColors.text(if (isMale) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -546,7 +552,7 @@ fun GenderSelectionRow(
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = stringResource(R.string.txt_female),
-                    color = if (!isMale) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = DetailColors.text(if (!isMale) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -598,7 +604,7 @@ fun CriterionInputCard(
                     Text(
                         text = description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
@@ -633,7 +639,7 @@ fun CriterionInputCard(
             if (error != null) {
                 Text(
                     text = error,
-                    color = AppColors.text(MaterialTheme.colorScheme.error),
+                    color = DetailColors.text(MaterialTheme.colorScheme.error),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp, top = 4.dp)
                 )
@@ -652,7 +658,7 @@ fun CriterionInputCard(
                     Text(
                         text = stringResource(R.string.txt_on_medication_for_this_conditi),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
@@ -696,7 +702,7 @@ fun BloodPressureInputCard(
                     Text(
                         text = stringResource(R.string.txt_elevated_blood_pressure),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
@@ -742,7 +748,7 @@ fun BloodPressureInputCard(
             if (systolicError != null || diastolicError != null) {
                 Text(
                     text = systolicError ?: diastolicError ?: "",
-                    color = AppColors.text(MaterialTheme.colorScheme.error),
+                    color = DetailColors.text(MaterialTheme.colorScheme.error),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp, top = 4.dp)
                 )
@@ -760,7 +766,7 @@ fun BloodPressureInputCard(
                 Text(
                     text = stringResource(R.string.txt_on_medication_for_high_bp),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
         }
