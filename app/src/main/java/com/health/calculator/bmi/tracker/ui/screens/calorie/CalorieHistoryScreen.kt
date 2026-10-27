@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -48,7 +50,7 @@ fun CalorieHistoryScreen(
     weeklySummaries: List<WeeklyCalorieSummary>,
     onNavigateBack: () -> Unit,
     onDayTapped: (String) -> Unit = {}
-) {
+) = DetailScreenTheme(DetailFeature.CALORIES) {
     val scrollState = rememberScrollState()
     var selectedTrendDays by remember { mutableIntStateOf(30) }
     var calendarYear by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
@@ -76,7 +78,7 @@ fun CalorieHistoryScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -211,7 +213,7 @@ private fun CalorieDayDetailsDialog(
                                 style = MaterialTheme.typography.headlineSmall.copy(
                                     fontWeight = FontWeight.Bold
                                 ),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer)
                             )
                             Text(
                                 text = if (target > 0.0) {
@@ -220,7 +222,7 @@ private fun CalorieDayDetailsDialog(
                                     differenceText
                                 },
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                                color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer)
                             )
                         }
                     }
@@ -272,14 +274,14 @@ private fun CalorieDayDetailsDialog(
                                         Text(
                                             text = detail,
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                                         )
                                     }
                                 }
                                 Text(
                                     text = "${"%.0f".format(entry.calories)} kcal",
                                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = DetailColors.text(MaterialTheme.colorScheme.primary)
                                 )
                             }
                             HorizontalDivider(
@@ -316,7 +318,7 @@ private fun HistoryMacroRow(
         Text(
             value,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
         )
     }
 }
@@ -327,7 +329,7 @@ private fun EmptyHistoryState() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -352,12 +354,12 @@ private fun EmptyHistoryState() {
             Text(
                 stringResource(R.string.txt_no_tracking_history_yet),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
             Text(
                 stringResource(R.string.txt_start_logging_your_food_intake),
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp)
             )
@@ -434,7 +436,7 @@ private fun StatisticsSummaryCard(stats: CalorieHistoryStats) {
                                 "Averaging ${"%.0f".format(stats.calorieDeficitOrSurplus)} kcal above target per day"
                         },
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = AppColors.text(balanceColor)
+                        color = DetailColors.text(balanceColor)
                     )
                 }
             }
@@ -448,12 +450,12 @@ private fun StatsGridItem(label: String, value: String, color: Color) {
         Text(
             value,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             fontSize = 12.sp,
             textAlign = TextAlign.Center
         )
@@ -519,7 +521,7 @@ private fun CalorieCalendarCard(
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -557,7 +559,7 @@ private fun CalorieCalendarCard(
                                     .padding(2.dp)
                                     .clip(CircleShape)
                                     .background(
-                                        if (status?.hasData == true) bgColor.copy(alpha = 0.7f)
+                                        if (status?.hasData == true) DetailColors.SurfaceAlt
                                         else Color.Transparent
                                     )
                                     .then(
@@ -571,15 +573,19 @@ private fun CalorieCalendarCard(
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
+                                if (status?.hasData == true) {
+                                    Box(Modifier.align(Alignment.BottomCenter).padding(bottom = 3.dp)
+                                        .size(4.dp).background(bgColor, CircleShape))
+                                }
                                 Text(
                                     "$day",
                                     style = MaterialTheme.typography.bodySmall.copy(
                                         fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
                                     ),
-                                    color = AppColors.text(when {
+                                    color = DetailColors.text(when {
                                         status?.hasData == true -> Color.White
                                         isToday -> MaterialTheme.colorScheme.primary
-                                        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                        else -> DetailColors.Secondary
                                     }),
                                     fontSize = 12.sp
                                 )
@@ -673,7 +679,7 @@ private fun CalorieTrendGraph(
                     Text(
                         stringResource(R.string.txt_not_enough_data_for_the_select),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
                 return@Column
@@ -765,7 +771,7 @@ private fun CalorieTrendGraph(
                         Text(
                             trendData.getOrNull(idx)?.first ?: "",
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             fontSize = 12.sp
                         )
                     }
@@ -830,7 +836,7 @@ private fun WeeklySummaryCard(weeklySummaries: List<WeeklyCalorieSummary>) {
                             Text(
                                 "${week.daysTracked} days tracked • Total: ${"%.0f".format(week.totalCalories)} kcal",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                                color = DetailColors.text(DetailColors.Secondary),
                                 fontSize = 12.sp
                             )
                         }
@@ -838,12 +844,12 @@ private fun WeeklySummaryCard(weeklySummaries: List<WeeklyCalorieSummary>) {
                             Text(
                                 "${"%.0f".format(week.averageCalories)} kcal/day",
                                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                color = AppColors.text(diffColor)
+                                color = DetailColors.text(diffColor)
                             )
                             Text(
                                 "${if (diff > 0) "+" else ""}${"%.0f".format(diff)} vs target",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AppColors.text(diffColor.copy(alpha = 0.7f)),
+                                color = DetailColors.text(diffColor.copy(alpha = 0.7f)),
                                 fontSize = 12.sp
                             )
                         }
@@ -940,7 +946,7 @@ private fun MacroTrendRow(
             Text(
                 statusText,
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(color),
+                color = DetailColors.text(color),
                 fontSize = 12.sp,
                 modifier = Modifier.weight(1f, fill = false).padding(start = 8.dp),
                 textAlign = TextAlign.End
@@ -1033,14 +1039,14 @@ private fun StatDetailRow(icon: ImageVector, label: String, value: String) {
             Text(
                 label,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontSize = 12.sp
             )
         }
         Text(
             value,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurface),
             modifier = Modifier.weight(0.55f),
             fontSize = 12.sp
         )

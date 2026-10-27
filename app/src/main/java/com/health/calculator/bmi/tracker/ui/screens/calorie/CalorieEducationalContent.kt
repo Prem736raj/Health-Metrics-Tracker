@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -160,7 +160,7 @@ private fun EducationCard(
                 Icon(
                     if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     null,
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -243,20 +243,20 @@ private fun DeficitVsSurplusContent() {
                     Text(
                         stringResource(R.string.txt_deficit),
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = AppColors.text(HealthColors.Good)
+                        color = DetailColors.text(HealthColors.Good)
                     )
                     Text(
                         "Calories In\n< Calories Out",
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                         fontSize = 12.sp,
-                        color = AppColors.text(HealthColors.Good)
+                        color = DetailColors.text(HealthColors.Good)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         stringResource(R.string.txt_weight_loss),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = AppColors.text(HealthColors.Good)
+                        color = DetailColors.text(HealthColors.Good)
                     )
                 }
             }
@@ -278,20 +278,20 @@ private fun DeficitVsSurplusContent() {
                     Text(
                         stringResource(R.string.txt_surplus),
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = AppColors.text(HealthColors.Severe)
+                        color = DetailColors.text(HealthColors.Severe)
                     )
                     Text(
                         "Calories In\n> Calories Out",
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                         fontSize = 12.sp,
-                        color = AppColors.text(HealthColors.Severe)
+                        color = DetailColors.text(HealthColors.Severe)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         stringResource(R.string.txt_weight_gain),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = AppColors.text(HealthColors.Severe)
+                        color = DetailColors.text(HealthColors.Severe)
                     )
                 }
             }
@@ -339,7 +339,7 @@ private fun TooFewCaloriesContent() {
                 Text(
                     stringResource(R.string.txt_eating_too_few_calories_can_be),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Danger.copy(alpha = 0.9f)),
+                    color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.9f)),
                     lineHeight = 18.sp
                 )
             }
@@ -367,7 +367,7 @@ private fun TooFewCaloriesContent() {
                 Text(
                     stringResource(R.string.txt_these_are_absolute_minimums_mo),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             }
@@ -391,13 +391,13 @@ private fun TooFewCaloriesContent() {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.06f)))
+            colors = CardDefaults.cardColors(containerColor = DetailColors.surface(HealthColors.Danger.copy(alpha = 0.06f)))
         ) {
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
                     stringResource(R.string.txt_signs_you_may_be_eating_too_li),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = AppColors.text(HealthColors.Danger)
+                    color = DetailColors.text(HealthColors.Danger)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 val signs = listOf(
@@ -411,7 +411,7 @@ private fun TooFewCaloriesContent() {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         pair.forEach { sign ->
                             Row(modifier = Modifier.weight(1f).padding(vertical = 2.dp)) {
-                                Text("• ", color = AppColors.text(HealthColors.Danger), style = MaterialTheme.typography.bodySmall)
+                                Text("• ", color = DetailColors.text(HealthColors.Danger), style = MaterialTheme.typography.bodySmall)
                                 Text(sign, style = MaterialTheme.typography.bodySmall, fontSize = 12.sp)
                             }
                         }
@@ -441,14 +441,14 @@ private fun MinCalCard(label: String, value: String, unit: String, color: Color)
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(cleanLegacyMarker(label), style = MaterialTheme.typography.labelSmall, color = AppColors.text(color))
+                Text(cleanLegacyMarker(label), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(color))
             }
             Text(
                 value,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                color = AppColors.text(color)
+                color = DetailColors.text(color)
             )
-            Text(unit, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color.copy(alpha = 0.7f)))
+            Text(unit, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(color.copy(alpha = 0.7f)))
         }
     }
 }
@@ -581,7 +581,7 @@ private fun CommonFoodsReferenceContent() {
                             Text(
                                 category.name,
                                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                color = AppColors.text(category.color)
+                                color = DetailColors.text(category.color)
                             )
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -592,7 +592,7 @@ private fun CommonFoodsReferenceContent() {
                                 Text(
                                     "${category.foods.size} foods",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(category.color),
+                                    color = DetailColors.text(category.color),
                                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                     fontSize = 12.sp
                                 )
@@ -623,13 +623,13 @@ private fun CommonFoodsReferenceContent() {
                                 Text(
                                     stringResource(R.string.txt_food_item),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                                    color = DetailColors.text(DetailColors.Secondary),
                                     modifier = Modifier.weight(1f)
                                 )
                                 Text(
                                     stringResource(R.string.txt_calories),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                                    color = DetailColors.text(DetailColors.Secondary)
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
@@ -645,7 +645,7 @@ private fun CommonFoodsReferenceContent() {
                                     Text(
                                         name,
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
+                                        color = DetailColors.text(DetailColors.Secondary),
                                         modifier = Modifier.weight(1f),
                                         fontSize = 12.sp
                                     )
@@ -658,7 +658,7 @@ private fun CommonFoodsReferenceContent() {
                                             style = MaterialTheme.typography.labelSmall.copy(
                                                 fontWeight = FontWeight.Bold
                                             ),
-                                            color = AppColors.text(category.color),
+                                            color = DetailColors.text(category.color),
                                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                                             fontSize = 12.sp
                                         )
@@ -686,7 +686,7 @@ private fun CommonFoodsReferenceContent() {
                 Text(
                     stringResource(R.string.txt_values_are_approximate_and_may),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp, lineHeight = 14.sp
                 )
             }
@@ -735,7 +735,7 @@ private fun EduParagraph(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
-        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
+        color = DetailColors.text(DetailColors.Secondary),
         lineHeight = 22.sp
     )
 }
@@ -758,14 +758,14 @@ private fun EduHighlight(emoji: String, title: String, text: String, color: Colo
                 Text(
                     title,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = AppColors.text(color)
+                    color = DetailColors.text(color)
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 18.sp,
                 fontSize = 12.sp
             )
@@ -779,7 +779,7 @@ private fun MindfulNoteCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))
         )
     ) {
         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.Top) {
@@ -794,13 +794,13 @@ private fun MindfulNoteCard() {
                 Text(
                     stringResource(R.string.txt_a_mindful_approach_to_tracking),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = AppColors.text(HealthColors.Healthy)
+                    color = DetailColors.text(HealthColors.Healthy)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.txt_calorie_tracking_is_a_tool_not),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     lineHeight = 18.sp, fontSize = 12.sp
                 )
             }
@@ -814,7 +814,7 @@ private fun MedicalDisclaimerEducation() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.06f))
+            containerColor = DetailColors.surface(HealthColors.Danger.copy(alpha = 0.06f))
         )
     ) {
         Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
@@ -827,13 +827,13 @@ private fun MedicalDisclaimerEducation() {
                 Text(
                     stringResource(R.string.txt_medical_disclaimer),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = AppColors.text(HealthColors.Danger.copy(alpha = 0.8f))
+                    color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.8f))
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     stringResource(R.string.txt_this_educational_content_is_fo_3),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Danger.copy(alpha = 0.7f)),
+                    color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.7f)),
                     fontSize = 12.sp, lineHeight = 16.sp
                 )
             }
