@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bsa
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -67,7 +68,7 @@ fun BSAScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -220,7 +221,7 @@ private fun BSAInputContent(
         // === Info Banner ===
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
             ),
             shape = RoundedCornerShape(14.dp),
             modifier = Modifier.fillMaxWidth()
@@ -285,7 +286,7 @@ private fun BSAInputContent(
                         text = stringResource(R.string.txt_using_profile_data_you_can_ove),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Medium,
-                        color = HealthGreen
+                        color = AppColors.text(HealthGreen)
                     )
                 }
             }
@@ -503,7 +504,7 @@ private fun BSAInputContent(
         if (uiState.validationWarnings.isNotEmpty()) {
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = HealthYellow.copy(alpha = 0.08f)
+                    containerColor = AppColors.surface(HealthYellow.copy(alpha = 0.08f))
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -523,7 +524,7 @@ private fun BSAInputContent(
                             text = stringResource(R.string.txt_notes),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            color = HealthYellow
+                            color = AppColors.text(HealthYellow)
                         )
                     }
                     Spacer(modifier = Modifier.height(6.dp))
@@ -605,11 +606,11 @@ private fun FormulaSelectionCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) {
+            containerColor = AppColors.surface(if (isSelected) {
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
             } else {
                 MaterialTheme.colorScheme.surface
-            }
+            })
         ),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(
@@ -651,7 +652,7 @@ private fun FormulaSelectionCard(
                             text = formula.label,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = labelColor,
+                            color = AppColors.text(labelColor),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
@@ -682,14 +683,14 @@ private fun FormulaSelectionCard(
                                 text = "Best for: ${formula.bestFor}",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Medium,
-                                color = labelColor
+                                color = AppColors.text(labelColor)
                             )
                         }
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = formula.formula,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
                             fontWeight = FontWeight.Medium
                         )
                     }

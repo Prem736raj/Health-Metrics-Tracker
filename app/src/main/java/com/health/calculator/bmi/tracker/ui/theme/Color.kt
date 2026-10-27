@@ -20,74 +20,74 @@ import androidx.compose.ui.graphics.Color
 
 // ─── LIGHT SCHEME ──────────────────────────────────────────────────────
 
-val PrimaryLight = Color(0xFF6C3CE1)        // Royal violet — bold, premium, unmistakable
+val PrimaryLight = Color(0xFF2E623A)        // Rich forest sage green — calm, grounded, high contrast
 val OnPrimaryLight = Color(0xFFFFFFFF)
-val PrimaryContainerLight = Color(0xFFEDE4FF)
-val OnPrimaryContainerLight = Color(0xFF22005D)
+val PrimaryContainerLight = Color(0xFFD9E8D7) // Soft fresh sage tint
+val OnPrimaryContainerLight = Color(0xFF0E2914) // Deep forest green
 
-val SecondaryLight = Color(0xFF2ABBA7)       // Teal-mint — fresh & approachable
+val SecondaryLight = Color(0xFF2E6B5E)       // Botanical mint — fresh & approachable
 val OnSecondaryLight = Color(0xFFFFFFFF)
-val SecondaryContainerLight = Color(0xFFCCFFF6)
-val OnSecondaryContainerLight = Color(0xFF00201B)
+val SecondaryContainerLight = Color(0xFFD4F0E8)
+val OnSecondaryContainerLight = Color(0xFF052A23)
 
-val TertiaryLight = Color(0xFFFF6B6B)        // Living coral — warm, playful, human
+val TertiaryLight = Color(0xFF9E4A2E)        // Warm terracotta coral
 val OnTertiaryLight = Color(0xFFFFFFFF)
-val TertiaryContainerLight = Color(0xFFFFE2E0)
-val OnTertiaryContainerLight = Color(0xFF3B0907)
+val TertiaryContainerLight = Color(0xFFFDE5DC)
+val OnTertiaryContainerLight = Color(0xFF3A1408)
 
 val ErrorLight = Color(0xFFBA1A1A)
 val OnErrorLight = Color(0xFFFFFFFF)
 val ErrorContainerLight = Color(0xFFFFDAD6)
 val OnErrorContainerLight = Color(0xFF410002)
 
-val BackgroundLight = Color(0xFFFAF8FF)      // Hint-of-violet white — not flat white
-val OnBackgroundLight = Color(0xFF1B1B2F)
-val SurfaceLight = Color(0xFFFFFFFF)
-val OnSurfaceLight = Color(0xFF1B1B2F)
-val SurfaceVariantLight = Color(0xFFF0EDF6)
-val OnSurfaceVariantLight = Color(0xFF49454F)
+val BackgroundLight = Color(0xFFF6F8F5)      // Linen / fresh porcelain sage — calm, not glaring white
+val OnBackgroundLight = Color(0xFF162018)    // Deep forest charcoal
+val SurfaceLight = Color(0xFFFFFFFF)         // Clean elevated white
+val OnSurfaceLight = Color(0xFF162018)
+val SurfaceVariantLight = Color(0xFFEBF1EA)  // Soft sage tint
+val OnSurfaceVariantLight = Color(0xFF475649)// Muted sage slate
 val SurfaceTintLight = PrimaryLight
-val InverseSurfaceLight = Color(0xFF313033)
-val InverseOnSurfaceLight = Color(0xFFF4EFF4)
-val InversePrimaryLight = Color(0xFFD0BCFF)
+val InverseSurfaceLight = Color(0xFF2B332C)
+val InverseOnSurfaceLight = Color(0xFFEFF3EE)
+val InversePrimaryLight = Color(0xFFA5C896)
 
 // ─── DARK SCHEME ───────────────────────────────────────────────────────
 
-val PrimaryDark = Color(0xFFD0BCFF)          // Soft lilac — glows on dark surfaces
-val OnPrimaryDark = Color(0xFF381E72)
-val PrimaryContainerDark = Color(0xFF4F378B)
-val OnPrimaryContainerDark = Color(0xFFEDE4FF)
+val PrimaryDark = Color(0xFFA5C896)          // Calming sage green — glows softly on dark surfaces
+val OnPrimaryDark = Color(0xFF121B13)        // Deep dark forest charcoal
+val PrimaryContainerDark = Color(0xFF223526) // Muted deep moss container
+val OnPrimaryContainerDark = Color(0xFFEDEFEA)
 
-val SecondaryDark = Color(0xFF70EFDE)        // Electric mint — pops beautifully
-val OnSecondaryDark = Color(0xFF003731)
-val SecondaryContainerDark = Color(0xFF005048)
-val OnSecondaryContainerDark = Color(0xFFCCFFF6)
+val SecondaryDark = Color(0xFF81C784)        // Fresh botanical light green
+val OnSecondaryDark = Color(0xFF101B11)
+val SecondaryContainerDark = Color(0xFF1C2F20)
+val OnSecondaryContainerDark = Color(0xFFEDEFEA)
 
-val TertiaryDark = Color(0xFFFFB4AB)         // Peach coral — warm even in dark
-val OnTertiaryDark = Color(0xFF561E19)
-val TertiaryContainerDark = Color(0xFF73342D)
-val OnTertiaryContainerDark = Color(0xFFFFDAD6)
+val TertiaryDark = Color(0xFFFFB74D)         // Warm gold/amber accent (from Understand card)
+val OnTertiaryDark = Color(0xFF2A1604)
+val TertiaryContainerDark = Color(0xFF382715)
+val OnTertiaryContainerDark = Color(0xFFFFE0B2)
 
 val ErrorDark = Color(0xFFFFB4AB)
 val OnErrorDark = Color(0xFF690005)
 val ErrorContainerDark = Color(0xFF93000A)
 val OnErrorContainerDark = Color(0xFFFFDAD6)
 
-val BackgroundDark = Color(0xFF0F0D1A)       // Deep space violet — rich, not boring gray
-val OnBackgroundDark = Color(0xFFE6E1E5)
-val SurfaceDark = Color(0xFF1C1B2E)          // Dark purple-slate
-val OnSurfaceDark = Color(0xFFE6E1E5)
-val SurfaceVariantDark = Color(0xFF2A2840)
-val OnSurfaceVariantDark = Color(0xFFCAC4D0)
+val BackgroundDark = Color(0xFF0D130E)       // Deep forest charcoal — calm, rich organic black
+val OnBackgroundDark = Color(0xFFEDEFEA)     // Clean soft cream-white
+val SurfaceDark = Color(0xFF141D16)          // Dark moss surface
+val OnSurfaceDark = Color(0xFFEDEFEA)
+val SurfaceVariantDark = Color(0xFF1A241C)   // Subtle elevated dark moss
+val OnSurfaceVariantDark = Color(0xFFA6B4A6) // Muted sage grey
 val SurfaceTintDark = PrimaryDark
-val InverseSurfaceDark = Color(0xFFE6E1E5)
-val InverseOnSurfaceDark = Color(0xFF313033)
+val InverseSurfaceDark = Color(0xFFEDEFEA)
+val InverseOnSurfaceDark = Color(0xFF141D16)
 val InversePrimaryDark = PrimaryLight
 
-val OutlineLight = Color(0xFF79747E)
-val OutlineVariantLight = Color(0xFFE0DCE4)
-val OutlineDark = Color(0xFF938F99)
-val OutlineVariantDark = Color(0xFF49454F)
+val OutlineLight = Color(0xFF748376)
+val OutlineVariantLight = Color(0xFFD7E2D5)
+val OutlineDark = Color(0xFF667E6B)          // Functional outline
+val OutlineVariantDark = Color(0xFF243326)   // Subtle decorative outline
 val ScrimLight = Color(0xFF000000)
 val ScrimDark = Color(0xFF000000)
 
@@ -158,22 +158,22 @@ object FeatureColors {
 object WellnessPalette {
     val ActionLight = PrimaryLight
     val ActionDark = PrimaryDark
-    val OnTrackLight = Color(0xFFD1FAE5)
-    val OnTrackDark = Color(0xFF064E3B)
-    val WarmAccentLight = Color(0xFFF97316)
-    val WarmAccentDark = Color(0xFFFB923C)
-    val QuietBorderLight = Color(0xFFE0DCE4)
-    val QuietBorderDark = Color(0xFF49454F)
+    val OnTrackLight = Color(0xFFD8E9D6)
+    val OnTrackDark = Color(0xFF1B3821)
+    val WarmAccentLight = Color(0xFF9E4A2E)
+    val WarmAccentDark = Color(0xFFFFB74D)
+    val QuietBorderLight = Color(0xFFD7E2D5)
+    val QuietBorderDark = Color(0xFF243326)
 
-    // The single hero surface has a vibrant, modern wellness gradient.
-    val HeroStart = Color(0xFF6C3CE1) // Rich Violet matching primary
-    val HeroEnd = Color(0xFF9333EA)   // Vibrant Purple — warm, premium feel
+    // The single hero surface has a calm, organic wellness gradient.
+    val HeroStart = Color(0xFF2A5734) // Deep Forest Green
+    val HeroEnd = Color(0xFF3A7548)   // Fresh Botanical Green
     val OnHero = Color(0xFFFFFFFF)
 
-    val MetricSurfaceLight = Color(0xFFF7F4FC)
-    val MetricSurfaceDark = Color(0xFF242239)
+    val MetricSurfaceLight = Color(0xFFF0F5EE)
+    val MetricSurfaceDark = Color(0xFF1A241C)
     val QuietSurfaceLight = Color(0xFFFFFFFF)
-    val QuietSurfaceDark = Color(0xFF1C1B2E)
+    val QuietSurfaceDark = Color(0xFF141D16)
 }
 
 /** Semantic colors for interpretation, never as the only signal of meaning. */
@@ -213,19 +213,19 @@ object HealthColors {
 
 /** A vibrant chart palette that pops in both themes. */
 object ChartColors {
-    val Primary = Color(0xFF6C3CE1)
+    val Primary = Color(0xFF2E623A)
     val Secondary = Color(0xFFF43F5E)
     val Tertiary = Color(0xFFF97316)
     val Accent1 = Color(0xFF10B981)
     val Accent2 = Color(0xFF0EA5E9)
     val Accent3 = Color(0xFFA855F7)
 
-    val GridLine = Color(0xFFE0DCE4)
-    val GridLineDark = Color(0xFF49454F)
+    val GridLine = Color(0xFFD7E2D5)
+    val GridLineDark = Color(0xFF243326)
     val GradientStart = Primary
-    val GradientEnd = Color(0x336C3CE1)
-    val GradientStartDark = Color(0xFFD0BCFF)
-    val GradientEndDark = Color(0x33D0BCFF)
+    val GradientEnd = Color(0x332E623A)
+    val GradientStartDark = Color(0xFFA5C896)
+    val GradientEndDark = Color(0x33A5C896)
 }
 
 /** Stable accents for calculator discovery cards — each feels unique. */
@@ -256,3 +256,18 @@ val HealthOrange = HealthColors.Caution
 val HealthRed = HealthColors.Danger
 val HealthBlue = HealthColors.Info
 val HealthTeal = HealthColors.BelowNormal
+
+/** Dark-only extended roles. Existing light expressions are passed through by AppColors. */
+object DarkRoles {
+    val Level1 = Color(0xFF141D16) // Base surface
+    val Level2 = Color(0xFF1A241C) // Elevated surface
+    val Level3 = Color(0xFF223024) // Card / interactive surface
+    val Text = Color(0xFFEDEFEA)
+    val SecondaryText = Color(0xFFA6B4A6)
+    val DisabledText = Color(0xFF8A9A8C)
+    val SubtleOutline = Color(0xFF243326)
+    // Functional boundaries need 3:1; subtle outlines are decorative only.
+    val FunctionalOutline = Color(0xFF667E6B)
+    val Accent = Color(0xFFA5C896)
+    val WarningOutline = Color(0xFFFBBF24)
+}

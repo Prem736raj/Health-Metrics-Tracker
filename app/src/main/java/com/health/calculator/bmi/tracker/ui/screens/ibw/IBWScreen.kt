@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -63,7 +64,7 @@ fun IBWScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -217,7 +218,7 @@ private fun IBWInputContent(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
             )
         ) {
             Row(
@@ -259,7 +260,7 @@ private fun IBWInputContent(
                     Text(
                         stringResource(R.string.txt_using_profile_data),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = AppColors.text(MaterialTheme.colorScheme.tertiary)
                     )
                 }
             }
@@ -384,7 +385,7 @@ private fun IBWInputContent(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
                 )
             ) {
                 Column(
@@ -481,7 +482,7 @@ private fun IBWInputContent(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer)
                 )
             ) {
                 Row(

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -46,6 +47,8 @@ fun IBWResultScreen(
     onNavigateToBMR: () -> Unit = {},
     onNavigateToWHR: () -> Unit = {}
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val scrollState = rememberScrollState()
     var visible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { visible = true }
@@ -55,7 +58,7 @@ fun IBWResultScreen(
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(
+                    colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                         MaterialTheme.colorScheme.surface,
                         MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     )
@@ -77,7 +80,7 @@ fun IBWResultScreen(
                         .padding(bottom = 16.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer)
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
@@ -264,10 +267,12 @@ private fun PrimaryResultCard(
     showInKg: Boolean,
     onToggleUnit: () -> Unit
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val weight = if (showInKg) result.frameAdjustedDevineKg else result.frameAdjustedDevineLbs
     val unit = if (showInKg) "kg" else "lbs"
     val weightAvailable = weight.isFinite()
-    
+
     val animatedWeight by animateFloatAsState(
         targetValue = if (weightAvailable) weight.toFloat() else 0f,
         animationSpec = tween(1500, easing = FastOutSlowInEasing),
@@ -288,7 +293,7 @@ private fun PrimaryResultCard(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             MaterialTheme.colorScheme.primaryContainer,
                             MaterialTheme.colorScheme.secondaryContainer
                         )
@@ -404,7 +409,7 @@ private fun BMIRangeCard(result: IBWResult, showInKg: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -423,7 +428,7 @@ private fun BMIRangeCard(result: IBWResult, showInKg: Boolean) {
 @Composable
 private fun FormulaComparisonCard(result: IBWResult, showInKg: Boolean) {
     var expanded by remember { mutableStateOf(false) }
-    
+
     val formulas = listOf(
         "Devine (Primary)" to if(showInKg) result.devineKg else result.devineLbs,
         "Robinson" to if(showInKg) result.robinsonKg else result.robinsonLbs,
@@ -451,7 +456,7 @@ private fun FormulaComparisonCard(result: IBWResult, showInKg: Boolean) {
                     contentDescription = null
                 )
             }
-            
+
             AnimatedVisibility(visible = expanded) {
                 Column(modifier = Modifier.padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     formulas.forEach { (name, weight) ->
@@ -471,7 +476,7 @@ private fun FormulaComparisonCard(result: IBWResult, showInKg: Boolean) {
                     Text(
                         stringResource(R.string.txt_different_formulas_are_used_by),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }

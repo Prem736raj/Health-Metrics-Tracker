@@ -1,6 +1,7 @@
 // ui/screens/waterintake/components/WaterCelebration.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -127,7 +128,7 @@ fun WaterGoalCelebration(
                     if (percentage >= 150) "INCREDIBLE!" else "GOAL ACHIEVED!",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 26.sp,
-                    color = HealthColors.Healthy
+                    color = AppColors.text(HealthColors.Healthy)
                 )
 
                 // Stats
@@ -154,7 +155,7 @@ fun WaterGoalCelebration(
                 Text(
                     message,
                     fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
                     textAlign = TextAlign.Center
                 )
 
@@ -209,8 +210,8 @@ private fun CelebrationStat(icon: ImageVector, value: String, label: String, tin
         Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         Text(
             label,
-            fontSize = 11.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            fontSize = 12.sp,
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
         )
     }
 }

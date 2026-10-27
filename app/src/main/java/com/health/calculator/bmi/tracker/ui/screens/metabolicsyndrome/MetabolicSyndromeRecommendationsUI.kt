@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -110,7 +111,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = riskColor.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(riskColor.copy(alpha = 0.08f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -134,7 +135,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                     text = stringResource(R.string.txt_cardiovascular_risk_estimation),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = riskColor
+                    color = AppColors.text(riskColor)
                 )
             }
 
@@ -181,13 +182,13 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                         text = "${riskSummary.riskScore}",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.ExtraBold,
-                        color = riskColor
+                        color = AppColors.text(riskColor)
                     )
                     Text(
                         text = riskSummary.riskLevel,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = riskColor.copy(alpha = 0.8f)
+                        color = AppColors.text(riskColor.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -226,7 +227,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                     text = stringResource(R.string.txt_recommended_actions),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = riskColor,
+                    color = AppColors.text(riskColor),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -242,7 +243,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                         Text(
                             text = "•",
                             style = MaterialTheme.typography.bodySmall,
-                            color = riskColor,
+                            color = AppColors.text(riskColor),
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(end = 8.dp, top = 1.dp)
                         )
@@ -278,7 +279,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
     }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = bgColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
         shape = RoundedCornerShape(14.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -319,7 +320,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         Text(
                             text = if (recommendation.isAbnormal) "Needs Attention" else "Healthy Range",
                             style = MaterialTheme.typography.labelSmall,
-                            color = if (recommendation.isAbnormal) HealthRed else HealthGreen,
+                            color = AppColors.text(if (recommendation.isAbnormal) HealthRed else HealthGreen),
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -334,7 +335,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         text = if (recommendation.isAbnormal) "Abnormal" else "Normal",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = borderColor,
+                        color = AppColors.text(borderColor),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
@@ -403,7 +404,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                             text = stringResource(R.string.txt_associated_health_risks),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.Bold,
-                            color = HealthRed
+                            color = AppColors.text(HealthRed)
                         )
                         Spacer(modifier = Modifier.height(6.dp))
 
@@ -441,7 +442,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                                 "Tips to Maintain",
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.Bold,
-                            color = if (recommendation.isAbnormal) HealthOrange else HealthGreen
+                            color = AppColors.text(if (recommendation.isAbnormal) HealthOrange else HealthGreen)
                         )
                         Spacer(modifier = Modifier.height(6.dp))
 
@@ -465,7 +466,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         Spacer(modifier = Modifier.height(10.dp))
                         Card(
                             colors = CardDefaults.cardColors(
-                                containerColor = HealthGreen.copy(alpha = 0.1f)
+                                containerColor = AppColors.surface(HealthGreen.copy(alpha = 0.1f))
                             ),
                             shape = RoundedCornerShape(10.dp)
                         ) {
@@ -484,7 +485,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                                     text = recommendation.normalMessage,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Medium,
-                                    color = HealthGreen,
+                                    color = AppColors.text(HealthGreen),
                                     lineHeight = 18.sp
                                 )
                             }
@@ -513,7 +514,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = bannerColor.copy(alpha = 0.1f * pulseAlpha)
+            containerColor = AppColors.surface(bannerColor.copy(alpha = 0.1f * pulseAlpha))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -534,7 +535,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
                     text = stringResource(R.string.txt_medical_consultation_recommend),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.ExtraBold,
-                    color = bannerColor
+                    color = AppColors.text(bannerColor)
                 )
             }
 
@@ -572,7 +573,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
                     Text(
                         text = stringResource(R.string.txt_this_is_not_a_diagnosis_only_a),
                         style = MaterialTheme.typography.labelSmall,
-                        color = bannerColor.copy(alpha = 0.8f),
+                        color = AppColors.text(bannerColor.copy(alpha = 0.8f)),
                         lineHeight = 14.sp
                     )
                 }

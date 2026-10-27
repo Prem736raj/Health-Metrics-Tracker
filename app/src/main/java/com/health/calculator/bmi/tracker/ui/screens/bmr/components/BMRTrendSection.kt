@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRTrendSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -144,7 +145,7 @@ private fun EmptyTrendState() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -208,7 +209,7 @@ private fun SingleReadingState(stats: BMRTrendStats) {
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f))
             )
         ) {
             Row(
@@ -244,7 +245,7 @@ private fun SingleStatCard(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.06f)),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(color.copy(alpha = 0.06f))),
         border = androidx.compose.foundation.BorderStroke(0.5.dp, color.copy(alpha = 0.15f))
     ) {
         Column(
@@ -261,12 +262,12 @@ private fun SingleStatCard(
                 text = value,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = unit,
                 style = MaterialTheme.typography.labelSmall,
-                color = color.copy(alpha = 0.7f)
+                color = AppColors.text(color.copy(alpha = 0.7f))
             )
         }
     }
@@ -321,7 +322,7 @@ private fun PreviousComparisonBadge(stats: BMRTrendStats) {
                 text = text,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = color
+                color = AppColors.text(color)
             )
         }
     }
@@ -410,7 +411,7 @@ private fun BMRTDEEGraph(
 
                 val label = textMeasurer.measure(
                     "${value.toInt()}",
-                    TextStyle(fontSize = 9.sp, color = labelColor)
+                    TextStyle(fontSize = 12.sp, color = labelColor)
                 )
                 drawText(label, topLeft = Offset(2.dp.toPx(), y - label.size.height / 2))
             }
@@ -425,7 +426,7 @@ private fun BMRTDEEGraph(
                     val x = indexToX(i)
                     val dateLabel = textMeasurer.measure(
                         points[i].dateLabel,
-                        TextStyle(fontSize = 8.sp, color = labelColor)
+                        TextStyle(fontSize = 12.sp, color = labelColor)
                     )
                     drawText(
                         dateLabel,
@@ -526,7 +527,7 @@ private fun PointTooltip(point: BMRHistoryPoint) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.9f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.9f))
         )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -562,14 +563,14 @@ private fun TooltipItem(label: String, value: String, color: Color) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = color.copy(alpha = 0.8f),
-            fontSize = 9.sp
+            color = AppColors.text(color.copy(alpha = 0.8f)),
+            fontSize = 12.sp
         )
         Text(
             text = value,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
-            color = color
+            color = AppColors.text(color)
         )
     }
 }
@@ -669,7 +670,7 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = changeColor.copy(alpha = 0.06f)
+                    containerColor = AppColors.surface(changeColor.copy(alpha = 0.06f))
                 )
             ) {
                 Row(
@@ -689,7 +690,7 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
                             text = "$sign${stats.changeFromFirst.toInt()} kcal",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
-                            color = changeColor
+                            color = AppColors.text(changeColor)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Surface(
@@ -700,7 +701,7 @@ private fun TrendStatisticsGrid(stats: BMRTrendStats) {
                                 text = "$sign${stats.changePercentFromFirst.roundToInt()}%",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = changeColor,
+                                color = AppColors.text(changeColor),
                                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
                             )
                         }
@@ -722,7 +723,7 @@ private fun TrendStatCard(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.06f)),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(color.copy(alpha = 0.06f))),
         border = androidx.compose.foundation.BorderStroke(0.5.dp, color.copy(alpha = 0.12f))
     ) {
         Column(
@@ -733,20 +734,20 @@ private fun TrendStatCard(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 9.sp
+                fontSize = 12.sp
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = unit,
                 style = MaterialTheme.typography.labelSmall,
-                color = color.copy(alpha = 0.6f),
-                fontSize = 9.sp
+                color = AppColors.text(color.copy(alpha = 0.6f)),
+                fontSize = 12.sp
             )
         }
     }
@@ -769,7 +770,7 @@ private fun InsightCard(stats: BMRTrendStats) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
         border = androidx.compose.foundation.BorderStroke(0.5.dp, borderColor)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -819,7 +820,7 @@ private fun InsightCard(stats: BMRTrendStats) {
                             text = "Weight changed ${wSign}${String.format(java.util.Locale.getDefault(), "%.1f", stats.weightChange)} kg since last reading",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 11.sp
+                            fontSize = 12.sp
                         )
                     }
                 }

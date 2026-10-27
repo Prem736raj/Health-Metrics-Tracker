@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.export
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +44,7 @@ fun ExportDataScreen(
             )
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.55f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.55f))
                 )
             ) {
                 Text(

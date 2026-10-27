@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -112,7 +113,7 @@ fun ZoneRecommendationsSection(
             Text(
                 text = "Based on your fitness level: ${fitnessLevel.label}",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
             )
         }
 
@@ -158,7 +159,7 @@ private fun CaloriesBurnedCard(calorieBurns: List<ZoneCalorieBurn>) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -197,7 +198,7 @@ private fun CaloriesBurnedCard(calorieBurns: List<ZoneCalorieBurn>) {
             Text(
                 text = stringResource(R.string.txt_estimates_based_on_your_body_w),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
             )
         }
     }
@@ -236,7 +237,7 @@ private fun CalorieBurnBar(burn: ZoneCalorieBurn, maxCalories: Int) {
                 text = "Z${burn.zoneNumber}",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = burn.color
+                color = AppColors.text(burn.color)
             )
         }
 
@@ -265,7 +266,7 @@ private fun CalorieBurnBar(burn: ZoneCalorieBurn, maxCalories: Int) {
                         text = "${burn.caloriesPer30Min} cal",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White,
+                        color = AppColors.text(Color.White),
                         modifier = Modifier.padding(end = 6.dp)
                     )
                 }
@@ -275,7 +276,7 @@ private fun CalorieBurnBar(burn: ZoneCalorieBurn, maxCalories: Int) {
                     text = "${burn.caloriesPer30Min} cal",
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = burn.color,
+                    color = AppColors.text(burn.color),
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .padding(start = (animatedFraction * 200 + 8).dp)
@@ -367,7 +368,7 @@ private fun GoalChip(
     Card(
         modifier = modifier.clickable { onClick() },
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = containerColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(containerColor)),
         border = if (borderColor != Color.Transparent)
             androidx.compose.foundation.BorderStroke(1.5.dp, borderColor) else null,
         elevation = CardDefaults.cardElevation(
@@ -403,8 +404,8 @@ private fun GoalChip(
                 Text(
                     text = stringResource(R.string.txt_for_you),
                     style = MaterialTheme.typography.labelSmall,
-                    fontSize = 9.sp,
-                    color = MaterialTheme.colorScheme.secondary,
+                    fontSize = 12.sp,
+                    color = AppColors.text(MaterialTheme.colorScheme.secondary),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -448,7 +449,7 @@ private fun GoalRecommendationCard(
                     Text(
                         text = recommendation.goalDescription,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -474,7 +475,7 @@ private fun GoalRecommendationCard(
                             text = stringResource(R.string.txt_recommended_for_your_fitness_l),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = HealthColors.Healthy
+                            color = AppColors.text(HealthColors.Healthy)
                         )
                     }
                 }
@@ -515,7 +516,7 @@ private fun GoalRecommendationCard(
             Card(
                 shape = RoundedCornerShape(14.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                 )
             ) {
                 Row(
@@ -532,7 +533,7 @@ private fun GoalRecommendationCard(
                     Text(
                         text = recommendation.keyAdvice,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
                         lineHeight = 18.sp
                     )
                 }
@@ -549,7 +550,7 @@ private fun GoalRecommendationCard(
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     )
                 ) {
                     Text(
@@ -557,7 +558,7 @@ private fun GoalRecommendationCard(
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(14.dp),
                         lineHeight = 20.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -587,7 +588,7 @@ private fun GoalRecommendationCard(
                             Text(
                                 text = cleanRecommendationCopy(tip),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)),
                                 lineHeight = 17.sp
                             )
                         }
@@ -645,7 +646,7 @@ private fun ZoneDistributionChart(distribution: List<ZoneDistribution>) {
                 style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 lineHeight = 14.sp
             )
         }
@@ -679,7 +680,7 @@ private fun ZoneDistributionChart(distribution: List<ZoneDistribution>) {
                         text = "${zone.percentage}%",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = zone.color
+                        color = AppColors.text(zone.color)
                     )
                 }
             }
@@ -702,7 +703,7 @@ private fun InfoRow(icon: ImageVector, title: String, content: String) {
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             )
             Text(
                 text = content,
@@ -724,7 +725,7 @@ private fun CompactInfoCard(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         )
     ) {
         Column(
@@ -743,7 +744,7 @@ private fun CompactInfoCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             )
             Text(
                 text = value,

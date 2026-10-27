@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -36,6 +37,8 @@ fun BMIQuickCheckCard(
     onQuickCheck: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val hasProfileData = profileWeightKg > 0f && profileHeightCm > 0f && profileAge > 0
 
     AnimatedVisibility(
@@ -56,9 +59,9 @@ fun BMIQuickCheckCard(
                     .fillMaxWidth()
                     .background(
                         brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.colorScheme.tertiary
+                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                                AppColors.surface(MaterialTheme.colorScheme.primary, 2),
+                                AppColors.surface(MaterialTheme.colorScheme.tertiary, 2)
                             )
                         ),
                         shape = RoundedCornerShape(16.dp)
@@ -75,16 +78,16 @@ fun BMIQuickCheckCard(
                             text = stringResource(R.string.txt_quick_check),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = AppColors.text(Color.White)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
 
                         val name = profileName?.takeIf { it.isNotBlank() }
-                        val greeting = if (name != null) "Hi \$name!" else "Profile data ready!"
+                        val greeting = if (name != null) "Hi $name!" else "Profile data ready!"
                         Text(
                             text = greeting,
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color.White.copy(alpha = 0.9f)
+                            color = AppColors.secondaryText(Color.White.copy(alpha = 0.9f))
                         )
 
                         Spacer(modifier = Modifier.height(2.dp))
@@ -100,7 +103,7 @@ fun BMIQuickCheckCard(
                         Text(
                             text = "$weightText • $heightText • Age ${profileAge}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color.White.copy(alpha = 0.7f)
+                            color = AppColors.secondaryText(Color.White.copy(alpha = 0.7f))
                         )
                     }
 
@@ -194,11 +197,10 @@ fun LastUsedInputCard(
     val genderText = if (isMale) "Male" else "Female"
 
     Card(
-        onClick = onApply,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -222,13 +224,13 @@ fun LastUsedInputCard(
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "Last used (\$timeAgo)",
+                        text = "Last used ($timeAgo)",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "\$weightText  •  \$heightText  •  Age \$age  •  \$genderText",
+                        text = "$weightText  •  $heightText  •  Age $age  •  $genderText",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
@@ -238,35 +240,30 @@ fun LastUsedInputCard(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-            ) {
-                Text(
-                    text = stringResource(R.string.txt_use),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                )
+            FilledTonalButton(onClick = onApply, contentPadding = PaddingValues(horizontal = 12.dp),
+                colors = ButtonDefaults.filledTonalButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    contentColor = MaterialTheme.colorScheme.primary
+                )) {
+                Text(stringResource(R.string.txt_use))
             }
         }
     }
 }
 
-private fun getTimeAgoText(timestamp: Long): String {
+internal fun getTimeAgoText(timestamp: Long, now: Long = System.currentTimeMillis()): String {
     if (timestamp <= 0L) return ""
-    val diff = System.currentTimeMillis() - timestamp
+    val diff = (now - timestamp).coerceAtLeast(0L)
     val minutes = diff / (1000 * 60)
     val hours = minutes / 60
     val days = hours / 24
 
     return when {
         minutes < 1 -> "just now"
-        minutes < 60 -> "\${minutes}m ago"
-        hours < 24 -> "\${hours}h ago"
-        days < 7 -> "\${days}d ago"
-        days < 30 -> "\${days / 7}w ago"
-        else -> "\${days / 30}mo ago"
+        minutes < 60 -> "${minutes}m ago"
+        hours < 24 -> "${hours}h ago"
+        days < 7 -> "${days}d ago"
+        days < 30 -> "${days / 7}w ago"
+        else -> "${days / 30}mo ago"
     }
 }

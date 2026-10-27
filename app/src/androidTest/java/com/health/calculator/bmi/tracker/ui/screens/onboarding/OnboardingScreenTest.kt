@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.screens.onboarding
 
+import androidx.compose.ui.test.assertCountEquals
+import com.health.calculator.bmi.tracker.data.model.ThemeMode
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -76,12 +78,33 @@ class OnboardingScreenTest {
         }
     }
 
+    @Test
+    fun nightMode_finalPageHasOneHomeActionAndCompletes() {
+        var completed = false
+        val next = resourceString(R.string.txt_next)
+        val home = resourceString(R.string.onboarding_explore_home)
+        val duplicate = resourceString(R.string.onboarding_explore_home_first)
+        setOnboardingContent(onComplete = { completed = true }, themeMode = ThemeMode.DARK)
+        waitForText(next)
+        composeRule.onNodeWithText(next).performClick()
+        composeRule.mainClock.advanceTimeBy(500)
+        waitForContentDescription(resourceString(R.string.onboarding_page_progress, 2, 3))
+        composeRule.onNodeWithText(next).performClick()
+        composeRule.mainClock.advanceTimeBy(500)
+        waitForText(home)
+        composeRule.onAllNodesWithText(home).assertCountEquals(1)
+        composeRule.onAllNodesWithText(duplicate).assertCountEquals(0)
+        composeRule.onNodeWithText(home).performClick()
+        composeRule.runOnIdle { assertTrue(completed) }
+    }
+
     private fun setOnboardingContent(
         onComplete: () -> Unit = {},
-        onStartAction: (OnboardingStartAction) -> Unit = {}
+        onStartAction: (OnboardingStartAction) -> Unit = {},
+        themeMode: ThemeMode = ThemeMode.SYSTEM
     ) {
         composeRule.setContent {
-            HealthCalculatorTheme {
+            HealthCalculatorTheme(themeMode = themeMode) {
                 OnboardingScreen(
                     onComplete = onComplete,
                     onSetUpProfile = {},

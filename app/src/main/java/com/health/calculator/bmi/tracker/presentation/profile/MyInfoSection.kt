@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.presentation.profile
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -45,6 +46,24 @@ fun MyInfoSection(
     onEthnicityClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
+        ForestMyInfoSection(
+            profile = profile,
+            useMetricSystem = useMetricSystem,
+            onNameClick = onNameClick,
+            onDateOfBirthClick = onDateOfBirthClick,
+            onGenderClick = onGenderClick,
+            onHeightClick = onHeightClick,
+            onWeightClick = onWeightClick,
+            onGoalWeightClick = onGoalWeightClick,
+            onActivityLevelClick = onActivityLevelClick,
+            onHealthGoalsClick = onHealthGoalsClick,
+            onFrameSizeClick = onFrameSizeClick,
+            onEthnicityClick = onEthnicityClick,
+            modifier = modifier
+        )
+        return
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -67,7 +86,7 @@ fun MyInfoSection(
 
         InfoItem(
             label = "Date of Birth",
-            value = profile.dateOfBirthMillis?.let { 
+            value = profile.dateOfBirthMillis?.let {
                 SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(it))
             } ?: "Not set",
             icon = Icons.Default.Cake,
@@ -152,7 +171,7 @@ fun MyInfoSection(
             onClick = onActivityLevelClick
         )
 
-        val goalsText = if (profile.healthGoals.isEmpty()) "Not set" 
+        val goalsText = if (profile.healthGoals.isEmpty()) "Not set"
                         else profile.healthGoals.joinToString(", ") { it.displayName }
         InfoItem(
             label = "Health Goals",
@@ -201,7 +220,7 @@ private fun InfoItem(
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            iconTint.copy(alpha = 0.08f),
+                            AppColors.surface(iconTint.copy(alpha = 0.08f), 2),
                             MaterialTheme.colorScheme.surface
                         )
                     )

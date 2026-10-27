@@ -73,6 +73,8 @@ fun ProfileAvatar(
     onClick: () -> Unit,
     size: androidx.compose.ui.unit.Dp = 40.dp
 ) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.clickable(onClick = onClick)
@@ -86,7 +88,7 @@ fun ProfileAvatar(
                     if (isActive) Modifier.border(
                         width = 2.dp,
                         brush = Brush.linearGradient(
-                            listOf(
+                            if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                                 MaterialTheme.colorScheme.primary,
                                 MaterialTheme.colorScheme.tertiary
                             )
@@ -103,7 +105,7 @@ fun ProfileAvatar(
                 fontSize = (size.value / 2.5f).sp,
                 fontWeight = FontWeight.Bold
             )
-            
+
             if (isActive) {
                 Box(
                     modifier = Modifier
@@ -122,9 +124,9 @@ fun ProfileAvatar(
                 }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        
+
         Text(
             text = profile.displayName.take(8),
             style = MaterialTheme.typography.labelSmall,
@@ -154,9 +156,9 @@ fun AddProfileButton(onClick: () -> Unit) {
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        
+
         Text(
             text = stringResource(R.string.txt_add),
             style = MaterialTheme.typography.labelSmall,
@@ -210,7 +212,7 @@ fun ProfileSwitcherSheet(
                 Text(stringResource(R.string.txt_add_family_member))
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
     }
 }

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -90,7 +91,7 @@ fun QuietHoursDialog(
                         Text(
                             quietHours.startTimeFormatted,
                             style = MaterialTheme.typography.titleMedium,
-                            color = if (quietHours.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            color = AppColors.secondaryText(if (quietHours.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                         )
                     },
                     leadingContent = { Icon(Icons.Default.AccessTime, null) },
@@ -104,7 +105,7 @@ fun QuietHoursDialog(
                         Text(
                             quietHours.endTimeFormatted,
                             style = MaterialTheme.typography.titleMedium,
-                            color = if (quietHours.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            color = AppColors.secondaryText(if (quietHours.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                         )
                     },
                     leadingContent = { Icon(Icons.Default.AccessTime, null) },

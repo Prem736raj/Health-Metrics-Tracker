@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.presentation.profile
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -70,7 +71,7 @@ fun HealthOverviewSection(
         HealthOverviewItem(overview.metabolicSyndromeStatus, onMetricClick)
 
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         // Progress Metrics
         Text(
             text = stringResource(R.string.txt_activity_nutrition),
@@ -129,7 +130,7 @@ fun SummarySmallCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
         ),
         shape = MetricTileShape,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.56f))
@@ -154,7 +155,7 @@ fun HealthScoreDonut(score: Int) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
         ),
         shape = HeroCardShape,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -31,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -105,7 +107,7 @@ fun BpTrendScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -226,7 +228,7 @@ private fun BpTrendArrowCard(statistics: BpStatistics) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
         shape = RoundedCornerShape(14.dp)
     ) {
         Row(
@@ -260,13 +262,13 @@ private fun BpTrendArrowCard(statistics: BpStatistics) {
                         trend.label,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = iconColor
+                        color = AppColors.text(iconColor)
                     )
                 }
                 Text(
                     "SYS $sysChangeText / DIA $diaChangeText mmHg vs previous readings",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
         }
@@ -307,7 +309,7 @@ private fun BpGraphTab(
                 Text(
                     stringResource(R.string.txt_show),
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 FilterChip(
@@ -368,7 +370,7 @@ private fun BpGraphTab(
                         Text(
                             "${dataPoints.size} readings",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                         )
                     }
 
@@ -407,7 +409,7 @@ private fun BpGraphTab(
                             Text(
                                 stringResource(R.string.txt_need_at_least_2_readings_for_a),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                             )
                         }
                     }
@@ -434,7 +436,7 @@ private fun LegendItem(color: Color, label: String) {
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
     }
 }
@@ -460,6 +462,7 @@ private fun BpLineChart(
     )
 
     val textColor = MaterialTheme.colorScheme.onSurface
+    val darkAxis = AppColors.isDark
     var tappedIndex by remember { mutableIntStateOf(-1) }
 
     val zoneColors = listOf(
@@ -538,8 +541,8 @@ private fun BpLineChart(
         // Grid lines
         val gridValues = listOf(80, 90, 120, 140, 160, 180)
         val labelPaint = android.graphics.Paint().apply {
-            color = textColor.copy(alpha = 0.4f).hashCode()
-            textSize = with(density) { 10.sp.toPx() }
+            color = (if (darkAxis) textColor.toArgb() else textColor.copy(alpha = 0.4f).hashCode())
+            textSize = with(density) { 12.sp.toPx() }
             textAlign = android.graphics.Paint.Align.RIGHT
         }
 
@@ -744,8 +747,8 @@ private fun BpLineChart(
 
         // Date labels (show a few)
         val dateLabelPaint = android.graphics.Paint().apply {
-            color = textColor.copy(alpha = 0.4f).hashCode()
-            textSize = with(density) { 9.sp.toPx() }
+            color = (if (darkAxis) textColor.toArgb() else textColor.copy(alpha = 0.4f).hashCode())
+            textSize = with(density) { 12.sp.toPx() }
             textAlign = android.graphics.Paint.Align.CENTER
         }
 
@@ -828,7 +831,7 @@ private fun BpCalendarTab(
                                     day,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Medium,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                                 )
                             }
                         }
@@ -933,11 +936,11 @@ private fun CalendarDayCell(
                 "$dayNumber",
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = if (isToday || hasData) FontWeight.Bold else FontWeight.Normal,
-                color = when {
+                color = AppColors.text(when {
                     hasData -> bgColor!!
                     isToday -> MaterialTheme.colorScheme.primary
                     else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                }
+                })
             )
             if (hasData) {
                 Box(
@@ -966,7 +969,7 @@ private fun CalendarLegendItem(color: Color, label: String) {
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
         )
     }
 }
@@ -1024,7 +1027,7 @@ private fun BpStatsTab(statistics: BpStatistics) {
                     Text(
                         "Total Readings: ${statistics.totalReadings}",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -1086,7 +1089,7 @@ private fun BpStatsTab(statistics: BpStatistics) {
                             Card(
                                 modifier = Modifier.weight(1f),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = HealthColors.Warning.copy(alpha = 0.1f)
+                                    containerColor = AppColors.surface(HealthColors.Warning.copy(alpha = 0.1f))
                                 ),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
@@ -1102,9 +1105,9 @@ private fun BpStatsTab(statistics: BpStatistics) {
                                             style = MaterialTheme.typography.titleLarge,
                                             fontWeight = FontWeight.Bold
                                         )
-                                        Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                                        Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
                                     } else {
-                                        Text(stringResource(R.string.txt_no_data), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                                        Text(stringResource(R.string.txt_no_data), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
                                     }
                                 }
                             }
@@ -1113,7 +1116,7 @@ private fun BpStatsTab(statistics: BpStatistics) {
                             Card(
                                 modifier = Modifier.weight(1f),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = HealthColors.Info.copy(alpha = 0.1f)
+                                    containerColor = AppColors.surface(HealthColors.Info.copy(alpha = 0.1f))
                                 ),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
@@ -1129,9 +1132,9 @@ private fun BpStatsTab(statistics: BpStatistics) {
                                             style = MaterialTheme.typography.titleLarge,
                                             fontWeight = FontWeight.Bold
                                         )
-                                        Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                                        Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
                                     } else {
-                                        Text(stringResource(R.string.txt_no_data), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                                        Text(stringResource(R.string.txt_no_data), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
                                     }
                                 }
                             }
@@ -1191,7 +1194,7 @@ private fun BpStatsTab(statistics: BpStatistics) {
                                             "${(dist.percentage * 100).toInt()}%",
                                             style = MaterialTheme.typography.labelSmall,
                                             fontWeight = FontWeight.Bold,
-                                            color = color
+                                            color = AppColors.text(color)
                                         )
                                     }
                                 }
@@ -1213,12 +1216,12 @@ private fun StatBox(label: String, value: String, color: Color) {
             value,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = color
+            color = AppColors.text(color)
         )
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
         )
     }
 }
@@ -1234,7 +1237,7 @@ private fun HighLowCard(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.08f)),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(color.copy(alpha = 0.08f))),
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(
@@ -1246,7 +1249,7 @@ private fun HighLowCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(18.dp))
-                Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = color)
+                Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = AppColors.text(color))
             }
             Spacer(modifier = Modifier.height(6.dp))
             if (systolic != null && diastolic != null) {
@@ -1254,11 +1257,11 @@ private fun HighLowCard(
                     "$systolic/$diastolic",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = color
+                    color = AppColors.text(color)
                 )
-                Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = color.copy(alpha = 0.6f))
+                Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = AppColors.text(color.copy(alpha = 0.6f)))
             } else {
-                Text(stringResource(R.string.txt_text_placeholder_18), style = MaterialTheme.typography.titleLarge, color = color.copy(alpha = 0.4f))
+                Text(stringResource(R.string.txt_text_placeholder_18), style = MaterialTheme.typography.titleLarge, color = AppColors.text(color.copy(alpha = 0.4f)))
             }
         }
     }
@@ -1325,7 +1328,7 @@ private fun BpDayDetailDialog(
                 if (dayData.avgSystolic != null) {
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -1333,7 +1336,7 @@ private fun BpDayDetailDialog(
                             modifier = Modifier.fillMaxWidth().padding(12.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(stringResource(R.string.txt_day_average), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            Text(stringResource(R.string.txt_day_average), style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
                             Text(
                                 "${dayData.avgSystolic}/${dayData.avgDiastolic} mmHg",
                                 style = MaterialTheme.typography.titleLarge,
@@ -1346,7 +1349,7 @@ private fun BpDayDetailDialog(
                 Text(
                     "${dayData.readings.size} reading(s)",
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
 
                 dayData.readings.forEach { entity ->
@@ -1381,14 +1384,14 @@ private fun BpDayDetailDialog(
                                 Text(
                                     time,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                                 )
                             }
                         }
                         Text(
                             cat.displayName,
                             style = MaterialTheme.typography.labelSmall,
-                            color = catColor,
+                            color = AppColors.text(catColor),
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -1419,15 +1422,15 @@ private fun BpDataPointDetailDialog(
                     "${dataPoint.systolic}/${dataPoint.diastolic}",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
-                    color = catColor
+                    color = AppColors.text(catColor)
                 )
-                Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = catColor.copy(alpha = 0.6f))
+                Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.bodySmall, color = AppColors.text(catColor.copy(alpha = 0.6f)))
             }
         },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = catColor.copy(alpha = 0.1f)),
+                    colors = CardDefaults.cardColors(containerColor = AppColors.surface(catColor.copy(alpha = 0.1f))),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
@@ -1436,14 +1439,14 @@ private fun BpDataPointDetailDialog(
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = catColor
+                        color = AppColors.text(catColor)
                     )
                 }
 
                 Text(
                     dataPoint.dateTime.format(DateTimeFormatter.ofPattern("EEEE, MMM d, yyyy 'at' hh:mm a")),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -1463,7 +1466,7 @@ private fun BpDataPointDetailDialog(
                 if (dataPoint.entity.note.isNotEmpty()) {
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                         ),
                         shape = RoundedCornerShape(8.dp)
                     ) {
@@ -1472,7 +1475,7 @@ private fun BpDataPointDetailDialog(
                             Text(
                                 dataPoint.entity.note,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                             )
                         }
                     }
@@ -1508,7 +1511,7 @@ private fun BpTrendEmptyState(modifier: Modifier = Modifier) {
             Text(
                 "Take multiple blood pressure readings\nover time to see your trends here.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 textAlign = TextAlign.Center
             )
         }

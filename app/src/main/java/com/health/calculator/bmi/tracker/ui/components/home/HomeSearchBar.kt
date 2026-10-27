@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.home
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -74,7 +75,7 @@ fun HomeSearchBar(
                 Card(
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                     shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)),
+                    colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surface.copy(alpha = 0.96f))),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -144,39 +145,44 @@ fun SearchTextField(
     onClear: () -> Unit,
     focusRequester: FocusRequester
 ) {
+    val isDark = AppColors.isDark
+    val containerBg = if (isDark) Color(0xFF131C15) else Color(0xFFFFFFFF)
+    val outlineBorder = if (isDark) Color(0xFF243426) else Color(0xFFDCE6DA)
+    val iconColor = if (isDark) Color(0xFFA5C896) else Color(0xFF2E623A)
+    val placeholderColor = if (isDark) Color(0xFF6E7E71) else Color(0xFF6B7B6E)
+    val textColor = if (isDark) Color.White else Color(0xFF162018)
+
     TextField(
         value = query,
         onValueChange = onQueryChange,
-        placeholder = { Text(stringResource(R.string.txt_search_health_tools_terms)) },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        placeholder = { Text(stringResource(R.string.txt_search_health_tools_terms), color = placeholderColor) },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = iconColor) },
         trailingIcon = {
             if (query.isNotEmpty()) {
                 IconButton(onClick = onClear) {
-                    Icon(Icons.Default.Clear, contentDescription = "Clear")
+                    Icon(Icons.Default.Clear, contentDescription = "Clear", tint = iconColor)
                 }
             }
         },
         singleLine = true,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedTextColor = textColor,
+            unfocusedTextColor = textColor,
+            unfocusedContainerColor = containerBg,
+            focusedContainerColor = containerBg,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(26.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 6.dp)
-            .shadow(elevation = 3.dp, shape = RoundedCornerShape(24.dp), spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(26.dp), spotColor = if (isDark) Color.Black.copy(alpha = 0.4f) else Color.Black.copy(alpha = 0.05f))
             .border(
                 width = 1.dp,
-                color = if (query.isEmpty()) {
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
-                } else {
-                    MaterialTheme.colorScheme.primary
-                },
-                shape = RoundedCornerShape(24.dp)
+                color = if (query.isEmpty()) outlineBorder else iconColor,
+                shape = RoundedCornerShape(26.dp)
             )
             .focusRequester(focusRequester)
             .onFocusChanged { state -> onFocusChange(state.isFocused) }

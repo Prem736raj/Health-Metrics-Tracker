@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import com.health.calculator.bmi.tracker.ui.components.*
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.theme.DarkRoles
 import java.io.File
 import java.io.FileOutputStream
 
@@ -39,6 +41,22 @@ private const val PROFILE_SCREEN_TAG = "ProfileScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    viewModel: ProfileViewModel,
+    onNavigateToConnections: () -> Unit,
+    onNavigateToMetric: (String) -> Unit,
+    onViewWeightTrends: () -> Unit,
+    onNavigateToMilestones: () -> Unit,
+    onNavigateToReminders: () -> Unit,
+    milestonesViewModel: com.health.calculator.bmi.tracker.ui.screens.profile.milestones.MilestonesViewModel
+) {
+    com.health.calculator.bmi.tracker.ui.theme.ForestScreenTheme {
+        ProfileContent(viewModel, onNavigateToConnections, onNavigateToMetric, onViewWeightTrends, onNavigateToMilestones, onNavigateToReminders, milestonesViewModel)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ProfileContent(
     viewModel: ProfileViewModel,
     onNavigateToConnections: () -> Unit,
     onNavigateToMetric: (String) -> Unit,
@@ -93,6 +111,39 @@ fun ProfileScreen(
         }
     }
 
+    if (AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
+        ForestProfileContent(
+            uiState = uiState,
+            journeySummary = milestonesState.journeySummary,
+            weightStatistics = weightStatistics,
+            onSave = viewModel::saveProfile,
+            onProfilePictureClick = viewModel::showImagePickerDialog,
+            onTabSelected = viewModel::selectTab,
+            onNavigateToConnections = onNavigateToConnections,
+            onNavigateToReminders = onNavigateToReminders,
+            onNavigateToMilestones = onNavigateToMilestones,
+            onLogWeight = viewModel::showWeightLogDialog,
+            onViewWeightTrends = onViewWeightTrends,
+            onNavigateToMetric = onNavigateToMetric
+        ) {
+            MyInfoSection(
+                profile = uiState.profile,
+                useMetricSystem = uiState.profile.useMetricSystem,
+                onNameChange = viewModel::updateName,
+                onNameClick = { beginEditing(PROFILE_FIELD_NAME) },
+                onProfilePictureClick = viewModel::showImagePickerDialog,
+                onDateOfBirthClick = viewModel::showDatePicker,
+                onGenderClick = viewModel::showGenderPicker,
+                onHeightClick = { beginEditing(PROFILE_FIELD_HEIGHT) },
+                onWeightClick = { beginEditing(PROFILE_FIELD_WEIGHT) },
+                onGoalWeightClick = { beginEditing(PROFILE_FIELD_GOAL_WEIGHT) },
+                onActivityLevelClick = viewModel::showActivityLevelPicker,
+                onHealthGoalsClick = viewModel::showHealthGoalsPicker,
+                onFrameSizeClick = viewModel::showFrameSizePicker,
+                onEthnicityClick = viewModel::showEthnicityPicker
+            )
+        }
+    } else {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -144,7 +195,11 @@ fun ProfileScreen(
                         }
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
+                    scrolledContainerColor = if (AppColors.isDark) DarkRoles.Level1 else MaterialTheme.colorScheme.surfaceContainer
+                )
             )
         }
     ) { padding ->
@@ -155,8 +210,8 @@ fun ProfileScreen(
                     Brush.verticalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.background,
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.12f)
+                            if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                            if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.12f)
                         )
                     )
                 )
@@ -177,7 +232,7 @@ fun ProfileScreen(
             ) {
                 ProfilePictureSection(
                     profilePictureUri = uiState.profile.profilePictureUri,
-                    initials = uiState.profile.name.ifBlank { "U" }.take(1),
+                    initials = uiState.profile.name.trim().take(1),
                     onEditClick = viewModel::showImagePickerDialog
                 )
                 Text(
@@ -208,7 +263,7 @@ fun ProfileScreen(
             // Tabs
             TabRow(
                 selectedTabIndex = uiState.selectedTab.ordinal,
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.primary,
                 indicator = { tabPositions ->
                     TabRowDefaults.SecondaryIndicator(
@@ -276,6 +331,8 @@ fun ProfileScreen(
             }
         }
         }
+    }
+
     }
 
     // Dialogs & Pickers

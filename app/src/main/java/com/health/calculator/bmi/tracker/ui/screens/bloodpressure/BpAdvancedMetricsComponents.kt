@@ -1,6 +1,7 @@
 // ui/screens/bloodpressure/BpAdvancedMetricsComponents.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -147,7 +149,7 @@ private fun PulsePressureCard(analysis: PulsePressureAnalysis) {
                         Text(
                             stringResource(R.string.txt_systolic_diastolic),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                         )
                     }
                 }
@@ -157,19 +159,19 @@ private fun PulsePressureCard(analysis: PulsePressureAnalysis) {
                         "${analysis.value}",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
-                        color = statusColor
+                        color = AppColors.text(statusColor)
                     )
                     Text(
                         stringResource(R.string.txt_mmhg_1),
                         style = MaterialTheme.typography.labelSmall,
-                        color = statusColor.copy(alpha = 0.6f)
+                        color = AppColors.text(statusColor.copy(alpha = 0.6f))
                     )
                 }
             }
 
             // Category badge
             Card(
-                colors = CardDefaults.cardColors(containerColor = statusColor.copy(alpha = 0.1f)),
+                colors = CardDefaults.cardColors(containerColor = AppColors.surface(statusColor.copy(alpha = 0.1f))),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Row(
@@ -187,7 +189,7 @@ private fun PulsePressureCard(analysis: PulsePressureAnalysis) {
                         analysis.interpretation,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = statusColor
+                        color = AppColors.text(statusColor)
                     )
                 }
             }
@@ -246,13 +248,13 @@ private fun PulsePressureCard(analysis: PulsePressureAnalysis) {
                     Text(
                         analysis.details,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
                     )
 
                     // Reference ranges
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                         ),
                         shape = RoundedCornerShape(10.dp)
                     ) {
@@ -275,8 +277,8 @@ private fun PulsePressureCard(analysis: PulsePressureAnalysis) {
                                         "${cat.displayName}: ${cat.rangeLabel}",
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = if (cat == analysis.category) FontWeight.Bold else FontWeight.Normal,
-                                        color = if (cat == analysis.category) statusColor
-                                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                        color = AppColors.text(if (cat == analysis.category) statusColor
+                                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                                     )
                                 }
                             }
@@ -332,7 +334,7 @@ private fun MapCard(analysis: MapAnalysis) {
                     }
                     Column {
                         Text(stringResource(R.string.txt_mean_arterial_pressure), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                        Text(stringResource(R.string.txt_dia_sys_dia), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                        Text(stringResource(R.string.txt_dia_sys_dia), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
                     }
                 }
 
@@ -341,14 +343,14 @@ private fun MapCard(analysis: MapAnalysis) {
                         "${analysis.value}",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
-                        color = statusColor
+                        color = AppColors.text(statusColor)
                     )
-                    Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.labelSmall, color = statusColor.copy(alpha = 0.6f))
+                    Text(stringResource(R.string.txt_mmhg_1), style = MaterialTheme.typography.labelSmall, color = AppColors.text(statusColor.copy(alpha = 0.6f)))
                 }
             }
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = statusColor.copy(alpha = 0.1f)),
+                colors = CardDefaults.cardColors(containerColor = AppColors.surface(statusColor.copy(alpha = 0.1f))),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Row(
@@ -360,7 +362,7 @@ private fun MapCard(analysis: MapAnalysis) {
                         if (analysis.isNormal) Icons.Filled.CheckCircle else Icons.Outlined.Warning,
                         contentDescription = null, tint = statusColor, modifier = Modifier.size(14.dp)
                     )
-                    Text(analysis.interpretation, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = statusColor)
+                    Text(analysis.interpretation, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = AppColors.text(statusColor))
                 }
             }
 
@@ -398,10 +400,10 @@ private fun MapCard(analysis: MapAnalysis) {
             AnimatedVisibility(isExpanded, enter = expandVertically() + fadeIn(), exit = shrinkVertically() + fadeOut()) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                    Text(analysis.details, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
+                    Text(analysis.details, style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)))
 
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))),
                         shape = RoundedCornerShape(10.dp)
                     ) {
                         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -414,7 +416,7 @@ private fun MapCard(analysis: MapAnalysis) {
                                         "${cat.displayName}: ${cat.rangeLabel}",
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = if (cat == analysis.category) FontWeight.Bold else FontWeight.Normal,
-                                        color = if (cat == analysis.category) statusColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                        color = AppColors.text(if (cat == analysis.category) statusColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                                     )
                                 }
                             }
@@ -473,17 +475,17 @@ private fun HeartRateCard(analysis: HeartRateAnalysis) {
                     }
                     Column {
                         Text(stringResource(R.string.txt_heart_rate_analysis), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                        Text(stringResource(R.string.txt_resting_heart_rate), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                        Text(stringResource(R.string.txt_resting_heart_rate), style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
                     }
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text("${analysis.bpm}", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = statusColor)
-                    Text(stringResource(R.string.txt_bpm_1), style = MaterialTheme.typography.labelSmall, color = statusColor.copy(alpha = 0.6f))
+                    Text("${analysis.bpm}", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = AppColors.text(statusColor))
+                    Text(stringResource(R.string.txt_bpm_1), style = MaterialTheme.typography.labelSmall, color = AppColors.text(statusColor.copy(alpha = 0.6f)))
                 }
             }
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = statusColor.copy(alpha = 0.1f)),
+                colors = CardDefaults.cardColors(containerColor = AppColors.surface(statusColor.copy(alpha = 0.1f))),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Row(
@@ -495,7 +497,7 @@ private fun HeartRateCard(analysis: HeartRateAnalysis) {
                         if (analysis.isNormal) Icons.Filled.CheckCircle else Icons.Outlined.Info,
                         null, tint = statusColor, modifier = Modifier.size(14.dp)
                     )
-                    Text("${analysis.category.displayName}: ${analysis.interpretation}", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = statusColor)
+                    Text("${analysis.category.displayName}: ${analysis.interpretation}", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = AppColors.text(statusColor))
                 }
             }
 
@@ -529,11 +531,11 @@ private fun HeartRateCard(analysis: HeartRateAnalysis) {
             AnimatedVisibility(isExpanded, enter = expandVertically() + fadeIn(), exit = shrinkVertically() + fadeOut()) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                    Text(analysis.details, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
+                    Text(analysis.details, style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)))
 
                     if (analysis.riskFactors.isNotEmpty()) {
                         Card(
-                            colors = CardDefaults.cardColors(containerColor = statusColor.copy(alpha = 0.05f)),
+                            colors = CardDefaults.cardColors(containerColor = AppColors.surface(statusColor.copy(alpha = 0.05f))),
                             shape = RoundedCornerShape(10.dp)
                         ) {
                             Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -541,7 +543,7 @@ private fun HeartRateCard(analysis: HeartRateAnalysis) {
                                 analysis.riskFactors.forEach { factor ->
                                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.Top) {
                                         Box(Modifier.size(5.dp).clip(CircleShape).background(statusColor).offset(y = 5.dp))
-                                        Text(factor, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                                        Text(factor, style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)))
                                     }
                                 }
                             }
@@ -549,7 +551,7 @@ private fun HeartRateCard(analysis: HeartRateAnalysis) {
                     }
 
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))),
                         shape = RoundedCornerShape(10.dp)
                     ) {
                         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -562,7 +564,7 @@ private fun HeartRateCard(analysis: HeartRateAnalysis) {
                                         "${cat.displayName}: ${cat.rangeLabel}",
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = if (cat == analysis.category) FontWeight.Bold else FontWeight.Normal,
-                                        color = if (cat == analysis.category) statusColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                        color = AppColors.text(if (cat == analysis.category) statusColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                                     )
                                 }
                             }
@@ -598,6 +600,7 @@ private fun MetricHorizontalScale(
 
     val density = LocalDensity.current
     val textColor = MaterialTheme.colorScheme.onSurface
+    val darkAxis = AppColors.isDark
 
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Canvas(
@@ -641,8 +644,8 @@ private fun MetricHorizontalScale(
 
             // Value label above
             val labelPaint = android.graphics.Paint().apply {
-                this.color = textColor.hashCode()
-                textSize = with(density) { 10.sp.toPx() }
+                this.color = (if (darkAxis) textColor.toArgb() else textColor.hashCode())
+                textSize = with(density) { 12.sp.toPx() }
                 textAlign = android.graphics.Paint.Align.CENTER
                 typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
                 isAntiAlias = true
@@ -658,11 +661,11 @@ private fun MetricHorizontalScale(
                 ) {
                     Text(
                         zone.label,
-                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
-                        color = zone.color.copy(alpha = 0.7f),
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                        color = AppColors.text(zone.color.copy(alpha = 0.7f)),
                         textAlign = TextAlign.Center,
                         maxLines = 2,
-                        lineHeight = 10.sp
+                        lineHeight = 12.sp
                     )
                 }
             }

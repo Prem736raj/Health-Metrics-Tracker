@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -156,7 +157,7 @@ fun BmiResultSection(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f))
                 ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -244,7 +245,7 @@ private fun SavedToHistoryBanner() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Healthy.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -279,8 +280,8 @@ private fun SavedToHistoryBanner() {
                 )
                 Text(
                     text = stringResource(R.string.txt_view_all_calculations_in_the_h),
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                 )
             }
         }
@@ -385,8 +386,8 @@ private fun ActionButtonsSection(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.txt_bmi_does_not_directly_measure_),
-                style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
                 lineHeight = 16.sp
             )
         }
@@ -407,7 +408,7 @@ private fun BmiNumberCard(
             .scale(scale),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = categoryColor.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(categoryColor.copy(alpha = 0.06f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -441,17 +442,17 @@ private fun BmiNumberCard(
                     fontSize = 64.sp,
                     letterSpacing = (-2).sp
                 ),
-                color = categoryColor
+                color = AppColors.text(categoryColor)
             )
             Text(
                 text = stringResource(R.string.txt_kg_m_1),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
             )
             Spacer(modifier = Modifier.height(12.dp))
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = categoryColor.copy(alpha = 0.12f),
+                color = AppColors.surface(categoryColor.copy(alpha = 0.12f)),
                 border = androidx.compose.foundation.BorderStroke(1.dp, categoryColor.copy(alpha = 0.3f))
             ) {
                 Text(
@@ -460,7 +461,7 @@ private fun BmiNumberCard(
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     ),
-                    color = categoryColor,
+                    color = AppColors.text(categoryColor),
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
                 )
             }
@@ -479,7 +480,7 @@ private fun HealthDetailsCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -510,7 +511,7 @@ private fun HealthDetailsCard(
             Text(
                 text = result.category.riskDescription,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
                 lineHeight = 18.sp,
                 modifier = Modifier.padding(start = 30.dp)
             )
@@ -533,7 +534,7 @@ private fun HealthDetailsCard(
             Text(
                 text = "For your height of ${result.inputHeightCm.toCleanDisplay()} cm",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
                 modifier = Modifier.padding(start = 30.dp)
             )
 
@@ -551,7 +552,7 @@ private fun HealthDetailsCard(
             Text(
                 text = "${result.inputGender.displayName} • Age ${result.inputAge}",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
                 modifier = Modifier.padding(start = 30.dp)
             )
         }
@@ -566,7 +567,7 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = HealthColors.Healthy.copy(alpha = 0.08f)),
+            colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Row(modifier = Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -583,7 +584,7 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text(stringResource(R.string.txt_great_job), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = HealthColors.Healthy)
-                    Text(stringResource(R.string.txt_your_bmi_is_in_the_healthy_nor), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), lineHeight = 18.sp)
+                    Text(stringResource(R.string.txt_your_bmi_is_in_the_healthy_nor), style = MaterialTheme.typography.bodySmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)), lineHeight = 18.sp)
                 }
             }
         }
@@ -599,7 +600,7 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = adviceColor.copy(alpha = 0.06f)),
+            colors = CardDefaults.cardColors(containerColor = AppColors.surface(adviceColor.copy(alpha = 0.06f))),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
@@ -613,7 +614,7 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     Spacer(modifier = Modifier.width(14.dp))
                     Column {
                         Text(stringResource(R.string.txt_to_reach_a_healthy_bmi), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = MaterialTheme.colorScheme.onSurface)
-                        Text(stringResource(R.string.txt_based_on_who_normal_range_18_5), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                        Text(stringResource(R.string.txt_based_on_who_normal_range_18_5), style = MaterialTheme.typography.bodySmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)))
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -621,9 +622,9 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     Column {
                         Text("You need to $adviceVerb", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Row(verticalAlignment = Alignment.Bottom) {
-                            Text("~$diffDisplay", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold), color = adviceColor)
+                            Text("~$diffDisplay", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold), color = AppColors.text(adviceColor))
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text(unitLabel, style = MaterialTheme.typography.bodyMedium, color = adviceColor.copy(alpha = 0.7f), modifier = Modifier.padding(bottom = 2.dp))
+                            Text(unitLabel, style = MaterialTheme.typography.bodyMedium, color = AppColors.text(adviceColor.copy(alpha = 0.7f)), modifier = Modifier.padding(bottom = 2.dp))
                         }
                     }
                     Column(horizontalAlignment = Alignment.End) {
@@ -645,7 +646,7 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     Text(
                         "Please consult a healthcare professional before starting any weight ${if (isGain) "gain" else "loss"} program. Gradual changes are safest.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
                         lineHeight = 18.sp
                     )
                 }
@@ -670,7 +671,7 @@ private fun DetailRow(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
             )
             Text(
                 text = value,

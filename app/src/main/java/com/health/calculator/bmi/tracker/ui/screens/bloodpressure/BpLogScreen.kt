@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -69,7 +70,7 @@ fun BpLogScreen(
                             Text(
                                 "${uiState.readingsCount} readings",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                             )
                         }
                     }
@@ -83,7 +84,7 @@ fun BpLogScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -302,7 +303,7 @@ private fun BpLogEntryCard(
                     "${entity.systolic}",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = categoryColor
+                    color = AppColors.text(categoryColor)
                 )
             }
 
@@ -319,12 +320,12 @@ private fun BpLogEntryCard(
                     Text(
                         stringResource(R.string.txt_mmhg_1),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
                     )
                     if (entity.isAveragedResult) {
                         Card(
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
+                                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer)
                             ),
                             shape = RoundedCornerShape(4.dp)
                         ) {
@@ -352,7 +353,7 @@ private fun BpLogEntryCard(
                     Text(
                         category.displayName,
                         style = MaterialTheme.typography.bodySmall,
-                        color = categoryColor,
+                        color = AppColors.text(categoryColor),
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -375,7 +376,7 @@ private fun BpLogEntryCard(
                             append(dateLabel).append(" • ").append(timeLabel)
                         },
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f))
                     )
                 }
 
@@ -394,7 +395,7 @@ private fun BpLogEntryCard(
                         Text(
                             if (entity.medicationName.isNotEmpty()) entity.medicationName else "On Medication",
                             style = MaterialTheme.typography.bodySmall,
-                            color = HealthColors.Info.copy(alpha = 0.9f),
+                            color = AppColors.text(HealthColors.Info.copy(alpha = 0.9f)),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -417,12 +418,12 @@ private fun BpLogEntryCard(
                         "$pulse",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                     Text(
                         stringResource(R.string.txt_bpm_1),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
                     )
                 }
             }
@@ -475,7 +476,7 @@ private fun BpLogEmptyState(modifier: Modifier = Modifier) {
             Text(
                 "Your blood pressure readings will appear here.\nCheck your BP to start tracking!",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 textAlign = TextAlign.Center
             )
         }
@@ -526,14 +527,14 @@ private fun BpLogDetailSheet(
                 Text(
                     reading.formattedDateTime,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
             }
 
             // Main reading
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = categoryColor.copy(alpha = 0.08f)
+                    containerColor = AppColors.surface(categoryColor.copy(alpha = 0.08f))
                 ),
                 shape = RoundedCornerShape(16.dp),
                 border = BorderStroke(1.dp, categoryColor.copy(alpha = 0.2f))
@@ -548,17 +549,17 @@ private fun BpLogDetailSheet(
                         "${reading.systolic}/${reading.diastolic}",
                         style = MaterialTheme.typography.displaySmall,
                         fontWeight = FontWeight.Bold,
-                        color = categoryColor
+                        color = AppColors.text(categoryColor)
                     )
                     Text(
                         stringResource(R.string.txt_mmhg_1),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = categoryColor.copy(alpha = 0.6f)
+                        color = AppColors.text(categoryColor.copy(alpha = 0.6f))
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = categoryColor.copy(alpha = 0.12f)
+                            containerColor = AppColors.surface(categoryColor.copy(alpha = 0.12f))
                         ),
                         shape = RoundedCornerShape(20.dp)
                     ) {
@@ -567,7 +568,7 @@ private fun BpLogDetailSheet(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = categoryColor
+                            color = AppColors.text(categoryColor)
                         )
                     }
 
@@ -717,9 +718,9 @@ private fun BpLogDetailSheet(
                                             "#${index + 1}",
                                             style = MaterialTheme.typography.labelMedium,
                                             fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.onSurface.copy(
+                                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(
                                                 alpha = 0.4f
-                                            )
+                                            ))
                                         )
                                         Text(
                                             "${r.systolic}/${r.diastolic}",
@@ -729,9 +730,9 @@ private fun BpLogDetailSheet(
                                         Text(
                                             stringResource(R.string.txt_mmhg_1),
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurface.copy(
+                                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(
                                                 alpha = 0.4f
-                                            )
+                                            ))
                                         )
                                     }
                                     Box(
@@ -788,13 +789,13 @@ private fun BpLogDetailSheet(
                         Text(
                             entity.note,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                         )
                     } else {
                         Text(
                             stringResource(R.string.txt_no_notes_added),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f))
                         )
                     }
                 }
@@ -836,13 +837,13 @@ private fun DetailRow(
         Text(
             label,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
         Text(
             value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
-            color = valueColor
+            color = AppColors.text(valueColor)
         )
     }
 }
@@ -889,7 +890,7 @@ fun BpNoteDialog(
                 Text(
                     stringResource(R.string.txt_quick_notes),
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                 )
 
                 // Quick note chips - wrapped

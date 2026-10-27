@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.domain.tracking.TrackingQualityPolicy
@@ -129,7 +130,7 @@ fun LogWeightDialog(
                 // Tips
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {

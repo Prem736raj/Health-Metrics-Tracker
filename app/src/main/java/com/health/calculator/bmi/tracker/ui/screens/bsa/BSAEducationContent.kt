@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bsa
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -111,7 +112,7 @@ fun BSAEducationScreen(
         // Disclaimer
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
             ),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth()
@@ -250,7 +251,7 @@ private fun WhatIsBSAContent() {
             text = stringResource(R.string.txt_key_facts_about_bsa),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
-            color = HealthBlue,
+            color = AppColors.text(HealthBlue),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -280,7 +281,7 @@ private fun WhatIsBSAContent() {
         // Visual comparison
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = HealthBlue.copy(alpha = 0.06f)
+                containerColor = AppColors.surface(HealthBlue.copy(alpha = 0.06f))
             ),
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
@@ -293,7 +294,7 @@ private fun WhatIsBSAContent() {
                     text = stringResource(R.string.txt_to_put_it_in_perspective),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = HealthBlue
+                    color = AppColors.text(HealthBlue)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -337,7 +338,7 @@ private fun PerspectiveItem(emoji: String, label: String, value: String, descrip
             text = value,
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.ExtraBold,
-            color = HealthBlue
+            color = AppColors.text(HealthBlue)
         )
         Text(
             text = description,
@@ -345,7 +346,7 @@ private fun PerspectiveItem(emoji: String, label: String, value: String, descrip
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             lineHeight = 13.sp,
-            fontSize = 9.sp
+            fontSize = 12.sp
         )
     }
 }
@@ -368,7 +369,7 @@ private fun WhySoManyFormulasContent() {
             text = stringResource(R.string.txt_a_century_of_bsa_research),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
-            color = HealthOrange,
+            color = AppColors.text(HealthOrange),
             modifier = Modifier.padding(bottom = 10.dp)
         )
 
@@ -501,7 +502,7 @@ private fun TimelineItem(
                         text = year,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.ExtraBold,
-                        color = color,
+                        color = AppColors.text(color),
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
@@ -519,7 +520,7 @@ private fun TimelineItem(
                     Text(
                         text = highlight,
                         style = MaterialTheme.typography.labelSmall,
-                        fontSize = 9.sp,
+                        fontSize = 12.sp,
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
                     )
                 }
@@ -617,7 +618,7 @@ private fun WhichFormulaContent() {
         // Agreement note
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             ),
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
@@ -655,7 +656,7 @@ private fun FormulaGuideCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.05f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.05f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -684,8 +685,8 @@ private fun FormulaGuideCard(
                         text = tag,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.ExtraBold,
-                        color = color,
-                        fontSize = 9.sp,
+                        color = AppColors.text(color),
+                        fontSize = 12.sp,
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
@@ -705,7 +706,7 @@ private fun FormulaGuideCard(
                     text = "Use: $recommendation",
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.ExtraBold,
-                    color = color
+                    color = AppColors.text(color)
                 )
             }
 
@@ -758,7 +759,7 @@ private fun BSAvsBMIContent() {
                         text = stringResource(R.string.txt_bsa),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.ExtraBold,
-                        color = HealthBlue,
+                        color = AppColors.text(HealthBlue),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.weight(1f)
                     )
@@ -766,7 +767,7 @@ private fun BSAvsBMIContent() {
                         text = stringResource(R.string.txt_bmi),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.ExtraBold,
-                        color = HealthGreen,
+                        color = AppColors.text(HealthGreen),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.weight(1f)
                     )
@@ -881,7 +882,7 @@ private fun ComparisonRow(label: String, bsaValue: String, bmiValue: String) {
         Text(
             text = bsaValue,
             style = MaterialTheme.typography.labelSmall,
-            color = HealthBlue,
+            color = AppColors.text(HealthBlue),
             textAlign = TextAlign.Center,
             modifier = Modifier.weight(1f),
             lineHeight = 14.sp
@@ -889,7 +890,7 @@ private fun ComparisonRow(label: String, bsaValue: String, bmiValue: String) {
         Text(
             text = bmiValue,
             style = MaterialTheme.typography.labelSmall,
-            color = HealthGreen,
+            color = AppColors.text(HealthGreen),
             textAlign = TextAlign.Center,
             modifier = Modifier.weight(1f),
             lineHeight = 14.sp
@@ -906,7 +907,7 @@ private fun UseCaseCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.05f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.05f))
         ),
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.fillMaxWidth()
@@ -924,7 +925,7 @@ private fun UseCaseCard(
                     text = title,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = color
+                    color = AppColors.text(color)
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
@@ -957,7 +958,7 @@ private fun UseCaseCard(
 private fun MythBusterItem(myth: String, truth: String) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -977,7 +978,7 @@ private fun MythBusterItem(myth: String, truth: String) {
                     text = "Myth: \"$myth\"",
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = HealthRed
+                    color = AppColors.text(HealthRed)
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
@@ -1018,7 +1019,7 @@ private fun Paragraph(text: String) {
 private fun AnalygyCard(emoji: String, text: String) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -1079,7 +1080,7 @@ private fun FactItem(emoji: String, title: String, description: String) {
 private fun HighlightCard(emoji: String, title: String, color: Color, content: String) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -1097,7 +1098,7 @@ private fun HighlightCard(emoji: String, title: String, color: Color, content: S
                     text = title,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = color
+                    color = AppColors.text(color)
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -1123,7 +1124,7 @@ private fun QuickStatRow(stats: List<Pair<String, String>>) {
                     text = value,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = HealthOrange
+                    color = AppColors.text(HealthOrange)
                 )
                 Text(
                     text = label,

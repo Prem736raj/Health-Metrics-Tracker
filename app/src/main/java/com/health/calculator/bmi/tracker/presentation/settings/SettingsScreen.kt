@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.presentation.settings
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.core.constants.AppLinks
@@ -238,7 +239,7 @@ fun SettingsScreen(
                         Text(
                             text = stringResource(R.string.txt_customize_your_experience),
                             style = MaterialTheme.typography.bodySmall,
-                            color = SettingsAccent.copy(alpha = 0.8f)
+                            color = AppColors.text(SettingsAccent.copy(alpha = 0.8f))
                         )
                     }
                 },
@@ -674,7 +675,7 @@ fun SettingsScreen(
                         Text(
                             text = "Made with care for your wellness\n${AppConstants.APP_NAME} © ${java.time.Year.now().value}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)),
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -775,7 +776,7 @@ private fun SettingsCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -872,15 +873,15 @@ private fun SettingsClickItem(
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Medium
                 ),
-                color = if (isDangerous)
+                color = AppColors.text(if (isDangerous)
                     DangerRed
                 else
-                    MaterialTheme.colorScheme.onSurface
+                    MaterialTheme.colorScheme.onSurface)
             )
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
             )
         }
 
@@ -891,7 +892,7 @@ private fun SettingsClickItem(
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
-                color = SettingsAccent
+                color = AppColors.text(SettingsAccent)
             )
             Spacer(modifier = Modifier.width(4.dp))
         }
@@ -958,7 +959,7 @@ private fun SettingsToggleItem(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
             )
         }
 
@@ -1033,7 +1034,7 @@ private fun MedicalDisclaimerCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1053,7 +1054,7 @@ private fun MedicalDisclaimerCard() {
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f)
+                    color = AppColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.8f))
                 )
             }
 
@@ -1129,7 +1130,7 @@ private fun UnitSystemPickerDialog(
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                                 ),
-                                color = if (isSelected) SettingsAccent else MaterialTheme.colorScheme.onSurface
+                                color = AppColors.text(if (isSelected) SettingsAccent else MaterialTheme.colorScheme.onSurface)
                             )
                             Text(
                                 text = system.description,
@@ -1151,7 +1152,7 @@ private fun UnitSystemPickerDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.txt_done), color = SettingsAccent)
+                Text(stringResource(R.string.txt_done), color = AppColors.text(SettingsAccent))
             }
         },
         shape = RoundedCornerShape(24.dp)
@@ -1225,7 +1226,7 @@ private fun ThemePickerDialog(
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                                 ),
-                                color = if (isSelected) themeColor else MaterialTheme.colorScheme.onSurface
+                                color = AppColors.text(if (isSelected) themeColor else MaterialTheme.colorScheme.onSurface)
                             )
                         }
                         if (isSelected) {
@@ -1242,7 +1243,7 @@ private fun ThemePickerDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.txt_done), color = SettingsAccent)
+                Text(stringResource(R.string.txt_done), color = AppColors.text(SettingsAccent))
             }
         },
         shape = RoundedCornerShape(24.dp)

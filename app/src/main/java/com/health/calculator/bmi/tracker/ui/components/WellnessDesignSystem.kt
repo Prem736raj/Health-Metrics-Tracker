@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -60,12 +61,12 @@ fun WellnessIconBadge(
     Surface(
         modifier = modifier.size(40.dp),
         shape = RoundedCornerShape(12.dp),
-        color = container,
-        contentColor = tint,
+        color = if (AppColors.isDark) AppColors.icon(tint).copy(alpha = 0.14f) else container,
+        contentColor = AppColors.icon(tint),
         border = BorderStroke(1.dp, tint.copy(alpha = 0.22f))
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Icon(icon, contentDescription = contentDescription, modifier = Modifier.size(20.dp))
+            Icon(icon, contentDescription = contentDescription, modifier = Modifier.size(20.dp), tint = AppColors.icon(tint))
         }
     }
 }
@@ -94,7 +95,7 @@ fun WellnessHeroSurface(
                 .fillMaxWidth()
                 .background(
                     Brush.linearGradient(
-                        colors = listOf(WellnessPalette.HeroStart, WellnessPalette.HeroEnd)
+                        colors = listOf(AppColors.surface(WellnessPalette.HeroStart, 2), AppColors.surface(WellnessPalette.HeroEnd, 2))
                     ),
                     shape = com.health.calculator.bmi.tracker.ui.theme.HeroCardShape
                 )
@@ -109,8 +110,8 @@ fun WellnessHeroSurface(
             modifier = surfaceModifier,
             shape = com.health.calculator.bmi.tracker.ui.theme.HeroCardShape,
             color = Color.Transparent,
-            contentColor = WellnessPalette.OnHero,
-            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))
+            contentColor = AppColors.text(WellnessPalette.OnHero),
+            border = BorderStroke(1.dp, AppColors.outline(Color.White.copy(alpha = 0.2f)))
         ) {
             heroContent()
         }
@@ -120,8 +121,8 @@ fun WellnessHeroSurface(
             modifier = surfaceModifier,
             shape = com.health.calculator.bmi.tracker.ui.theme.HeroCardShape,
             color = Color.Transparent,
-            contentColor = WellnessPalette.OnHero,
-            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))
+            contentColor = AppColors.text(WellnessPalette.OnHero),
+            border = BorderStroke(1.dp, AppColors.outline(Color.White.copy(alpha = 0.2f)))
         ) {
             heroContent()
         }
@@ -213,17 +214,16 @@ fun WellnessMetricCard(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            progress?.let { fraction ->
-                Spacer(Modifier.height(4.dp))
-                LinearProgressIndicator(
-                    progress = { fraction.coerceIn(0f, 1f) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp)
-                        .clip(RoundedCornerShape(3.dp)),
-                    color = accent,
-                    trackColor = accent.copy(alpha = 0.12f)
-                )
+            Spacer(Modifier.height(4.dp))
+            Box(Modifier.fillMaxWidth().height(6.dp)) {
+                progress?.let { fraction ->
+                    LinearProgressIndicator(
+                        progress = { fraction.coerceIn(0f, 1f) },
+                        modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
+                        color = accent,
+                        trackColor = accent.copy(alpha = 0.12f)
+                    )
+                }
             }
         }
     }
@@ -340,8 +340,8 @@ fun WellnessInsightCallout(
             1.5.dp,
             Brush.linearGradient(
                 listOf(
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                    MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
+                    AppColors.outline(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
+                    AppColors.outline(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f))
                 )
             )
         )
@@ -350,8 +350,8 @@ fun WellnessInsightCallout(
             modifier = Modifier.background(
                 Brush.linearGradient(
                     listOf(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f),
-                        MaterialTheme.colorScheme.tertiary.copy(alpha = 0.04f)
+                        AppColors.surface(MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)),
+                        AppColors.surface(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.04f))
                     )
                 )
             )

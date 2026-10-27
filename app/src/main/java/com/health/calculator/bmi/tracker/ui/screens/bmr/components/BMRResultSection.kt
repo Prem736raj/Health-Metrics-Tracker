@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRResultSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -214,7 +215,7 @@ private fun PrimaryBMRCard(
                         text = level.label,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = getLevelColor(level)
+                        color = AppColors.text(getLevelColor(level))
                     )
                 }
             }
@@ -227,6 +228,8 @@ private fun PrimaryBMRCard(
 // ============================================================
 @Composable
 private fun FlameVisual(bmrValue: Float) {
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
     val infiniteTransition = rememberInfiniteTransition(label = "flame")
 
     val flameScale by infiniteTransition.animateFloat(
@@ -264,7 +267,7 @@ private fun FlameVisual(bmrValue: Float) {
                 .clip(CircleShape)
                 .background(
                     brush = Brush.radialGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             flameColor2.copy(alpha = 0.2f * innerGlow),
                             flameColor2.copy(alpha = 0.05f),
                             Color.Transparent
@@ -280,7 +283,7 @@ private fun FlameVisual(bmrValue: Float) {
                 .clip(CircleShape)
                 .background(
                     brush = Brush.radialGradient(
-                        colors = listOf(
+                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
                             flameColor3.copy(alpha = 0.4f),
                             flameColor1.copy(alpha = 0.2f),
                             Color.Transparent
@@ -314,7 +317,7 @@ private fun InterpretationCard(resultData: BMRResultData) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -430,7 +433,7 @@ private fun BMRBreakdownCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 )
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
@@ -460,7 +463,7 @@ private fun BMRBreakdownCard(
                             text = "${resultData.bmrInKJ.toInt()} kJ/day",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = AppColors.text(MaterialTheme.colorScheme.tertiary)
                         )
                     }
                 }
@@ -488,7 +491,7 @@ private fun BreakdownItem(
             text = value,
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Bold,
-            color = color
+            color = AppColors.text(color)
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
@@ -599,9 +602,9 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(10.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(
+                                containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(
                                     alpha = 0.3f
-                                )
+                                ))
                             )
                         ) {
                             Row(
@@ -633,7 +636,7 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                                         text = "${resultData.bmrRange.toInt()} kcal",
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.SemiBold,
-                                        color = MaterialTheme.colorScheme.tertiary
+                                        color = AppColors.text(MaterialTheme.colorScheme.tertiary)
                                     )
                                 }
                                 Column(horizontalAlignment = Alignment.End) {
@@ -698,7 +701,7 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                                 text = "$unavailableCount formula(s) not shown (require body fat % input)",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 11.sp
+                                fontSize = 12.sp
                             )
                         }
                     }
@@ -740,7 +743,7 @@ private fun FormulaComparisonBar(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
+        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
         border = if (isSelected) androidx.compose.foundation.BorderStroke(
             1.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
         ) else null
@@ -761,8 +764,8 @@ private fun FormulaComparisonBar(
                         text = formulaName,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                        color = if (isSelected) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurface
+                        color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onSurface)
                     )
                     if (isSelected) {
                         Spacer(modifier = Modifier.width(4.dp))
@@ -791,7 +794,7 @@ private fun FormulaComparisonBar(
                             Text(
                                 text = stringResource(R.string.txt_bf),
                                 style = MaterialTheme.typography.labelSmall,
-                                fontSize = 9.sp,
+                                fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.onTertiaryContainer,
                                 modifier = Modifier.padding(horizontal = 3.dp, vertical = 1.dp)
                             )
@@ -802,8 +805,8 @@ private fun FormulaComparisonBar(
                     text = "${value.toInt()} kcal",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (isSelected) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.onSurface
+                    color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.onSurface)
                 )
             }
 

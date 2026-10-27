@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.history
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -62,10 +63,10 @@ fun HistoryEntryCard(
             ),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (entry.isSelected)
+            containerColor = AppColors.surface(if (entry.isSelected)
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
             else
-                MaterialTheme.colorScheme.surface
+                MaterialTheme.colorScheme.surface)
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (entry.isSelected) 4.dp else 2.dp
@@ -152,7 +153,7 @@ fun HistoryEntryCard(
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.labelSmall,
-                                color = categoryIndicatorColor,
+                                color = AppColors.text(categoryIndicatorColor),
                                 fontWeight = FontWeight.Medium,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -163,7 +164,7 @@ fun HistoryEntryCard(
                         Text(
                             text = entry.formattedTime,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         )
                     }
                 }
@@ -174,12 +175,12 @@ fun HistoryEntryCard(
                         text = entry.primaryValue,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = categoryIndicatorColor
+                        color = AppColors.text(categoryIndicatorColor)
                     )
                     Text(
                         text = entry.primaryLabel,
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     )
                 }
             }
@@ -208,7 +209,7 @@ fun HistoryEntryCard(
                         Text(
                             text = note,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -321,7 +322,7 @@ private fun DetailRow(
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
         Text(
             text = value,

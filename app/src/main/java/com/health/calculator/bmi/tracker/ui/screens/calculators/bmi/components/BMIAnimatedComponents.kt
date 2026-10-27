@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -100,7 +102,7 @@ fun AnimatedInputField(
                 else MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = if (isError)
                     MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
-                else MaterialTheme.colorScheme.outlineVariant,
+                else if (com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.outlineVariant,
                 errorBorderColor = MaterialTheme.colorScheme.error
             )
         )
@@ -352,20 +354,20 @@ fun AnimatedBMIResultValue(
             text = String.format("%.1f", animatedBMI.value),
             style = MaterialTheme.typography.displayLarge,
             fontWeight = FontWeight.Bold,
-            color = categoryColor,
+            color = AppColors.text(categoryColor),
             fontSize = 56.sp
         )
         Spacer(modifier = Modifier.height(4.dp))
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = categoryColor.copy(alpha = 0.12f),
+            color = AppColors.surface(categoryColor.copy(alpha = 0.12f)),
             border = BorderStroke(1.dp, categoryColor.copy(alpha = 0.3f))
         ) {
             Text(
                 text = category,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = categoryColor,
+                color = AppColors.text(categoryColor),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
         }

@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.presentation.profile
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -234,7 +235,7 @@ private fun HealthConnectAccessCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.55f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.55f))
         )
     ) {
         Column(
@@ -317,7 +318,7 @@ private fun HealthConnectFeatureRow(
 @Composable
 fun ConnectionHeader(map: HealthConnectionMap?) {
     if (map == null) return
-    
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -333,7 +334,7 @@ fun ConnectionHeader(map: HealthConnectionMap?) {
             StatItem(label = "Data Points", value = "${map.profileFieldUsageCount}")
             StatItem(label = "Connections", value = "${map.totalInterconnections}")
             StatItem(
-                label = "Alerts", 
+                label = "Alerts",
                 value = "${map.calculatorsNeedingRecalculation.size}",
                 valueColor = if (map.calculatorsNeedingRecalculation.isNotEmpty()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
             )
@@ -376,9 +377,9 @@ fun ConnectionCard(
                         modifier = Modifier.size(22.dp)
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.width(12.dp))
-                
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = connection.calculatorName,
@@ -388,8 +389,8 @@ fun ConnectionCard(
                     if (connection.needsRecalculation) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                Icons.Default.Warning, 
-                                contentDescription = null, 
+                                Icons.Default.Warning,
+                                contentDescription = null,
                                 tint = MaterialTheme.colorScheme.error,
                                 modifier = Modifier.size(12.dp)
                             )
@@ -412,7 +413,7 @@ fun ConnectionCard(
             if (connection.inputsFromProfile.isNotEmpty()) {
                 InputSection("From Profile", connection.inputsFromProfile, MaterialTheme.colorScheme.primary)
             }
-            
+
             connection.inputsFromOtherCalculators.forEach { link ->
                 InputSection("From ${link.sourceCalculator}", listOf(link.dataField), MaterialTheme.colorScheme.secondary)
             }
@@ -480,19 +481,19 @@ fun FlowRow(
     androidx.compose.ui.layout.Layout(content = content, modifier = modifier) { measurables, constraints ->
         val chipConstraints = constraints.copy(minWidth = 0, minHeight = 0)
         val placeables = measurables.map { it.measure(chipConstraints) }
-        
+
         layout(constraints.maxWidth, constraints.maxHeight) {
             var y = 0
             var x = 0
             var maxYInRow = 0
-            
+
             placeables.forEach { placeable ->
                 if (x + placeable.width > constraints.maxWidth) {
                     y += maxYInRow + crossAxisSpacing.roundToPx()
                     x = 0
                     maxYInRow = 0
                 }
-                
+
                 placeable.placeRelative(x, y)
                 x += placeable.width + mainAxisSpacing.roundToPx()
                 maxYInRow = maxOf(maxYInRow, placeable.height)

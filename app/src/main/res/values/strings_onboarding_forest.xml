@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Reference copy belongs only to the dark forest onboarding. -->
+    <string name="forest_welcome_description">Track a few daily measures. Your records stay\non this device by default.</string>
+    <string name="forest_private_description">Your data\nstays on this\ndevice by default</string>
+    <string name="forest_understand_description">Get clear,\ninformational\ninsights</string>
+    <string name="forest_start_description">Pick a quick action now. You can always\nchange it later.</string>
+</resources>

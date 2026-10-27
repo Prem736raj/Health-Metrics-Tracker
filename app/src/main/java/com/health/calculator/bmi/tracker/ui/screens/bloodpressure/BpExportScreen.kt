@@ -1,6 +1,7 @@
 // ui/screens/bloodpressure/BpExportScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -56,7 +57,7 @@ fun BpExportScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -73,7 +74,7 @@ fun BpExportScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
                 ),
                 shape = RoundedCornerShape(16.dp)
             ) {
@@ -160,7 +161,7 @@ fun BpExportScreen(
             // Doctor report info
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = HealthColors.Good.copy(alpha = 0.08f)
+                    containerColor = AppColors.surface(HealthColors.Good.copy(alpha = 0.08f))
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -178,7 +179,7 @@ fun BpExportScreen(
                     Text(
                         stringResource(R.string.txt_the_doctor_report_includes_you),
                         style = MaterialTheme.typography.bodySmall,
-                        color = HealthColors.Good.copy(alpha = 0.9f)
+                        color = AppColors.text(HealthColors.Good.copy(alpha = 0.9f))
                     )
                 }
             }
@@ -226,7 +227,7 @@ fun BpExportScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -234,7 +235,7 @@ fun BpExportScreen(
                         stringResource(R.string.txt_no_readings_to_share_yet_take_),
                         modifier = Modifier.padding(16.dp),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -275,7 +276,7 @@ private fun ExportStatItem(
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
         )
     }
 }
@@ -333,7 +334,7 @@ private fun ExportOptionCard(
                     Text(
                         description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f))
                     )
                 }
             }

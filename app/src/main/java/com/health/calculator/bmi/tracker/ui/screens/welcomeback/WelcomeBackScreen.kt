@@ -1,6 +1,7 @@
 // app/src/main/java/com/health/calculator/bmi/tracker/ui/screens/welcomeback/WelcomeBackScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.welcomeback
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -218,9 +219,9 @@ private fun StreakStatusCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (freezeApplied)
+            containerColor = AppColors.surface(if (freezeApplied)
                 HealthColors.Healthy.copy(alpha = 0.1f)
-            else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+            else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -234,7 +235,7 @@ private fun StreakStatusCard(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
-                        Text(stringResource(R.string.txt_streak_protected), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = HealthColors.Healthy)
+                        Text(stringResource(R.string.txt_streak_protected), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = AppColors.text(HealthColors.Healthy))
                         Text(stringResource(R.string.txt_your_streak_freeze_kept_your_s), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
@@ -311,7 +312,7 @@ private fun PlantStatusCard(plantStatus: PlantWelcomeStatus) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
         )
     ) {
         Row(

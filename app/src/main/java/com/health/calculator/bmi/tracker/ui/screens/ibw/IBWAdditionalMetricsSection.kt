@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -195,13 +196,13 @@ private fun WeightCategoryCard(
                 Text(
                     text = "${"%.0f".format(animatedPercent)}%",
                     style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
-                    color = categoryColor
+                    color = AppColors.text(categoryColor)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = stringResource(R.string.txt_of_ibw),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
@@ -217,7 +218,7 @@ private fun WeightCategoryCard(
                 Text(
                     text = metrics.weightCategory,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = categoryColor,
+                    color = AppColors.text(categoryColor),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                 )
             }
@@ -233,7 +234,7 @@ private fun WeightCategoryCard(
             Text(
                 text = metrics.weightCategoryDescription,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -329,11 +330,11 @@ private fun WeightCategoryScale(percent: Double) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(stringResource(R.string.txt_60), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
-            Text(stringResource(R.string.txt_80), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
-            Text(stringResource(R.string.txt_100_1), style = MaterialTheme.typography.labelSmall, color = HealthColors.Healthy, fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.txt_120), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
-            Text(stringResource(R.string.txt_160), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+            Text(stringResource(R.string.txt_60), style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
+            Text(stringResource(R.string.txt_80), style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
+            Text(stringResource(R.string.txt_100_1), style = MaterialTheme.typography.labelSmall, color = AppColors.text(HealthColors.Healthy), fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.txt_120), style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
+            Text(stringResource(R.string.txt_160), style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
         }
     }
 }
@@ -351,7 +352,7 @@ private fun MetricChip(label: String, value: String) {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             )
             Text(
                 text = value,
@@ -378,7 +379,7 @@ private fun AdjustedBodyWeightCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = FeatureColors.HeartStart.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(FeatureColors.HeartStart.copy(alpha = 0.06f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -408,7 +409,7 @@ private fun AdjustedBodyWeightCard(
                     Text(
                         text = stringResource(R.string.txt_for_clinical_use_when_weight_1),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -430,13 +431,13 @@ private fun AdjustedBodyWeightCard(
                 Text(
                     text = "${"%.1f".format(animatedAbw)}",
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    color = FeatureColors.HeartStart
+                    color = AppColors.text(FeatureColors.HeartStart)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = unit,
                     style = MaterialTheme.typography.titleSmall,
-                    color = FeatureColors.HeartStart.copy(alpha = 0.7f),
+                    color = AppColors.text(FeatureColors.HeartStart.copy(alpha = 0.7f)),
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
@@ -452,13 +453,13 @@ private fun AdjustedBodyWeightCard(
                     Text(
                         text = stringResource(R.string.txt_formula_ibw_0_4_actual_weight_),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "${"%.1f".format(idealWeightKg * factor)} + 0.4 × (${"%.1f".format(actualWeightKg * factor)} − ${"%.1f".format(idealWeightKg * factor)}) = ${"%.1f".format(adjustedWeightKg * factor)} $unit",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -480,8 +481,8 @@ private fun AdjustedBodyWeightCard(
                 Text(
                     text = stringResource(R.string.txt_used_by_healthcare_providers_f),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                    fontSize = 11.sp
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -531,7 +532,7 @@ private fun LeanBodyWeightCard(
                     Text(
                         text = stringResource(R.string.txt_estimated_weight_minus_body_fa),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                     )
                 }
             }
@@ -600,8 +601,8 @@ private fun LeanBodyWeightCard(
                     Text(
                         text = stringResource(R.string.txt_this_is_an_estimation_based_on),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                        fontSize = 11.sp
+                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                        fontSize = 12.sp
                     )
                 }
             }
@@ -649,13 +650,13 @@ private fun CompositionCircle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp
                     ),
-                    color = color
+                    color = AppColors.text(color)
                 )
                 Text(
                     text = unit,
                     style = MaterialTheme.typography.labelSmall,
-                    color = color.copy(alpha = 0.7f),
-                    fontSize = 9.sp
+                    color = AppColors.text(color.copy(alpha = 0.7f)),
+                    fontSize = 12.sp
                 )
             }
         }
@@ -663,7 +664,7 @@ private fun CompositionCircle(
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
         )
     }
 }
@@ -712,7 +713,7 @@ private fun BodyCompositionBar(leanPercent: Float, fatPercent: Float) {
                 Text(
                     "Lean ${"%.0f".format(leanPercent)}%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -726,7 +727,7 @@ private fun BodyCompositionBar(leanPercent: Float, fatPercent: Float) {
                 Text(
                     "Fat ${"%.0f".format(fatPercent)}%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 )
             }
         }
@@ -773,7 +774,7 @@ private fun SportSpecificNotesCard() {
                         Text(
                             text = stringResource(R.string.txt_ideal_weight_varies_by_activit),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                         )
                     }
                 }
@@ -833,12 +834,12 @@ private fun SportSpecificNotesCard() {
                                             Text(
                                                 text = note.bmiRange,
                                                 style = MaterialTheme.typography.labelSmall,
-                                                color = FeatureColors.BmiStart,
+                                                color = AppColors.text(FeatureColors.BmiStart),
                                                 modifier = Modifier.padding(
                                                     horizontal = 6.dp,
                                                     vertical = 2.dp
                                                 ),
-                                                fontSize = 10.sp
+                                                fontSize = 12.sp
                                             )
                                         }
                                     }
@@ -846,7 +847,7 @@ private fun SportSpecificNotesCard() {
                                     Text(
                                         text = note.note,
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                                     )
                                 }
                             }
@@ -872,8 +873,8 @@ private fun SportSpecificNotesCard() {
                             Text(
                                 text = stringResource(R.string.txt_athletes_may_have_ideal_weight),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = HealthColors.Caution.copy(alpha = 0.9f),
-                                fontSize = 11.sp
+                                color = AppColors.text(HealthColors.Caution.copy(alpha = 0.9f)),
+                                fontSize = 12.sp
                             )
                         }
                     }

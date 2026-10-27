@@ -23,6 +23,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -33,6 +34,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import android.app.Activity
+import androidx.core.view.WindowCompat
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -176,9 +180,21 @@ fun NavGraph(
     // a destination TopAppBar creates a visible blank strip above most screens
     // on edge-to-edge devices.
     val shouldApplyRootSystemBarInsets = rootOwnsSystemBarInsets(currentRoute)
+    val darkAppTheme = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val lightSystemBars = usesLightSystemBars(darkAppTheme)
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+            val controller = WindowCompat.getInsetsController(window, view)
+            controller.isAppearanceLightStatusBars = lightSystemBars
+            controller.isAppearanceLightNavigationBars = lightSystemBars
+        }
+    }
 
     Scaffold(
         modifier = modifier,
+        containerColor = if (usesForestPresentation(currentRoute)) com.health.calculator.bmi.tracker.ui.components.forest.BotanicalPalette.Background else if (darkAppTheme && Screen.isBottomNavRoute(currentRoute)) com.health.calculator.bmi.tracker.ui.components.forest.ForestPalette.Background else MaterialTheme.colorScheme.background,
         contentWindowInsets = if (shouldApplyRootSystemBarInsets) {
             ScaffoldDefaults.contentWindowInsets
         } else {
@@ -228,9 +244,15 @@ fun NavGraph(
             }
         }
     ) { innerPadding ->
+        val initialStartDestination = if (onboardingCompleted == true) {
+            Screen.Splash.route
+        } else {
+            Screen.Onboarding.route
+        }
+
         NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route,
+        startDestination = initialStartDestination,
         modifier = Modifier.padding(innerPadding),
         enterTransition = {
             fadeIn(animationSpec = tween(NAV_ANIMATION_DURATION)) +

@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -16,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.health.calculator.bmi.tracker.data.model.ThemeMode
+import com.health.calculator.bmi.tracker.ui.components.forest.BotanicalDayRoles
+import com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen
 
 // ============================================================================
 // LIGHT COLOR SCHEME
@@ -73,6 +76,13 @@ private val LightColorScheme = lightColorScheme(
 // ============================================================================
 
 private val DarkColorScheme = darkColorScheme(
+    surfaceDim = BackgroundDark,
+    surfaceBright = DarkRoles.Level3,
+    surfaceContainerLowest = BackgroundDark,
+    surfaceContainerLow = DarkRoles.Level1,
+    surfaceContainer = DarkRoles.Level2,
+    surfaceContainerHigh = DarkRoles.Level3,
+    surfaceContainerHighest = DarkRoles.Level3,
     // Primary
     primary = PrimaryDark,
     onPrimary = OnPrimaryDark,
@@ -122,6 +132,46 @@ private val DarkColorScheme = darkColorScheme(
 // ============================================================================
 // THEME COMPOSABLE
 // ============================================================================
+
+/** Day defaults are scoped to the botanical screens; the global light scheme is unchanged. */
+private val BotanicalLightColorScheme = LightColorScheme.copy(
+    primary = BotanicalDayRoles.Primary,
+    onPrimary = Color.White,
+    primaryContainer = BotanicalDayRoles.Selected,
+    onPrimaryContainer = BotanicalDayRoles.Ink,
+    secondary = BotanicalDayRoles.Primary,
+    onSecondary = Color.White,
+    secondaryContainer = BotanicalDayRoles.Button,
+    onSecondaryContainer = BotanicalDayRoles.Ink,
+    background = BotanicalDayRoles.Background,
+    onBackground = BotanicalDayRoles.Text,
+    surface = BotanicalDayRoles.Surface,
+    onSurface = BotanicalDayRoles.Text,
+    surfaceVariant = BotanicalDayRoles.Selected,
+    onSurfaceVariant = BotanicalDayRoles.Secondary,
+    surfaceTint = BotanicalDayRoles.Primary,
+    surfaceContainerLowest = BotanicalDayRoles.Surface,
+    surfaceContainerLow = BotanicalDayRoles.Background,
+    surfaceContainer = BotanicalDayRoles.Surface,
+    surfaceContainerHigh = BotanicalDayRoles.Background,
+    surfaceContainerHighest = BotanicalDayRoles.Selected,
+    outline = BotanicalDayRoles.Primary,
+    outlineVariant = BotanicalDayRoles.Outline
+)
+
+/** Local defaults follow app brightness without changing its preference or window flags. */
+@Composable
+fun ForestScreenTheme(content: @Composable () -> Unit) {
+    val scheme = if (AppColors.isDark) DarkColorScheme else BotanicalLightColorScheme
+    CompositionLocalProvider(LocalBotanicalScreen provides true) {
+        MaterialTheme(
+            colorScheme = scheme,
+            typography = MaterialTheme.typography,
+            shapes = MaterialTheme.shapes,
+            content = content
+        )
+    }
+}
 
 @Composable
 fun HealthCalculatorTheme(

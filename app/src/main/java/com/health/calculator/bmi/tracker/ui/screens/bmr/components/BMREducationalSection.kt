@@ -1,6 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMREducationalSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -114,8 +115,8 @@ fun BMREducationalSection(
                     Text(
                         text = stringResource(R.string.txt_this_educational_content_is_fo),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                        fontSize = 10.sp,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
+                        fontSize = 12.sp,
                         lineHeight = 14.sp
                     )
                 }
@@ -135,7 +136,7 @@ private fun ExpandableEducationalCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column {
@@ -262,7 +263,7 @@ private fun HighlightParagraph(paragraph: EducationalParagraph) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
         ),
         border = androidx.compose.foundation.BorderStroke(
             0.5.dp,
@@ -294,7 +295,7 @@ private fun TipParagraph(paragraph: EducationalParagraph) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Healthy.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))
         ),
         border = androidx.compose.foundation.BorderStroke(
             0.5.dp,
@@ -328,7 +329,7 @@ private fun WarningParagraph(paragraph: EducationalParagraph) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = HealthColors.Caution.copy(alpha = 0.08f)
+            containerColor = AppColors.surface(HealthColors.Caution.copy(alpha = 0.08f))
         ),
         border = androidx.compose.foundation.BorderStroke(
             0.5.dp,
@@ -412,7 +413,7 @@ fun BMRFormulaComparisonSection(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                     )
                 ) {
                     Column(modifier = Modifier.padding(12.dp)) {
@@ -482,7 +483,7 @@ fun BMRFormulaComparisonSection(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = HealthColors.Healthy.copy(alpha = 0.08f)
+                        containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))
                     ),
                     border = androidx.compose.foundation.BorderStroke(
                         0.5.dp, HealthColors.Healthy.copy(alpha = 0.18f)
@@ -504,7 +505,7 @@ fun BMRFormulaComparisonSection(
                                 text = stringResource(R.string.txt_recommendation),
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = HealthColors.Healthy
+                                color = AppColors.text(HealthColors.Healthy)
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
@@ -537,7 +538,7 @@ private fun FormulaInsightBullet(text: String) {
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = 16.sp,
-            fontSize = 11.sp
+            fontSize = 12.sp
         )
     }
 }
@@ -554,7 +555,7 @@ private fun QuickStatCard(
         modifier = modifier,
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.06f)
+            containerColor = AppColors.surface(color.copy(alpha = 0.06f))
         )
     ) {
         Column(
@@ -565,19 +566,19 @@ private fun QuickStatCard(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 9.sp
+                fontSize = 12.sp
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = color
+                color = AppColors.text(color)
             )
             Text(
                 text = formula,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 9.sp
+                fontSize = 12.sp
             )
         }
     }

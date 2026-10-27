@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.*
@@ -31,56 +34,45 @@ fun ProfilePictureSection(
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .clickable { onEditClick() },
-            contentAlignment = Alignment.Center
-        ) {
-            if (profilePictureUri != null && profilePictureUri.isNotBlank()) {
-                AsyncImage(
-                    model = profilePictureUri,
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Text(
-                    text = initials.uppercase(),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-            }
-
-            // Edit overlay
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.2f)),
-                contentAlignment = Alignment.BottomCenter
+    Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.size(100.dp)) {
+            Surface(
+                onClick = onEditClick,
+                modifier = Modifier.fillMaxSize(),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primaryContainer
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f))
-                        .padding(bottom = 8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.CameraAlt,
-                        contentDescription = "Edit",
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(16.dp)
-                    )
+                Box(contentAlignment = Alignment.Center) {
+                    if (!profilePictureUri.isNullOrBlank()) {
+                        AsyncImage(
+                            model = profilePictureUri,
+                            contentDescription = "Profile picture. Edit photo",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else if (initials.isNotBlank()) {
+                        Text(
+                            text = initials.take(1).uppercase(),
+                            style = MaterialTheme.typography.headlineLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
+                        )
+                    } else {
+                        Icon(Icons.Default.Person, "Your profile. Edit photo", modifier = Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
                 }
+            }
+            FilledIconButton(
+                onClick = onEditClick,
+                modifier = Modifier.align(Alignment.BottomEnd).size(48.dp),
+                shape = CircleShape,
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (AppColors.isDark) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Icon(Icons.Default.CameraAlt, "Edit profile photo", modifier = Modifier.size(22.dp))
             }
         }
     }
@@ -123,7 +115,7 @@ fun ProfileImagePickerDialog(
             ListItem(
                 headlineContent = { Text(stringResource(R.string.txt_remove_current_picture), color = MaterialTheme.colorScheme.error) },
                 leadingContent = { Icon(Icons.Default.AddPhotoAlternate, null, tint = MaterialTheme.colorScheme.error) },
-                modifier = Modifier.clickable { 
+                modifier = Modifier.clickable {
                     onImageSelected(null)
                     onDismiss()
                 }

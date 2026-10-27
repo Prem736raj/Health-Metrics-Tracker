@@ -1,6 +1,7 @@
 // ui/components/NotificationChannelSettings.kt
 package com.health.calculator.bmi.tracker.ui.components
 
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -32,7 +33,7 @@ fun NotificationChannelSettingsCard() {
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -55,7 +56,7 @@ fun NotificationChannelSettingsCard() {
                         fontWeight = FontWeight.Bold
                     )
                 }
-                
+
                 IconButton(onClick = {
                     val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
@@ -103,7 +104,7 @@ private fun ChannelItem(name: String, description: String, isEnabled: Boolean) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        
+
         Badge(
             containerColor = if (isEnabled) HealthColors.Healthy else MaterialTheme.colorScheme.surfaceVariant,
             contentColor = if (isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -112,7 +113,7 @@ private fun ChannelItem(name: String, description: String, isEnabled: Boolean) {
             Text(
                 text = if (isEnabled) "Active" else "Disabled",
                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
-                fontSize = 10.sp
+                fontSize = 12.sp
             )
         }
     }
@@ -130,7 +131,7 @@ fun RateLimitInfoCard(
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -140,9 +141,9 @@ fun RateLimitInfoCard(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Row(modifier = Modifier.fillMaxWidth()) {
                 StatItem(
                     label = "Sent",
@@ -160,16 +161,16 @@ fun RateLimitInfoCard(
                     modifier = Modifier.weight(1f)
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             LinearProgressIndicator(
                 progress = (sentCount.toFloat() / (sentCount + remainingCount)).coerceIn(0f, 1f),
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
-            
+
             Text(
                 text = stringResource(R.string.txt_we_limit_notifications_to_8_pe),
                 style = MaterialTheme.typography.labelSmall,
