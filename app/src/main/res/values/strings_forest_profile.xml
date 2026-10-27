@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="forest_profile_more">More profile actions</string>
+    <string name="forest_profile_edit_photo">Edit profile photo</string>
+    <string name="forest_profile_your_profile">Your profile</string>
+    <string name="forest_profile_my_info">My Info</string>
+    <string name="forest_profile_health_overview">Health Overview</string>
+    <string name="forest_profile_name">Name</string>
+    <string name="forest_profile_birthdate">Date of Birth</string>
+    <string name="forest_profile_not_set">Not set</string>
+    <string name="forest_profile_goal_weight">Goal Weight</string>
+    <string name="forest_profile_activity_level">Activity Level</string>
+    <string name="forest_profile_health_goals">Health Goals</string>
+    <string name="forest_profile_ethnicity">Ethnicity / Region</string>
+    <string name="forest_profile_percentage">%1$d%%</string>
+    <string name="forest_profile_water_streak">Hydration: %1$s streak</string>
+    <string name="forest_profile_calorie_adherence">Calorie Adherence: %1$d%%</string>
+    <string name="forest_profile_weekly_change">%1$s %2$s/week</string>
+    <string name="forest_profile_count_separator">%1$s · %2$s · %3$s</string>
+    <plurals name="forest_profile_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="forest_profile_milestones">
+        <item quantity="one">%d milestone</item>
+        <item quantity="other">%d milestones</item>
+    </plurals>
+    <plurals name="forest_profile_records">
+        <item quantity="one">%d record</item>
+        <item quantity="other">%d records</item>
+    </plurals>
+</resources>

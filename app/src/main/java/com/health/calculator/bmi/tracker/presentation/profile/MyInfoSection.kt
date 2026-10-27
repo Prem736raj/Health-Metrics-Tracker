@@ -46,6 +46,24 @@ fun MyInfoSection(
     onEthnicityClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
+        ForestMyInfoSection(
+            profile = profile,
+            useMetricSystem = useMetricSystem,
+            onNameClick = onNameClick,
+            onDateOfBirthClick = onDateOfBirthClick,
+            onGenderClick = onGenderClick,
+            onHeightClick = onHeightClick,
+            onWeightClick = onWeightClick,
+            onGoalWeightClick = onGoalWeightClick,
+            onActivityLevelClick = onActivityLevelClick,
+            onHealthGoalsClick = onHealthGoalsClick,
+            onFrameSizeClick = onFrameSizeClick,
+            onEthnicityClick = onEthnicityClick,
+            modifier = modifier
+        )
+        return
+    }
     Column(
         modifier = modifier
             .fillMaxSize()

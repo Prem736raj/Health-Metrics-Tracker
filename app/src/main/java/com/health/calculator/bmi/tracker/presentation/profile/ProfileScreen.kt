@@ -49,6 +49,22 @@ fun ProfileScreen(
     onNavigateToReminders: () -> Unit,
     milestonesViewModel: com.health.calculator.bmi.tracker.ui.screens.profile.milestones.MilestonesViewModel
 ) {
+    com.health.calculator.bmi.tracker.ui.theme.ForestScreenTheme {
+        ProfileContent(viewModel, onNavigateToConnections, onNavigateToMetric, onViewWeightTrends, onNavigateToMilestones, onNavigateToReminders, milestonesViewModel)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ProfileContent(
+    viewModel: ProfileViewModel,
+    onNavigateToConnections: () -> Unit,
+    onNavigateToMetric: (String) -> Unit,
+    onViewWeightTrends: () -> Unit,
+    onNavigateToMilestones: () -> Unit,
+    onNavigateToReminders: () -> Unit,
+    milestonesViewModel: com.health.calculator.bmi.tracker.ui.screens.profile.milestones.MilestonesViewModel
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val milestonesState by milestonesViewModel.uiState.collectAsStateWithLifecycle()
     val weightStatistics by viewModel.weightStatistics.collectAsStateWithLifecycle()
@@ -95,6 +111,39 @@ fun ProfileScreen(
         }
     }
 
+    if (AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
+        ForestProfileContent(
+            uiState = uiState,
+            journeySummary = milestonesState.journeySummary,
+            weightStatistics = weightStatistics,
+            onSave = viewModel::saveProfile,
+            onProfilePictureClick = viewModel::showImagePickerDialog,
+            onTabSelected = viewModel::selectTab,
+            onNavigateToConnections = onNavigateToConnections,
+            onNavigateToReminders = onNavigateToReminders,
+            onNavigateToMilestones = onNavigateToMilestones,
+            onLogWeight = viewModel::showWeightLogDialog,
+            onViewWeightTrends = onViewWeightTrends,
+            onNavigateToMetric = onNavigateToMetric
+        ) {
+            MyInfoSection(
+                profile = uiState.profile,
+                useMetricSystem = uiState.profile.useMetricSystem,
+                onNameChange = viewModel::updateName,
+                onNameClick = { beginEditing(PROFILE_FIELD_NAME) },
+                onProfilePictureClick = viewModel::showImagePickerDialog,
+                onDateOfBirthClick = viewModel::showDatePicker,
+                onGenderClick = viewModel::showGenderPicker,
+                onHeightClick = { beginEditing(PROFILE_FIELD_HEIGHT) },
+                onWeightClick = { beginEditing(PROFILE_FIELD_WEIGHT) },
+                onGoalWeightClick = { beginEditing(PROFILE_FIELD_GOAL_WEIGHT) },
+                onActivityLevelClick = viewModel::showActivityLevelPicker,
+                onHealthGoalsClick = viewModel::showHealthGoalsPicker,
+                onFrameSizeClick = viewModel::showFrameSizePicker,
+                onEthnicityClick = viewModel::showEthnicityPicker
+            )
+        }
+    } else {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -282,6 +331,8 @@ fun ProfileScreen(
             }
         }
         }
+    }
+
     }
 
     // Dialogs & Pickers

@@ -51,3 +51,8 @@ extracted_strings.xml
 logs.txt
 *.ps1
 scratch/
+
+# IDE & local
+.vscode/
+app/release/
+artifacts/
