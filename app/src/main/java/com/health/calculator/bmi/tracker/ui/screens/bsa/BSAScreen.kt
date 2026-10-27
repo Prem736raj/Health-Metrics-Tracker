@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.bsa
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -46,7 +48,7 @@ import com.health.calculator.bmi.tracker.viewmodel.BSAUiState
 fun BSAScreen(
     onNavigateBack: () -> Unit,
     viewModel: BSAViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.BSA) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
@@ -68,7 +70,7 @@ fun BSAScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -218,50 +220,11 @@ private fun BSAInputContent(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // === Info Banner ===
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
-            ),
-            shape = RoundedCornerShape(14.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier.padding(14.dp),
-                verticalAlignment = Alignment.Top
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Straighten,
-                        contentDescription = stringResource(R.string.txt_body_surface_area),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(22.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                Column {
-                    Text(
-                        text = stringResource(R.string.txt_what_is_bsa),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = stringResource(R.string.txt_body_surface_area_bsa_is_the_m),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        lineHeight = 18.sp
-                    )
-                }
-            }
-        }
+        // Specimen sheet pairs the area concept with a restrained leaf drawing.
+        SpecimenHeader(
+            title = stringResource(R.string.txt_what_is_bsa),
+            subtitle = stringResource(R.string.txt_body_surface_area_bsa_is_the_m)
+        )
 
         // Profile indicator
         if (uiState.isFromProfile) {
@@ -286,7 +249,7 @@ private fun BSAInputContent(
                         text = stringResource(R.string.txt_using_profile_data_you_can_ove),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Medium,
-                        color = AppColors.text(HealthGreen)
+                        color = DetailColors.text(HealthGreen)
                     )
                 }
             }
@@ -504,7 +467,7 @@ private fun BSAInputContent(
         if (uiState.validationWarnings.isNotEmpty()) {
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthYellow.copy(alpha = 0.08f))
+                    containerColor = DetailColors.surface(HealthYellow.copy(alpha = 0.08f))
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -524,7 +487,7 @@ private fun BSAInputContent(
                             text = stringResource(R.string.txt_notes),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(HealthYellow)
+                            color = DetailColors.text(HealthYellow)
                         )
                     }
                     Spacer(modifier = Modifier.height(6.dp))
@@ -532,7 +495,7 @@ private fun BSAInputContent(
                         Text(
                             text = "• $warning",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                             lineHeight = 16.sp,
                             modifier = Modifier.padding(vertical = 2.dp)
                         )
@@ -606,7 +569,7 @@ private fun FormulaSelectionCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(if (isSelected) {
+            containerColor = DetailColors.surface(if (isSelected) {
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
             } else {
                 MaterialTheme.colorScheme.surface
@@ -652,7 +615,7 @@ private fun FormulaSelectionCard(
                             text = formula.label,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(labelColor),
+                            color = DetailColors.text(labelColor),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
@@ -660,7 +623,7 @@ private fun FormulaSelectionCard(
                 Text(
                     text = "${formula.authors} (${formula.year})",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
 
                 // Expanded details when selected
@@ -673,7 +636,7 @@ private fun FormulaSelectionCard(
                         Text(
                             text = formula.description,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                             lineHeight = 16.sp
                         )
                         Spacer(modifier = Modifier.height(4.dp))
@@ -683,14 +646,14 @@ private fun FormulaSelectionCard(
                                 text = "Best for: ${formula.bestFor}",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Medium,
-                                color = AppColors.text(labelColor)
+                                color = DetailColors.text(labelColor)
                             )
                         }
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = formula.formula,
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                            color = DetailColors.secondaryText(DetailColors.Secondary),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -719,7 +682,7 @@ private fun GenderButton(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface)
             )
         }
     }

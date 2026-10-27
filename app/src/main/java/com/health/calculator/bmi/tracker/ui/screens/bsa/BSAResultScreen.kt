@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bsa
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -171,7 +171,7 @@ private fun PrimaryResultCard(
     ) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
             ),
             shape = RoundedCornerShape(24.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -181,39 +181,10 @@ private fun PrimaryResultCard(
                 modifier = Modifier.padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Straighten,
-                    contentDescription = stringResource(R.string.txt_body_surface_area),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(44.dp)
+                SpecimenHeader(
+                    title = stringResource(R.string.txt_4f).format(bsa) + " " + stringResource(R.string.txt_m_1),
+                    subtitle = stringResource(R.string.txt_body_surface_area)
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = stringResource(R.string.txt_body_surface_area),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = stringResource(R.string.txt_4f).format(bsa),
-                    style = MaterialTheme.typography.displayMedium,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Text(
-                    text = stringResource(R.string.txt_m_1),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
 
                 Surface(
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
@@ -223,7 +194,7 @@ private fun PrimaryResultCard(
                         text = "${result.selectedFormula.name} Formula (${result.selectedFormula.year})",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary),
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
                     )
                 }
@@ -294,18 +265,18 @@ private fun UnitValueColumn(value: String, unit: String, label: String) {
             text = value,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.ExtraBold,
-            color = MaterialTheme.colorScheme.primary
+            color = DetailColors.text(MaterialTheme.colorScheme.primary)
         )
         Text(
             text = unit,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
-            color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
+            color = DetailColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
         )
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
         )
     }
 }
@@ -432,12 +403,12 @@ private fun BodySilhouetteVisualization(
                         text = stringResource(R.string.txt_2f_m).format(bsa),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.ExtraBold,
-                        color = AppColors.text(primaryColor)
+                        color = DetailColors.text(primaryColor)
                     )
                     Text(
                         text = stringResource(R.string.txt_total_surface),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
@@ -447,7 +418,7 @@ private fun BodySilhouetteVisualization(
             Text(
                 text = stringResource(R.string.txt_the_colored_area_represents_th),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 textAlign = TextAlign.Center,
                 lineHeight = 16.sp
             )
@@ -460,7 +431,7 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
     if (isMale == null) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
             ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
@@ -484,7 +455,7 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
                 Text(
                     text = "Add sex in your profile to see a sex-specific population estimate. BSA is an informational estimate, not a healthy range or treatment guide.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                     lineHeight = 16.sp
                 )
             }
@@ -523,7 +494,7 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(comparisonColor.copy(alpha = 0.06f))
+            containerColor = DetailColors.surface(comparisonColor.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -560,8 +531,10 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
                     Text(stringResource(R.string.txt_you), style = MaterialTheme.typography.labelSmall, modifier = Modifier.width(40.dp))
                     Box(modifier = Modifier.weight(1f).height(24.dp).clip(RoundedCornerShape(6.dp)).background(MaterialTheme.colorScheme.surfaceVariant)) {
                         Box(modifier = Modifier.fillMaxHeight().fillMaxWidth(animatedProgress).clip(RoundedCornerShape(6.dp)).background(MaterialTheme.colorScheme.primary))
-                        Text(stringResource(R.string.txt_2f_m).format(bsa), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp))
                     }
+                    Text(stringResource(R.string.txt_2f_m).format(bsa),
+                        style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold,
+                        color = DetailColors.Text, modifier = Modifier.padding(start = 8.dp))
                 }
                 Spacer(modifier = Modifier.height(6.dp))
                 // Avg
@@ -569,8 +542,10 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
                     Text(stringResource(R.string.txt_avg_1), style = MaterialTheme.typography.labelSmall, modifier = Modifier.width(40.dp))
                     Box(modifier = Modifier.weight(1f).height(24.dp).clip(RoundedCornerShape(6.dp)).background(MaterialTheme.colorScheme.surfaceVariant)) {
                         Box(modifier = Modifier.fillMaxHeight().fillMaxWidth(animatedAvgProgress).clip(RoundedCornerShape(6.dp)).background(comparisonColor.copy(alpha = 0.6f)))
-                        Text(stringResource(R.string.txt_2f_m).format(averageBSA), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp))
                     }
+                    Text(stringResource(R.string.txt_2f_m).format(averageBSA),
+                        style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold,
+                        color = DetailColors.Text, modifier = Modifier.padding(start = 8.dp))
                 }
             }
 
@@ -588,7 +563,7 @@ private fun GenderComparisonCard(bsa: Float, isMale: Boolean?) {
                         text = "Your BSA is ${"%.1f".format(abs(percentDiff))}% ${if (isAbove) "above" else "below"} average for adult ${genderLabel}s",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = AppColors.text(comparisonColor)
+                        color = DetailColors.text(comparisonColor)
                     )
                 }
             }
@@ -611,8 +586,8 @@ private fun ReferenceChip(label: String, value: String, isHighlighted: Boolean) 
         shape = RoundedCornerShape(8.dp)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
-            Text(value, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = AppColors.secondaryText(if (isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant))
-            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(value, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = DetailColors.secondaryText(if (isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant))
+            Text(label, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
         }
     }
 }
@@ -625,7 +600,7 @@ private fun InputSummaryCard(result: BSAResult) {
     val weightLbs = result.weightKg / 0.453592f
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -638,7 +613,7 @@ private fun InputSummaryCard(result: BSAResult) {
                     modifier = Modifier.size(20.dp)
                 )
                 Text(stringResource(R.string.txt_1f_kg).format(result.weightKg), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.txt_1f_lbs).format(weightLbs), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.txt_1f_lbs).format(weightLbs), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
@@ -648,7 +623,7 @@ private fun InputSummaryCard(result: BSAResult) {
                     modifier = Modifier.size(20.dp)
                 )
                 Text(stringResource(R.string.txt_1f_cm).format(result.heightCm), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-                Text("(%d'%.0f\")".format(ft, inch), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("(%d'%.0f\")".format(ft, inch), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
@@ -658,7 +633,7 @@ private fun InputSummaryCard(result: BSAResult) {
                     modifier = Modifier.size(20.dp)
                 )
                 Text(result.selectedFormula.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-                Text(result.selectedFormula.year, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(result.selectedFormula.year, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
             }
         }
     }
@@ -701,9 +676,9 @@ private fun FormulaComparisonSection(result: BSAResult) {
                     else Spacer(modifier = Modifier.size(14.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     Column(modifier = Modifier.width(90.dp)) {
-                        Text(formula.name, style = MaterialTheme.typography.labelSmall, fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium, maxLines = 1)
+                        Text(formula.name, style = MaterialTheme.typography.labelSmall, fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium)
                         Surface(color = labelColor.copy(alpha = 0.12f), shape = RoundedCornerShape(3.dp)) {
-                            Text(formula.label, style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = AppColors.text(labelColor), modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp))
+                            Text(formula.label, style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = DetailColors.text(labelColor), modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp))
                         }
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -711,7 +686,7 @@ private fun FormulaComparisonSection(result: BSAResult) {
                         Box(modifier = Modifier.fillMaxHeight().fillMaxWidth(barProgress).clip(RoundedCornerShape(4.dp)).background(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)))
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.txt_4f).format(value), style = MaterialTheme.typography.bodySmall, fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium, color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface), modifier = Modifier.width(52.dp), textAlign = TextAlign.End)
+                    Text(stringResource(R.string.txt_4f).format(value), style = MaterialTheme.typography.bodySmall, fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium, color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface), modifier = Modifier.width(52.dp), textAlign = TextAlign.End)
                 }
             }
         }
@@ -729,7 +704,7 @@ private fun FormulaStatisticsCard(result: BSAResult) {
     val maxFormula = result.allResults.maxByOrNull { it.second }?.first?.name ?: ""
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))),
         shape = RoundedCornerShape(14.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -750,7 +725,7 @@ private fun FormulaStatisticsCard(result: BSAResult) {
                 Column(modifier = Modifier.padding(10.dp)) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text(stringResource(R.string.txt_range_spread), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
-                        Text(stringResource(R.string.txt_4f_m_1f).format(range, if (avg > 0) (range / avg) * 100 else 0), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = AppColors.text(MaterialTheme.colorScheme.tertiary))
+                        Text(stringResource(R.string.txt_4f_m_1f).format(range, if (avg > 0) (range / avg) * 100 else 0), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = DetailColors.text(MaterialTheme.colorScheme.tertiary))
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Box(modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)).background(MaterialTheme.colorScheme.surfaceVariant)) {
@@ -759,7 +734,7 @@ private fun FormulaStatisticsCard(result: BSAResult) {
                         Box(modifier = Modifier.align(Alignment.CenterStart).padding(start = (selectedPos * 280).dp).size(width = 4.dp, height = 8.dp).background(MaterialTheme.colorScheme.primary, RoundedCornerShape(2.dp)))
                     }
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text("▲ Your selected formula (${result.selectedFormula.name})", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, fontSize = 12.sp)
+                    Text("▲ Your selected formula (${result.selectedFormula.name})", style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.primary), fontSize = 12.sp)
                 }
             }
         }
@@ -769,15 +744,15 @@ private fun FormulaStatisticsCard(result: BSAResult) {
 @Composable
 private fun StatColumn(label: String, value: String, subLabel: String, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.ExtraBold, color = AppColors.text(color))
-        Text(subLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, textAlign = TextAlign.Center)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
+        Text(value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.ExtraBold, color = DetailColors.text(color))
+        Text(subLabel, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant), fontSize = 12.sp, textAlign = TextAlign.Center)
     }
 }
 
 @Composable
 private fun FormulaRecommendationCard() {
-    Card(colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.Info.copy(alpha = 0.06f))), shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
+    Card(colors = CardDefaults.cardColors(containerColor = DetailColors.surface(HealthColors.Info.copy(alpha = 0.06f))), shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -787,7 +762,7 @@ private fun FormulaRecommendationCard() {
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.txt_formula_recommendations), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = AppColors.text(HealthColors.Info))
+                Text(stringResource(R.string.txt_formula_recommendations), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = DetailColors.text(HealthColors.Info))
             }
             Spacer(modifier = Modifier.height(10.dp))
             FormulaRecItem(Icons.Outlined.LocalHospital, "Du Bois & Du Bois", "Commonly cited adult equation; use the method requested by a qualified professional when BSA informs care.")
@@ -796,7 +771,7 @@ private fun FormulaRecommendationCard() {
             FormulaRecItem(Icons.Default.Public, "Fujimoto / Takahira", "Developed from a Japanese reference population; population fit can vary.")
             FormulaRecItem(Icons.Outlined.Science, "Shuter & Aslani", "A later equation with different source data; do not assume it is universally most accurate.")
             Spacer(modifier = Modifier.height(8.dp))
-            Text(stringResource(R.string.txt_for_most_clinical_purposes_any), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 16.sp)
+            Text(stringResource(R.string.txt_for_most_clinical_purposes_any), style = MaterialTheme.typography.bodySmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant), lineHeight = 16.sp)
         }
     }
 }
@@ -814,7 +789,7 @@ private fun FormulaRecItem(icon: ImageVector, formula: String, recommendation: S
         )
         Column {
             Text(formula, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
-            Text(recommendation, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 15.sp)
+            Text(recommendation, style = MaterialTheme.typography.bodySmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant), lineHeight = 15.sp)
         }
     }
 }

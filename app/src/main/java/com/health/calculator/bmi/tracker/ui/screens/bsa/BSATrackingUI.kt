@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bsa
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -103,7 +103,7 @@ fun BSATrackingSection(
 private fun EmptyTrackingState() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -131,7 +131,7 @@ private fun EmptyTrackingState() {
                 text = stringResource(R.string.txt_calculate_and_save_your_first_),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
             )
             Spacer(modifier = Modifier.height(10.dp))
             UseCaseChip(icon = Icons.Outlined.Timeline, text = "Comparing readings over time")
@@ -164,7 +164,7 @@ private fun UseCaseChip(icon: ImageVector, text: String) {
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
             )
         }
     }
@@ -174,7 +174,7 @@ private fun UseCaseChip(icon: ImageVector, text: String) {
 private fun SingleReadingPrompt() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthBlue.copy(alpha = 0.06f))
+            containerColor = DetailColors.surface(HealthBlue.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -199,7 +199,7 @@ private fun SingleReadingPrompt() {
                 Text(
                     text = stringResource(R.string.txt_save_another_bsa_calculation_t),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                     lineHeight = 16.sp
                 )
             }
@@ -305,7 +305,7 @@ private fun BSAStatisticsCard(stats: BSAStatistics) {
                     Text(
                         text = stringResource(R.string.txt_overall_change),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -315,13 +315,13 @@ private fun BSAStatisticsCard(stats: BSAStatistics) {
                             text = "$changeWord ${"%.4f".format(abs(stats.changeFromFirst))} m²",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(changeColor)
+                            color = DetailColors.text(changeColor)
                         )
                     }
                     Text(
                         text = "(${"%.1f".format(abs(stats.changePercent))}% ${if (stats.changeFromFirst >= 0) "increase" else "decrease"})",
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(changeColor.copy(alpha = 0.7f))
+                        color = DetailColors.text(changeColor.copy(alpha = 0.7f))
                     )
                 }
 
@@ -337,14 +337,14 @@ private fun BSAStatisticsCard(stats: BSAStatistics) {
                         Text(
                             text = stringResource(R.string.txt_most_used_formula),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = stats.mostUsedFormula,
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.ExtraBold,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = DetailColors.text(MaterialTheme.colorScheme.primary),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -360,18 +360,18 @@ private fun StatValueColumn(label: String, value: String, unit: String, color: C
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
         )
         Text(
             text = value,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.ExtraBold,
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
         Text(
             text = unit,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(color.copy(alpha = 0.6f))
+            color = DetailColors.text(color.copy(alpha = 0.6f))
         )
     }
 }
@@ -390,7 +390,7 @@ private fun PreviousComparisonCard(current: BSARecord, previous: BSARecord) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(overallColor.copy(alpha = 0.06f))
+            containerColor = DetailColors.surface(overallColor.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(14.dp),
         modifier = Modifier.fillMaxWidth()
@@ -442,7 +442,7 @@ private fun PreviousComparisonCard(current: BSARecord, previous: BSARecord) {
             Text(
                 text = "Previous: ${previous.dateTime.take(10)} • Current: ${current.dateTime.take(10)}",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -478,13 +478,13 @@ private fun ChangeIndicator(
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = arrow,
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(color),
+                color = DetailColors.text(color),
                 fontWeight = FontWeight.ExtraBold
             )
             Spacer(modifier = Modifier.width(2.dp))
@@ -492,7 +492,7 @@ private fun ChangeIndicator(
                 text = if (isNeutral) "No change" else format.format(abs(change)),
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
-                color = AppColors.text(color)
+                color = DetailColors.text(color)
             )
         }
     }
@@ -534,7 +534,7 @@ private fun BSATrendGraph(records: List<BSARecord>) {
                     Text(
                         text = stringResource(R.string.txt_track_growth_or_weight_change_),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
@@ -546,7 +546,7 @@ private fun BSATrendGraph(records: List<BSARecord>) {
             val avgLineColor = HealthGreen.copy(alpha = 0.5f)
             val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
             val textColor = MaterialTheme.colorScheme.onSurfaceVariant
-    val darkAxis = AppColors.isDark
+    val darkAxis = DetailColors.isDark
             val density = LocalDensity.current
 
             val values = sorted.map { it.bsaValue }
@@ -580,7 +580,7 @@ private fun BSATrendGraph(records: List<BSARecord>) {
                         pL - 6.dp.toPx(),
                         y + 4.dp.toPx(),
                         android.graphics.Paint().apply {
-                            color = (if (darkAxis) textColor.toArgb() else textColor.hashCode())
+                            color = textColor.toArgb()
                             textSize = with(density) { 12.sp.toPx() }
                             textAlign = android.graphics.Paint.Align.RIGHT
                         }
@@ -601,7 +601,7 @@ private fun BSATrendGraph(records: List<BSARecord>) {
                     size.width - pR + 2.dp.toPx(),
                     avgY - 4.dp.toPx(),
                     android.graphics.Paint().apply {
-                        color = avgLineColor.hashCode()
+                        color = avgLineColor.toArgb()
                         textSize = with(density) { 12.sp.toPx() }
                         textAlign = android.graphics.Paint.Align.LEFT
                     }
@@ -646,7 +646,7 @@ private fun BSATrendGraph(records: List<BSARecord>) {
                             x,
                             size.height - 4.dp.toPx(),
                             android.graphics.Paint().apply {
-                                color = (if (darkAxis) textColor.toArgb() else textColor.hashCode())
+                                color = textColor.toArgb()
                                 textSize = with(density) { 12.sp.toPx() }
                                 textAlign = android.graphics.Paint.Align.CENTER
                             }
@@ -691,7 +691,7 @@ private fun LegendItem(color: Color, label: String, dashed: Boolean = false) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
         )
     }
 }
@@ -782,7 +782,7 @@ private fun BSAReadingsTimeline(records: List<BSARecord>) {
                         Text(
                             text = record.dateTime.take(16),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                         )
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
@@ -796,14 +796,14 @@ private fun BSAReadingsTimeline(records: List<BSARecord>) {
                                     text = changeText,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
-                                    color = AppColors.text(changeColor)
+                                    color = DetailColors.text(changeColor)
                                 )
                             }
                         }
                         Text(
                             text = "${"%.1f".format(record.weightKg)} kg • ${"%.1f".format(record.heightCm)} cm",
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                         )
                     }
 
@@ -816,8 +816,7 @@ private fun BSAReadingsTimeline(records: List<BSARecord>) {
                             text = record.formulaName,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Medium,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                            maxLines = 1
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         )
                     }
                 }
