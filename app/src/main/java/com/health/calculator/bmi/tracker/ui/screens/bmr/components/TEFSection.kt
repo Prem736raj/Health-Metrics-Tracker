@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/TEFSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -42,9 +42,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 // Energy component colors
-private val BMRColor = CalculatorColors.BMR
-private val ActivityColor = HealthColors.Info
-private val TEFColor = HealthColors.Caution
 
 private fun energyComponentIcon(label: String): ImageVector = when {
     label.contains("Basal", ignoreCase = true) -> Icons.Outlined.LocalFireDepartment
@@ -92,6 +89,8 @@ fun TEFSection(
 // ============================================================
 @Composable
 private fun TEFResultCard(tefData: TEFData) {
+    val digestionInk = AppColors.Warning
+
     val animatedTEF = remember { Animatable(0f) }
     LaunchedEffect(tefData.totalTEF) {
         animatedTEF.snapTo(0f)
@@ -115,7 +114,7 @@ private fun TEFResultCard(tefData: TEFData) {
                 Icon(
                     imageVector = Icons.Outlined.Thermostat,
                     contentDescription = null,
-                    tint = TEFColor,
+                    tint = digestionInk,
                     modifier = Modifier.size(22.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -128,7 +127,7 @@ private fun TEFResultCard(tefData: TEFData) {
                     )
                     Text(
                         text = stringResource(R.string.txt_energy_spent_digesting_your_fo),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -146,7 +145,7 @@ private fun TEFResultCard(tefData: TEFData) {
                     text = "${animatedTEF.value.toInt()}",
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(TEFColor),
+                    color = AppColors.text(digestionInk),
                     fontSize = 44.sp
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -166,15 +165,15 @@ private fun TEFResultCard(tefData: TEFData) {
             ) {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = TEFColor.copy(alpha = 0.1f),
+                    color = digestionInk.copy(alpha = 0.1f),
                     border = androidx.compose.foundation.BorderStroke(
-                        1.dp, TEFColor.copy(alpha = 0.2f)
+                        1.dp, digestionInk.copy(alpha = 0.2f)
                     )
                 ) {
                     Text(
                         text = "≈ ${tefData.tefPercentOfIntake.roundToInt()}% of your food intake",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = AppColors.text(TEFColor),
+                        style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
+                        color = AppColors.text(digestionInk),
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
                     )
@@ -190,7 +189,7 @@ private fun TEFResultCard(tefData: TEFData) {
             ) {
                 Text(
                     text = "Range: ${tefData.totalTEFLow.toInt()} – ${tefData.totalTEFHigh.toInt()} kcal/day",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -202,7 +201,7 @@ private fun TEFResultCard(tefData: TEFData) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(TEFColor.copy(alpha = 0.05f))
+                    containerColor = AppColors.surface(digestionInk.copy(alpha = 0.05f))
                 )
             ) {
                 Row(
@@ -212,13 +211,13 @@ private fun TEFResultCard(tefData: TEFData) {
                     Icon(
                         imageVector = Icons.Outlined.Lightbulb,
                         contentDescription = null,
-                        tint = TEFColor,
+                        tint = digestionInk,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = tefData.getInterpretation(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         lineHeight = 18.sp
                     )
@@ -248,7 +247,7 @@ private fun TEFResultCard(tefData: TEFData) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = tefData.getPersonalizedInsight(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         lineHeight = 18.sp
                     )
@@ -263,6 +262,11 @@ private fun TEFResultCard(tefData: TEFData) {
 // ============================================================
 @Composable
 private fun MacroTEFBreakdownCard(tefData: TEFData) {
+    val proteinInk = AppColors.Success
+    val carbsInk = AppColors.Accent
+    val fatInk = AppColors.Danger
+    val digestionInk = AppColors.Warning
+
     var expanded by remember { mutableStateOf(true) }
 
     Card(
@@ -340,7 +344,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                         Column(modifier = Modifier.padding(10.dp)) {
                             Text(
                                 text = stringResource(R.string.txt_thermic_effect_rates),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -349,9 +353,9 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                TEFRateChip("Protein", "20-35%", MacroColors.Protein)
-                                TEFRateChip("Carbs", "5-15%", MacroColors.Carbs)
-                                TEFRateChip("Fat", "0-5%", MacroColors.Fat)
+                                TEFRateChip("Protein", "20-35%", proteinInk)
+                                TEFRateChip("Carbs", "5-15%", carbsInk)
+                                TEFRateChip("Fat", "0-5%", fatInk)
                             }
                         }
                     }
@@ -368,7 +372,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                         tefHigh = tefData.proteinTEFHigh,
                         rateRange = "20-35%",
                         rateMid = TEFData.PROTEIN_TEF_MID,
-                        color = MacroColors.Protein,
+                        color = proteinInk,
                         totalTEF = tefData.totalTEF
                     )
 
@@ -383,7 +387,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                         tefHigh = tefData.carbsTEFHigh,
                         rateRange = "5-15%",
                         rateMid = TEFData.CARBS_TEF_MID,
-                        color = MacroColors.Carbs,
+                        color = carbsInk,
                         totalTEF = tefData.totalTEF
                     )
 
@@ -398,7 +402,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                         tefHigh = tefData.fatTEFHigh,
                         rateRange = "0-5%",
                         rateMid = TEFData.FAT_TEF_MID,
-                        color = MacroColors.Fat,
+                        color = fatInk,
                         totalTEF = tefData.totalTEF
                     )
 
@@ -419,7 +423,7 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                             Icon(
                                 imageVector = Icons.Outlined.Thermostat,
                                 contentDescription = null,
-                                tint = TEFColor,
+                                tint = digestionInk,
                                 modifier = Modifier.size(18.dp)
                             )
                             Spacer(modifier = Modifier.width(6.dp))
@@ -435,11 +439,11 @@ private fun MacroTEFBreakdownCard(tefData: TEFData) {
                                 text = "${tefData.totalTEF.toInt()} kcal/day",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = AppColors.text(TEFColor)
+                                color = AppColors.text(digestionInk)
                             )
                             Text(
                                 text = "Range: ${tefData.totalTEFLow.toInt()} – ${tefData.totalTEFHigh.toInt()}",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -462,16 +466,16 @@ private fun TEFRateChip(label: String, rate: String, color: Color) {
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
         Text(
             text = rate,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             fontWeight = FontWeight.Bold,
             color = AppColors.text(color),
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
     }
 }
@@ -529,15 +533,15 @@ private fun MacroTEFItem(
                     Column {
                         Text(
                             text = label,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "Intake: ${intake.toInt()} kcal × ${(rateMid * 100).roundToInt()}% avg",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
                     }
                 }
@@ -551,9 +555,9 @@ private fun MacroTEFItem(
                     )
                     Text(
                         text = "${tefLow.toInt()}–${tefHigh.toInt()} range",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 12.sp
+                        fontSize = 14.sp
                     )
                 }
             }
@@ -581,9 +585,9 @@ private fun MacroTEFItem(
 
             Text(
                 text = "${(proportion * 100).roundToInt()}% of total TEF",
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(color.copy(alpha = 0.7f)),
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
     }
@@ -594,6 +598,10 @@ private fun MacroTEFItem(
 // ============================================================
 @Composable
 private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
+    val restingInk = AppColors.Accent
+    val activityInk = AppColors.Success
+    val digestionInk = AppColors.Warning
+
     val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
     val components = listOf(
         EnergyComponent(
@@ -602,7 +610,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
             calories = tefData.bmr,
             percentage = tefData.bmrPercentOfTotal,
             description = "Energy for basic life functions at rest",
-            color = BMRColor
+            color = restingInk
         ),
         EnergyComponent(
             label = "Physical Activity",
@@ -610,7 +618,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
             calories = tefData.activityCaloriesForBreakdown,
             percentage = tefData.activityPercentOfTotal,
             description = "Illustrative movement slice after the TEF estimate",
-            color = ActivityColor
+            color = activityInk
         ),
         EnergyComponent(
             label = "Thermic Effect of Food",
@@ -618,7 +626,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
             calories = tefData.totalTEF,
             percentage = tefData.tefPercentOfTotal,
             description = "Energy for digesting and processing food",
-            color = TEFColor
+            color = digestionInk
         )
     )
 
@@ -649,7 +657,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
                     )
                     Text(
                         text = stringResource(R.string.txt_your_full_daily_energy_breakdo),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -733,7 +741,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
                         )
                         Text(
                             text = stringResource(R.string.txt_bmr_activity_tef),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -750,11 +758,11 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
                             text = "${animTotal.value.toInt()}",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = AppColors.text(MaterialTheme.colorScheme.primary)
                         )
                         Text(
                             text = stringResource(R.string.txt_kcal_day),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -781,7 +789,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
                     EquationChip(
                         value = "${tefData.bmr.toInt()}",
                         label = "BMR",
-                        color = BMRColor
+                        color = restingInk
                     )
                     Text(
                         text = stringResource(R.string.txt_text_placeholder_36),
@@ -792,7 +800,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
                     EquationChip(
                         value = "${tefData.activityCaloriesForBreakdown.toInt()}",
                         label = "Activity",
-                        color = ActivityColor
+                        color = activityInk
                     )
                     Text(
                         text = stringResource(R.string.txt_text_placeholder_36),
@@ -803,7 +811,7 @@ private fun CompleteEnergyBreakdownCard(tefData: TEFData) {
                     EquationChip(
                         value = "${tefData.totalTEF.toInt()}",
                         label = "TEF",
-                        color = TEFColor
+                        color = digestionInk
                     )
                     Text(
                         text = stringResource(R.string.txt_text_placeholder_34),
@@ -827,15 +835,15 @@ private fun EquationChip(value: String, label: String, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
             fontWeight = FontWeight.Bold,
             color = AppColors.text(color)
         )
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = AppColors.text(color.copy(alpha = 0.7f)),
-            fontSize = 12.sp
+            fontSize = 14.sp
         )
     }
 }
@@ -851,6 +859,10 @@ private fun EnergyDonutChart(
     totalCalories: Float,
     modifier: Modifier = Modifier
 ) {
+    val restingInk = AppColors.Accent
+    val activityInk = AppColors.Success
+    val digestionInk = AppColors.Warning
+
     val total = (bmrPct + activityPct + tefPct).coerceAtLeast(1f)
     val bmrSweep = (bmrPct / total) * 360f
     val actSweep = (activityPct / total) * 360f
@@ -898,7 +910,7 @@ private fun EnergyDonutChart(
             // BMR arc
             var startAngle = -90f
             drawArc(
-                color = BMRColor,
+                color = restingInk,
                 startAngle = startAngle,
                 sweepAngle = (animBMR.value - gapDegrees).coerceAtLeast(0f),
                 useCenter = false,
@@ -910,7 +922,7 @@ private fun EnergyDonutChart(
             // Activity arc
             startAngle += animBMR.value
             drawArc(
-                color = ActivityColor,
+                color = activityInk,
                 startAngle = startAngle,
                 sweepAngle = (animAct.value - gapDegrees).coerceAtLeast(0f),
                 useCenter = false,
@@ -922,7 +934,7 @@ private fun EnergyDonutChart(
             // TEF arc
             startAngle += animAct.value
             drawArc(
-                color = TEFColor,
+                color = digestionInk,
                 startAngle = startAngle,
                 sweepAngle = (animTEF.value - gapDegrees).coerceAtLeast(0f),
                 useCenter = false,
@@ -942,15 +954,15 @@ private fun EnergyDonutChart(
             )
             Text(
                 text = stringResource(R.string.txt_kcal_day),
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
             Text(
                 text = stringResource(R.string.txt_total),
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
     }
@@ -977,18 +989,18 @@ private fun EnergyLegendItem(component: EnergyComponent) {
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = component.label.split(" ").first(),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 12.sp
+                    fontSize = 14.sp
                 )
             }
             Text(
                 text = "${component.percentage.roundToInt()}%",
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 color = AppColors.text(component.color),
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
     }
@@ -1003,6 +1015,10 @@ private fun EnergyStackedBar(
     activityPct: Float,
     tefPct: Float
 ) {
+    val restingInk = AppColors.Accent
+    val activityInk = AppColors.Success
+    val digestionInk = AppColors.Warning
+
     val total = (bmrPct + activityPct + tefPct).coerceAtLeast(1f)
     val bmrFrac = bmrPct / total
     val actFrac = activityPct / total
@@ -1019,24 +1035,24 @@ private fun EnergyStackedBar(
         ) {
             Text(
                 text = "BMR ${bmrPct.roundToInt()}%",
-                style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(BMRColor),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = AppColors.text(restingInk),
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
             Text(
                 text = "Activity ${activityPct.roundToInt()}%",
-                style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(ActivityColor),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = AppColors.text(activityInk),
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
             Text(
                 text = "TEF ${tefPct.roundToInt()}%",
-                style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(TEFColor),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = AppColors.text(digestionInk),
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp
+                fontSize = 14.sp
             )
         }
 
@@ -1053,19 +1069,19 @@ private fun EnergyStackedBar(
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight(animBMR.coerceAtLeast(0.01f))
-                        .background(BMRColor)
+                        .background(restingInk)
                 )
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight(animAct.coerceAtLeast(0.01f))
-                        .background(ActivityColor)
+                        .background(activityInk)
                 )
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight((1f - animBMR - animAct).coerceAtLeast(0.01f))
-                        .background(TEFColor)
+                        .background(digestionInk)
                 )
             }
         }
@@ -1121,15 +1137,15 @@ private fun EnergyComponentCard(
                 Column {
                     Text(
                         text = component.label,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = component.description,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         lineHeight = 13.sp
                     )
                 }
@@ -1148,7 +1164,7 @@ private fun EnergyComponentCard(
                 ) {
                     Text(
                         text = "${component.percentage.roundToInt()}%",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.Bold,
                         color = AppColors.text(component.color),
                         modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)

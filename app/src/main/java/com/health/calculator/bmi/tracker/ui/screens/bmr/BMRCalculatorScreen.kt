@@ -1,7 +1,10 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/BMRCalculatorScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailHero
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -81,6 +84,27 @@ fun BMRCalculatorScreen(
     profileUnitCm: Boolean = true,
     profileActivityLevel: String? = null,
     viewModel: BMRViewModel = hiltViewModel()
+) {
+    DetailScreenTheme(DetailFeature.BMR) {
+        BMRCalculatorContent(
+            onNavigateBack, profileWeightKg, profileHeightCm, profileAge,
+            profileIsMale, profileUnitKg, profileUnitCm, profileActivityLevel, viewModel
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BMRCalculatorContent(
+    onNavigateBack: () -> Unit,
+    profileWeightKg: Float,
+    profileHeightCm: Float,
+    profileAge: Int,
+    profileIsMale: Boolean,
+    profileUnitKg: Boolean,
+    profileUnitCm: Boolean,
+    profileActivityLevel: String?,
+    viewModel: BMRViewModel
 ) {
     val inputState by viewModel.inputState.collectAsStateWithLifecycle()
     val validationState by viewModel.validationState.collectAsStateWithLifecycle()
@@ -242,6 +266,7 @@ fun BMRCalculatorScreen(
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
+                        EnergyLedgerHeading("01", "Choose an equation")
                         BMRFormulaSelector(
                             selectedFormula = inputState.selectedFormula,
                             onFormulaSelected = { formula ->
@@ -266,6 +291,7 @@ fun BMRCalculatorScreen(
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
+                        EnergyLedgerHeading("02", "Your measurements")
                         // Input Mode Toggle
                         InputModeToggle(
                             useSliders = useSliders,
@@ -442,10 +468,10 @@ fun BMRCalculatorScreen(
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
                                         text = stringResource(R.string.txt_the_who_fao_unu_equation_prima),
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                        fontSize = 12.sp,
-                                        lineHeight = 15.sp
+                                        fontSize = 14.sp,
+                                        lineHeight = 20.sp
                                     )
                                 }
                             }
@@ -514,6 +540,7 @@ fun BMRCalculatorScreen(
             StaggeredEntrance(index = 5, totalItems = 8) {
                 Column {
                     AnimatedCalculateButton(
+                        text = "Calculate BMR",
                         onClick = {
                             haptic.lightTap()
                             val isValid = viewModel.onCalculate()
@@ -562,27 +589,9 @@ fun BMRCalculatorScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Result header
+                // The result continues the method/measurement ledger.
                 CascadeAnimatedItem(index = 0) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Assessment,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(22.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(R.string.txt_your_bmr_results),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                    EnergyLedgerHeading("03", stringResource(R.string.txt_your_bmr_results))
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -774,7 +783,7 @@ fun BMRCalculatorScreen(
                             Icon(
                                 Icons.Outlined.Info,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(16.dp)
                             )
                             Spacer(modifier = Modifier.width(6.dp))
@@ -783,10 +792,10 @@ fun BMRCalculatorScreen(
                                         "statistical formulas. Individual metabolism varies. These results " +
                                         "are for informational purposes only and should not replace " +
                                         "professional medical or nutritional advice.",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
-                                lineHeight = 16.sp,
-                                fontSize = 12.sp
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+                                lineHeight = 20.sp,
+                                fontSize = 14.sp
                             )
                         }
                     }
@@ -806,50 +815,32 @@ fun BMRCalculatorScreen(
 
 @Composable
 private fun BMRExplanationHeader() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
+    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        DetailHero(
+            title = "Your energy ledger",
+            subtitle = stringResource(R.string.txt_your_bmr_is_the_number_of_calo)
         )
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                modifier = Modifier.size(48.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Outlined.LocalFireDepartment,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.width(14.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.txt_basal_metabolic_rate),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = stringResource(R.string.txt_your_bmr_is_the_number_of_calo),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    lineHeight = 16.sp
-                )
-            }
+        HorizontalDivider(color = AppColors.Outline)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Outlined.LocalFireDepartment, null, tint = AppColors.Accent,
+                modifier = Modifier.size(24.dp))
+            Spacer(Modifier.width(10.dp))
+            Text(stringResource(R.string.txt_basal_metabolic_rate),
+                style = MaterialTheme.typography.titleMedium, color = AppColors.Text)
         }
+    }
+}
+
+@Composable
+private fun EnergyLedgerHeading(number: String, title: String) {
+    Row(Modifier.fillMaxWidth().padding(bottom = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+        Surface(color = AppColors.SurfaceAlt, shape = RoundedCornerShape(6.dp)) {
+            Text(number, Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                style = MaterialTheme.typography.titleMedium, color = AppColors.Accent)
+        }
+        Spacer(Modifier.width(12.dp))
+        Text(title, style = MaterialTheme.typography.titleMedium, color = AppColors.Text,
+            modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
     }
 }
 
@@ -879,7 +870,7 @@ private fun ProfileDataIndicator() {
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = stringResource(R.string.txt_using_profile_data_you_can_adj),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Medium
             )
@@ -1002,9 +993,9 @@ private fun UnitToggleButton(
     ) {
         Text(
             text = if (isFirstOption) secondLabel else firstLabel,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.primary,
+            color = AppColors.text(MaterialTheme.colorScheme.primary),
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
     }
@@ -1063,9 +1054,9 @@ private fun QuickInfoItem(icon: ImageVector, text: String) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            lineHeight = 16.sp
+            lineHeight = 20.sp
         )
     }
 }

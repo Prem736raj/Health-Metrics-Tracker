@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components.AnimatedActionButton
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BMRActionButtons(
     isSaved: Boolean,
@@ -18,16 +19,17 @@ fun BMRActionButtons(
     onShare: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    FlowRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         AnimatedActionButton(
             text = if (isSaved) "Saved ✓" else "Save",
             icon = Icons.Filled.Save,
             onClick = onSave,
             enabled = !isSaved,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.defaultMinSize(minHeight = 48.dp),
             containerColor = if (isSaved)
                 MaterialTheme.colorScheme.surfaceVariant
             else MaterialTheme.colorScheme.primaryContainer,
@@ -40,7 +42,7 @@ fun BMRActionButtons(
             text = "Recalculate",
             icon = Icons.Filled.Refresh,
             onClick = onRecalculate,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.defaultMinSize(minHeight = 48.dp),
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
@@ -49,7 +51,7 @@ fun BMRActionButtons(
             text = "Share",
             icon = Icons.Filled.Share,
             onClick = onShare,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.defaultMinSize(minHeight = 48.dp),
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             contentColor = MaterialTheme.colorScheme.onTertiaryContainer
         )

@@ -1,7 +1,7 @@
 // File: com/health/calculator/bmi/tracker/ui/screens/bmr/components/BMRResultSection.kt
 package com.health.calculator.bmi.tracker.ui.screens.bmr.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -122,19 +122,25 @@ private fun PrimaryBMRCard(
     ) {
         Column(
             modifier = Modifier.padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
-            // Flame Animation
-            FlameVisual(bmrValue = resultData.primaryBMR)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Outlined.LocalFireDepartment, null,
+                    tint = AppColors.Accent, modifier = Modifier.size(24.dp))
+                Spacer(Modifier.width(10.dp))
+                Text("Resting energy estimate", style = MaterialTheme.typography.titleMedium,
+                    color = AppColors.Secondary)
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // BMR Value
             Text(
                 text = "${animatedValue.value.toInt()}",
-                style = MaterialTheme.typography.displayLarge,
+                style = MaterialTheme.typography.displayLarge.copy(
+                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace),
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
+                color = AppColors.text(MaterialTheme.colorScheme.primary),
                 fontSize = 56.sp
             )
 
@@ -156,9 +162,9 @@ private fun PrimaryBMRCard(
                 ) {
                     Text(
                         text = if (showKJ) "kcal" else "kJ",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = AppColors.text(MaterialTheme.colorScheme.primary),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                     )
                 }
@@ -167,6 +173,8 @@ private fun PrimaryBMRCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             // Formula tag
+            HorizontalDivider(color = AppColors.Outline)
+            Spacer(modifier = Modifier.height(12.dp))
             Surface(
                 shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
@@ -184,7 +192,7 @@ private fun PrimaryBMRCard(
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = resultData.selectedFormula.displayName,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                         color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 }
@@ -213,7 +221,7 @@ private fun PrimaryBMRCard(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = level.label,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.SemiBold,
                         color = AppColors.text(getLevelColor(level))
                     )
@@ -228,7 +236,7 @@ private fun PrimaryBMRCard(
 // ============================================================
 @Composable
 private fun FlameVisual(bmrValue: Float) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
 
     val infiniteTransition = rememberInfiniteTransition(label = "flame")
 
@@ -267,7 +275,7 @@ private fun FlameVisual(bmrValue: Float) {
                 .clip(CircleShape)
                 .background(
                     brush = Brush.radialGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                        colors = listOf(
                             flameColor2.copy(alpha = 0.2f * innerGlow),
                             flameColor2.copy(alpha = 0.05f),
                             Color.Transparent
@@ -283,7 +291,7 @@ private fun FlameVisual(bmrValue: Float) {
                 .clip(CircleShape)
                 .background(
                     brush = Brush.radialGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                        colors = listOf(
                             flameColor3.copy(alpha = 0.4f),
                             flameColor1.copy(alpha = 0.2f),
                             Color.Transparent
@@ -350,7 +358,7 @@ private fun InterpretationCard(resultData: BMRResultData) {
 
             Text(
                 text = level.description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 18.sp
             )
@@ -439,7 +447,7 @@ private fun BMRBreakdownCard(
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
                         text = stringResource(R.string.txt_unit_conversion),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -452,7 +460,7 @@ private fun BMRBreakdownCard(
                             text = "${resultData.primaryBMR.toInt()} kcal/day",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.primary
+                            color = AppColors.text(MaterialTheme.colorScheme.primary)
                         )
                         Text(
                             text = stringResource(R.string.txt_text_placeholder_26),
@@ -496,7 +504,7 @@ private fun BreakdownItem(
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -562,7 +570,7 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                         ) {
                             Text(
                                 text = "${resultData.allFormulaResults.size}",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
@@ -616,7 +624,7 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                                 Column {
                                     Text(
                                         text = stringResource(R.string.txt_range),
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Text(
@@ -629,7 +637,7 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                                 Column(horizontalAlignment = Alignment.End) {
                                     Text(
                                         text = stringResource(R.string.txt_difference),
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Text(
@@ -642,14 +650,14 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                                 Column(horizontalAlignment = Alignment.End) {
                                     Text(
                                         text = stringResource(R.string.txt_average),
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Text(
                                         text = "${resultData.averageBMR.toInt()} kcal",
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.SemiBold,
-                                        color = MaterialTheme.colorScheme.primary
+                                        color = AppColors.text(MaterialTheme.colorScheme.primary)
                                     )
                                 }
                             }
@@ -699,9 +707,9 @@ private fun FormulaComparisonCard(resultData: BMRResultData) {
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = "$unavailableCount formula(s) not shown (require body fat % input)",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 12.sp
+                                fontSize = 14.sp
                             )
                         }
                     }
@@ -762,7 +770,7 @@ private fun FormulaComparisonBar(
                 ) {
                     Text(
                         text = formulaName,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                         color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary
                         else MaterialTheme.colorScheme.onSurface)
@@ -793,8 +801,8 @@ private fun FormulaComparisonBar(
                         ) {
                             Text(
                                 text = stringResource(R.string.txt_bf),
-                                style = MaterialTheme.typography.labelSmall,
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                                fontSize = 14.sp,
                                 color = MaterialTheme.colorScheme.onTertiaryContainer,
                                 modifier = Modifier.padding(horizontal = 3.dp, vertical = 1.dp)
                             )
