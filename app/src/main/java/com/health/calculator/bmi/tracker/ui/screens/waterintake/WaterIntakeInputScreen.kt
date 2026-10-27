@@ -1,7 +1,9 @@
 // ui/screens/waterintake/WaterIntakeInputScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -62,7 +64,7 @@ fun WaterIntakeInputScreen(
     onNavigateBack: () -> Unit,
     onNavigateToResult: () -> Unit,
     onNavigateToEducation: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.WATER) {
     val haptic = LocalHapticFeedback.current
     val scrollState = rememberScrollState()
 
@@ -131,7 +133,7 @@ fun WaterIntakeInputScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -207,7 +209,7 @@ fun WaterIntakeInputScreen(
                         .clickable { onNavigateToEducation() },
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer)
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer)
                     )
                 ) {
                     Row(
@@ -226,7 +228,7 @@ fun WaterIntakeInputScreen(
                         Text(
                             stringResource(R.string.txt_learn_about_hydration_science),
                             fontSize = 13.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -258,69 +260,10 @@ fun WaterIntakeInputScreen(
 
 @Composable
 private fun WaterHeaderCard(waterDropOffset: Float) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
-        ),
-        elevation = CardDefaults.cardElevation(0.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                            FeatureColors.WaterStart,
-                            FeatureColors.WaterDeep
-                        )
-                    ),
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .padding(24.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = "Calculate Your Daily\nWater Needs",
-                        color = AppColors.text(Color.White),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        lineHeight = 26.sp
-                    )
-                    Text(
-                        text = stringResource(R.string.txt_proper_hydration_is_essential_),
-                        color = AppColors.text(Color.White.copy(alpha = 0.85f)),
-                        fontSize = 13.sp,
-                        lineHeight = 18.sp
-                    )
-                }
-                Spacer(Modifier.width(16.dp))
-                // Animated water drop
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.offset(y = waterDropOffset.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.WaterDrop,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(52.dp)
-                    )
-                }
-            }
-        }
-    }
+    ReservoirHeader(
+        title = "Calculate Your Daily\nWater Needs",
+        subtitle = stringResource(R.string.txt_proper_hydration_is_essential_)
+    )
 }
 
 @Composable
@@ -329,7 +272,7 @@ private fun ProfileDataBanner() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer)
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer)
         )
     ) {
         Row(
@@ -348,7 +291,7 @@ private fun ProfileDataBanner() {
             Text(
                 text = stringResource(R.string.txt_using_profile_data_you_can_ove_1),
                 fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer)
             )
         }
     }
@@ -364,7 +307,7 @@ private fun BodyInfoSection(
         Text(
             text = stringResource(R.string.txt_water_reference_note),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
         )
         Spacer(Modifier.height(8.dp))
 
@@ -373,7 +316,7 @@ private fun BodyInfoSection(
             Text(
                 text = stringResource(R.string.txt_weight),
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurface),
                 fontWeight = FontWeight.Medium
             )
             Row(
@@ -391,14 +334,14 @@ private fun BodyInfoSection(
                     suffix = {
                         Text(
                             if (viewModel.isMetric) "kg" else "lbs",
-                            color = MaterialTheme.colorScheme.primary
+                            color = DetailColors.text(MaterialTheme.colorScheme.primary)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
                     isError = viewModel.weightError != null,
                     supportingText = viewModel.weightError?.let { error ->
-                        { Text(error, color = AppColors.text(MaterialTheme.colorScheme.error)) }
+                        { Text(error, color = DetailColors.text(MaterialTheme.colorScheme.error)) }
                     },
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -432,7 +375,7 @@ private fun BodyInfoSection(
             Text(
                 text = stringResource(R.string.txt_age),
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurface),
                 fontWeight = FontWeight.Medium
             )
             OutlinedTextField(
@@ -440,12 +383,12 @@ private fun BodyInfoSection(
                 onValueChange = { viewModel.updateAge(it) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text(stringResource(R.string.txt_e_g_30)) },
-                suffix = { Text(stringResource(R.string.txt_years), color = MaterialTheme.colorScheme.primary) },
+                suffix = { Text(stringResource(R.string.txt_years), color = DetailColors.text(MaterialTheme.colorScheme.primary)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 isError = viewModel.ageError != null,
                 supportingText = viewModel.ageError?.let { error ->
-                    { Text(error, color = AppColors.text(MaterialTheme.colorScheme.error)) }
+                    { Text(error, color = DetailColors.text(MaterialTheme.colorScheme.error)) }
                 },
                 shape = RoundedCornerShape(12.dp)
             )
@@ -458,7 +401,7 @@ private fun BodyInfoSection(
             Text(
                 text = stringResource(R.string.txt_gender),
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurface),
                 fontWeight = FontWeight.Medium
             )
             Row(
@@ -490,7 +433,7 @@ private fun BodyInfoSection(
                             Text(
                                 text = gender,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+                                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface)
                             )
                         }
                     }
@@ -568,7 +511,7 @@ private fun ClimateSection(
                                 fontSize = 12.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 textAlign = TextAlign.Center,
-                                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+                                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface)
                             )
                         }
                     }
@@ -606,7 +549,7 @@ private fun ClimateSection(
                                 fontSize = 12.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 textAlign = TextAlign.Center,
-                                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+                                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface)
                             )
                         }
                     }
@@ -712,7 +655,7 @@ private fun SectionCard(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                 )
             }
             Spacer(Modifier.height(12.dp))
@@ -749,7 +692,7 @@ private fun SelectableChipCard(
             )
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(backgroundColor)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(backgroundColor)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (selected) 4.dp else 0.dp
         )
@@ -801,13 +744,13 @@ private fun SelectableOptionRow(
                 text = text,
                 fontSize = 14.sp,
                 fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+                color = DetailColors.text(if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface)
             )
             if (subtitle != null) {
                 Text(
                     text = subtitle,
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                     modifier = Modifier.padding(top = 2.dp)
                 )
             }

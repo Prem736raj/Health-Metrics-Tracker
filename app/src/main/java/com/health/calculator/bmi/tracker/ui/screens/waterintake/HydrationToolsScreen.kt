@@ -1,7 +1,9 @@
 // ui/screens/waterintake/HydrationToolsScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -51,7 +53,7 @@ fun HydrationToolsScreen(
     viewModel: HydrationToolsViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToElectrolytes: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.WATER) {
     val haptic = LocalHapticFeedback.current
     val recentUrineColors by viewModel.recentUrineColors.collectAsStateWithLifecycle(initialValue = emptyList())
     val latestUrineColor by viewModel.latestUrineColor.collectAsStateWithLifecycle()
@@ -86,7 +88,7 @@ fun HydrationToolsScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -272,7 +274,7 @@ private fun UrineColorTab(
         ) {
             Card(
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.Healthy)),
+                colors = CardDefaults.cardColors(containerColor = DetailColors.surface(HealthColors.Healthy)),
                 elevation = CardDefaults.cardElevation(8.dp)
             ) {
                 Row(
@@ -280,8 +282,8 @@ private fun UrineColorTab(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Icon(Icons.Default.Check, null, tint = Color.White, modifier = Modifier.size(20.dp))
-                    Text(stringResource(R.string.txt_urine_color_logged), color = AppColors.text(Color.White), fontWeight = FontWeight.SemiBold)
+                    Icon(Icons.Default.Check, null, tint = DetailColors.Accent, modifier = Modifier.size(20.dp))
+                    Text(stringResource(R.string.txt_urine_color_logged), color = DetailColors.text(Color.White), fontWeight = FontWeight.SemiBold)
                 }
             }
         }
@@ -290,7 +292,7 @@ private fun UrineColorTab(
 
 @Composable
 private fun UrineChartHeaderCard() {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -303,7 +305,7 @@ private fun UrineChartHeaderCard() {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(HealthColors.Warning, HealthColors.Caution)
+                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(HealthColors.Warning, HealthColors.Caution)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 )
@@ -322,13 +324,13 @@ private fun UrineChartHeaderCard() {
                 Column {
                     Text(
                         stringResource(R.string.txt_urine_color_chart),
-                        color = AppColors.text(Color.White),
+                        color = DetailColors.text(Color.White),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp
                     )
                     Text(
                         stringResource(R.string.txt_your_urine_color_is_a_quick_in),
-                        color = AppColors.text(Color.White.copy(alpha = 0.85f)),
+                        color = DetailColors.text(Color.White.copy(alpha = 0.85f)),
                         fontSize = 12.sp,
                         lineHeight = 16.sp
                     )
@@ -360,7 +362,7 @@ private fun UrineColorChartCard(
                 stringResource(R.string.txt_tap_your_current_urine_color),
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
 
             UrineColor.entries.forEach { color ->
@@ -415,7 +417,7 @@ private fun UrineColorChartCard(
                             "${color.level}",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(if (color.level <= 4) Color.Black.copy(alpha = 0.5f)
+                            color = DetailColors.text(if (color.level <= 4) Color.Black.copy(alpha = 0.5f)
                             else Color.White.copy(alpha = 0.8f))
                         )
                     }
@@ -440,7 +442,7 @@ private fun UrineColorChartCard(
                             Text(
                                 color.status,
                                 fontSize = 12.sp,
-                                color = AppColors.text(hydrationLevelColor(color.hydrationLevel))
+                                color = DetailColors.text(hydrationLevelColor(color.hydrationLevel))
                             )
                         }
                     }
@@ -493,7 +495,7 @@ private fun LatestUrineCard(entry: UrineColorEntry) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer))
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer))
     ) {
         Row(
             modifier = Modifier
@@ -513,7 +515,7 @@ private fun LatestUrineCard(entry: UrineColorEntry) {
                     "Latest: ${color.label}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer)
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -528,7 +530,7 @@ private fun LatestUrineCard(entry: UrineColorEntry) {
                     Text(
                         "${color.status} • ${timeFormat.format(Date(entry.timestamp))}",
                         fontSize = 12.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -562,7 +564,7 @@ private fun UrineHistoryEntry(entry: UrineColorEntry) {
             Text(
                 timeFormat.format(Date(entry.timestamp)),
                 fontSize = 12.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
         Icon(
@@ -580,7 +582,7 @@ private fun UrineDisclaimerCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
         )
     ) {
         Row(
@@ -600,7 +602,7 @@ private fun UrineDisclaimerCard() {
                         "Consult a doctor if you have concerns.",
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -722,7 +724,7 @@ private fun DehydrationSymptomsTab(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
                     )
                 ) {
                     Row(
@@ -734,7 +736,7 @@ private fun DehydrationSymptomsTab(
                         Text(
                             stringResource(R.string.txt_this_is_not_a_medical_diagnosi),
                             fontSize = 12.sp, lineHeight = 16.sp,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -745,7 +747,7 @@ private fun DehydrationSymptomsTab(
 
 @Composable
 private fun SymptomsHeaderCard() {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -758,7 +760,7 @@ private fun SymptomsHeaderCard() {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(HealthColors.Severe, FeatureColors.BpDeep)
+                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(HealthColors.Severe, FeatureColors.BpDeep)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 )
@@ -775,10 +777,10 @@ private fun SymptomsHeaderCard() {
                     modifier = Modifier.size(44.dp)
                 )
                 Column {
-                    Text(stringResource(R.string.txt_dehydration_checker), color = AppColors.text(Color.White), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text(stringResource(R.string.txt_dehydration_checker), color = DetailColors.text(Color.White), fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     Text(
                         stringResource(R.string.txt_check_off_any_symptoms_you_re_),
-                        color = AppColors.text(Color.White.copy(alpha = 0.85f)), fontSize = 12.sp, lineHeight = 16.sp
+                        color = DetailColors.text(Color.White.copy(alpha = 0.85f)), fontSize = 12.sp, lineHeight = 16.sp
                     )
                 }
             }
@@ -830,7 +832,7 @@ private fun SymptomCheckItem(
             Text(
                 symptom.description,
                 fontSize = 12.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
         val severityColor = when (symptom.severity) {
@@ -860,7 +862,7 @@ private fun DehydrationRiskCard(risk: DehydrationRisk, symptomCount: Int) {
             .scale(animatedScale),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(riskColor(risk).copy(alpha = 0.12f))
+            containerColor = DetailColors.surface(riskColor(risk).copy(alpha = 0.12f))
         ),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -882,12 +884,12 @@ private fun DehydrationRiskCard(risk: DehydrationRisk, symptomCount: Int) {
                     risk.label,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
-                    color = AppColors.text(riskColor(risk))
+                    color = DetailColors.text(riskColor(risk))
                 )
                 Text(
                     "$symptomCount of ${HydrationToolsViewModel.DEHYDRATION_SYMPTOMS.size} symptoms checked",
                     fontSize = 12.sp,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -950,7 +952,7 @@ private fun DehydrationRecommendationCard(risk: DehydrationRisk) {
                         cleanToolMarker(text),
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -1039,7 +1041,7 @@ private fun WaterFromFoodTab(
 
 @Composable
 private fun FoodWaterHeaderCard(estimatedMl: Int, goalMl: Int) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -1052,7 +1054,7 @@ private fun FoodWaterHeaderCard(estimatedMl: Int, goalMl: Int) {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(HealthColors.HealthyDark, FeatureColors.WeightDeep)
+                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(HealthColors.HealthyDark, FeatureColors.WeightDeep)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 )
@@ -1069,10 +1071,10 @@ private fun FoodWaterHeaderCard(estimatedMl: Int, goalMl: Int) {
                     modifier = Modifier.size(44.dp)
                 )
                 Column {
-                    Text(stringResource(R.string.txt_water_from_food), color = AppColors.text(Color.White), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text(stringResource(R.string.txt_water_from_food), color = DetailColors.text(Color.White), fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     Text(
                         stringResource(R.string.txt_did_you_know_about_20_of_your_),
-                        color = AppColors.text(Color.White.copy(alpha = 0.85f)), fontSize = 12.sp, lineHeight = 16.sp
+                        color = DetailColors.text(Color.White.copy(alpha = 0.85f)), fontSize = 12.sp, lineHeight = 16.sp
                     )
                 }
             }
@@ -1085,7 +1087,7 @@ private fun FoodContributionCard(estimatedMl: Int, goalMl: Int) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer)),
         elevation = CardDefaults.cardElevation(1.dp)
     ) {
         Column(
@@ -1095,7 +1097,7 @@ private fun FoodContributionCard(estimatedMl: Int, goalMl: Int) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(stringResource(R.string.txt_your_food_water_estimate), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            Text(stringResource(R.string.txt_your_food_water_estimate), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -1106,15 +1108,15 @@ private fun FoodContributionCard(estimatedMl: Int, goalMl: Int) {
                         "~${estimatedMl}ml",
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 28.sp,
-                        color = AppColors.text(HealthColors.Healthy)
+                        color = DetailColors.text(HealthColors.Healthy)
                     )
-                    Text(stringResource(R.string.txt_from_food), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                    Text(stringResource(R.string.txt_from_food), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
                 }
 
                 Icon(
                     imageVector = Icons.Outlined.Add,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
+                    tint = DetailColors.Secondary,
                     modifier = Modifier.padding(top = 8.dp).size(22.dp)
                 )
 
@@ -1123,9 +1125,9 @@ private fun FoodContributionCard(estimatedMl: Int, goalMl: Int) {
                         "~${goalMl - estimatedMl}ml",
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 28.sp,
-                        color = AppColors.text(FeatureColors.WaterStart)
+                        color = DetailColors.text(FeatureColors.WaterStart)
                     )
-                    Text(stringResource(R.string.txt_from_drinks), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                    Text(stringResource(R.string.txt_from_drinks), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
                 }
             }
 
@@ -1159,14 +1161,14 @@ private fun FoodContributionCard(estimatedMl: Int, goalMl: Int) {
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Box(modifier = Modifier.size(10.dp).background(HealthColors.Healthy, CircleShape))
-                    Text(stringResource(R.string.txt_food_20), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                    Text(stringResource(R.string.txt_food_20), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Box(modifier = Modifier.size(10.dp).background(FeatureColors.WaterStart, CircleShape))
-                    Text(stringResource(R.string.txt_drinks_80), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                    Text(stringResource(R.string.txt_drinks_80), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
                 }
             }
         }
@@ -1175,7 +1177,7 @@ private fun FoodContributionCard(estimatedMl: Int, goalMl: Int) {
 
 @Composable
 private fun FoodItemCard(food: WaterRichFood) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val percentColor = when {
         food.waterPercent >= 94 -> FeatureColors.WeightDeep
@@ -1209,7 +1211,7 @@ private fun FoodItemCard(food: WaterRichFood) {
                 Text(
                     food.servingSize,
                     fontSize = 12.sp,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
 
@@ -1218,12 +1220,12 @@ private fun FoodItemCard(food: WaterRichFood) {
                     "${food.waterPercent}%",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
-                    color = AppColors.text(percentColor)
+                    color = DetailColors.text(percentColor)
                 )
                 Text(
                     "~${food.waterMl}ml",
                     fontSize = 12.sp,
-                    color = AppColors.text(FeatureColors.WaterStart)
+                    color = DetailColors.text(FeatureColors.WaterStart)
                 )
             }
 
@@ -1242,7 +1244,7 @@ private fun FoodItemCard(food: WaterRichFood) {
                         .align(Alignment.BottomCenter)
                         .background(
                             brush = Brush.verticalGradient(
-                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(percentColor.copy(alpha = 0.7f), percentColor)
+                                colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(percentColor.copy(alpha = 0.7f), percentColor)
                             ),
                             shape = RoundedCornerShape(3.dp)
                         )
@@ -1291,7 +1293,7 @@ private fun FoodHydrationTipsCard() {
                     )
                     Text(
                         cleanToolMarker(tip), fontSize = 13.sp, lineHeight = 18.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -1304,7 +1306,7 @@ private fun ElectrolytesTab(
     isVisible: Boolean,
     onNavigateToFull: () -> Unit
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -1327,7 +1329,7 @@ private fun ElectrolytesTab(
                             .fillMaxWidth()
                             .background(
                                 brush = Brush.linearGradient(
-                                    colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(HealthColors.Warning, HealthColors.Caution)
+                                    colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(HealthColors.Warning, HealthColors.Caution)
                                 ),
                                 shape = RoundedCornerShape(16.dp)
                             )
@@ -1346,13 +1348,13 @@ private fun ElectrolytesTab(
                             Column {
                                 Text(
                                     stringResource(R.string.txt_electrolyte_balance),
-                                    color = AppColors.text(Color.White),
+                                    color = DetailColors.text(Color.White),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 18.sp
                                 )
                                 Text(
                                     stringResource(R.string.txt_beyond_water_minerals_your_bod),
-                                    color = AppColors.text(Color.White.copy(alpha = 0.85f)),
+                                    color = DetailColors.text(Color.White.copy(alpha = 0.85f)),
                                     fontSize = 12.sp
                                 )
                             }
@@ -1493,7 +1495,7 @@ private fun ElectrolytesTab(
                         .fillMaxWidth()
                         .clickable { onNavigateToFull() },
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer))
+                    colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer))
                 ) {
                     Row(
                         modifier = Modifier
@@ -1517,7 +1519,7 @@ private fun ElectrolytesTab(
                             Text(
                                 stringResource(R.string.txt_simple_recipe_with_water_salt_),
                                 fontSize = 12.sp,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                color = DetailColors.text(DetailColors.Secondary)
                             )
                         }
                         Icon(
@@ -1538,7 +1540,7 @@ private fun QuickElectrolyteChip(marker: String, name: String, color: Color) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(color.copy(alpha = 0.1f))
+            containerColor = DetailColors.surface(color.copy(alpha = 0.1f))
         )
     ) {
         Column(
@@ -1552,7 +1554,7 @@ private fun QuickElectrolyteChip(marker: String, name: String, color: Color) {
                 tint = color,
                 modifier = Modifier.size(24.dp)
             )
-            Text(name, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = AppColors.text(color))
+            Text(name, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = DetailColors.text(color))
         }
     }
 }

@@ -1,7 +1,9 @@
 // ui/screens/waterintake/WaterTrackingScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -72,7 +74,7 @@ fun WaterTrackingScreen(
     onNavigateToGamification: () -> Unit,
     onNavigateToTools: () -> Unit,
     onNavigateToEducation: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.WATER) {
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
 
@@ -190,7 +192,7 @@ fun WaterTrackingScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         },
@@ -297,7 +299,7 @@ fun WaterTrackingScreen(
                                 },
                             shape = RoundedCornerShape(16.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer)
+                                containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer)
                             ),
                             elevation = CardDefaults.cardElevation(1.dp)
                         ) {
@@ -323,7 +325,7 @@ fun WaterTrackingScreen(
                                     Text(
                                         stringResource(R.string.txt_learn_about_hydration_science_),
                                         fontSize = 12.sp,
-                                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f)
+                                        color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
                                     )
                                 }
                                 Icon(
@@ -418,7 +420,7 @@ fun WaterTrackingScreen(
                             Text(
                                 text = "${todayLogs.size} entries",
                                 fontSize = 12.sp,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                color = DetailColors.text(DetailColors.Secondary)
                             )
                         }
                     }
@@ -547,7 +549,7 @@ private fun ProgressRingCard(
             Text(
                 text = SimpleDateFormat("EEEE, MMMM d", Locale.getDefault()).format(Date()),
                 fontSize = 14.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontWeight = FontWeight.Medium
             )
 
@@ -625,7 +627,7 @@ private fun ProgressRingCard(
                         text = "${animatedPercentage.toInt()}%",
                         fontSize = 42.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = AppColors.text(if (goalReached) HealthColors.Healthy else MaterialTheme.colorScheme.primary)
+                        color = DetailColors.text(if (goalReached) HealthColors.Healthy else MaterialTheme.colorScheme.primary)
                     )
 
                     val currentL = currentMl / 1000f
@@ -634,7 +636,7 @@ private fun ProgressRingCard(
                         text = "${String.format("%.1f", currentL)}L / ${String.format("%.1f", goalL)}L",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
 
                     if (goalReached) {
@@ -642,14 +644,14 @@ private fun ProgressRingCard(
                             text = stringResource(R.string.txt_goal_reached),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(HealthColors.Healthy)
+                            color = DetailColors.text(HealthColors.Healthy)
                         )
                     } else {
                         val remainingMl = goalMl - currentMl
                         Text(
                             text = "${remainingMl}ml remaining",
                             fontSize = 12.sp,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -801,7 +803,7 @@ private fun QuickAddButton(
             },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(if (isCustom)
+            containerColor = DetailColors.surface(if (isCustom)
                 MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
             else
                 MaterialTheme.colorScheme.primaryContainer)
@@ -830,13 +832,13 @@ private fun QuickAddButton(
                     text = "+${amount}ml",
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    color = if (isCustom) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
+                    color = DetailColors.text(if (isCustom) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onPrimaryContainer)
                 )
             }
             Text(
                 text = label,
                 fontSize = 12.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -902,7 +904,7 @@ private fun GlassIndicatorsCard(
             Text(
                 text = "Each glass ≈ ${mlPerGlass.toInt()}ml",
                 fontSize = 12.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
@@ -1032,13 +1034,13 @@ private fun WaterLogEntry(
                         text = "+${log.amountMl}ml",
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.primary
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary)
                     )
                     if (log.note.isNotBlank()) {
                         Text(
                             text = "• ${log.note}",
                             fontSize = 12.sp,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -1049,17 +1051,17 @@ private fun WaterLogEntry(
                     Text(
                         text = timeFormat.format(Date(log.timestamp)),
                         fontSize = 12.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Text(
                         text = stringResource(R.string.txt_text_placeholder_3),
                         fontSize = 12.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Text(
                         text = "Total: ${runningTotal}ml",
                         fontSize = 12.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.secondary)
+                        color = DetailColors.text(MaterialTheme.colorScheme.secondary)
                     )
                 }
             }
@@ -1080,7 +1082,7 @@ private fun WaterLogEntry(
                     if (showDeleteConfirm) Icons.Default.DeleteForever else Icons.Default.Close,
                     "Delete",
                     tint = if (showDeleteConfirm) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                    else DetailColors.Secondary,
                     modifier = Modifier.size(18.dp)
                 )
             }
@@ -1096,7 +1098,7 @@ private fun EmptyLogState() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer)
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer)
         )
     ) {
         Column(
@@ -1124,12 +1126,12 @@ private fun EmptyLogState() {
                 text = stringResource(R.string.txt_no_water_logged_today),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
             )
             Text(
                 text = stringResource(R.string.txt_tap_the_quick_add_buttons_abov),
                 fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
+                color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer),
                 textAlign = TextAlign.Center
             )
         }
@@ -1211,18 +1213,18 @@ private fun CelebrationOverlay() {
                     text = stringResource(R.string.txt_amazing),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = AppColors.text(HealthColors.Healthy)
+                    color = DetailColors.text(HealthColors.Healthy)
                 )
                 Text(
                     text = "You've met your\nhydration goal today!",
                     fontSize = 15.sp,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
                 Text(
                     text = stringResource(R.string.txt_great_job_staying_hydrated),
                     fontSize = 13.sp,
-                    color = AppColors.text(HealthColors.Warning),
+                    color = DetailColors.text(HealthColors.Warning),
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -1267,7 +1269,7 @@ private fun CustomAmountDialog(
                         error = null
                     },
                     label = { Text(stringResource(R.string.txt_amount)) },
-                    suffix = { Text(stringResource(R.string.txt_ml), color = AppColors.text(FeatureColors.WaterDeep)) },
+                    suffix = { Text(stringResource(R.string.txt_ml), color = DetailColors.text(FeatureColors.WaterDeep)) },
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                         keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
                     ),
@@ -1376,9 +1378,9 @@ private fun StreakAndScoreMiniCard(
                     "$currentStreak",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
-                    color = AppColors.secondaryText(if (currentStreak > 0) HealthColors.Warning else MaterialTheme.colorScheme.onSurfaceVariant)
+                    color = DetailColors.secondaryText(if (currentStreak > 0) HealthColors.Warning else MaterialTheme.colorScheme.onSurfaceVariant)
                 )
-                Text(stringResource(R.string.txt_streak), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                Text(stringResource(R.string.txt_streak), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
             }
 
             Box(
@@ -1400,9 +1402,9 @@ private fun StreakAndScoreMiniCard(
                     todayScore?.grade ?: "F",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.primary
+                    color = DetailColors.text(MaterialTheme.colorScheme.primary)
                 )
-                Text(stringResource(R.string.txt_grade), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                Text(stringResource(R.string.txt_grade), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
             }
 
             Box(
@@ -1424,9 +1426,9 @@ private fun StreakAndScoreMiniCard(
                     stringResource(R.string.txt_view),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.primary
+                    color = DetailColors.text(MaterialTheme.colorScheme.primary)
                 )
-                Text(stringResource(R.string.txt_badges), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                Text(stringResource(R.string.txt_badges), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
             }
         }
     }
@@ -1464,7 +1466,7 @@ fun ToolsQuickAccessCard(onClick: () -> Unit) {
             }
             Column(modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.txt_hydration_tools), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text(stringResource(R.string.txt_urine_chart_symptoms_food_esti), fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)))
+                Text(stringResource(R.string.txt_urine_chart_symptoms_food_esti), fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
             }
             Icon(
                 androidx.compose.material.icons.Icons.Default.KeyboardArrowRight,

@@ -1,7 +1,11 @@
 // ui/screens/waterintake/WaterIntakeResultScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.data.export.ExportDisclosurePolicy
@@ -75,7 +79,7 @@ fun WaterIntakeResultScreen(
     onNavigateBack: () -> Unit,
     onRecalculate: () -> Unit,
     onStartTracking: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.WATER) {
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
     val result = viewModel.calculationResult
@@ -116,7 +120,7 @@ fun WaterIntakeResultScreen(
                 Text(
                     text = stringResource(R.string.txt_water_result_unavailable_message),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                     textAlign = TextAlign.Center
                 )
                 Spacer(Modifier.height(24.dp))
@@ -125,7 +129,7 @@ fun WaterIntakeResultScreen(
                 }
             }
         }
-        return
+        return@DetailScreenTheme
     }
     val scrollState = rememberScrollState()
 
@@ -145,6 +149,8 @@ fun WaterIntakeResultScreen(
     // Save confirmation
     var showSaveConfirmation by remember { mutableStateOf(false) }
     var isSaved by remember { mutableStateOf(false) }
+    var actionBarHeightPx by remember { mutableIntStateOf(0) }
+    val actionBarPadding = with(LocalDensity.current) { actionBarHeightPx.toDp() }
 
     Scaffold(
         topBar = {
@@ -172,7 +178,7 @@ fun WaterIntakeResultScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -184,7 +190,7 @@ fun WaterIntakeResultScreen(
                     .padding(paddingValues)
                     .verticalScroll(scrollState)
                     .padding(horizontal = 16.dp)
-                    .padding(bottom = 100.dp),
+                    .padding(bottom = actionBarPadding),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Spacer(Modifier.height(4.dp))
@@ -252,7 +258,7 @@ fun WaterIntakeResultScreen(
             AnimatedVisibility(
                 visible = isVisible,
                 enter = slideInVertically(tween(500, 400)) { it } + fadeIn(tween(500, 400)),
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter).onSizeChanged { actionBarHeightPx = it.height }
             ) {
                 BottomActionBar(
                     isSaved = isSaved,
@@ -292,7 +298,7 @@ fun WaterIntakeResultScreen(
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(HealthColors.Healthy)
+                        containerColor = DetailColors.surface(HealthColors.Healthy)
                     ),
                     elevation = CardDefaults.cardElevation(8.dp)
                 ) {
@@ -301,8 +307,8 @@ fun WaterIntakeResultScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(Icons.Default.Check, null, tint = Color.White, modifier = Modifier.size(20.dp))
-                        Text(stringResource(R.string.txt_goal_saved_successfully), color = AppColors.text(Color.White), fontWeight = FontWeight.SemiBold)
+                        Icon(Icons.Default.Check, null, tint = DetailColors.Accent, modifier = Modifier.size(20.dp))
+                        Text(stringResource(R.string.txt_goal_saved_successfully), color = DetailColors.text(Color.White), fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -315,7 +321,7 @@ private fun InformationalDisclaimerCard(text: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f))
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -333,7 +339,7 @@ private fun InformationalDisclaimerCard(text: String) {
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
+                color = DetailColors.text(MaterialTheme.colorScheme.onTertiaryContainer)
             )
         }
     }
@@ -343,7 +349,7 @@ private fun InformationalDisclaimerCard(text: String) {
 
 @Composable
 private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val fillFraction = (result.recommendedIntakeMl.toFloat() / 4000f).coerceIn(0.2f, 1f)
 
@@ -375,102 +381,34 @@ private fun WaterBottleResultCard(result: WaterIntakeCalculation) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(0.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.SurfaceAlt)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                            FeatureColors.WaterDeep,
-                            FeatureColors.WaterStart,
-                            FeatureColors.WaterEnd
-                        )
-                    ),
-                    shape = RoundedCornerShape(24.dp)
-                )
-                .padding(24.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.txt_your_daily_water_goal),
-                    color = AppColors.text(Color.White.copy(alpha = 0.9f)),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                // Water Bottle Canvas
-                Box(
-                    modifier = Modifier
-                        .size(width = 140.dp, height = 220.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Canvas(modifier = Modifier.fillMaxSize()) {
-                        drawWaterBottle(
-                            fillLevel = animatedFill,
-                            wavePhase = wavePhase
-                        )
-                    }
-
-                    // Overlay text on bottle
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.offset(y = 20.dp)
-                    ) {
-                        Text(
-                            text = String.format("%.1f", animatedLiters),
-                            color = AppColors.text(Color.White),
-                            fontSize = 36.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        Text(
-                            text = stringResource(R.string.txt_liters),
-                            color = AppColors.text(Color.White.copy(alpha = 0.9f)),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
-                        )
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(stringResource(R.string.txt_your_daily_water_goal),
+                style = MaterialTheme.typography.titleMedium, color = DetailColors.Text)
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Canvas(Modifier.width(84.dp).height(144.dp)) {
+                    drawWaterBottle(fillLevel = animatedFill, wavePhase = wavePhase)
+                }
+                Surface(Modifier.weight(1f), color = DetailColors.Surface, shape = RoundedCornerShape(12.dp)) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(String.format("%.1f", animatedLiters), fontSize = 36.sp,
+                            fontWeight = FontWeight.ExtraBold, color = DetailColors.Text)
+                        Text(stringResource(R.string.txt_liters), style = MaterialTheme.typography.bodyMedium,
+                            color = DetailColors.Secondary)
+                        Text("${result.recommendedIntakeMl} ml per day", style = MaterialTheme.typography.bodySmall,
+                            color = DetailColors.Text)
                     }
                 }
-
-                // Subtitle
-                Text(
-                    text = "${result.recommendedIntakeMl} ml per day",
-                    color = AppColors.text(Color.White.copy(alpha = 0.85f)),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-
-                // Motivational message
-                val motivationText = when {
+            }
+            val motivationText = when {
                     result.recommendedIntakeMl >= 3500 -> "A higher starting point for your selected context. Sip steadily and adjust to thirst."
                     result.recommendedIntakeMl >= 2500 -> "A practical starting point — adjust for thirst, food and daily conditions."
                     else -> "A starting point for planning fluids; your needs can vary day to day."
                 }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.WaterDrop,
-                        contentDescription = null,
-                        tint = Color.White.copy(alpha = 0.8f),
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = motivationText,
-                        color = AppColors.text(Color.White.copy(alpha = 0.8f)),
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
+            Text(motivationText, style = MaterialTheme.typography.bodySmall, color = DetailColors.Secondary)
         }
     }
 }
@@ -714,12 +652,12 @@ private fun UnitItem(value: String, unit: String, icon: ImageVector) {
             text = value,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.primary
+            color = DetailColors.text(MaterialTheme.colorScheme.primary)
         )
         Text(
             text = unit,
             fontSize = 12.sp,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+            color = DetailColors.text(DetailColors.Secondary)
         )
     }
 }
@@ -782,7 +720,7 @@ private fun GlassesVisualizationCard(result: WaterIntakeCalculation) {
             Text(
                 text = stringResource(R.string.txt_each_glass_250_ml_8_5_fl_oz),
                 fontSize = 12.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
 
             // Glass grid
@@ -857,7 +795,7 @@ private fun GlassIcon(filled: Boolean, modifier: Modifier = Modifier) {
 
 @Composable
 private fun HourlyBreakdownCard(result: WaterIntakeCalculation) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val wakingHours = 16
     val hourlyMl = result.recommendedIntakeMl / wakingHours
@@ -875,7 +813,7 @@ private fun HourlyBreakdownCard(result: WaterIntakeCalculation) {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(
                             MaterialTheme.colorScheme.primaryContainer,
                             MaterialTheme.colorScheme.secondaryContainer
                         )
@@ -901,14 +839,14 @@ private fun HourlyBreakdownCard(result: WaterIntakeCalculation) {
                         stringResource(R.string.txt_hourly_recommendation),
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.titleSmall,
-                        color = onPrimaryContainer
+                        color = DetailColors.text(onPrimaryContainer)
                     )
                 }
 
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.surface.copy(alpha = 0.88f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.surface.copy(alpha = 0.88f))
                     )
                 ) {
                     Row(
@@ -936,12 +874,12 @@ private fun HourlyBreakdownCard(result: WaterIntakeCalculation) {
                                 text = "Drink ~${hourlyMl} ml every hour",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 15.sp,
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                             )
                             Text(
                                 text = "(~${String.format("%.1f", hourlyOz)} fl oz) during your ${wakingHours} waking hours",
                                 fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                             )
                         }
                     }
@@ -983,13 +921,13 @@ private fun HourlyTimeline(hourlyMl: Int, wakingHours: Int) {
                 Text(
                     text = time,
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f),
+                    color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer),
                     fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = "${hourlyMl}ml",
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.68f)
+                    color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer)
                 )
             }
         }
@@ -1061,7 +999,7 @@ private fun FactorBreakdownCard(viewModel: WaterIntakeViewModel) {
             Text(
                 text = com.health.calculator.bmi.tracker.data.model.WaterIntakeCalculator.METHODOLOGY_NOTE,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 17.sp
             )
 
@@ -1123,13 +1061,13 @@ private fun FactorBreakdownCard(viewModel: WaterIntakeViewModel) {
                     text = stringResource(R.string.txt_total_daily_goal),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                 )
                 Text(
                     text = "${result.recommendedIntakeMl} ml",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.primary
+                    color = DetailColors.text(MaterialTheme.colorScheme.primary)
                 )
             }
 
@@ -1175,7 +1113,7 @@ private fun BreakdownRow(
                 Text(
                     text = detail,
                     fontSize = 12.sp,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -1183,7 +1121,7 @@ private fun BreakdownRow(
             text = value,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
     }
 }
@@ -1312,7 +1250,7 @@ private fun HydrationTipsCard() {
                         text = tip,
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -1330,82 +1268,32 @@ private fun BottomActionBar(
     onShare: () -> Unit,
     onStartTracking: () -> Unit
 ) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shadowElevation = 16.dp,
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 3.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .navigationBarsPadding(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // Recalculate
-            OutlinedButton(
-                onClick = onRecalculate,
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
-            ) {
-                Icon(Icons.Default.Refresh, null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(4.dp))
-                Text(
-                    stringResource(R.string.txt_recalculate),
-                    fontSize = 13.sp,
-                    maxLines = 1,
-                    softWrap = false,
-                    overflow = TextOverflow.Ellipsis
-                )
+    Surface(modifier = Modifier.fillMaxWidth(), shadowElevation = 8.dp,
+        color = DetailColors.Surface, tonalElevation = 0.dp) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).navigationBarsPadding(),
+            verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = onRecalculate, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) {
+                    Icon(Icons.Default.Refresh, null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.txt_recalculate))
+                }
+                Button(onClick = { if (!isSaved) onSave() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) {
+                    Icon(Icons.Default.Check, null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(if (isSaved) "Saved" else stringResource(R.string.txt_save))
+                }
             }
-
-            // Save / Saved
-            Button(
-                onClick = { if (!isSaved) onSave() },
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSaved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Icon(
-                    if (isSaved) Icons.Default.Check else Icons.Default.Check,
-                    null,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(Modifier.width(4.dp))
-                Text(
-                    if (isSaved) "Saved" else stringResource(R.string.txt_save),
-                    fontSize = 12.sp,
-                    maxLines = 1,
-                    softWrap = false,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            // Share
-            FilledTonalButton(
-                onClick = onShare,
-                modifier = Modifier.widthIn(min = 64.dp),
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
-            ) {
-                Icon(Icons.Default.Share, null, modifier = Modifier.size(18.dp))
-            }
-
-            // Start Tracking / Track
-            AnimatedVisibility(visible = isSaved) {
-                Button(
-                    onClick = onStartTracking,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary
-                    )
-                ) {
-                    Text(stringResource(R.string.txt_track), fontSize = 13.sp)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilledTonalButton(onClick = onShare, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) {
+                    Icon(Icons.Default.Share, contentDescription = "Share water goal", modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("Share")
+                }
+                AnimatedVisibility(visible = isSaved, modifier = Modifier.weight(1f)) {
+                    Button(onClick = onStartTracking, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                        Text(stringResource(R.string.txt_track))
+                    }
                 }
             }
         }
