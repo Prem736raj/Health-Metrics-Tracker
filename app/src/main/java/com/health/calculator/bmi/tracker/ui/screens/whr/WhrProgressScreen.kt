@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.whr
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -51,7 +53,7 @@ import com.health.calculator.bmi.tracker.ui.screens.whr.WhrHistoryEntryDetailDia
 fun WhrProgressScreen(
     viewModel: WhrProgressViewModel,
     onNavigateBack: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.WAIST_HIP) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
     val scrollState = rememberScrollState()
@@ -232,7 +234,7 @@ private fun EmptyProgressState(modifier: Modifier = Modifier) {
                 stringResource(R.string.txt_start_tracking_your_waist_to_h),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -242,7 +244,7 @@ private fun EmptyProgressState(modifier: Modifier = Modifier) {
 private fun MotivationalBanner(message: String) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(14.dp)
     ) {
@@ -256,7 +258,7 @@ private fun MotivationalBanner(message: String) {
             Text(
                 message,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer),
                 lineHeight = 20.sp,
                 modifier = Modifier.weight(1f)
             )
@@ -271,7 +273,7 @@ private fun ComparisonCard(comparison: WhrComparison) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))
         )
     ) {
         Column(
@@ -299,7 +301,7 @@ private fun ComparisonCard(comparison: WhrComparison) {
                 Text(
                     dateFormat.format(Date(comparison.previousDate)),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
 
@@ -344,7 +346,7 @@ private fun ComparisonItem(
     val color = when (direction) {
         WhrTrendDirection.IMPROVING -> HealthColors.Healthy
         WhrTrendDirection.WORSENING -> HealthColors.Danger
-        WhrTrendDirection.STEADY -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        WhrTrendDirection.STEADY -> DetailColors.Secondary
     }
 
     val icon = when (direction) {
@@ -365,7 +367,7 @@ private fun ComparisonItem(
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+            color = DetailColors.text(DetailColors.Secondary)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -381,7 +383,7 @@ private fun ComparisonItem(
                 "$prefix${String.format(format, diff)}$suffix",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                color = AppColors.text(color)
+                color = DetailColors.text(color)
             )
         }
     }
@@ -414,7 +416,7 @@ private fun GoalProgressCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(goalColor.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(goalColor.copy(alpha = 0.08f))
         )
     ) {
         Column(
@@ -452,7 +454,7 @@ private fun GoalProgressCard(
                         Icons.Outlined.Edit,
                         contentDescription = "Edit Goal",
                         modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        tint = DetailColors.Secondary
                     )
                 }
             }
@@ -466,7 +468,7 @@ private fun GoalProgressCard(
                     Text(
                         stringResource(R.string.txt_current),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Text(
                         "${String.format("%.1f", currentWaist)} cm",
@@ -478,14 +480,14 @@ private fun GoalProgressCard(
                     Text(
                         if (isGoalReached) "Achieved!" else "Remaining",
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Text(
                         if (isGoalReached) "✓"
                         else "${String.format("%.1f", remaining)} cm",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(if (isGoalReached) goalColor
+                        color = DetailColors.text(if (isGoalReached) goalColor
                         else MaterialTheme.colorScheme.error)
                     )
                 }
@@ -493,13 +495,13 @@ private fun GoalProgressCard(
                     Text(
                         stringResource(R.string.txt_target),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Text(
                         "${String.format("%.1f", goal.targetWaistCm)} cm",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(goalColor)
+                        color = DetailColors.text(goalColor)
                     )
                 }
             }
@@ -518,7 +520,7 @@ private fun GoalProgressCard(
                 Text(
                     "${(progress * 100).toInt()}% complete",
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -608,7 +610,7 @@ private fun TrendGraphCard(
         Card(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
             )
         ) {
             Box(
@@ -620,7 +622,7 @@ private fun TrendGraphCard(
                 Text(
                     stringResource(R.string.txt_need_at_least_2_measurements_t),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     textAlign = TextAlign.Center
                 )
             }
@@ -635,7 +637,7 @@ private fun TrendGraphCard(
     val yellowZone = HealthColors.Warning
     val redZone = HealthColors.Danger
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
-    val textColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+    val textColor = DetailColors.Secondary
     val pointRingColor = MaterialTheme.colorScheme.surface
 
     val dateFormat = SimpleDateFormat("M/d", Locale.getDefault())
@@ -649,7 +651,7 @@ private fun TrendGraphCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
         )
     ) {
         Column(
@@ -848,7 +850,7 @@ private fun TrendGraphCard(
                     Text(
                         dateFormat.format(Date(entries.first().timestamp)),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(textColor),
+                        color = DetailColors.text(textColor),
                         fontSize = 12.sp
                     )
                     if (entries.size > 2) {
@@ -856,14 +858,14 @@ private fun TrendGraphCard(
                         Text(
                             dateFormat.format(Date(midEntry.timestamp)),
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(textColor),
+                            color = DetailColors.text(textColor),
                             fontSize = 12.sp
                         )
                     }
                     Text(
                         dateFormat.format(Date(entries.last().timestamp)),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(textColor),
+                        color = DetailColors.text(textColor),
                         fontSize = 12.sp
                     )
                 }
@@ -877,7 +879,7 @@ private fun ProgressStatsCard(stats: WhrProgressStats) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -910,7 +912,7 @@ private fun ProgressStatsCard(stats: WhrProgressStats) {
                 stringResource(R.string.txt_whr),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary
+                color = DetailColors.text(MaterialTheme.colorScheme.primary)
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -929,7 +931,7 @@ private fun ProgressStatsCard(stats: WhrProgressStats) {
                 stringResource(R.string.txt_waist),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = AppColors.text(HealthColors.Danger)
+                color = DetailColors.text(HealthColors.Danger)
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -957,7 +959,7 @@ private fun ProgressStatsCard(stats: WhrProgressStats) {
                 stringResource(R.string.txt_hip),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = AppColors.text(HealthColors.Good)
+                color = DetailColors.text(HealthColors.Good)
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -1003,14 +1005,14 @@ private fun StatItem(
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             fontSize = 12.sp
         )
         Text(
             value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
-            color = AppColors.text(valueColor ?: MaterialTheme.colorScheme.onSurface)
+            color = DetailColors.text(valueColor ?: MaterialTheme.colorScheme.onSurface)
         )
     }
 }
@@ -1025,7 +1027,7 @@ private fun CategoryDistributionCard(entries: List<WhrHistoryEntry>) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -1088,7 +1090,7 @@ private fun DistributionBar(
             Text(
                 "$count (${(fraction * 100).toInt()}%)",
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
         LinearProgressIndicator(
@@ -1126,7 +1128,7 @@ private fun GoalSettingDialog(
                 Text(
                     stringResource(R.string.txt_set_a_target_waist_circumferen),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
 
                 OutlinedTextField(
@@ -1151,7 +1153,7 @@ private fun GoalSettingDialog(
 
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -1173,7 +1175,7 @@ private fun GoalSettingDialog(
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 12.sp,
                             lineHeight = 16.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer),
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -1192,7 +1194,7 @@ private fun GoalSettingDialog(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (existingGoal != null) {
                     TextButton(onClick = onClear) {
-                        Text(stringResource(R.string.txt_remove_goal), color = AppColors.text(MaterialTheme.colorScheme.error))
+                        Text(stringResource(R.string.txt_remove_goal), color = DetailColors.text(MaterialTheme.colorScheme.error))
                     }
                 }
                 TextButton(onClick = onDismiss) {

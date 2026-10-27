@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.whr
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -53,7 +55,7 @@ fun WhrInputScreen(
     onCalculate: (waistCm: Float, hipCm: Float, gender: Gender, age: Int) -> Unit,
     onNavigateToEducation: () -> Unit = {},
     viewModel: WhrViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.WAIST_HIP) {
     val inputState by viewModel.inputState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
     val scrollState = rememberScrollState()
@@ -84,7 +86,7 @@ fun WhrInputScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -179,7 +181,7 @@ fun WhrInputScreen(
                 inputState.waistWarning?.let { warning ->
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f))
+                            containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f))
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -197,7 +199,7 @@ fun WhrInputScreen(
                             Text(
                                 text = warning,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onTertiaryContainer
+                                color = DetailColors.text(MaterialTheme.colorScheme.onTertiaryContainer)
                             )
                         }
                     }
@@ -313,55 +315,17 @@ fun WhrInputScreen(
 
 @Composable
 private fun WhrHeaderCard() {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
-        ),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                modifier = Modifier.size(48.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Outlined.Straighten,
-                        contentDescription = stringResource(R.string.txt_waist_to_hip_ratio),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(26.dp)
-                    )
-                }
-            }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    stringResource(R.string.txt_waist_to_hip_ratio),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    stringResource(R.string.txt_measures_body_fat_distribution),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
-                )
-            }
-        }
-    }
+    MeasuringRibbonHeader(
+        title = stringResource(R.string.txt_waist_to_hip_ratio),
+        subtitle = stringResource(R.string.txt_measures_body_fat_distribution)
+    )
 }
 
 @Composable
 private fun ProfileDataBanner() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(8.dp)
     ) {
@@ -381,7 +345,7 @@ private fun ProfileDataBanner() {
             Text(
                 stringResource(R.string.txt_using_profile_data_for_gender_),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
             )
         }
     }
@@ -391,7 +355,7 @@ private fun ProfileDataBanner() {
 private fun MeasurementGuideVisual() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -442,7 +406,7 @@ private fun MeasurementGuideVisual() {
 private fun BodyMeasurementIllustration() {
     val primaryColor = MaterialTheme.colorScheme.primary
     val secondaryColor = MaterialTheme.colorScheme.secondary
-    val outlineColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    val outlineColor = DetailColors.Secondary
 
     Canvas(
         modifier = Modifier
@@ -611,7 +575,7 @@ private fun MeasurementLegendItem(
             Text(
                 description,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontSize = 12.sp
             )
         }
@@ -622,7 +586,7 @@ private fun MeasurementLegendItem(
 private fun MeasurementTipCard() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -640,7 +604,7 @@ private fun MeasurementTipCard() {
             Text(
                 text = stringResource(R.string.txt_use_a_flexible_tape_measure_st),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                color = DetailColors.text(MaterialTheme.colorScheme.onTertiaryContainer),
                 lineHeight = 18.sp
             )
         }
@@ -655,7 +619,7 @@ private fun UnitToggleSection(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Row(
@@ -687,10 +651,10 @@ private fun UnitToggleSection(
                         Text(
                             stringResource(R.string.txt_cm_1),
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                            color = if (useMetric)
+                            color = DetailColors.text(if (useMetric)
                                 MaterialTheme.colorScheme.onPrimary
                             else
-                                MaterialTheme.colorScheme.onSurfaceVariant,
+                                MaterialTheme.colorScheme.onSurfaceVariant),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -706,10 +670,10 @@ private fun UnitToggleSection(
                         Text(
                             stringResource(R.string.txt_inches_1),
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                            color = if (!useMetric)
+                            color = DetailColors.text(if (!useMetric)
                                 MaterialTheme.colorScheme.onPrimary
                             else
-                                MaterialTheme.colorScheme.onSurfaceVariant,
+                                MaterialTheme.colorScheme.onSurfaceVariant),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -740,7 +704,7 @@ private fun MeasurementInputField(
             Text(
                 helperText,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
             IconButton(
                 onClick = onInfoClick,
@@ -768,7 +732,7 @@ private fun MeasurementInputField(
             placeholder = { Text(placeholder) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             isError = error != null,
-            supportingText = error?.let { { Text(it, color = AppColors.text(MaterialTheme.colorScheme.error)) } },
+            supportingText = error?.let { { Text(it, color = DetailColors.text(MaterialTheme.colorScheme.error)) } },
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth()
@@ -783,7 +747,7 @@ private fun MeasurementGuideCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(accentColor.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(accentColor.copy(alpha = 0.08f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -796,12 +760,12 @@ private fun MeasurementGuideCard(
                 guide.title,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = AppColors.text(accentColor)
+                color = DetailColors.text(accentColor)
             )
             Text(
                 guide.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
             HorizontalDivider(
                 color = accentColor.copy(alpha = 0.2f),
@@ -822,7 +786,7 @@ private fun MeasurementGuideCard(
                                 "${index + 1}",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = AppColors.text(accentColor),
+                                color = DetailColors.text(accentColor),
                                 fontSize = 12.sp
                             )
                         }
@@ -830,7 +794,7 @@ private fun MeasurementGuideCard(
                     Text(
                         step,
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         lineHeight = 18.sp
                     )
                 }
@@ -905,7 +869,7 @@ private fun GenderOption(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(backgroundColor)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(backgroundColor)),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 2.dp else 0.dp
@@ -929,7 +893,7 @@ private fun GenderOption(
                 label,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = AppColors.text(if (isSelected)
+                color = DetailColors.text(if (isSelected)
                     MaterialTheme.colorScheme.primary
                 else
                     MaterialTheme.colorScheme.onSurface)
@@ -946,7 +910,7 @@ private fun HowToMeasureExpandable(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -979,7 +943,7 @@ private fun HowToMeasureExpandable(
                 Icon(
                     if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
                     contentDescription = if (expanded) "Collapse" else "Expand",
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -1048,7 +1012,7 @@ private fun HowToStep(
                     "$number",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = DetailColors.text(MaterialTheme.colorScheme.primary)
                 )
             }
         }
@@ -1061,7 +1025,7 @@ private fun HowToStep(
             Text(
                 description,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 18.sp
             )
         }

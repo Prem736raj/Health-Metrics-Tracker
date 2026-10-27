@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.whr
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -259,12 +259,12 @@ fun AnimatedValueReveal(
             value,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+            color = DetailColors.text(DetailColors.Secondary)
         )
     }
 }

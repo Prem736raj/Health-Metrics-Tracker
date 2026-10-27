@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.whr
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -70,7 +72,7 @@ fun WhrResultScreen(
     onNavigateToEducation: () -> Unit = {},
     showHeightInput: Boolean = false,
     onHeightSubmitted: ((Float) -> Unit)? = null
-) {
+) = DetailScreenTheme(DetailFeature.WAIST_HIP) {
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -175,7 +177,7 @@ fun WhrResultScreen(
             edgeCaseMessage?.let { message ->
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -193,7 +195,7 @@ fun WhrResultScreen(
                         Text(
                             message,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onErrorContainer,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer),
                             lineHeight = 18.sp
                         )
                     }
@@ -322,7 +324,7 @@ private fun WhrMainResultCard(
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(categoryColor.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(categoryColor.copy(alpha = 0.08f))
         ),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -336,34 +338,23 @@ private fun WhrMainResultCard(
             Text(
                 stringResource(R.string.txt_your_waist_to_hip_ratio),
                 style = MaterialTheme.typography.titleSmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
 
-            // Animated WHR gauge
-            Box(
-                modifier = Modifier.size(180.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                WhrGaugeCanvas(
-                    whr = whr,
-                    gender = gender,
-                    categoryColor = categoryColor,
-                    progress = animationProgress
-                )
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = String.format("%.2f", whr * animationProgress),
-                        style = MaterialTheme.typography.displayMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = AppColors.text(categoryColor)
-                    )
-                    Text(
-                        stringResource(R.string.txt_whr),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
-                    )
+            // The ratio is a reading on the measuring ribbon, not another circular dial.
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Icon(Icons.Outlined.Straighten, contentDescription = null,
+                    tint = DetailColors.Accent, modifier = Modifier.size(36.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(String.format("%.2f", whr * animationProgress),
+                        style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.Bold,
+                        color = DetailColors.Text)
+                    Text(stringResource(R.string.txt_whr), style = MaterialTheme.typography.labelMedium,
+                        color = DetailColors.Secondary)
                 }
             }
+            HorizontalDivider(color = DetailColors.Outline)
 
             // Category Chip
             Surface(
@@ -385,7 +376,7 @@ private fun WhrMainResultCard(
                         category.label,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(categoryColor)
+                        color = DetailColors.text(categoryColor)
                     )
                 }
             }
@@ -394,7 +385,7 @@ private fun WhrMainResultCard(
                 category.description,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
 
             // Reference thresholds
@@ -407,7 +398,7 @@ private fun WhrMainResultCard(
                 thresholds,
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontSize = 12.sp
             )
         }
@@ -525,7 +516,7 @@ private fun WhrVisualScale(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -607,13 +598,13 @@ private fun WhrVisualScale(
                             label,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = AppColors.text(color),
+                            color = DetailColors.text(color),
                             fontSize = 12.sp
                         )
                         Text(
                             range,
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             fontSize = 12.sp
                         )
                     }
@@ -623,7 +614,7 @@ private fun WhrVisualScale(
             Text(
                 "Sex-specific reference context: ${if (gender == Gender.FEMALE) "Female" else "Male"}",
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontSize = 12.sp
             )
         }
@@ -644,7 +635,7 @@ private fun BodyShapeCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(shapeColor.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(shapeColor.copy(alpha = 0.08f))
         )
     ) {
         Row(
@@ -667,24 +658,24 @@ private fun BodyShapeCard(
                 Text(
                     stringResource(R.string.txt_body_shape),
                     style = MaterialTheme.typography.labelMedium,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Text(
                     bodyShape.label,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(shapeColor)
+                    color = DetailColors.text(shapeColor)
                 )
                 Text(
                     bodyShape.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     bodyShape.riskNote,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp,
                     lineHeight = 16.sp
                 )
@@ -710,7 +701,7 @@ private fun WaistCircumferenceRiskCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -756,7 +747,7 @@ private fun WaistCircumferenceRiskCard(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(riskColor)
+                        color = DetailColors.text(riskColor)
                     )
                 }
             }
@@ -778,28 +769,28 @@ private fun WaistCircumferenceRiskCard(
                     Text(
                         "Below reference",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary),
                         fontSize = 12.sp
                     )
                     Text(
                         "<${thresholdIncreased.toInt()} cm",
                         style = MaterialTheme.typography.bodySmall,
                         fontSize = 12.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         "At or above reference",
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.tertiary),
+                        color = DetailColors.text(MaterialTheme.colorScheme.tertiary),
                         fontSize = 12.sp
                     )
                     Text(
                         "≥${thresholdIncreased.toInt()} cm",
                         style = MaterialTheme.typography.bodySmall,
                         fontSize = 12.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -807,7 +798,7 @@ private fun WaistCircumferenceRiskCard(
             Text(
                 "Selected population waist reference for ${if (gender == Gender.FEMALE) "women" else "men"}; this is screening context, not a diagnosis.",
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontSize = 12.sp
             )
         }
@@ -878,13 +869,13 @@ private fun WaistToHeightCard(
     val whtrColor = when {
         whtrAtRisk == true -> HealthColors.Danger
         whtrAtRisk == false -> HealthColors.Healthy
-        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        else -> DetailColors.Secondary
     }
 
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -921,12 +912,12 @@ private fun WaistToHeightCard(
                             String.format("%.2f", whtr),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(whtrColor)
+                            color = DetailColors.text(whtrColor)
                         )
                         Text(
                             "Height: ${String.format("%.0f", heightCm)} cm",
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
 
@@ -939,7 +930,7 @@ private fun WaistToHeightCard(
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(whtrColor)
+                            color = DetailColors.text(whtrColor)
                         )
                     }
                 }
@@ -986,13 +977,13 @@ private fun WaistToHeightCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(stringResource(R.string.txt_normal_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, color = AppColors.text(HealthColors.Healthy))
-                    Text(stringResource(R.string.txt_at_risk_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, color = AppColors.text(HealthColors.Danger))
+                    Text(stringResource(R.string.txt_normal_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, color = DetailColors.text(HealthColors.Healthy))
+                    Text(stringResource(R.string.txt_at_risk_0_5), style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, color = DetailColors.text(HealthColors.Danger))
                 }
 
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -1010,7 +1001,7 @@ private fun WaistToHeightCard(
                         Text(
                             stringResource(R.string.txt_keep_your_waist_to_less_than_h),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer),
                             lineHeight = 16.sp
                         )
                     }
@@ -1019,7 +1010,7 @@ private fun WaistToHeightCard(
                 // No height available
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f))
                     ),
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.clickable { onAddHeight() }
@@ -1046,13 +1037,13 @@ private fun WaistToHeightCard(
                             Text(
                                 stringResource(R.string.txt_tap_to_enter_height_or_add_it_),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                color = DetailColors.text(DetailColors.Secondary)
                             )
                         }
                         Icon(
                             Icons.Filled.ChevronRight,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                            tint = DetailColors.Secondary
                         )
                     }
                 }
@@ -1069,7 +1060,7 @@ private fun HealthRisksSection(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -1122,7 +1113,7 @@ private fun HealthRiskRow(risk: HealthRiskItem) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(riskColor.copy(alpha = 0.06f))
+            containerColor = DetailColors.surface(riskColor.copy(alpha = 0.06f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
@@ -1168,14 +1159,14 @@ private fun HealthRiskRow(risk: HealthRiskItem) {
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(riskColor)
+                            color = DetailColors.text(riskColor)
                         )
                     }
                     Icon(
                         if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        tint = DetailColors.Secondary
                     )
                 }
             }
@@ -1188,7 +1179,7 @@ private fun HealthRiskRow(risk: HealthRiskItem) {
                 Text(
                     risk.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     lineHeight = 18.sp,
                     modifier = Modifier.padding(top = 4.dp)
                 )
@@ -1202,7 +1193,7 @@ private fun MeasurementSummaryCard(result: WhrResult) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(
@@ -1240,7 +1231,7 @@ private fun SummaryRow(label: String, value: String) {
         Text(
             label,
             style = MaterialTheme.typography.bodySmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+            color = DetailColors.text(DetailColors.Secondary)
         )
         Text(
             value,
@@ -1254,7 +1245,7 @@ private fun SummaryRow(label: String, value: String) {
 private fun DisclaimerCard() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f))
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -1272,7 +1263,7 @@ private fun DisclaimerCard() {
             Text(
                 stringResource(R.string.txt_this_tool_is_for_informational),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f),
+                color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f)),
                 lineHeight = 16.sp,
                 fontSize = 12.sp
             )
