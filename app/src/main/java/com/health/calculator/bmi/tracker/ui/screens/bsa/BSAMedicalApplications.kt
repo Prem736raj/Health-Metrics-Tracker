@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.bsa
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -49,7 +49,7 @@ fun BSAMedicalApplicationsSection(
         // Toggle header
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
             ),
             shape = RoundedCornerShape(14.dp),
             modifier = Modifier
@@ -89,7 +89,7 @@ fun BSAMedicalApplicationsSection(
                     Text(
                         text = stringResource(R.string.txt_how_bsa_is_used_in_medical_pra),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
                 Icon(
@@ -142,7 +142,7 @@ fun BSAMedicalApplicationsSection(
 private fun CriticalDisclaimerBanner() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer)
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer)
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -163,13 +163,13 @@ private fun CriticalDisclaimerBanner() {
                     text = stringResource(R.string.txt_educational_information_only),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.ExtraBold,
-                    color = AppColors.text(MaterialTheme.colorScheme.error)
+                    color = DetailColors.text(MaterialTheme.colorScheme.error)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = stringResource(R.string.txt_the_medical_applications_descr),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer),
                     lineHeight = 18.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -203,7 +203,7 @@ private fun DrugDosageSection(bsa: Float) {
             Text(
                 text = stringResource(R.string.txt_many_medications_especially_ch),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp
             )
 
@@ -213,7 +213,7 @@ private fun DrugDosageSection(bsa: Float) {
                 text = stringResource(R.string.txt_educational_example),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = AppColors.text(HealthRed)
+                color = DetailColors.text(HealthRed)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -227,7 +227,7 @@ private fun DrugDosageSection(bsa: Float) {
 
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -237,7 +237,7 @@ private fun DrugDosageSection(bsa: Float) {
                         text = "Your BSA: ${"%.4f".format(bsa)} m²",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -292,7 +292,7 @@ private fun DrugDosageSection(bsa: Float) {
                                 style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.weight(0.8f),
                                 textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                             )
                             Text(
                                 text = "${"%.1f".format(calculatedDose)} mg",
@@ -300,7 +300,7 @@ private fun DrugDosageSection(bsa: Float) {
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.weight(0.8f),
                                 textAlign = TextAlign.End,
-                                color = MaterialTheme.colorScheme.primary
+                                color = DetailColors.text(MaterialTheme.colorScheme.primary)
                             )
                         }
                         HorizontalDivider(
@@ -328,7 +328,7 @@ private fun DrugDosageSection(bsa: Float) {
                         text = stringResource(R.string.txt_these_are_fictional_examples_f),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(HealthRed),
+                        color = DetailColors.text(HealthRed),
                         lineHeight = 15.sp
                     )
                 }
@@ -367,7 +367,7 @@ private fun DrugDosageSection(bsa: Float) {
                     Text(
                         text = reason,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                         lineHeight = 16.sp
                     )
                 }
@@ -401,7 +401,7 @@ private fun BurnAssessmentSection(bsa: Float) {
             Text(
                 text = "Medical professionals use the \"Rule of Nines\" to quickly estimate the percentage of body surface area affected by burns. This helps determine treatment urgency and fluid resuscitation needs.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp
             )
 
@@ -417,7 +417,7 @@ private fun BurnAssessmentSection(bsa: Float) {
                 text = stringResource(R.string.txt_rule_of_nines_body_region_perc),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = AppColors.text(HealthOrange)
+                color = DetailColors.text(HealthOrange)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -435,7 +435,7 @@ private fun BurnAssessmentSection(bsa: Float) {
 
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -492,14 +492,14 @@ private fun BurnAssessmentSection(bsa: Float) {
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.weight(0.5f),
                                 textAlign = TextAlign.Center,
-                                color = AppColors.text(HealthOrange)
+                                color = DetailColors.text(HealthOrange)
                             )
                             Text(
                                 text = "${"%.4f".format(area)}",
                                 style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.weight(0.6f),
                                 textAlign = TextAlign.End,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                             )
                         }
                         HorizontalDivider(
@@ -525,7 +525,7 @@ private fun BurnAssessmentSection(bsa: Float) {
                             fontWeight = FontWeight.ExtraBold,
                             modifier = Modifier.weight(0.5f),
                             textAlign = TextAlign.Center,
-                            color = AppColors.text(HealthOrange)
+                            color = DetailColors.text(HealthOrange)
                         )
                         Text(
                             text = "${"%.4f".format(bsa)}",
@@ -557,7 +557,7 @@ private fun BurnAssessmentSection(bsa: Float) {
             Text(
                 text = stringResource(R.string.txt_the_rule_of_nines_is_modified_),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 16.sp
             )
         }
@@ -569,7 +569,7 @@ private fun RuleOfNinesDiagram(bsa: Float) {
     val orangeColor = HealthOrange
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
     val onSurface = MaterialTheme.colorScheme.onSurface
-    val darkAxis = AppColors.isDark
+    val darkAxis = DetailColors.isDark
     val density = LocalDensity.current
     val txt9 = stringResource(R.string.txt_9)
     val txt18 = stringResource(R.string.txt_18)
@@ -601,13 +601,13 @@ private fun RuleOfNinesDiagram(bsa: Float) {
                 val h = size.height
                 val strokeW = 2.dp.toPx()
                 val textPaint = android.graphics.Paint().apply {
-                    color = (if (darkAxis) onSurface.toArgb() else onSurface.hashCode())
+                    color = onSurface.toArgb()
                     textSize = with(density) { 12.sp.toPx() }
                     textAlign = android.graphics.Paint.Align.CENTER
                     isFakeBoldText = true
                 }
                 val percentPaint = android.graphics.Paint().apply {
-                    color = orangeColor.hashCode()
+                    color = orangeColor.toArgb()
                     textSize = with(density) { 12.sp.toPx() }
                     textAlign = android.graphics.Paint.Align.CENTER
                     isFakeBoldText = true
@@ -745,12 +745,12 @@ private fun BurnSeverityItem(severity: String, criteria: String, color: Color) {
             text = "$severity: ",
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold,
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
         Text(
             text = criteria,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
         )
     }
 }
@@ -782,7 +782,7 @@ private fun RenalFunctionSection(bsa: Float) {
             Text(
                 text = stringResource(R.string.txt_glomerular_filtration_rate_gfr),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp
             )
 
@@ -791,7 +791,7 @@ private fun RenalFunctionSection(bsa: Float) {
             // Standard BSA comparison
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthTeal.copy(alpha = 0.06f))
+                    containerColor = DetailColors.surface(HealthTeal.copy(alpha = 0.06f))
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -804,7 +804,7 @@ private fun RenalFunctionSection(bsa: Float) {
                         text = stringResource(R.string.txt_standard_reference_bsa),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(HealthTeal)
+                        color = DetailColors.text(HealthTeal)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
 
@@ -814,17 +814,17 @@ private fun RenalFunctionSection(bsa: Float) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(stringResource(R.string.txt_standard), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(stringResource(R.string.txt_1_73_m), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = AppColors.text(HealthTeal))
+                            Text(stringResource(R.string.txt_standard), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
+                            Text(stringResource(R.string.txt_1_73_m), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = DetailColors.text(HealthTeal))
                         }
-                        Text(stringResource(R.string.txt_vs), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.txt_vs), style = MaterialTheme.typography.bodySmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(stringResource(R.string.txt_yours), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(stringResource(R.string.txt_yours), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                             Text(
                                 "${"%.4f".format(bsa)} m²",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.primary
+                                color = DetailColors.text(MaterialTheme.colorScheme.primary)
                             )
                         }
                     }
@@ -836,7 +836,7 @@ private fun RenalFunctionSection(bsa: Float) {
                         text = "Your BSA is ${"%.1f".format((ratio - 1f) * 100)}% ${if (ratio > 1) "above" else "below"} the standard reference",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -866,7 +866,7 @@ private fun RenalFunctionSection(bsa: Float) {
                     Text(
                         text = "For your BSA: factor = ${"%.4f".format(standardBSA / bsa)}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary)
                     )
                 }
             }
@@ -915,7 +915,7 @@ private fun GfrRangeItem(age: String, range: String, color: Color) {
             text = range,
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.SemiBold,
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
     }
 }
@@ -945,7 +945,7 @@ private fun CardiacIndexSection(bsa: Float) {
             Text(
                 text = stringResource(R.string.txt_cardiac_index_ci_is_the_cardia),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp
             )
 
@@ -971,7 +971,7 @@ private fun CardiacIndexSection(bsa: Float) {
                     Text(
                         text = "CI = CO (L/min) ÷ ${"%.4f".format(bsa)} (m²)",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -992,7 +992,7 @@ private fun CardiacIndexSection(bsa: Float) {
 
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthRed.copy(alpha = 0.06f))
+                    containerColor = DetailColors.surface(HealthRed.copy(alpha = 0.06f))
                 ),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -1003,22 +1003,22 @@ private fun CardiacIndexSection(bsa: Float) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(stringResource(R.string.txt_co), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.txt_co), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                         Text(stringResource(R.string.txt_5_0_l_min), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
                     }
-                    Text(stringResource(R.string.txt_text_placeholder_38), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.txt_text_placeholder_38), style = MaterialTheme.typography.titleMedium, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(stringResource(R.string.txt_bsa), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.txt_bsa), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                         Text("${"%.2f".format(bsa)} m²", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
                     }
-                    Text(stringResource(R.string.txt_text_placeholder_26), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.txt_text_placeholder_26), style = MaterialTheme.typography.titleMedium, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(stringResource(R.string.txt_ci), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.txt_ci), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                         Text(
                             "${"%.1f".format(ci)} L/min/m²",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.ExtraBold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = DetailColors.text(MaterialTheme.colorScheme.primary)
                         )
                     }
                 }
@@ -1044,7 +1044,7 @@ private fun CardiacIndexSection(bsa: Float) {
             Text(
                 text = stringResource(R.string.txt_cardiac_index_is_measured_usin),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 16.sp
             )
         }
@@ -1073,7 +1073,7 @@ private fun CIRangeItem(label: String, range: String, color: Color, description:
                     text = "$label: ",
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(color)
+                    color = DetailColors.text(color)
                 )
                 Text(
                     text = range,
@@ -1084,7 +1084,7 @@ private fun CIRangeItem(label: String, range: String, color: Color, description:
             Text(
                 text = description,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
             )
         }
     }
@@ -1107,7 +1107,7 @@ private fun MedicalApplicationCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(accentColor.copy(alpha = 0.04f))
+            containerColor = DetailColors.surface(accentColor.copy(alpha = 0.04f))
         ),
         shape = RoundedCornerShape(14.dp),
         modifier = Modifier
@@ -1147,7 +1147,7 @@ private fun MedicalApplicationCard(
                                 text = number,
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = AppColors.text(accentColor),
+                                color = DetailColors.text(accentColor),
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp)
                             )
                         }
@@ -1161,7 +1161,7 @@ private fun MedicalApplicationCard(
                     Text(
                         text = subtitle,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
                 Icon(
@@ -1196,7 +1196,7 @@ private fun MedicalApplicationCard(
 private fun FinalDisclaimerCard() {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f))
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -1217,13 +1217,13 @@ private fun FinalDisclaimerCard() {
                     text = stringResource(R.string.txt_important_reminder),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = AppColors.text(MaterialTheme.colorScheme.error)
+                    color = DetailColors.text(MaterialTheme.colorScheme.error)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = stringResource(R.string.txt_all_medical_applications_shown),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer),
                     lineHeight = 17.sp
                 )
             }
