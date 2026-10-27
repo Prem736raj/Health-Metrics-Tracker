@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -132,7 +132,7 @@ fun MetabolicSyndromeResultScreen(
 
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
             ),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
@@ -149,7 +149,7 @@ fun MetabolicSyndromeResultScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(stringResource(R.string.txt_detailed_analysis_recommendati), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                        Text("Tap to ${if (showRecommendations) "collapse" else "view health insights"}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Tap to ${if (showRecommendations) "collapse" else "view health insights"}", style = MaterialTheme.typography.bodySmall, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
                     }
                 }
                 Icon(if (showRecommendations) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
@@ -180,7 +180,7 @@ fun MetabolicSyndromeResultScreen(
 
         // === Disclaimer ===
         Card(
-            colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))),
+            colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))),
             shape = RoundedCornerShape(12.dp)
         ) {
             Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
@@ -189,7 +189,7 @@ fun MetabolicSyndromeResultScreen(
                 Text(
                     text = stringResource(R.string.txt_this_assessment_is_for_educati),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
         }
@@ -204,60 +204,27 @@ private fun RiskGauge(
     animationProgress: Float,
     riskColor: Color
 ) {
-    val trackColor = MaterialTheme.colorScheme.outlineVariant
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.size(220.dp)) {
-        Canvas(modifier = Modifier.size(200.dp)) {
-            val strokeWidth = 20.dp.toPx()
-            val arcSize = Size(size.width - strokeWidth, size.height - strokeWidth)
-            val topLeft = Offset(strokeWidth / 2, strokeWidth / 2)
-
-            drawArc(
-                color = trackColor.copy(alpha = 0.45f),
-                startAngle = 135f, sweepAngle = 270f, useCenter = false,
-                topLeft = topLeft, size = arcSize,
-                style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
-            )
-
-            val segmentAngle = 270f / 5f
-            val segColors = listOf(
-                HealthColors.Healthy,
-                HealthColors.Good,
-                HealthColors.Warning,
-                HealthColors.Caution,
-                HealthColors.Danger
-            )
-            for (i in 0 until 5) {
-                drawArc(
-                    color = segColors[i].copy(alpha = 0.15f),
-                    startAngle = 135f + (i * segmentAngle),
-                    sweepAngle = segmentAngle - 2f, useCenter = false,
-                    topLeft = topLeft, size = arcSize,
-                    style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
-                )
+    val trackColor = DetailColors.Outline
+    Surface(color = DetailColors.SurfaceAlt, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("$criteriaMet/5", style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.ExtraBold, color = DetailColors.Text)
+                Text(stringResource(R.string.txt_criteria_met_1), style = MaterialTheme.typography.bodySmall,
+                    color = DetailColors.Secondary, modifier = Modifier.weight(1f).padding(bottom = 6.dp))
             }
-
-            drawArc(
-                color = riskColor,
-                startAngle = 135f,
-                sweepAngle = animationProgress * 270f,
-                useCenter = false,
-                topLeft = topLeft, size = arcSize,
-                style = Stroke(width = strokeWidth + 4.dp.toPx(), cap = StrokeCap.Round)
-            )
-        }
-
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "$criteriaMet/5",
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.ExtraBold,
-                color = AppColors.text(riskColor)
-            )
-            Text(
-                text = stringResource(R.string.txt_criteria_met_1),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            // Five nodes display the existing criteria count; all criterion details remain below.
+            Canvas(Modifier.fillMaxWidth().height(36.dp)) {
+                val y = size.height / 2
+                drawLine(trackColor, Offset(size.width * .08f, y), Offset(size.width * .92f, y), 2.dp.toPx())
+                drawLine(riskColor, Offset(size.width * .08f, y),
+                    Offset(size.width * (.08f + .84f * animationProgress), y), 3.dp.toPx())
+                repeat(5) { index ->
+                    val center = Offset(size.width * (.08f + index * .21f), y)
+                    drawCircle(trackColor, 9.dp.toPx(), center, style = Stroke(2.dp.toPx()))
+                    if (index < criteriaMet) drawCircle(riskColor, 6.dp.toPx(), center)
+                }
+            }
         }
     }
 }
@@ -272,7 +239,7 @@ private fun ScreeningSummaryCard(result: MetabolicSyndromeResult, animationStart
         enter = scaleIn(tween(500, delayMillis = 600)) + fadeIn(tween(500, delayMillis = 600))
     ) {
         Card(
-            colors = CardDefaults.cardColors(containerColor = AppColors.surface(screeningColor.copy(alpha = 0.1f))),
+            colors = CardDefaults.cardColors(containerColor = DetailColors.surface(screeningColor.copy(alpha = 0.1f))),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -289,12 +256,12 @@ private fun ScreeningSummaryCard(result: MetabolicSyndromeResult, animationStart
                         text = "Screening reference: ${result.criteriaMet} of 5 markers",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(screeningColor)
+                        color = DetailColors.text(screeningColor)
                     )
                     Text(
                         text = "Selected ${result.selectedEthnicity.displayName} waist reference; not a diagnosis",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
@@ -314,7 +281,7 @@ private fun CriterionCard(criterion: MetabolicCriterion) {
     )
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(statusColor.copy(alpha = bgAlpha))),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(statusColor.copy(alpha = bgAlpha))),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -335,20 +302,20 @@ private fun CriterionCard(criterion: MetabolicCriterion) {
                     if (criterion.isOnMedication) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Surface(color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f), shape = RoundedCornerShape(4.dp)) {
-                            Text(stringResource(R.string.txt_medicated), style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.tertiary), modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
+                            Text(stringResource(R.string.txt_medicated), style = MaterialTheme.typography.labelSmall, color = DetailColors.text(MaterialTheme.colorScheme.tertiary), modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(2.dp))
-                Text("Your value: ${criterion.userValue}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Threshold: ${criterion.threshold}", style = MaterialTheme.typography.bodySmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)))
+                Text("Your value: ${criterion.userValue}", style = MaterialTheme.typography.bodyMedium, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant))
+                Text("Threshold: ${criterion.threshold}", style = MaterialTheme.typography.bodySmall, color = DetailColors.secondaryText(DetailColors.Secondary))
             }
             Surface(color = statusColor.copy(alpha = 0.15f), shape = RoundedCornerShape(8.dp)) {
                 Text(
                     text = if (criterion.isMet) "Marker met" else "Marker not met",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(statusColor),
+                    color = DetailColors.text(statusColor),
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                 )
             }
@@ -367,7 +334,7 @@ private fun RiskMessageCard(riskLevel: MetabolicRiskLevel, criteriaMet: Int) {
     }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant)),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -375,10 +342,10 @@ private fun RiskMessageCard(riskLevel: MetabolicRiskLevel, criteriaMet: Int) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(riskLevel.label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = AppColors.text(color))
+                Text(riskLevel.label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = DetailColors.text(color))
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 20.sp)
+            Text(message, style = MaterialTheme.typography.bodyMedium, color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant), lineHeight = 20.sp)
         }
     }
 }

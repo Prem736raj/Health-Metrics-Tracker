@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -77,7 +77,7 @@ fun CrossLinksSection(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
         ),
         shape = RoundedCornerShape(14.dp),
         modifier = modifier
@@ -118,7 +118,7 @@ fun CrossLinksSection(
                 Text(
                     text = stringResource(R.string.txt_quick_links_to_update_your_mea),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
 
@@ -164,7 +164,7 @@ fun CrossLinksSection(
                                     Text(
                                         text = link.description,
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                                         lineHeight = 14.sp
                                     )
                                 }

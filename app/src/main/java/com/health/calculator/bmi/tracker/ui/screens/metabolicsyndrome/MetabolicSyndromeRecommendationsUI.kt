@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.metabolicsyndrome
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -75,7 +75,7 @@ fun DetailedRecommendationsSection(
             text = stringResource(R.string.txt_criterion_by_criterion_analysi),
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -111,7 +111,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(riskColor.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(riskColor.copy(alpha = 0.08f))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -135,7 +135,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                     text = stringResource(R.string.txt_cardiovascular_risk_estimation),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(riskColor)
+                    color = DetailColors.text(riskColor)
                 )
             }
 
@@ -182,13 +182,13 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                         text = "${riskSummary.riskScore}",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.ExtraBold,
-                        color = AppColors.text(riskColor)
+                        color = DetailColors.text(riskColor)
                     )
                     Text(
                         text = riskSummary.riskLevel,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = AppColors.text(riskColor.copy(alpha = 0.8f))
+                        color = DetailColors.text(riskColor.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -200,7 +200,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -209,7 +209,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                 text = riskSummary.overallMessage,
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp
             )
 
@@ -227,7 +227,7 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                     text = stringResource(R.string.txt_recommended_actions),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(riskColor),
+                    color = DetailColors.text(riskColor),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -243,14 +243,14 @@ private fun CardiovascularRiskCard(riskSummary: CardiovascularRiskSummary) {
                         Text(
                             text = "•",
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(riskColor),
+                            color = DetailColors.text(riskColor),
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(end = 8.dp, top = 1.dp)
                         )
                         Text(
                             text = item,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                             lineHeight = 18.sp
                         )
                     }
@@ -279,7 +279,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
     }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(bgColor)),
         shape = RoundedCornerShape(14.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -320,7 +320,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         Text(
                             text = if (recommendation.isAbnormal) "Needs Attention" else "Healthy Range",
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(if (recommendation.isAbnormal) HealthRed else HealthGreen),
+                            color = DetailColors.text(if (recommendation.isAbnormal) HealthRed else HealthGreen),
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -335,7 +335,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         text = if (recommendation.isAbnormal) "Abnormal" else "Normal",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(borderColor),
+                        color = DetailColors.text(borderColor),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
@@ -360,7 +360,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         recommendation.normalMessage
                     },
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                     maxLines = 2,
                     lineHeight = 16.sp
                 )
@@ -386,13 +386,13 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         text = stringResource(R.string.txt_what_this_means_1),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = recommendation.healthMeaning,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                         lineHeight = 18.sp
                     )
 
@@ -404,7 +404,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                             text = stringResource(R.string.txt_associated_health_risks),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(HealthRed)
+                            color = DetailColors.text(HealthRed)
                         )
                         Spacer(modifier = Modifier.height(6.dp))
 
@@ -424,7 +424,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                                 Text(
                                     text = risk,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                                     lineHeight = 17.sp
                                 )
                             }
@@ -442,7 +442,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                                 "Tips to Maintain",
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(if (recommendation.isAbnormal) HealthOrange else HealthGreen)
+                            color = DetailColors.text(if (recommendation.isAbnormal) HealthOrange else HealthGreen)
                         )
                         Spacer(modifier = Modifier.height(6.dp))
 
@@ -454,7 +454,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                                 Text(
                                     text = tip,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                                     lineHeight = 18.sp
                                 )
                             }
@@ -466,7 +466,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                         Spacer(modifier = Modifier.height(10.dp))
                         Card(
                             colors = CardDefaults.cardColors(
-                                containerColor = AppColors.surface(HealthGreen.copy(alpha = 0.1f))
+                                containerColor = DetailColors.surface(HealthGreen.copy(alpha = 0.1f))
                             ),
                             shape = RoundedCornerShape(10.dp)
                         ) {
@@ -485,7 +485,7 @@ private fun CriterionRecommendationCard(recommendation: CriterionRecommendation)
                                     text = recommendation.normalMessage,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Medium,
-                                    color = AppColors.text(HealthGreen),
+                                    color = DetailColors.text(HealthGreen),
                                     lineHeight = 18.sp
                                 )
                             }
@@ -514,7 +514,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(bannerColor.copy(alpha = 0.1f * pulseAlpha))
+            containerColor = DetailColors.surface(bannerColor.copy(alpha = 0.1f * pulseAlpha))
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -535,7 +535,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
                     text = stringResource(R.string.txt_medical_consultation_recommend),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.ExtraBold,
-                    color = AppColors.text(bannerColor)
+                    color = DetailColors.text(bannerColor)
                 )
             }
 
@@ -549,7 +549,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
                 },
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp
             )
 
@@ -573,7 +573,7 @@ private fun MedicalConsultationBanner(criteriaMet: Int) {
                     Text(
                         text = stringResource(R.string.txt_this_is_not_a_diagnosis_only_a),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(bannerColor.copy(alpha = 0.8f)),
+                        color = DetailColors.text(bannerColor.copy(alpha = 0.8f)),
                         lineHeight = 14.sp
                     )
                 }
