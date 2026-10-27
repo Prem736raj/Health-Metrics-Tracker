@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.idealweight
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
+import com.health.calculator.bmi.tracker.ui.screens.ibw.BranchRangeHeader
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -35,6 +37,10 @@ fun IdealWeightInputSection(
     ageShakeController: ShakeController
 ) {
     Column {
+        BranchRangeHeader(
+            title = stringResource(R.string.txt_ideal_body_weight),
+            subtitle = stringResource(R.string.txt_personal_details)
+        )
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -131,7 +137,7 @@ fun IdealWeightInputSection(
                 Text(
                     text = stringResource(R.string.txt_gender),
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -191,7 +197,7 @@ private fun UnitToggleButton(
         Text(
             text = if (isFirstOption) firstLabel else secondLabel,
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = DetailColors.text(MaterialTheme.colorScheme.primary),
             fontWeight = FontWeight.Bold
         )
         Icon(
