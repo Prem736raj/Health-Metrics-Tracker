@@ -1,7 +1,9 @@
 // ui/screens/bloodpressure/BpReminderScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import android.Manifest
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
@@ -39,7 +41,7 @@ import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 fun BpReminderScreen(
     onNavigateBack: () -> Unit,
     viewModel: BpReminderViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.BLOOD_PRESSURE) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
@@ -66,7 +68,7 @@ fun BpReminderScreen(
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface)
             )
         }
     ) { padding ->
@@ -81,7 +83,7 @@ fun BpReminderScreen(
             // Recommendation banner
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -94,7 +96,7 @@ fun BpReminderScreen(
                     Text(
                         stringResource(R.string.txt_doctors_recommend_measuring_bp),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer)
                     )
                 }
             }
@@ -175,7 +177,7 @@ fun BpReminderScreen(
                     Text(
                         stringResource(R.string.txt_set_a_reminder_for_your_next_d),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     OutlinedButton(
                         onClick = {
@@ -295,7 +297,7 @@ private fun ReminderCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                    Text(description, style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                    Text(description, style = MaterialTheme.typography.bodySmall, color = DetailColors.text(DetailColors.Secondary))
                 }
                 Switch(
                     checked = isEnabled,
@@ -330,7 +332,7 @@ private fun ReminderCard(
                             Icon(Icons.Outlined.Schedule, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
                             Text(timeFormatted, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                         }
-                        Icon(Icons.Outlined.Edit, contentDescription = "Change time", tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f), modifier = Modifier.size(18.dp))
+                        Icon(Icons.Outlined.Edit, contentDescription = "Change time", tint = DetailColors.Secondary, modifier = Modifier.size(18.dp))
                     }
                 }
             }

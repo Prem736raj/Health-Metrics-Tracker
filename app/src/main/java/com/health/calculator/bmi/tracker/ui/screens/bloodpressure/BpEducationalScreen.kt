@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.bloodpressure
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -71,7 +73,7 @@ private fun bpEducationIcon(legacyLabel: String): ImageVector = when {
 @Composable
 fun BpEducationalScreen(
     onNavigateBack: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.BLOOD_PRESSURE) {
     val haptic = LocalHapticFeedback.current
     val sections = remember { BpEducationalContent.getAllSections() }
     val expandedSections = remember { mutableStateMapOf<String, Boolean>() }
@@ -85,7 +87,7 @@ fun BpEducationalScreen(
                         Text(
                             stringResource(R.string.txt_learn_about_blood_pressure_1),
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 },
@@ -98,7 +100,7 @@ fun BpEducationalScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -114,7 +116,7 @@ fun BpEducationalScreen(
             item {
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -146,7 +148,7 @@ fun BpEducationalScreen(
                             Text(
                                 stringResource(R.string.txt_tap_any_section_below_to_expan),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                                color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer)
                             )
                         }
                     }
@@ -229,7 +231,7 @@ private fun EducationalSectionCard(
                     Text(
                         section.subtitle,
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
 
@@ -244,7 +246,7 @@ private fun EducationalSectionCard(
                     modifier = Modifier
                         .size(24.dp)
                         .graphicsLayer { rotationZ = rotation },
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -304,7 +306,7 @@ private fun ParagraphRenderer(item: BpEducationalItem.Paragraph) {
     Text(
         item.text,
         style = MaterialTheme.typography.bodyMedium,
-        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f))
+        color = DetailColors.text(DetailColors.Secondary)
     )
 }
 
@@ -314,7 +316,7 @@ private fun HeadingRenderer(item: BpEducationalItem.Heading) {
         item.text,
         style = MaterialTheme.typography.titleSmall,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = DetailColors.text(MaterialTheme.colorScheme.onSurface),
         modifier = Modifier.padding(top = 4.dp)
     )
 }
@@ -348,7 +350,7 @@ private fun BulletPointRenderer(item: BpEducationalItem.BulletPoint) {
             Text(
                 item.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -376,7 +378,7 @@ private fun NumberedStepRenderer(item: BpEducationalItem.NumberedStep) {
                 "${item.number}",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.ExtraBold,
-                color = MaterialTheme.colorScheme.primary
+                color = DetailColors.text(MaterialTheme.colorScheme.primary)
             )
         }
         Column(modifier = Modifier.weight(1f)) {
@@ -400,7 +402,7 @@ private fun NumberedStepRenderer(item: BpEducationalItem.NumberedStep) {
             Text(
                 item.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -438,7 +440,7 @@ private fun HighlightBoxRenderer(item: BpEducationalItem.HighlightBox) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(bgColor)),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(bgColor)),
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, borderColor)
     ) {
@@ -460,13 +462,13 @@ private fun HighlightBoxRenderer(item: BpEducationalItem.HighlightBox) {
                     item.title,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(iconTint)
+                    color = DetailColors.text(iconTint)
                 )
             }
             Text(
                 item.text,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -486,7 +488,7 @@ private fun ComparisonRowRenderer(item: BpEducationalItem.ComparisonRow) {
         )
         Card(
             modifier = Modifier.weight(0.375f),
-            colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))),
+            colors = CardDefaults.cardColors(containerColor = DetailColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))),
             shape = RoundedCornerShape(8.dp)
         ) {
             Row(
@@ -504,13 +506,13 @@ private fun ComparisonRowRenderer(item: BpEducationalItem.ComparisonRow) {
                 Text(
                     item.include,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Healthy)
+                    color = DetailColors.text(HealthColors.Healthy)
                 )
             }
         }
         Card(
             modifier = Modifier.weight(0.375f),
-            colors = CardDefaults.cardColors(containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.08f))),
+            colors = CardDefaults.cardColors(containerColor = DetailColors.surface(HealthColors.Danger.copy(alpha = 0.08f))),
             shape = RoundedCornerShape(8.dp)
         ) {
             Row(
@@ -528,7 +530,7 @@ private fun ComparisonRowRenderer(item: BpEducationalItem.ComparisonRow) {
                 Text(
                     item.avoid,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Danger)
+                    color = DetailColors.text(HealthColors.Danger)
                 )
             }
         }
@@ -552,7 +554,7 @@ private fun MythBusterRenderer(item: BpEducationalItem.MythBuster) {
             // Myth
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.08f))
+                    containerColor = DetailColors.surface(HealthColors.Danger.copy(alpha = 0.08f))
                 ),
                 shape = RoundedCornerShape(10.dp)
             ) {
@@ -572,14 +574,14 @@ private fun MythBusterRenderer(item: BpEducationalItem.MythBuster) {
                             stringResource(R.string.txt_myth),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
-                            color = AppColors.text(HealthColors.Danger)
+                            color = DetailColors.text(HealthColors.Danger)
                         )
                         Text(
                             item.myth,
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             fontStyle = FontStyle.Italic,
-                            color = AppColors.text(HealthColors.Danger.copy(alpha = 0.8f))
+                            color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.8f))
                         )
                     }
                 }
@@ -588,7 +590,7 @@ private fun MythBusterRenderer(item: BpEducationalItem.MythBuster) {
             // Fact
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))
+                    containerColor = DetailColors.surface(HealthColors.Healthy.copy(alpha = 0.08f))
                 ),
                 shape = RoundedCornerShape(10.dp)
             ) {
@@ -608,12 +610,12 @@ private fun MythBusterRenderer(item: BpEducationalItem.MythBuster) {
                             stringResource(R.string.txt_fact),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
-                            color = AppColors.text(HealthColors.Healthy)
+                            color = DetailColors.text(HealthColors.Healthy)
                         )
                         Text(
                             item.fact,
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -626,7 +628,7 @@ private fun MythBusterRenderer(item: BpEducationalItem.MythBuster) {
 private fun AnalogyRenderer(item: BpEducationalItem.Analogy) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthColors.Warning.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(HealthColors.Warning.copy(alpha = 0.08f))
         ),
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, HealthColors.Warning.copy(alpha = 0.35f))
@@ -647,13 +649,13 @@ private fun AnalogyRenderer(item: BpEducationalItem.Analogy) {
                     stringResource(R.string.txt_think_of_it_this_way),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(HealthColors.Warning)
+                    color = DetailColors.text(HealthColors.Warning)
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     item.text,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontStyle = FontStyle.Italic
                 )
             }
@@ -674,7 +676,7 @@ private fun DividerRenderer(item: BpEducationalItem.DividerItem) {
                 "  ${item.label}  ",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
             HorizontalDivider(modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
         }
@@ -693,7 +695,7 @@ private fun EducationalDisclaimer() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -705,7 +707,7 @@ private fun EducationalDisclaimer() {
             Icon(
                 Icons.Outlined.Info,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                tint = DetailColors.Secondary,
                 modifier = Modifier.size(20.dp).padding(top = 2.dp)
             )
             Column {
@@ -713,19 +715,19 @@ private fun EducationalDisclaimer() {
                     stringResource(R.string.txt_medical_disclaimer),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.txt_this_educational_content_is_pr),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.txt_the_information_presented_is_b),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
