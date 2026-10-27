@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -265,7 +265,7 @@ private fun SavedToHistoryBanner() {
                 Icon(
                     imageVector = Icons.Filled.BookmarkAdded,
                     contentDescription = null,
-                    tint = HealthColors.Healthy,
+                    tint = if (AppColors.active) AppColors.Accent else HealthColors.Healthy,
                     modifier = Modifier.size(14.dp)
                 )
             }
@@ -273,15 +273,15 @@ private fun SavedToHistoryBanner() {
             Column {
                 Text(
                     text = stringResource(R.string.txt_saved_to_history),
-                    style = MaterialTheme.typography.labelMedium.copy(
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    color = HealthColors.Healthy
+                    color = AppColors.text(HealthColors.Healthy)
                 )
                 Text(
                     text = stringResource(R.string.txt_view_all_calculations_in_the_h),
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
         }
@@ -386,9 +386,9 @@ private fun ActionButtonsSection(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.txt_bmi_does_not_directly_measure_),
-                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
-                lineHeight = 16.sp
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+                lineHeight = 20.sp
             )
         }
     }
@@ -406,7 +406,8 @@ private fun BmiNumberCard(
         modifier = Modifier
             .fillMaxWidth()
             .scale(scale),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(topStart = 4.dp, topEnd = 24.dp, bottomEnd = 24.dp, bottomStart = 4.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, AppColors.Outline),
         colors = CardDefaults.cardColors(
             containerColor = AppColors.surface(categoryColor.copy(alpha = 0.06f))
         ),
@@ -415,9 +416,11 @@ private fun BmiNumberCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(28.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(24.dp),
+            horizontalAlignment = Alignment.Start
         ) {
+            androidx.compose.material3.HorizontalDivider(color = AppColors.Accent, thickness = 3.dp)
+            Spacer(modifier = Modifier.height(18.dp))
             Icon(
                 imageVector = if (result.category == BmiCategory.NORMAL) {
                     Icons.Outlined.CheckCircle
@@ -425,7 +428,7 @@ private fun BmiNumberCard(
                     Icons.Outlined.Warning
                 },
                 contentDescription = null,
-                tint = categoryColor,
+                tint = AppColors.icon(categoryColor),
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -439,15 +442,16 @@ private fun BmiNumberCard(
                 text = String.format("%.1f", result.bmiValue),
                 style = MaterialTheme.typography.displayLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 64.sp,
-                    letterSpacing = (-2).sp
+                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                    fontSize = 60.sp,
+                    letterSpacing = (-1).sp
                 ),
                 color = AppColors.text(categoryColor)
             )
             Text(
                 text = stringResource(R.string.txt_kg_m_1),
                 style = MaterialTheme.typography.bodyMedium,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
             )
             Spacer(modifier = Modifier.height(12.dp))
             Surface(
@@ -461,7 +465,7 @@ private fun BmiNumberCard(
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     ),
-                    color = AppColors.text(categoryColor),
+                    color = AppColors.Text,
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
                 )
             }
@@ -502,7 +506,7 @@ private fun HealthDetailsCard(
             Spacer(modifier = Modifier.height(16.dp))
 
             DetailRow(
-                icon = { Icon(Icons.Filled.Warning, null, tint = categoryColor, modifier = Modifier.size(18.dp)) },
+                icon = { Icon(Icons.Filled.Warning, null, tint = AppColors.icon(categoryColor), modifier = Modifier.size(18.dp)) },
                 label = "Reference context",
                 value = result.category.riskLevel,
                 valueColor = categoryColor
@@ -510,8 +514,8 @@ private fun HealthDetailsCard(
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = result.category.riskDescription,
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp,
                 modifier = Modifier.padding(start = 30.dp)
             )
@@ -525,7 +529,7 @@ private fun HealthDetailsCard(
             val unitLabel = result.displayWeightUnit.displayName
 
             DetailRow(
-                icon = { Icon(Icons.Outlined.MonitorWeight, null, tint = HealthColors.Healthy, modifier = Modifier.size(18.dp)) },
+                icon = { Icon(Icons.Outlined.MonitorWeight, null, tint = if (AppColors.active) AppColors.Accent else HealthColors.Healthy, modifier = Modifier.size(18.dp)) },
                 label = "Healthy Weight Range",
                 value = "$minDisplay – $maxDisplay $unitLabel",
                 valueColor = HealthColors.Healthy
@@ -533,8 +537,8 @@ private fun HealthDetailsCard(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "For your height of ${result.inputHeightCm.toCleanDisplay()} cm",
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                 modifier = Modifier.padding(start = 30.dp)
             )
 
@@ -551,8 +555,8 @@ private fun HealthDetailsCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "${result.inputGender.displayName} • Age ${result.inputAge}",
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                 modifier = Modifier.padding(start = 30.dp)
             )
         }
@@ -579,12 +583,12 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                         .border(1.dp, HealthColors.Healthy.copy(alpha = 0.2f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Filled.Check, null, tint = HealthColors.Healthy, modifier = Modifier.size(24.dp))
+                    Icon(Icons.Filled.Check, null, tint = if (AppColors.active) AppColors.Accent else HealthColors.Healthy, modifier = Modifier.size(24.dp))
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(stringResource(R.string.txt_great_job), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = HealthColors.Healthy)
-                    Text(stringResource(R.string.txt_your_bmi_is_in_the_healthy_nor), style = MaterialTheme.typography.bodySmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)), lineHeight = 18.sp)
+                    Text(stringResource(R.string.txt_great_job), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = AppColors.text(HealthColors.Healthy))
+                    Text(stringResource(R.string.txt_your_bmi_is_in_the_healthy_nor), style = MaterialTheme.typography.bodyMedium, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant), lineHeight = 18.sp)
                 }
             }
         }
@@ -614,13 +618,13 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     Spacer(modifier = Modifier.width(14.dp))
                     Column {
                         Text(stringResource(R.string.txt_to_reach_a_healthy_bmi), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = MaterialTheme.colorScheme.onSurface)
-                        Text(stringResource(R.string.txt_based_on_who_normal_range_18_5), style = MaterialTheme.typography.bodySmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)))
+                        Text(stringResource(R.string.txt_based_on_who_normal_range_18_5), style = MaterialTheme.typography.bodyMedium, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant))
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Column {
-                        Text("You need to $adviceVerb", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("You need to $adviceVerb", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text("~$diffDisplay", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold), color = AppColors.text(adviceColor))
                             Spacer(modifier = Modifier.width(4.dp))
@@ -628,8 +632,8 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                         }
                     }
                     Column(horizontalAlignment = Alignment.End) {
-                        Text(stringResource(R.string.txt_target_weight), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text("~$targetDisplay $unitLabel", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = HealthColors.Healthy)
+                        Text(stringResource(R.string.txt_target_weight), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("~$targetDisplay $unitLabel", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = AppColors.text(HealthColors.Healthy))
                     }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
@@ -637,7 +641,7 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     Icon(
                         imageVector = Icons.Outlined.MedicalServices,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
                             .size(16.dp)
                             .padding(top = 2.dp)
@@ -645,8 +649,8 @@ private fun WeightAdviceCard(result: BmiResult, categoryColor: Color) {
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         "Please consult a healthcare professional before starting any weight ${if (isGain) "gain" else "loss"} program. Gradual changes are safest.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                         lineHeight = 18.sp
                     )
                 }
@@ -670,13 +674,13 @@ private fun DetailRow(
         Column {
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                color = valueColor
+                color = AppColors.text(valueColor)
             )
         }
     }

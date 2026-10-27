@@ -1,6 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -206,7 +207,7 @@ private fun GoalSetterView(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.txt_set_a_goal_that_feels_right_fo),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
@@ -259,7 +260,7 @@ private fun GoalSetterView(
                     text = String.format("%.1f", targetBMI),
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    color = getBMIColor(targetBMI)
+                    color = AppColors.text(getBMIColor(targetBMI))
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -273,7 +274,7 @@ private fun GoalSetterView(
             // Suggested default note
             Text(
                 text = "Suggested: ${BMIGoalData.NORMAL_BMI_MID} (middle of normal range)",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -298,9 +299,9 @@ private fun GoalSetterView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(stringResource(R.string.txt_16_0), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(stringResource(R.string.txt_normal_18_5_24_9), style = MaterialTheme.typography.bodySmall, color = HealthColors.Healthy, fontWeight = FontWeight.Medium)
-                Text(stringResource(R.string.txt_35_0), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.txt_16_0), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.txt_normal_18_5_24_9), style = MaterialTheme.typography.bodyMedium, color = AppColors.text(HealthColors.Healthy), fontWeight = FontWeight.Medium)
+                Text(stringResource(R.string.txt_35_0), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             if (targetBmiIsOutsideReference) {
@@ -385,7 +386,7 @@ private fun GoalSetterView(
                             text = String.format("%.1f", correspondingBMI),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = getBMIColor(correspondingBMI)
+                            color = AppColors.text(getBMIColor(correspondingBMI))
                         )
                     }
                 }
@@ -497,7 +498,7 @@ private fun WeightChangeCard(
                 Icon(
                     imageVector = directionIcon,
                     contentDescription = null,
-                    tint = accentColor,
+                    tint = AppColors.icon(accentColor),
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -505,7 +506,7 @@ private fun WeightChangeCard(
                     text = "$action ${String.format("%.1f", displayWeight)} $unit to reach BMI ${String.format("%.1f", targetBMI)}",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
-                    color = accentColor
+                    color = AppColors.text(accentColor)
                 )
             }
         }
@@ -598,7 +599,7 @@ private fun TimelineEstimateCard(
                         if (isLoss) "Common reference pace: 1.1–2.2 lb per week"
                         else "Common reference pace: 0.6–1.1 lb per week"
                     },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -616,7 +617,7 @@ private fun TimelineItem(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -624,12 +625,12 @@ private fun TimelineItem(
             text = time,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = color
+            color = AppColors.text(color)
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = rate,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -716,7 +717,7 @@ fun GoalProgressView(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = getMotivationalMessage(updatedGoal.progressPercentage),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
                         textAlign = TextAlign.Center
                     )
@@ -777,8 +778,8 @@ fun GoalProgressView(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     stringResource(R.string.txt_clear_goal),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
+                    color = AppColors.text(MaterialTheme.colorScheme.error),
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -839,11 +840,11 @@ private fun ProgressCircle(
                 text = "${progress.roundToInt()}%",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
-                color = progressColor
+                color = AppColors.text(progressColor)
             )
             Text(
                 text = stringResource(R.string.txt_progress_1),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -857,7 +858,7 @@ private fun AnimatedProgressBar(
     currentBMI: Float,
     targetBMI: Float
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
 
     val primaryColor = MaterialTheme.colorScheme.primary
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
@@ -877,26 +878,20 @@ private fun AnimatedProgressBar(
                     .clip(RoundedCornerShape(12.dp))
                     .background(
                         brush = Brush.horizontalGradient(
-                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                                primaryColor.copy(alpha = 0.7f),
-                                primaryColor
-                            )
+                            colors = listOf(primaryColor, primaryColor)
                         )
                     )
             )
 
-            // Progress text on bar
-            if (progress > 0.15f) {
-                Text(
-                    text = "${(progress * 100).roundToInt()}%",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 12.dp)
-                )
-            }
+        }
+        if (progress > 0.15f) {
+            Text(
+                text = "${(progress * 100).roundToInt()}%",
+                style = MaterialTheme.typography.labelLarge,
+                color = AppColors.Text,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -907,12 +902,12 @@ private fun AnimatedProgressBar(
         ) {
             Text(
                 text = "Start: ${String.format("%.1f", startBMI)}",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = "Goal: ${String.format("%.1f", targetBMI)}",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -929,7 +924,7 @@ private fun ProgressStatItem(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(2.dp))
@@ -937,12 +932,12 @@ private fun ProgressStatItem(
             text = value,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = if (isHighlighted) FontWeight.Bold else FontWeight.SemiBold,
-            color = if (isHighlighted) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurface
+            color = AppColors.text(if (isHighlighted) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.onSurface)
         )
         Text(
             text = subValue,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -981,7 +976,7 @@ private fun GoalReachedCelebration() {
             Icon(
                 imageVector = Icons.Outlined.EmojiEvents,
                 contentDescription = "Goal reached",
-                tint = HealthColors.Healthy,
+                tint = if (AppColors.active) AppColors.Accent else HealthColors.Healthy,
                 modifier = Modifier
                     .size(40.dp)
                     .graphicsLayer {
@@ -994,7 +989,7 @@ private fun GoalReachedCelebration() {
                 text = stringResource(R.string.txt_congratulations),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = HealthColors.Healthy
+                color = AppColors.text(HealthColors.Healthy)
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -1006,7 +1001,7 @@ private fun GoalReachedCelebration() {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(R.string.txt_amazing_work_keep_maintaining_),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
@@ -1055,13 +1050,13 @@ private fun GoalContextNote(text: String) {
             Icon(
                 imageVector = Icons.Outlined.Info,
                 contentDescription = null,
-                tint = HealthColors.Warning,
+                tint = if (AppColors.active) AppColors.Accent else HealthColors.Warning,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }

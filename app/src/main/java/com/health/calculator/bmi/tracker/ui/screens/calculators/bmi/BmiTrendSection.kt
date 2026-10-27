@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -140,7 +140,7 @@ fun BmiTrendSection(
                 Text(
                     stringResource(R.string.txt_loading_trend_data),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
         } else if (!trendData.hasEnoughData) {
@@ -192,7 +192,7 @@ fun BmiTrendSection(
 
 @Composable
 private fun TrendHeader(readingsCount: Int) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -214,7 +214,7 @@ private fun TrendHeader(readingsCount: Int) {
                     .clip(RoundedCornerShape(12.dp))
                     .background(
                         Brush.linearGradient(
-                            if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(TrendAccent.copy(alpha = 0.15f), TrendAccent.copy(alpha = 0.08f))
+                            listOf(TrendAccent.copy(alpha = 0.15f), TrendAccent.copy(alpha = 0.08f))
                         )
                     ),
                 contentAlignment = Alignment.Center
@@ -234,8 +234,8 @@ private fun TrendHeader(readingsCount: Int) {
                 )
                 Text(
                     "$readingsCount reading${if (readingsCount != 1) "s" else ""} tracked",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
         }
@@ -304,7 +304,7 @@ private fun NotEnoughDataCard(readingsCount: Int) {
                 else
                     "You have $readingsCount reading so far. Calculate your BMI again later to see how your trend changes over time!",
                 style = MaterialTheme.typography.bodyMedium,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                 textAlign = TextAlign.Center,
                 lineHeight = 22.sp
             )
@@ -334,7 +334,7 @@ private fun NotEnoughDataCard(readingsCount: Int) {
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 label,
-                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                 color = AppColors.text(TrendAccent.copy(alpha = 0.7f))
                             )
                         }
@@ -409,8 +409,8 @@ private fun ComparisonCard(stats: BmiTrendStats) {
                 if (timeSince.isNotEmpty()) {
                     Text(
                         text = "Previous: ${String.format("%.1f", stats.previousBmi)} • $timeSince",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
@@ -419,12 +419,12 @@ private fun ComparisonCard(stats: BmiTrendStats) {
                 Text(
                     text = String.format("%.1f", stats.currentBmi),
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    color = bmiCategoryColor(stats.currentCategory)
+                    color = AppColors.text(bmiCategoryColor(stats.currentCategory))
                 )
                 Text(
                     stringResource(R.string.txt_current),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
         }
@@ -492,10 +492,12 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
             }
 
             // Graph
-            val graphHeight = 200.dp
+            val graphHeight = (220 * androidx.compose.ui.platform.LocalDensity.current.fontScale.coerceAtLeast(1f)).dp
+            val chartPadding = with(androidx.compose.ui.platform.LocalDensity.current) { maxOf(36.dp.toPx(), 14.sp.toPx() * 2.4f) }
             val surfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
             val darkChart = AppColors.isDark
             val graphLine = AppColors.accent(GraphLineColor)
+            val pointHalo = AppColors.Surface
             val sameDateCounts = points.groupingBy { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it.timestamp)) }.eachCount()
             val xLabels = points.map { point ->
                 val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(point.timestamp))
@@ -514,7 +516,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                             detectTapGestures { offset ->
                                 if (points.isEmpty()) return@detectTapGestures
                                 val width = size.width.toFloat()
-                                val padding = 40f
+                                val padding = chartPadding
                                 val graphWidth = width - padding * 2
 
                                 // Find nearest point
@@ -532,7 +534,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
 
                     val width = size.width
                     val height = size.height
-                    val padding = 40f
+                    val padding = chartPadding
                     val graphWidth = width - padding * 2
                     val graphHeight2 = height - padding * 2
 
@@ -594,8 +596,8 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                             8f,
                             y + 4f,
                             android.graphics.Paint().apply {
-                                color = (if (darkChart) surfaceVariant.toArgb() else surfaceVariant.copy(alpha = 0.4f).hashCode())
-                                textSize = 12.sp.toPx()
+                                color = surfaceVariant.toArgb()
+                                textSize = 14.sp.toPx()
                                 isAntiAlias = true
                             }
                         )
@@ -659,7 +661,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
 
                             // Outer circle
                             drawCircle(
-                                color = Color.White,
+                                color = pointHalo,
                                 radius = (dotRadius + 2.dp.toPx()) * dotScale.value,
                                 center = Offset(x, y)
                             )
@@ -689,11 +691,11 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                         val dateStr = xLabels[i]
                         drawContext.canvas.nativeCanvas.drawText(
                             dateStr,
-                            x - 16f,
+                            x,
                             height - 6f,
                             android.graphics.Paint().apply {
-                                color = (if (darkChart) surfaceVariant.toArgb() else surfaceVariant.copy(alpha = 0.4f).hashCode())
-                                textSize = 12.sp.toPx()
+                                color = surfaceVariant.toArgb()
+                                textSize = 14.sp.toPx()
                                 isAntiAlias = true
                                 textAlign = android.graphics.Paint.Align.CENTER
                             }
@@ -725,7 +727,7 @@ private fun LegendDot(color: Color, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(color))
         Spacer(modifier = Modifier.width(4.dp))
-        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)))
+        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant))
     }
 }
 
@@ -734,7 +736,7 @@ private fun ZoneLegend(color: Color, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(modifier = Modifier.size(10.dp, 6.dp).clip(RoundedCornerShape(2.dp)).background(color.copy(alpha = 0.4f)))
         Spacer(modifier = Modifier.width(4.dp))
-        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)))
+        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant))
     }
 }
 
@@ -757,17 +759,17 @@ private fun PointTooltip(point: BmiTrendPoint, onDismiss: () -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     "BMI ${String.format("%.1f", point.bmiValue)} — ${point.category.label}",
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(fontWeight = FontWeight.Bold),
                     color = AppColors.text(catColor)
                 )
                 Text(
                     "${formatFullDate(point.timestamp)} • ${point.inputSummary}",
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
             IconButton(onClick = onDismiss, modifier = Modifier.size(48.dp)) {
-                Icon(Icons.Filled.Close, "Dismiss", modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+                Icon(Icons.Filled.Close, "Dismiss", modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
@@ -832,8 +834,8 @@ private fun StatisticsCard(stats: BmiTrendStats) {
             ) {
                 Text(
                     "${stats.totalReadings} total readings",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                 )
             }
         }
@@ -851,8 +853,8 @@ private fun StatItem(label: String, value: String, color: Color) {
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             label,
-            style = MaterialTheme.typography.labelSmall,
-            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
         )
     }
 }

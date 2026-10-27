@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -158,9 +159,9 @@ fun EdgeCaseWarningCard(
         EdgeCaseSeverity.CRITICAL -> HealthColors.Danger
     }
     val iconColor = when (edgeCaseMessage.severity) {
-        EdgeCaseSeverity.WARNING -> HealthColors.Warning
-        EdgeCaseSeverity.CONCERN -> HealthColors.Caution
-        EdgeCaseSeverity.CRITICAL -> HealthColors.Danger
+        EdgeCaseSeverity.WARNING -> if (AppColors.active) AppColors.Warning else HealthColors.Warning
+        EdgeCaseSeverity.CONCERN -> if (AppColors.active) AppColors.Warning else HealthColors.Caution
+        EdgeCaseSeverity.CRITICAL -> if (AppColors.active) AppColors.Danger else HealthColors.Danger
     }
 
     Card(
@@ -187,7 +188,7 @@ fun EdgeCaseWarningCard(
                         text = edgeCaseMessage.title,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = iconColor
+                        color = if (AppColors.active) AppColors.Text else iconColor
                     )
                     if (edgeCaseMessage.severity == EdgeCaseSeverity.CRITICAL) {
                         Surface(
@@ -196,9 +197,9 @@ fun EdgeCaseWarningCard(
                         ) {
                             Text(
                                 text = stringResource(R.string.txt_immediate_attention_needed),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = if (AppColors.active) MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp) else MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = borderColor,
+                                color = if (AppColors.active) AppColors.Text else borderColor,
                                 modifier = Modifier.padding(
                                     horizontal = 6.dp,
                                     vertical = 2.dp
@@ -242,14 +243,14 @@ fun EdgeCaseWarningCard(
                         Column {
                             Text(
                                 text = stringResource(R.string.txt_please_seek_help),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = if (AppColors.active) MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp) else MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = iconColor
+                                color = if (AppColors.active) AppColors.Text else iconColor
                             )
                             Text(
                                 text = stringResource(R.string.txt_contact_your_healthcare_provid) +
                                         "qualified health service for advice.",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 lineHeight = 16.sp
                             )
@@ -301,9 +302,9 @@ fun ValidationErrorSummary(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = stringResource(R.string.txt_please_fix_the_following),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = if (AppColors.active) MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp) else MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.error
+                        color = if (AppColors.active) AppColors.Text else MaterialTheme.colorScheme.error
                     )
                 }
                 Spacer(modifier = Modifier.height(6.dp))
@@ -314,13 +315,13 @@ fun ValidationErrorSummary(
                     ) {
                         Text(
                             text = stringResource(R.string.txt_text_placeholder_3),
-                            color = MaterialTheme.colorScheme.error,
+                            color = if (AppColors.active) AppColors.Text else MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = error,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onErrorContainer
                         )
                     }

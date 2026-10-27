@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -146,8 +146,8 @@ fun BmiComparisonSection(
                     )
                     Text(
                         text = comparisonData.ageGroupLabel,
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
 
@@ -216,20 +216,20 @@ private fun PediatricSection(
         ) {
             Icon(
                 Icons.Outlined.ChildCare, null,
-                tint = HealthColors.Info,
+                tint = if (AppColors.active) AppColors.Accent else HealthColors.Info,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
                     stringResource(R.string.txt_child_teen_bmi_assessment),
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = HealthColors.Info
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(fontWeight = FontWeight.Bold),
+                    color = AppColors.text(HealthColors.Info)
                 )
                 Text(
                     stringResource(R.string.txt_bmi_for_age_percentile_method_),
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
         }
@@ -259,14 +259,14 @@ private fun PediatricSection(
                 Text(
                     text = data.pediatricCategory.label,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = catColor
+                    color = AppColors.text(catColor)
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = data.pediatricCategory.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -282,19 +282,19 @@ private fun PediatricSection(
                         fontWeight = FontWeight.Bold,
                         fontSize = 48.sp
                     ),
-                    color = catColor
+                    color = AppColors.text(catColor)
                 )
                 Text(
                     text = getOrdinalSuffix(data.estimatedPercentile.toInt()),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = catColor.copy(alpha = 0.7f),
+                    color = AppColors.text(catColor.copy(alpha = 0.7f)),
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(R.string.txt_percentile),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
@@ -314,7 +314,7 @@ private fun PediatricSection(
 
 @Composable
 private fun PercentileBar(percentile: Double, catColor: Color) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
 
     val animatedPosition = remember { Animatable(0f) }
     LaunchedEffect(percentile) {
@@ -333,7 +333,7 @@ private fun PercentileBar(percentile: Double, catColor: Color) {
                 .clip(RoundedCornerShape(8.dp))
                 .background(
                     Brush.horizontalGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                        colors = listOf(
                             HealthColors.Caution.copy(alpha = 0.3f),
                             HealthColors.Healthy.copy(alpha = 0.4f),
                             HealthColors.Healthy.copy(alpha = 0.4f),
@@ -365,15 +365,15 @@ private fun PercentileBar(percentile: Double, catColor: Color) {
         Spacer(modifier = Modifier.height(6.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.txt_0), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
+            Text(stringResource(R.string.txt_0), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant))
             Spacer(modifier = Modifier.weight(0.05f))
-            Text(stringResource(R.string.txt_5th), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = HealthColors.Caution.copy(alpha = 0.6f))
+            Text(stringResource(R.string.txt_5th), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.text(HealthColors.Caution.copy(alpha = 0.6f)))
             Spacer(modifier = Modifier.weight(0.8f))
-            Text(stringResource(R.string.txt_85th), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = HealthColors.Warning.copy(alpha = 0.6f))
+            Text(stringResource(R.string.txt_85th), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.text(HealthColors.Warning.copy(alpha = 0.6f)))
             Spacer(modifier = Modifier.weight(0.1f))
-            Text(stringResource(R.string.txt_95th), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = HealthColors.Danger.copy(alpha = 0.6f))
+            Text(stringResource(R.string.txt_95th), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.text(HealthColors.Danger.copy(alpha = 0.6f)))
             Spacer(modifier = Modifier.weight(0.05f))
-            Text(stringResource(R.string.txt_100_2), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
+            Text(stringResource(R.string.txt_100_2), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant))
         }
     }
 }
@@ -391,8 +391,8 @@ private fun PediatricCategoryTable(currentCategory: PediatricBmiCategory) {
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 stringResource(R.string.txt_who_bmi_for_age_categories),
-                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(fontWeight = FontWeight.Bold),
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
             )
             Spacer(modifier = Modifier.height(4.dp))
 
@@ -417,16 +417,16 @@ private fun PediatricCategoryTable(currentCategory: PediatricBmiCategory) {
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         cat.label,
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                         ),
-                        color = if (isSelected) color else MaterialTheme.colorScheme.onSurface,
+                        color = AppColors.text(if (isSelected) color else MaterialTheme.colorScheme.onSurface),
                         modifier = Modifier.weight(1f)
                     )
                     Text(
                         cat.description,
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                        color = if (isSelected) color.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                        color = AppColors.text(if (isSelected) color.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant),
                         textAlign = TextAlign.End
                     )
                     if (isSelected) {
@@ -469,8 +469,8 @@ private fun AdultSection(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 "${data.gender.displayName} • ${data.ageGroupLabel}",
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -507,8 +507,8 @@ private fun AdultSection(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         statusText,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                         lineHeight = 18.sp
                     )
                 }
@@ -531,21 +531,21 @@ private fun AdultSection(
                 Icon(
                     imageVector = Icons.Outlined.Person,
                     contentDescription = null,
-                    tint = HealthColors.Good,
+                    tint = if (AppColors.active) AppColors.Accent else HealthColors.Good,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         stringResource(R.string.txt_note_for_older_adults),
-                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = HealthColors.Good
+                        style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(fontWeight = FontWeight.SemiBold),
+                        color = AppColors.text(HealthColors.Good)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         "BMI can be less informative as body composition changes with age. Review this result alongside weight trend, strength, nutrition, symptoms, and your clinician's advice.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                         lineHeight = 18.sp
                     )
                 }
@@ -570,7 +570,7 @@ private fun ReferenceContextCard() {
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 "No population average is shown. Averages depend on the country and dataset and are not a personal target. BMI also does not measure body fat or diagnose a condition.",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 18.sp,
                 modifier = Modifier.weight(1f)
@@ -605,9 +605,9 @@ private fun AdultRangeBar(
     Column {
         // Labels
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(String.format("%.0f", barMin), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
-            Text("Reference: ${rangeMin}–${rangeMax}", style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp, fontWeight = FontWeight.SemiBold), color = HealthColors.Healthy.copy(alpha = 0.7f))
-            Text(String.format("%.0f", barMax), style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
+            Text(String.format("%.0f", barMin), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant))
+            Text("Reference: ${rangeMin}–${rangeMax}", style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp, fontWeight = FontWeight.SemiBold), color = AppColors.text(HealthColors.Healthy.copy(alpha = 0.7f)))
+            Text(String.format("%.0f", barMax), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant))
         }
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -669,8 +669,8 @@ private fun AdultRangeBar(
         ) {
             Text(
                 "Your BMI: ${String.format("%.1f", bmiValue)}",
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp, fontWeight = FontWeight.Bold),
-                color = markerColor
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp, fontWeight = FontWeight.Bold),
+                color = AppColors.text(markerColor)
             )
         }
     }
@@ -698,14 +698,14 @@ private fun AgeContextCard(note: String) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     stringResource(R.string.txt_age_specific_note),
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = ComparisonAccent
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(fontWeight = FontWeight.SemiBold),
+                    color = AppColors.text(ComparisonAccent)
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     note,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                     lineHeight = 18.sp
                 )
             }
@@ -727,7 +727,7 @@ private fun ComparisonDisclaimer(isPediatric: Boolean) {
     ) {
         Icon(
             Icons.Outlined.Info, null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(14.dp).offset { IntOffset(0, 4) }
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -736,9 +736,9 @@ private fun ComparisonDisclaimer(isPediatric: Boolean) {
                 "Pediatric BMI percentiles are estimates based on WHO growth reference data. For accurate assessment, consult your child's pediatrician who can use clinical growth charts."
             else
                 "No population average is shown. BMI reference categories are informational and do not account for body composition or an individual's full health context.",
-            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
-            lineHeight = 16.sp
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+            lineHeight = 20.sp
         )
     }
 }

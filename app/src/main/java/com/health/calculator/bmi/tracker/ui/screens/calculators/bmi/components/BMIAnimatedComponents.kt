@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
@@ -102,7 +102,7 @@ fun AnimatedInputField(
                 else MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = if (isError)
                     MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
-                else if (com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.outlineVariant,
+                else if (AppColors.isDark) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.outlineVariant,
                 errorBorderColor = MaterialTheme.colorScheme.error
             )
         )
@@ -132,9 +132,9 @@ fun AnimatedInputField(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = errorMessage ?: "",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 12.sp
+                    style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
+                    color = if (AppColors.active) AppColors.Danger else MaterialTheme.colorScheme.error,
+                    fontSize = if (AppColors.active) 14.sp else 12.sp
                 )
             }
         }
@@ -149,7 +149,8 @@ fun AnimatedCalculateButton(
     onClick: () -> Unit,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    text: String? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -236,7 +237,7 @@ fun AnimatedCalculateButton(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = stringResource(R.string.txt_calculate_bmi),
+                        text = text ?: stringResource(R.string.txt_calculate_bmi),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -283,7 +284,7 @@ fun AnimatedClearButton(
         Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = stringResource(R.string.txt_clear_all_1),
-            color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
+            color = if (AppColors.active) AppColors.Danger else MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
             fontWeight = FontWeight.Medium
         )
     }
