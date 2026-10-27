@@ -71,6 +71,26 @@ fun TrackHubScreen(
     onOpenHistory: () -> Unit,
     onOpenReminders: () -> Unit
 ) {
+    com.health.calculator.bmi.tracker.ui.theme.ForestScreenTheme {
+        TrackHubContent(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TrackHubContent(
+    onOpenWeight: () -> Unit,
+    onOpenWater: () -> Unit,
+    onOpenBloodPressure: () -> Unit,
+    onOpenFood: () -> Unit,
+    onOpenHealthConnections: () -> Unit,
+    onOpenHistory: () -> Unit,
+    onOpenReminders: () -> Unit
+) {
+    if (com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
+        ForestTrackHubScreen(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders)
+        return
+    }
     HubScaffold(
         title = "Track",
         subtitle = "Small check-ins that make trends useful"
@@ -104,6 +124,18 @@ enum class CalculatorDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorsHubScreen(onOpen: (CalculatorDestination) -> Unit) {
+    com.health.calculator.bmi.tracker.ui.theme.ForestScreenTheme {
+        CalculatorsHubContent(onOpen)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CalculatorsHubContent(onOpen: (CalculatorDestination) -> Unit) {
+    if (com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
+        ForestCalculatorsHubScreen(onOpen)
+        return
+    }
     val calculators = remember {
         CalculatorQualityCatalog.all.map { info ->
             CalculatorEntry(
@@ -158,6 +190,27 @@ fun InsightsHubScreen(
     insights: List<WellnessInsight> = emptyList(),
     onOpenInsight: (String) -> Unit = { onOpenHistory() }
 ) {
+    com.health.calculator.bmi.tracker.ui.theme.ForestScreenTheme {
+        InsightsHubContent(onOpenWeeklyReport, onOpenTrends, onOpenAssistant, onOpenAchievements, onOpenArticles, onOpenHistory, insights, onOpenInsight)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InsightsHubContent(
+    onOpenWeeklyReport: () -> Unit,
+    onOpenTrends: () -> Unit,
+    onOpenAssistant: () -> Unit,
+    onOpenAchievements: () -> Unit,
+    onOpenArticles: () -> Unit,
+    onOpenHistory: () -> Unit,
+    insights: List<WellnessInsight> = emptyList(),
+    onOpenInsight: (String) -> Unit = { onOpenHistory() }
+) {
+    if (com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
+        ForestInsightsHubScreen(onOpenWeeklyReport, onOpenTrends, onOpenAssistant, onOpenAchievements, onOpenArticles, onOpenHistory, insights, onOpenInsight)
+        return
+    }
     HubScaffold(
         title = "Insights",
         subtitle = "Patterns from the information you choose to record"

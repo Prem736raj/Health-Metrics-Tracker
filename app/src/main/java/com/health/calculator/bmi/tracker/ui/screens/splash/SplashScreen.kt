@@ -1,9 +1,5 @@
 package com.health.calculator.bmi.tracker.ui.screens.splash
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
-import androidx.compose.ui.res.stringResource
-import com.health.calculator.bmi.tracker.R
-
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseOutCubic
@@ -14,6 +10,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,12 +20,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
@@ -45,44 +41,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.calculator.bmi.tracker.R
+import com.health.calculator.bmi.tracker.ui.theme.AppColors
 import kotlinx.coroutines.delay
-import com.health.calculator.bmi.tracker.ui.theme.InversePrimaryLight
-import com.health.calculator.bmi.tracker.ui.theme.OnPrimaryContainerLight
-import com.health.calculator.bmi.tracker.ui.theme.PrimaryLight
-
-// ─── Splash Colors ────────────────────────────────────────────────────────────
-
-// Brand-consistent violet — matches the new PrimaryLight (#6C3CE1) palette.
-private val SplashTeal = PrimaryLight
-private val SplashTealDark = OnPrimaryContainerLight
-private val SplashTealLight = InversePrimaryLight
 
 /**
- * Animated splash screen displayed on every app launch.
- * Shows the app's calm wellness mark with a short pulse animation for ~1.8 seconds
- * before calling [onSplashComplete].
- *
- * Animation sequence:
- * 1. Logo scales in with bounce (0-400ms)
- * 2. App name fades in (200-600ms)
- * 3. A gentle pulse settles around the wellness mark (400ms+)
- * 4. Subtitle fades in (800-1200ms)
- * 5. Entire screen fades out (1600-1800ms)
- * 6. onSplashComplete is called
+ * Animated splash screen matching the calm botanical design.
+ * Shows the botanical background with the concentric wellness mark,
+ * serif app name, subtitle, and pulsing dots.
  */
 @Composable
 fun SplashScreen(
     onSplashComplete: () -> Unit
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val isDark = AppColors.isDark
 
-    // ── Animation States ──────────────────────────────────────────────────
-    val logoScale = remember { Animatable(0f) }
+    // Theme-driven colors matching media_1793021528957_fcbb4e2b.png
+    val bgDrawable = if (isDark) R.drawable.bg_onboarding_nature else R.drawable.bg_onboarding_nature_light
+    val titleColor = if (isDark) Color.White else Color(0xFF162018)
+    val subtitleColor = if (isDark) Color(0xFFA5C896) else Color(0xFF2E623A)
+    val footerColor = if (isDark) Color(0xFF869488) else Color(0xFF5A685D)
+    val dotColor = if (isDark) Color(0xFFA5C896) else Color(0xFF2E623A)
+
+    val outerRingBorder = if (isDark) Color(0x33A5C896) else Color(0x332E623A)
+    val middleRingBg = if (isDark) Color(0x1FA5C896) else Color(0x1F2E623A)
+    val middleRingBorder = if (isDark) Color(0x40A5C896) else Color(0x402E623A)
+    val innerCircleBg = if (isDark) Color(0xFF233527) else Color(0xFFDDEBDC)
+    val innerCircleBorder = if (isDark) Color(0xFF384F3C) else Color(0xFFB8D5B6)
+    val heartTint = if (isDark) Color(0xFFB5D3A7) else Color(0xFF2E623A)
+
+    // Animation states
+    val logoScale = remember { Animatable(0.2f) }
     val titleAlpha = remember { Animatable(0f) }
     val subtitleAlpha = remember { Animatable(0f) }
     var fadeOut by remember { mutableStateOf(false) }
@@ -100,208 +97,167 @@ fun SplashScreen(
     val infiniteTransition = rememberInfiniteTransition(label = "heartbeat")
     val heartbeatScale by infiniteTransition.animateFloat(
         initialValue = 1f,
-        targetValue = 1.15f,
+        targetValue = 1.08f,
         animationSpec = infiniteRepeatable(
-            animation = tween(500, easing = EaseInOut),
+            animation = tween(700, easing = EaseInOut),
             repeatMode = RepeatMode.Reverse
         ),
         label = "pulse"
     )
 
-    // Outer ring pulse
     val ringScale by infiniteTransition.animateFloat(
         initialValue = 1f,
-        targetValue = 1.2f,
+        targetValue = 1.05f,
         animationSpec = infiniteRepeatable(
-            animation = tween(800, easing = EaseInOut),
+            animation = tween(1000, easing = EaseInOut),
             repeatMode = RepeatMode.Reverse
         ),
         label = "ring_pulse"
     )
 
-    val ringAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.3f,
-        targetValue = 0.1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800, easing = EaseInOut),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "ring_alpha"
-    )
-
-    // ── Animation Sequence ────────────────────────────────────────────────
     LaunchedEffect(Unit) {
-        // Step 1: Logo scales in with bounce
         logoScale.animateTo(
             targetValue = 1f,
             animationSpec = tween(500, easing = FastOutSlowInEasing)
         )
-
-        // Step 2: Title fades in
         delay(100)
         titleAlpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(400, easing = FastOutSlowInEasing)
         )
-
-        // Step 3: Subtitle fades in
-        delay(200)
+        delay(150)
         subtitleAlpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(400, easing = FastOutSlowInEasing)
         )
-
-        // Step 4: Hold for a moment to let pulse animate
-        delay(600)
-
-        // Step 5: Fade out
+        delay(700)
         fadeOut = true
     }
 
-    // ── UI ────────────────────────────────────────────────────────────────
     Box(
         modifier = Modifier
             .fillMaxSize()
             .alpha(screenAlpha)
-            .background(
-                Brush.verticalGradient(
-                    colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                        MaterialTheme.colorScheme.background,
-                        MaterialTheme.colorScheme.background,
-                        SplashTeal.copy(alpha = 0.03f)
-                    )
-                )
-            ),
-        contentAlignment = Alignment.Center
     ) {
+        // Full bleed botanical nature background
+        Image(
+            painter = painterResource(id = bgDrawable),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        // Center Content
         Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // ── Logo Section ──────────────────────────────────────────
+            // Concentric circle wellness logo
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.scale(logoScale.value)
+                modifier = Modifier
+                    .scale(logoScale.value)
+                    .size(220.dp)
             ) {
-                // Outer pulsing ring
+                // Outer ring
                 Box(
                     modifier = Modifier
-                        .size(160.dp)
+                        .size(200.dp)
                         .scale(ringScale)
                         .clip(CircleShape)
-                        .border(
-                            width = 2.dp,
-                            color = SplashTeal.copy(alpha = ringAlpha),
-                            shape = CircleShape
-                        )
+                        .border(1.dp, outerRingBorder, CircleShape)
                 )
 
-                // Middle ring
+                // Middle glowing circle
                 Box(
                     modifier = Modifier
-                        .size(130.dp)
+                        .size(144.dp)
                         .clip(CircleShape)
-                        .background(
-                            Brush.radialGradient(
-                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                                    SplashTeal.copy(alpha = 0.08f),
-                                    SplashTeal.copy(alpha = 0.02f),
-                                    Color.Transparent
-                                )
-                            )
-                        )
+                        .background(middleRingBg)
+                        .border(1.dp, middleRingBorder, CircleShape)
                 )
 
-                // Inner circle with medical cross
+                // Inner circle with heart
                 Box(
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(92.dp)
                         .scale(heartbeatScale)
                         .clip(CircleShape)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                                    SplashTeal.copy(alpha = 0.12f),
-                                    SplashTealDark.copy(alpha = 0.08f)
-                                )
-                            )
-                        )
-                        .border(
-                            width = 1.5.dp,
-                            brush = Brush.verticalGradient(
-                                colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                                    SplashTealLight.copy(alpha = 0.4f),
-                                    SplashTeal.copy(alpha = 0.2f)
-                                )
-                            ),
-                            shape = CircleShape
-                        ),
+                        .background(innerCircleBg)
+                        .border(1.dp, innerCircleBorder, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    WellnessMark()
+                    Icon(
+                        imageVector = Icons.Outlined.FavoriteBorder,
+                        contentDescription = null,
+                        modifier = Modifier.size(40.dp),
+                        tint = heartTint
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
-            // ── App Name ──────────────────────────────────────────────
+            // App Name (Serif Headline)
             Text(
                 text = stringResource(R.string.txt_health_calculator),
                 style = MaterialTheme.typography.headlineLarge.copy(
+                    fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp,
                     letterSpacing = (-0.5).sp
                 ),
-                color = MaterialTheme.colorScheme.onBackground,
+                color = titleColor,
                 modifier = Modifier.alpha(titleAlpha.value)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            // ── Subtitle ──────────────────────────────────────────────
+            // Subtitle
             Text(
                 text = stringResource(R.string.txt_your_personal_health_companion),
-                style = MaterialTheme.typography.bodyLarge,
-                color = AppColors.text(SplashTeal.copy(alpha = 0.8f)),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp,
+                    letterSpacing = 0.1.sp
+                ),
+                color = subtitleColor,
                 modifier = Modifier.alpha(subtitleAlpha.value)
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(44.dp))
 
-            // ── Loading dots ──────────────────────────────────────────
+            // 3 Animated Loading Dots
             LoadingDots(
-                modifier = Modifier.alpha(subtitleAlpha.value)
+                modifier = Modifier.alpha(subtitleAlpha.value),
+                dotColor = dotColor
             )
         }
 
-        // ── Bottom disclaimer ─────────────────────────────────────────
+        // Bottom educational disclaimer
         Text(
             text = stringResource(R.string.txt_for_educational_purposes_only),
-            style = MaterialTheme.typography.bodySmall,
-            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)),
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 12.sp
+            ),
+            color = footerColor,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 32.dp)
+                .navigationBarsPadding()
+                .padding(bottom = 28.dp)
                 .alpha(subtitleAlpha.value)
         )
     }
 }
 
-// ─── Wellness Mark ────────────────────────────────────────────────────────────
-
 @Composable
-private fun WellnessMark() {
-    Icon(
-        imageVector = Icons.Outlined.FavoriteBorder,
-        contentDescription = null,
-        modifier = Modifier.size(38.dp),
-        tint = SplashTeal
-    )
-}
-
-// ─── Loading Dots Animation ───────────────────────────────────────────────────
-
-@Composable
-private fun LoadingDots(modifier: Modifier = Modifier) {
+private fun LoadingDots(
+    modifier: Modifier = Modifier,
+    dotColor: Color
+) {
     val infiniteTransition = rememberInfiniteTransition(label = "dots")
 
     Row(
@@ -322,14 +278,14 @@ private fun LoadingDots(modifier: Modifier = Modifier) {
 
             Box(
                 modifier = Modifier
-                    .size(8.dp)
+                    .size(7.dp)
                     .clip(CircleShape)
                     .alpha(dotAlpha)
-                    .background(SplashTeal)
+                    .background(dotColor)
             )
 
             if (index < 2) {
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.width(7.dp))
             }
         }
     }
