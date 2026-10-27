@@ -1,7 +1,7 @@
 // ui/screens/waterintake/components/HydrationPlantComposable.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -79,7 +79,7 @@ fun HydrationPlantCard(
     onTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     // Animations
     val infiniteTransition = rememberInfiniteTransition(label = "plant")
@@ -162,7 +162,7 @@ fun HydrationPlantCard(
                 .height(180.dp)
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(
                             SkyBlue.copy(alpha = 0.3f),
                             Color.Transparent
                         )
@@ -211,7 +211,7 @@ fun HydrationPlantCard(
                 text = plantState.stage.displayName,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(8.dp)
@@ -604,7 +604,7 @@ private fun PlantMoodBubble(
         modifier = modifier.scale(bubbleScale),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.9f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.9f))
         ),
         elevation = CardDefaults.cardElevation(1.dp)
     ) {
@@ -623,7 +623,7 @@ private fun PlantMoodBubble(
                 text = message,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -658,7 +658,7 @@ fun PlantDetailDialog(
                 Text(
                     text = plantState.stage.description,
                     fontSize = 13.sp,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         },
@@ -768,16 +768,16 @@ fun PlantDetailDialog(
                                 stage.displayName,
                                 fontSize = 12.sp,
                                 fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
-                                color = AppColors.text(if (isCurrent) StemGreen else MaterialTheme.colorScheme.onSurface)
+                                color = DetailColors.text(if (isCurrent) StemGreen else MaterialTheme.colorScheme.onSurface)
                             )
                             Text(
                                 if (stage.daysRequired == 0) "Start" else "${stage.daysRequired} days",
                                 fontSize = 12.sp,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                                color = DetailColors.text(DetailColors.Secondary)
                             )
                         }
                         if (isCurrent) {
-                            Text(stringResource(R.string.txt_you_1), fontSize = 12.sp, color = AppColors.text(StemGreen), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.txt_you_1), fontSize = 12.sp, color = DetailColors.text(StemGreen), fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -788,7 +788,7 @@ fun PlantDetailDialog(
         },
         dismissButton = {
             TextButton(onClick = onHide) {
-                Text(stringResource(R.string.txt_hide_plant), color = AppColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.7f)))
+                Text(stringResource(R.string.txt_hide_plant), color = DetailColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.7f)))
             }
         }
     )

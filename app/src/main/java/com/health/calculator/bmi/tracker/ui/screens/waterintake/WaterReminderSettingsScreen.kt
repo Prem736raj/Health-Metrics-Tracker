@@ -1,7 +1,9 @@
 // ui/screens/waterintake/WaterReminderSettingsScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -52,7 +54,7 @@ import com.health.calculator.bmi.tracker.notifications.NotificationPermissionHel
 @Composable
 fun WaterReminderSettingsScreen(
     onNavigateBack: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.WATER) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val prefs = remember { WaterReminderPreferences(context) }
@@ -120,7 +122,7 @@ fun WaterReminderSettingsScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -287,7 +289,7 @@ private fun ReminderHeaderCard(isEnabled: Boolean) {
                 Column {
                     Text(
                         text = if (isEnabled) "Reminders Active" else "Reminders Off",
-                        color = AppColors.text(Color.White),
+                        color = DetailColors.text(Color.White),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -296,7 +298,7 @@ private fun ReminderHeaderCard(isEnabled: Boolean) {
                             "We'll help you stay hydrated throughout the day"
                         else
                             "Enable reminders to never forget to drink water",
-                        color = AppColors.text(Color.White.copy(alpha = 0.8f)),
+                        color = DetailColors.text(Color.White.copy(alpha = 0.8f)),
                         fontSize = 13.sp
                     )
                 }
@@ -350,7 +352,7 @@ private fun EnableToggleCard(enabled: Boolean, onToggle: (Boolean) -> Unit) {
                     Text(
                         stringResource(R.string.txt_get_notified_to_drink_water),
                         fontSize = 12.sp,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -428,7 +430,7 @@ private fun ScheduleCard(
             Text(
                 text = "Active window: ${hours}h ${if (mins > 0) "${mins}m" else ""}",
                 fontSize = 12.sp,
-                color = AppColors.text(FeatureColors.WaterDeep),
+                color = DetailColors.text(FeatureColors.WaterDeep),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
@@ -449,7 +451,7 @@ private fun TimePickerButton(
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(FeatureColors.WaterStart.copy(alpha = 0.12f)))
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(FeatureColors.WaterStart.copy(alpha = 0.12f)))
     ) {
         Column(
             modifier = Modifier
@@ -464,8 +466,8 @@ private fun TimePickerButton(
                 tint = FeatureColors.WaterDeep,
                 modifier = Modifier.size(22.dp)
             )
-            Text(label, fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
-            Text(time, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = AppColors.text(FeatureColors.WaterDeep))
+            Text(label, fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
+            Text(time, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = DetailColors.text(FeatureColors.WaterDeep))
         }
     }
 }
@@ -523,7 +525,7 @@ private fun FrequencyCard(
                 Text(
                     text = "Suggested: every ~${suggestedMinutes} min based on your goal",
                     fontSize = 12.sp,
-                    color = AppColors.text(FeatureColors.WaterDeep),
+                    color = DetailColors.text(FeatureColors.WaterDeep),
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -559,7 +561,7 @@ private fun FrequencyCard(
                         Text(
                             freq.label,
                             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                            color = AppColors.text(if (isSelected) FeatureColors.WaterDeep else MaterialTheme.colorScheme.onSurface)
+                            color = DetailColors.text(if (isSelected) FeatureColors.WaterDeep else MaterialTheme.colorScheme.onSurface)
                         )
 
                         val remindersPerDay = if (freq.minutes > 0) wakingMinutes / freq.minutes else 0
@@ -570,7 +572,7 @@ private fun FrequencyCard(
                             Text(
                                 "${remindersPerDay}x/day",
                                 fontSize = 12.sp,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                color = DetailColors.text(DetailColors.Secondary)
                             )
                             AnimatedVisibility(
                                 visible = isSelected,
@@ -586,7 +588,7 @@ private fun FrequencyCard(
                                     Icon(
                                         Icons.Default.Check,
                                         null,
-                                        tint = Color.White,
+                                        tint = DetailColors.Accent,
                                         modifier = Modifier.size(14.dp)
                                     )
                                 }
@@ -733,7 +735,7 @@ private fun SettingsToggleRow(
             Text(
                 subtitle,
                 fontSize = 12.sp,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
         Switch(
@@ -756,7 +758,7 @@ private fun ReminderSummaryCard(settings: WaterReminderSettings) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(FeatureColors.WaterStart.copy(alpha = 0.1f)))
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(FeatureColors.WaterStart.copy(alpha = 0.1f)))
     ) {
         Column(
             modifier = Modifier
@@ -778,7 +780,7 @@ private fun ReminderSummaryCard(settings: WaterReminderSettings) {
                     stringResource(R.string.txt_reminder_summary),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = AppColors.text(FeatureColors.WaterDeep)
+                    color = DetailColors.text(FeatureColors.WaterDeep)
                 )
             }
 
@@ -805,7 +807,7 @@ private fun ReminderSummaryCard(settings: WaterReminderSettings) {
                     Text(
                         text = item,
                         fontSize = 13.sp,
-                        color = AppColors.text(FeatureColors.WaterDeep.copy(alpha = 0.88f))
+                        color = DetailColors.text(FeatureColors.WaterDeep.copy(alpha = 0.88f))
                     )
                 }
             }
@@ -844,7 +846,7 @@ private fun WaterTimePicker(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = AppColors.text(FeatureColors.WaterDeep)
+                    color = DetailColors.text(FeatureColors.WaterDeep)
                 )
 
                 TimePicker(
