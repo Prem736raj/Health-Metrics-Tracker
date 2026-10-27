@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -75,7 +77,7 @@ fun HeartRateZoneResultScreen(
     onNavigateBack: () -> Unit,
     onSaveToHistory: (HeartRateZoneResult) -> Unit,
     onRecalculate: () -> Unit
-) {
+) = DetailScreenTheme(DetailFeature.HEART_RATE) {
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
 
@@ -114,7 +116,7 @@ fun HeartRateZoneResultScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -369,7 +371,7 @@ private fun MaxHeartRateCard(result: HeartRateZoneResult) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(FeatureColors.HeartDeep.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(FeatureColors.HeartDeep.copy(alpha = 0.08f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -489,18 +491,18 @@ private fun AnimatedHeartWithBPM(bpm: Int, label: String) {
             text = "$animatedBpm",
             style = MaterialTheme.typography.displayLarge,
             fontWeight = FontWeight.ExtraBold,
-            color = AppColors.text(FeatureColors.HeartDeep)
+            color = DetailColors.text(FeatureColors.HeartDeep)
         )
         Text(
             text = stringResource(R.string.txt_bpm_1),
             style = MaterialTheme.typography.titleMedium,
-            color = AppColors.text(FeatureColors.HeartDeep.copy(alpha = 0.7f)),
+            color = DetailColors.text(FeatureColors.HeartDeep.copy(alpha = 0.7f)),
             fontWeight = FontWeight.Medium
         )
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+            color = DetailColors.text(DetailColors.Secondary)
         )
     }
 }
@@ -528,7 +530,7 @@ private fun InfoChip(icon: ImageVector, label: String, value: String) {
                 Text(
                     text = label,
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Text(
                     text = value,
@@ -550,7 +552,7 @@ private fun KarvonenInfoCard(result: HeartRateZoneResult) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthColors.Good.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(HealthColors.Good.copy(alpha = 0.08f))
         )
     ) {
         Row(
@@ -569,7 +571,7 @@ private fun KarvonenInfoCard(result: HeartRateZoneResult) {
                     text = stringResource(R.string.txt_karvonen_method),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = AppColors.text(HealthColors.Good)
+                    color = DetailColors.text(HealthColors.Good)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -577,7 +579,7 @@ private fun KarvonenInfoCard(result: HeartRateZoneResult) {
                             "HRR = Max HR (${result.maxHeartRate}) − Resting HR (${result.restingHeartRate}) = ${result.heartRateReserve} BPM\n" +
                             "Target HR = (HRR × %Intensity) + Resting HR",
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     lineHeight = 18.sp
                 )
             }
@@ -598,7 +600,7 @@ private fun ZoneVisualizationChart(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         )
     ) {
         Column(
@@ -632,14 +634,14 @@ private fun ZoneVisualizationChart(
                     Text(
                         text = "${it.bpmLow}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
                 Text(
                     text = "$maxHR BPM",
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -648,7 +650,7 @@ private fun ZoneVisualizationChart(
 
 @Composable
 private fun ZoneBar(zone: HeartRateZone, maxBPM: Int) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val zoneColor = heartRateZoneColor(zone.zoneNumber)
     val animatedWidth by animateFloatAsState(
@@ -661,70 +663,18 @@ private fun ZoneBar(zone: HeartRateZone, maxBPM: Int) {
         label = "zone_bar_${zone.zoneNumber}"
     )
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Zone label
-        Text(
-            text = "Z${zone.zoneNumber}",
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold,
-            color = AppColors.text(zoneColor),
-            modifier = Modifier.width(24.dp),
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        // Bar
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .height(28.dp)
-        ) {
-            // Background
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(zoneColor.copy(alpha = 0.1f))
-            )
-
-            // Filled bar
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(animatedWidth)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(
-                        Brush.horizontalGradient(
-                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                                zoneColor.copy(alpha = 0.4f),
-                                zoneColor.copy(alpha = 0.8f)
-                            )
-                        )
-                    ),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Text(
-                    text = "${zone.bpmLow}-${zone.bpmHigh}",
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
+    Column(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Icon(heartRateZoneIcon(zone.zoneNumber), contentDescription = zone.zoneName,
+                tint = zoneColor, modifier = Modifier.size(18.dp))
+            Text("Z${zone.zoneNumber}", style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold, color = DetailColors.Text, modifier = Modifier.weight(1f))
+            Text("${zone.bpmLow}-${zone.bpmHigh}", style = MaterialTheme.typography.labelMedium,
+                color = DetailColors.Text)
         }
-
-        Spacer(modifier = Modifier.width(6.dp))
-
-        Icon(
-            imageVector = heartRateZoneIcon(zone.zoneNumber),
-            contentDescription = zone.zoneName,
-            tint = zoneColor,
-            modifier = Modifier.size(18.dp)
-        )
+        LinearProgressIndicator(progress = { animatedWidth }, modifier = Modifier.fillMaxWidth().height(8.dp),
+            color = zoneColor, trackColor = DetailColors.SurfaceAlt)
     }
 }
 
@@ -745,7 +695,7 @@ private fun ZoneDetailCard(
             .clickable { onToggleExpand() },
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(zoneColor.copy(alpha = 0.06f))
+            containerColor = DetailColors.surface(zoneColor.copy(alpha = 0.06f))
         ),
         border = androidx.compose.foundation.BorderStroke(
             width = 1.5.dp,
@@ -784,7 +734,7 @@ private fun ZoneDetailCard(
                             text = "Zone ${zone.zoneNumber}",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(zoneColor)
+                            color = DetailColors.text(zoneColor)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Icon(
@@ -810,7 +760,7 @@ private fun ZoneDetailCard(
                         text = "${zone.bpmLow}-${zone.bpmHigh}",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.ExtraBold,
-                        color = AppColors.text(zoneColor),
+                        color = DetailColors.text(zoneColor),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     )
                 }
@@ -822,7 +772,7 @@ private fun ZoneDetailCard(
             Text(
                 text = "${zone.percentLow}% - ${zone.percentHigh}% of Max HR",
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
 
             // Expanded details
@@ -880,7 +830,7 @@ private fun ZoneDetailCard(
                 Text(
                     text = stringResource(R.string.txt_tap_for_details),
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp),
@@ -906,12 +856,12 @@ private fun ZoneDetailRow(icon: ImageVector, title: String, content: String) {
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
             Text(
                 text = content,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 17.sp
             )
         }
@@ -988,7 +938,7 @@ private fun ActionButtonsSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
         )
     ) {
         Column(
@@ -1022,7 +972,7 @@ private fun ActionButtonsSection(
                 Text(
                     text = if (savedToHistory) "Saved to History ✓" else "Save to History",
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = DetailColors.text(MaterialTheme.colorScheme.onPrimary)
                 )
             }
 

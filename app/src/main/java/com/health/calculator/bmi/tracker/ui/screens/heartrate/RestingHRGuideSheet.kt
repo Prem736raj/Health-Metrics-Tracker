@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.heartrate
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -74,7 +74,7 @@ fun RestingHRGuideSheet(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(HealthColors.Caution.copy(alpha = 0.08f))
+                    containerColor = DetailColors.surface(HealthColors.Caution.copy(alpha = 0.08f))
                 )
             ) {
                 Row(
@@ -93,12 +93,12 @@ fun RestingHRGuideSheet(
                             text = stringResource(R.string.txt_best_time_to_measure),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = AppColors.text(HealthColors.Caution)
+                            color = DetailColors.text(HealthColors.Caution)
                         )
                         Text(
                             text = stringResource(R.string.txt_first_thing_in_the_morning_bef),
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                            color = DetailColors.text(DetailColors.Secondary)
                         )
                     }
                 }
@@ -140,7 +140,7 @@ fun RestingHRGuideSheet(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
                 )
             ) {
                 Column(
@@ -155,7 +155,7 @@ fun RestingHRGuideSheet(
                     Text(
                         text = stringResource(R.string.txt_count_beats_for_15_seconds_and),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -163,7 +163,7 @@ fun RestingHRGuideSheet(
             Text(
                 text = "These are general reference bands, not a diagnosis. Resting heart rate can vary with medicines, illness, stress, sleep and training; compare readings taken under similar conditions.",
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 15.sp,
                 modifier = Modifier.padding(top = 8.dp)
             )
@@ -191,7 +191,7 @@ fun RestingHRGuideSheet(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 )
             ) {
                 Column(
@@ -221,7 +221,7 @@ fun RestingHRGuideSheet(
                             Text(
                                 text = range,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                                color = DetailColors.text(DetailColors.Secondary)
                             )
                         }
                     }
@@ -286,7 +286,7 @@ private fun GuideStepItem(
                 text = stepNumber,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = DetailColors.text(MaterialTheme.colorScheme.primary)
             )
         }
 
@@ -303,7 +303,7 @@ private fun GuideStepItem(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 18.sp
             )
         }
