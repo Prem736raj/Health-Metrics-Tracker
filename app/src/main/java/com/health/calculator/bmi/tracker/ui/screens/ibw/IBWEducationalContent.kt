@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -45,7 +45,7 @@ fun IBWEducationalContent() {
             Text(
                 text = stringResource(R.string.txt_learn_about_ideal_body_weight),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface
+                color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
             )
         }
 
@@ -140,13 +140,13 @@ private fun EducationalExpandableCard(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                     )
                 }
                 Icon(
                     imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     contentDescription = if (expanded) "Collapse" else "Expand",
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    tint = DetailColors.Secondary
                 )
             }
 
@@ -210,7 +210,7 @@ private fun WhatIsIBWContent() {
                 Text(
                     text = stringResource(R.string.txt_a_muscular_person_may_weigh_si),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Info.copy(alpha = 0.9f)),
+                    color = DetailColors.text(HealthColors.Info.copy(alpha = 0.9f)),
                     fontSize = 12.sp
                 )
             }
@@ -279,7 +279,7 @@ private fun WhyDifferentResultsContent() {
                 Text(
                     text = stringResource(R.string.txt_recommendation_focus_on_the_bm),
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = AppColors.text(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f)),
+                    color = DetailColors.text(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f)),
                     fontSize = 12.sp
                 )
             }
@@ -400,7 +400,7 @@ private fun FrameSizeContent() {
                 Text(
                     text = stringResource(R.string.txt_remember_frame_size_explains_w),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Warning.copy(alpha = 0.9f)),
+                    color = DetailColors.text(HealthColors.Warning.copy(alpha = 0.9f)),
                     fontSize = 12.sp
                 )
             }
@@ -413,7 +413,7 @@ private fun EducationalParagraph(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
-        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)),
+        color = DetailColors.text(DetailColors.Secondary),
         lineHeight = 22.sp
     )
 }
@@ -440,14 +440,14 @@ private fun KeyPointCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 lineHeight = 18.sp
             )
         }
@@ -475,7 +475,7 @@ private fun FormulaHistoryItem(
                     Text(
                         text = name,
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Surface(
@@ -485,7 +485,7 @@ private fun FormulaHistoryItem(
                         Text(
                             text = highlight,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = DetailColors.text(MaterialTheme.colorScheme.primary),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                             fontSize = 12.sp
                         )
@@ -495,7 +495,7 @@ private fun FormulaHistoryItem(
                 Text(
                     text = detail,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             }
@@ -530,7 +530,7 @@ private fun ComparisonCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                color = AppColors.text(color),
+                color = DetailColors.text(color),
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -543,14 +543,14 @@ private fun ComparisonCard(
                 ) {
                     Text(
                         stringResource(R.string.txt_text_placeholder_3),
-                        color = AppColors.text(color),
+                        color = DetailColors.text(color),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = point,
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -586,14 +586,14 @@ private fun FrameTypeItem(
                 Text(
                     text = type,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontSize = 12.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -608,7 +608,7 @@ private fun FrameTypeItem(
                 Text(
                     text = "Quick test: $wristGuide",
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
+                    color = DetailColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -623,7 +623,7 @@ private fun MedicalDisclaimerCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f))
         )
     ) {
         Row(
@@ -641,13 +641,13 @@ private fun MedicalDisclaimerCard() {
                 Text(
                     text = stringResource(R.string.txt_medical_disclaimer),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = AppColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.8f))
+                    color = DetailColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.8f))
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = stringResource(R.string.txt_this_information_is_for_educat_1),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.7f)),
+                    color = DetailColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.7f)),
                     fontSize = 12.sp,
                     lineHeight = 16.sp
                 )
