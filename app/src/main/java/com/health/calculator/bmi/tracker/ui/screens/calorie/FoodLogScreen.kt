@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -58,7 +60,7 @@ fun FoodLogScreen(
     targetCarbs: Double = 0.0,
     targetFat: Double = 0.0,
     viewModel: FoodLogViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.CALORIES) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
 
@@ -77,7 +79,7 @@ fun FoodLogScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 ),
                 actions = {
                     var showEdu by remember { mutableStateOf(false) }
@@ -280,12 +282,12 @@ private fun DailySummaryCard(log: DailyFoodLog) {
                             fontWeight = FontWeight.Bold,
                             fontSize = 36.sp
                         ),
-                        color = AppColors.text(ringColor)
+                        color = DetailColors.text(ringColor)
                     )
                     Text(
                         "/ ${"%.0f".format(log.targetCalories)} kcal",
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
@@ -305,7 +307,7 @@ private fun DailySummaryCard(log: DailyFoodLog) {
                     Text(
                         text = statusText,
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = AppColors.text(statusColor),
+                        color = DetailColors.text(statusColor),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -336,12 +338,12 @@ private fun StatChip(label: String, value: String, color: Color) {
         Text(
             value,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             fontSize = 12.sp
         )
     }
@@ -421,14 +423,14 @@ private fun MacroProgressBar(
                 Text(
                     "${"%.0f".format(consumed)} / ${"%.0f".format(target)} $unit",
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             } else {
                 Text(
                     "${"%.0f".format(consumed)} $unit",
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(color),
+                    color = DetailColors.text(color),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -523,7 +525,7 @@ private fun QuickAddSection(
                     Text(
                         stringResource(R.string.txt_common_foods),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
 
@@ -539,7 +541,7 @@ private fun QuickAddSection(
                         Text(
                             stringResource(R.string.txt_my_foods),
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             modifier = Modifier.padding(bottom = 6.dp)
                         )
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -594,14 +596,13 @@ private fun PresetChip(
                 preset.name.split(" ").first(),
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 12.sp,
-                maxLines = 1,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.widthIn(max = 64.dp)
             )
             Text(
                 "${"%.0f".format(preset.calories)} cal",
                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary,
+                color = DetailColors.text(MaterialTheme.colorScheme.primary),
                 fontSize = 12.sp
             )
             onRemove?.let {
@@ -634,7 +635,7 @@ private fun MealLogSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
             )
         ) {
             Column(
@@ -659,12 +660,12 @@ private fun MealLogSection(
                 Text(
                     stringResource(R.string.txt_no_food_logged_yet),
                     style = MaterialTheme.typography.titleSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Text(
                     stringResource(R.string.txt_tap_to_add_food_or_use_quick_a),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -704,7 +705,7 @@ private fun MealLogSection(
                         Text(
                             "${"%.0f".format(mealCalories)} kcal",
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.primary
+                            color = DetailColors.text(MaterialTheme.colorScheme.primary)
                         )
                     }
 
@@ -735,7 +736,7 @@ private fun FoodEntryRow(entry: FoodEntry, onRemove: () -> Unit) {
                 Text(
                     entry.servingSize,
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             }
@@ -750,7 +751,7 @@ private fun FoodEntryRow(entry: FoodEntry, onRemove: () -> Unit) {
         Text(
             "${"%.0f".format(entry.calories)} kcal",
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.primary
+            color = DetailColors.text(MaterialTheme.colorScheme.primary)
         )
         Spacer(modifier = Modifier.width(4.dp))
         IconButton(onClick = onRemove, modifier = Modifier.size(48.dp)) {
@@ -872,7 +873,7 @@ private fun AddFoodDialog(
                 }
 
                 uiState.errorMessage?.let {
-                    Text(it, color = AppColors.text(MaterialTheme.colorScheme.error), fontSize = 12.sp)
+                    Text(it, color = DetailColors.text(MaterialTheme.colorScheme.error), fontSize = 12.sp)
                 }
             }
         },
@@ -1009,9 +1010,9 @@ private fun AddCustomPresetDialog(
 private fun MacroMiniChip(label: String, value: String, color: Color) {
     Surface(shape = RoundedCornerShape(4.dp), color = color.copy(alpha = 0.1f)) {
         Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(label, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(color), fontSize = 12.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.width(2.dp))
-            Text(value, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color.copy(alpha = 0.8f)), fontSize = 12.sp)
+            Text(value, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(color.copy(alpha = 0.8f)), fontSize = 12.sp)
         }
     }
 }

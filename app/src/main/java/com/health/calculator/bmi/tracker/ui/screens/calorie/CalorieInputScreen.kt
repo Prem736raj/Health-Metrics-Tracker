@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -58,41 +58,11 @@ fun CalorieInputScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Header note
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
-            )
-        ) {
-            Row(
-                modifier = Modifier.padding(14.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.LocalFireDepartment,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(28.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column {
-                    Text(
-                        text = stringResource(R.string.txt_daily_calorie_calculator),
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = stringResource(R.string.txt_find_out_exactly_how_many_calo),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
-                        lineHeight = 18.sp
-                    )
-                }
-            }
-        }
+        // Harvest receipt introduces the form without another elevated hero.
+        HarvestHeader(
+            title = stringResource(R.string.txt_daily_calorie_calculator),
+            subtitle = stringResource(R.string.txt_find_out_exactly_how_many_calo)
+        )
 
         // Profile data indicator
         AnimatedVisibility(visible = uiState.isProfileDataUsed) {
@@ -114,7 +84,7 @@ fun CalorieInputScreen(
                     Text(
                         stringResource(R.string.txt_using_profile_data_you_can_adj_1),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.tertiary)
+                        color = DetailColors.text(MaterialTheme.colorScheme.tertiary)
                     )
                 }
             }
@@ -294,7 +264,7 @@ fun CalorieInputScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer)
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer)
                 )
             ) {
                 Row(
@@ -311,7 +281,7 @@ fun CalorieInputScreen(
                     Text(
                         text = uiState.errorMessage ?: "",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onErrorContainer
+                        color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer)
                     )
                 }
             }
@@ -377,7 +347,7 @@ private fun SectionHeader(
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onSurface
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
         )
     }
 }
@@ -393,7 +363,7 @@ private fun BodyFatSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -402,7 +372,7 @@ private fun BodyFatSection(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
+                Column(Modifier.weight(1f).padding(end = 12.dp)) {
                     Text(
                         text = stringResource(R.string.txt_body_fat_optional),
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
@@ -410,7 +380,7 @@ private fun BodyFatSection(
                     Text(
                         text = stringResource(R.string.txt_for_more_accurate_calculation_),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -464,7 +434,7 @@ private fun BodyFatSection(
                             Text(
                                 text = stringResource(R.string.txt_don_t_know_skip_this_we_ll_use),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
+                                color = DetailColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
                                 fontSize = 12.sp,
                                 lineHeight = 14.sp
                             )
@@ -503,7 +473,7 @@ private fun ActivityLevelSelector(
                     MaterialTheme.colorScheme.primary
                 ) else null,
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(if (isSelected)
+                    containerColor = DetailColors.surface(if (isSelected)
                         MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
                     else MaterialTheme.colorScheme.surface)
                 )
@@ -538,7 +508,7 @@ private fun ActivityLevelSelector(
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold
                                 ),
-                                color = AppColors.text(if (isSelected) MaterialTheme.colorScheme.primary
+                                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.primary
                                 else MaterialTheme.colorScheme.onSurface)
                             )
                             Spacer(modifier = Modifier.width(6.dp))
@@ -549,7 +519,7 @@ private fun ActivityLevelSelector(
                                 Text(
                                     text = "×${option.multiplier}",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = DetailColors.text(MaterialTheme.colorScheme.primary),
                                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold
@@ -560,7 +530,7 @@ private fun ActivityLevelSelector(
                         Text(
                             text = option.description,
                             style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             lineHeight = 16.sp,
                             fontSize = 12.sp
                         )
@@ -582,7 +552,7 @@ private fun GoalSelector(
         Text(
             text = stringResource(R.string.txt_weight_loss_1),
             style = MaterialTheme.typography.labelMedium,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
         )
 
@@ -595,7 +565,7 @@ private fun GoalSelector(
         Text(
             text = stringResource(R.string.txt_maintenance),
             style = MaterialTheme.typography.labelMedium,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
         )
 
@@ -608,7 +578,7 @@ private fun GoalSelector(
         Text(
             text = stringResource(R.string.txt_weight_gain_1),
             style = MaterialTheme.typography.labelMedium,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
         )
 
@@ -647,7 +617,7 @@ private fun GoalOptionCard(
             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         ),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(if (isSelected)
+            containerColor = DetailColors.surface(if (isSelected)
                 goalColor.copy(alpha = 0.06f)
             else MaterialTheme.colorScheme.surface)
         )
@@ -683,13 +653,13 @@ private fun GoalOptionCard(
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold
                     ),
-                    color = AppColors.text(if (isSelected) goalColor
+                    color = DetailColors.text(if (isSelected) goalColor
                     else MaterialTheme.colorScheme.onSurface)
                 )
                 Text(
                     text = option.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             }
@@ -703,7 +673,7 @@ private fun GoalOptionCard(
                     Text(
                         text = "${if (option.calorieAdjustment > 0) "+" else ""}${option.calorieAdjustment}",
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = AppColors.text(goalColor),
+                        color = DetailColors.text(goalColor),
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
                         fontSize = 12.sp
                     )

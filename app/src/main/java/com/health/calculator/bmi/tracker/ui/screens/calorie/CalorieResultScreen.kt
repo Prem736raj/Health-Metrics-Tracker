@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -350,12 +350,12 @@ fun CalorieProgressRing(
                 text = "$current",
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.ExtraBold,
-                color = AppColors.text(color)
+                color = DetailColors.text(color)
             )
             Text(
                 text = "of $target kcal",
                 style = MaterialTheme.typography.labelMedium,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                color = DetailColors.text(DetailColors.Secondary)
             )
         }
     }
@@ -453,7 +453,7 @@ fun AnimatedFoodLogEntry(
                 "$calories kcal",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = DetailColors.text(MaterialTheme.colorScheme.primary)
             )
         }
     }
@@ -465,7 +465,7 @@ private fun SafetyWarningCard(result: CalorieResult) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(HealthColors.Danger.copy(alpha = 0.1f))
+            containerColor = DetailColors.surface(HealthColors.Danger.copy(alpha = 0.1f))
         )
     ) {
         Row(
@@ -483,20 +483,20 @@ private fun SafetyWarningCard(result: CalorieResult) {
                 Text(
                     text = stringResource(R.string.txt_calorie_intake_below_recommend),
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    color = AppColors.text(HealthColors.Danger)
+                    color = DetailColors.text(HealthColors.Danger)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "Your goal of ${"%.0f".format(result.goalCalories)} kcal/day is below the recommended minimum of ${"%.0f".format(result.minimumCalories)} kcal/day for ${result.gender.lowercase()}s. We've adjusted your target to ${"%.0f".format(result.safeGoalCalories)} kcal/day for safety.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Danger.copy(alpha = 0.9f)),
+                    color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.9f)),
                     lineHeight = 18.sp
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = stringResource(R.string.txt_consider_a_less_aggressive_app),
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(HealthColors.Danger.copy(alpha = 0.8f)),
+                    color = DetailColors.text(HealthColors.Danger.copy(alpha = 0.8f)),
                     fontSize = 12.sp
                 )
             }
@@ -523,7 +523,7 @@ private fun PrimaryCalorieCard(result: CalorieResult) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(goalColor.copy(alpha = 0.08f))
+            containerColor = DetailColors.surface(goalColor.copy(alpha = 0.08f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
@@ -536,58 +536,26 @@ private fun PrimaryCalorieCard(result: CalorieResult) {
             Text(
                 text = result.goalName,
                 style = MaterialTheme.typography.titleMedium,
-                color = AppColors.text(goalColor)
+                color = DetailColors.text(goalColor)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Animated ring with calories
-            Box(modifier = Modifier.size(180.dp), contentAlignment = Alignment.Center) {
-                val trackColor = goalColor.copy(alpha = 0.15f)
-                val sweepFraction = (displayCalories / result.tdee).toFloat().coerceIn(0f, 1.5f)
-                val animatedSweep by animateFloatAsState(
-                    targetValue = sweepFraction * 240f,
-                    animationSpec = tween(1500, 300, easing = FastOutSlowInEasing),
-                    label = "sweep"
-                )
-
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    val strokeW = 10.dp.toPx()
-                    drawArc(
-                        color = trackColor,
-                        startAngle = 150f, sweepAngle = 240f, useCenter = false,
-                        style = Stroke(strokeW, cap = StrokeCap.Round)
-                    )
-                    drawArc(
-                        color = goalColor,
-                        startAngle = 150f, sweepAngle = animatedSweep, useCenter = false,
-                        style = Stroke(strokeW, cap = StrokeCap.Round)
-                    )
-                }
-
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Outlined.LocalFireDepartment,
-                        contentDescription = "Daily calorie target",
-                        tint = goalColor,
-                        modifier = Modifier.size(22.dp)
-                    )
-                    Text(
-                        text = "${"%.0f".format(animatedCalories)}",
-                        style = MaterialTheme.typography.displayMedium.copy(
-                            fontWeight = FontWeight.Bold, fontSize = 40.sp
-                        ),
-                        color = AppColors.text(goalColor)
-                    )
-                    Text(
-                        text = stringResource(R.string.txt_kcal_day),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = AppColors.text(goalColor.copy(alpha = 0.7f))
-                    )
+            // Energy receipt: value and unit share a readable, ruled baseline.
+            HorizontalDivider(color = DetailColors.Outline, modifier = Modifier.padding(vertical = 12.dp))
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Icon(Icons.Outlined.LocalFireDepartment, contentDescription = "Daily calorie target",
+                    tint = DetailColors.Accent, modifier = Modifier.size(32.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(text = "${"%.0f".format(animatedCalories)}",
+                        style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold, fontSize = 40.sp),
+                        color = DetailColors.Text)
+                    Text(stringResource(R.string.txt_kcal_day), style = MaterialTheme.typography.bodyMedium,
+                        color = DetailColors.Secondary)
                 }
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalDivider(color = DetailColors.Outline, modifier = Modifier.padding(vertical = 12.dp))
 
             if (result.isBelowMinimum) {
                 Surface(
@@ -597,7 +565,7 @@ private fun PrimaryCalorieCard(result: CalorieResult) {
                     Text(
                         text = "Adjusted from ${"%.0f".format(result.goalCalories)} to ${"%.0f".format(result.safeGoalCalories)} kcal (safety floor)",
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(HealthColors.Danger),
+                        color = DetailColors.text(HealthColors.Danger),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         fontSize = 12.sp
                     )
@@ -612,7 +580,7 @@ private fun PrimaryCalorieCard(result: CalorieResult) {
                 Text(
                     text = adjText,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
         }
@@ -678,11 +646,11 @@ private fun MetricColumn(
     color: Color
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(label, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color), fontWeight = FontWeight.Bold)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(color), fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(value, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = AppColors.text(color))
-        Text(unit, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color.copy(alpha = 0.6f)), fontSize = 12.sp)
-        Text(subtitle, style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)), fontSize = 12.sp)
+        Text(value, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = DetailColors.text(color))
+        Text(unit, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(color.copy(alpha = 0.6f)), fontSize = 12.sp)
+        Text(subtitle, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(DetailColors.Secondary), fontSize = 12.sp)
     }
 }
 
@@ -750,7 +718,7 @@ private fun EnergyBreakdownCard(result: CalorieResult) {
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(stringResource(R.string.txt_total_tdee), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
-                Text("${"%.0f".format(result.tdee)} kcal", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.primary)
+                Text("${"%.0f".format(result.tdee)} kcal", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = DetailColors.text(MaterialTheme.colorScheme.primary))
             }
         }
     }
@@ -765,11 +733,11 @@ private fun BreakdownLegendItem(
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold))
-            Text(description, style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)), fontSize = 12.sp)
+            Text(description, style = MaterialTheme.typography.bodySmall, color = DetailColors.text(DetailColors.Secondary), fontSize = 12.sp)
         }
         Column(horizontalAlignment = Alignment.End) {
-            Text(value, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold), color = AppColors.text(color))
-            Text(percent, style = MaterialTheme.typography.labelSmall, color = AppColors.text(color.copy(alpha = 0.6f)), fontSize = 12.sp)
+            Text(value, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold), color = DetailColors.text(color))
+            Text(percent, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(color.copy(alpha = 0.6f)), fontSize = 12.sp)
         }
     }
 }
@@ -785,7 +753,7 @@ private fun ProjectedOutcomeCard(result: CalorieResult) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(projColor.copy(alpha = 0.06f))),
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(projColor.copy(alpha = 0.06f))),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -808,7 +776,7 @@ private fun ProjectedOutcomeCard(result: CalorieResult) {
                     Text(
                         text = "At ${"%.0f".format(result.safeGoalCalories)} kcal/day, you may $action approximately:",
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -832,7 +800,7 @@ private fun ProjectedOutcomeCard(result: CalorieResult) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             stringResource(R.string.txt_aggressive_weight_loss_1_kg_we),
-                            style = MaterialTheme.typography.bodySmall, color = AppColors.text(CalorieVisualColors.deficit.copy(alpha = 0.9f)), fontSize = 12.sp, lineHeight = 14.sp
+                            style = MaterialTheme.typography.bodySmall, color = DetailColors.text(CalorieVisualColors.deficit.copy(alpha = 0.9f)), fontSize = 12.sp, lineHeight = 14.sp
                         )
                     }
                 }
@@ -851,8 +819,8 @@ private fun ProjectionItem(value: String, period: String, icon: androidx.compose
             modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(value, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onSurface)
-        Text(period, style = MaterialTheme.typography.labelSmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)), fontSize = 12.sp)
+        Text(value, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = DetailColors.text(MaterialTheme.colorScheme.onSurface))
+        Text(period, style = MaterialTheme.typography.labelSmall, color = DetailColors.text(DetailColors.Secondary), fontSize = 12.sp)
     }
 }
 
@@ -905,7 +873,7 @@ private fun FormulaDetailsCard(result: CalorieResult) {
 @Composable
 private fun DetailRow(label: String, value: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(label, style = MaterialTheme.typography.bodySmall, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)), fontSize = 12.sp)
+        Text(label, style = MaterialTheme.typography.bodySmall, color = DetailColors.text(DetailColors.Secondary), fontSize = 12.sp)
         Text(value, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold), fontSize = 12.sp)
     }
 }

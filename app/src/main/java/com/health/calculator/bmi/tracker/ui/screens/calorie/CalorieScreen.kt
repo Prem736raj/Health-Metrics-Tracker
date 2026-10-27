@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
@@ -32,7 +34,7 @@ fun CalorieScreen(
     navController: NavHostController,
     onNavigateBack: () -> Unit,
     viewModel: CalorieViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.CALORIES) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
@@ -55,7 +57,7 @@ fun CalorieScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }

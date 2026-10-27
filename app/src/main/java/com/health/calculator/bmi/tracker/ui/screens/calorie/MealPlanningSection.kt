@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calorie
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -146,14 +146,14 @@ private fun MealCountSelector(
                             Text(
                                 "$count",
                                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                color = if (isSelected) MaterialTheme.colorScheme.onPrimary
-                                else MaterialTheme.colorScheme.onSurface
+                                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.onPrimary
+                                else MaterialTheme.colorScheme.onSurface)
                             )
                             Text(
                                 stringResource(R.string.txt_meals),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = if (isSelected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
-                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                                else DetailColors.Secondary),
                                 fontSize = 12.sp
                             )
                         }
@@ -289,7 +289,7 @@ private fun MealRowItem(
                     Text(
                         meal.suggestedTime,
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -299,12 +299,12 @@ private fun MealRowItem(
                 Text(
                     "${"%.0f".format(meal.calories)} kcal",
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = AppColors.text(color)
+                    color = DetailColors.text(color)
                 )
                 Text(
                     "${"%.0f".format(meal.percentOfDaily)}%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             }
@@ -358,7 +358,7 @@ private fun MacroMiniChip(label: String, value: String, color: Color) {
             Text(
                 label,
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(color),
+                color = DetailColors.text(color),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -366,7 +366,7 @@ private fun MacroMiniChip(label: String, value: String, color: Color) {
             Text(
                 value,
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(color.copy(alpha = 0.8f)),
+                color = DetailColors.text(color.copy(alpha = 0.8f)),
                 fontSize = 12.sp
             )
         }
@@ -443,7 +443,7 @@ private fun IntermittentFastingCard(
                     Text(
                         stringResource(R.string.txt_eating_window_starts_at),
                         style = MaterialTheme.typography.labelMedium,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -466,8 +466,8 @@ private fun IntermittentFastingCard(
                                     displayHour,
                                     modifier = Modifier.padding(vertical = 8.dp),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = if (isSelected) MaterialTheme.colorScheme.onPrimary
-                                    else MaterialTheme.colorScheme.onSurface,
+                                    color = DetailColors.text(if (isSelected) MaterialTheme.colorScheme.onPrimary
+                                    else MaterialTheme.colorScheme.onSurface),
                                     textAlign = TextAlign.Center,
                                     fontSize = 12.sp
                                 )
@@ -507,9 +507,9 @@ private fun IFInfoChip(icon: ImageVector, label: String, value: String, color: C
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
             Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(14.dp))
-            Text(label, style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)))
+            Text(label, style = MaterialTheme.typography.labelSmall, fontSize = 12.sp, color = DetailColors.text(DetailColors.Secondary))
         }
-        Text(value, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = AppColors.text(color))
+        Text(value, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = DetailColors.text(color))
     }
 }
 
@@ -519,7 +519,7 @@ private fun IFTimelineVisual(ifPlan: IntermittentFastingPlan) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -597,7 +597,7 @@ private fun IFTimelineVisual(ifPlan: IntermittentFastingPlan) {
                     Text(
                         label,
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -695,7 +695,7 @@ private fun WorkoutNutritionCard(
                         Text(
                             stringResource(R.string.txt_pre_post_workout_meal_planning),
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             fontSize = 12.sp
                         )
                     }
@@ -716,7 +716,7 @@ private fun WorkoutNutritionCard(
                     Text(
                         stringResource(R.string.txt_when_do_you_work_out),
                         style = MaterialTheme.typography.labelMedium,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -806,12 +806,12 @@ private fun WorkoutMealCard(
                         Text(
                             label,
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                            color = AppColors.text(color)
+                            color = DetailColors.text(color)
                         )
                         Text(
                             timing,
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            color = DetailColors.text(DetailColors.Secondary),
                             fontSize = 12.sp
                         )
                     }
@@ -820,12 +820,12 @@ private fun WorkoutMealCard(
                     Text(
                         "${"%.0f".format(meal.calories)} kcal",
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                        color = AppColors.text(color)
+                        color = DetailColors.text(color)
                     )
                     Text(
                         "${meal.percentOfDaily.toInt()}% of daily",
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -848,7 +848,7 @@ private fun WorkoutMealCard(
             Text(
                 stringResource(R.string.txt_ideas),
                 style = MaterialTheme.typography.labelSmall,
-                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                color = DetailColors.text(DetailColors.Secondary),
                 fontSize = 12.sp
             )
             meal.mealIdeas.take(2).forEach { idea ->
@@ -863,7 +863,7 @@ private fun WorkoutMealCard(
                     Text(
                         idea.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -927,7 +927,7 @@ private fun MealIdeasSection(mealPlan: MealPlan) {
                                     Text(
                                         "${"%.0f".format(meal.calories)} kcal",
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.primary,
+                                        color = DetailColors.text(MaterialTheme.colorScheme.primary),
                                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                         fontSize = 12.sp
                                     )
@@ -937,7 +937,7 @@ private fun MealIdeasSection(mealPlan: MealPlan) {
                                 if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                                 contentDescription = "Toggle",
                                 modifier = Modifier.size(20.dp),
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                                tint = DetailColors.Secondary
                             )
                         }
 
@@ -965,13 +965,13 @@ private fun MealIdeasSection(mealPlan: MealPlan) {
                                             Text(
                                                 idea.description,
                                                 style = MaterialTheme.typography.bodySmall,
-                                                color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                                                color = DetailColors.text(DetailColors.Secondary)
                                             )
                                         }
                                         Text(
                                             "~${idea.calories} kcal",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                                            color = DetailColors.text(DetailColors.Secondary),
                                             fontSize = 12.sp
                                         )
                                     }
