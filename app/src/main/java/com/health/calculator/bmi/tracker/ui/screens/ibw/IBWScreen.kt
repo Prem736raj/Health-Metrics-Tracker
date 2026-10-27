@@ -1,6 +1,8 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -38,7 +40,7 @@ fun IBWScreen(
     onNavigateToBMR: () -> Unit,
     onNavigateToWHR: () -> Unit,
     viewModel: IBWViewModel = hiltViewModel()
-) {
+) = DetailScreenTheme(DetailFeature.IDEAL_WEIGHT) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
@@ -64,7 +66,7 @@ fun IBWScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+                    containerColor = if (DetailColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -103,9 +105,7 @@ fun IBWScreen(
                             viewModel.saveGoal()
                         },
                         onClearGoal = { viewModel.clearGoal() },
-                        onNavigateToBMR = { calorieAdjustment ->
-                            // Optional: Implementation for navigation to BMR with specific deficit
-                        },
+                        onNavigateToBMR = { onNavigateToBMR() },
                         selectedGoalSource = uiState.selectedGoalSource,
                         selectedGoalWeightKg = uiState.selectedGoalWeightKg,
                         selectedPace = uiState.selectedPace
@@ -213,32 +213,11 @@ private fun IBWInputContent(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Info card
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
-            )
-        ) {
-            Row(
-                modifier = Modifier.padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.Person,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.txt_ideal_body_weight_is_the_weigh),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-        }
+        // Reference branches keep historical formulas distinct from a goal.
+        BranchRangeHeader(
+            title = stringResource(R.string.txt_ideal_body_weight),
+            subtitle = stringResource(R.string.txt_ideal_body_weight_is_the_weigh)
+        )
 
         // Profile data indicator
         if (uiState.isProfileDataUsed) {
@@ -260,7 +239,7 @@ private fun IBWInputContent(
                     Text(
                         stringResource(R.string.txt_using_profile_data),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.tertiary)
+                        color = DetailColors.text(MaterialTheme.colorScheme.tertiary)
                     )
                 }
             }
@@ -385,7 +364,7 @@ private fun IBWInputContent(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
                 )
             ) {
                 Column(
@@ -395,12 +374,12 @@ private fun IBWInputContent(
                     Text(
                         stringResource(R.string.txt_measure_your_wrist),
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
                     )
                     Text(
                         stringResource(R.string.txt_wrap_a_flexible_tape_measure_a),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
                     )
 
                     OutlinedTextField(
@@ -429,7 +408,7 @@ private fun IBWInputContent(
                             "Female:\n• Under 155cm: S < 14, M 14-14.6, L > 14.6\n• 155-163cm: S < 15.2, M 15.2-15.9, L > 15.9\n• Over 163cm: S < 16, M 16-16.5, L > 16.5"
                         },
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                        color = DetailColors.text(MaterialTheme.colorScheme.onSecondaryContainer)
                     )
                 }
             }
@@ -482,7 +461,7 @@ private fun IBWInputContent(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.errorContainer)
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.errorContainer)
                 )
             ) {
                 Row(
@@ -499,7 +478,7 @@ private fun IBWInputContent(
                     Text(
                         text = uiState.errorMessage ?: "",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onErrorContainer
+                        color = DetailColors.text(MaterialTheme.colorScheme.onErrorContainer)
                     )
                 }
             }

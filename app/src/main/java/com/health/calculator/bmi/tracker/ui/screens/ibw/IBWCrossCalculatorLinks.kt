@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -121,12 +121,12 @@ private fun CrossLinkItem(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = DetailColors.text(MaterialTheme.colorScheme.onSurface)
                 )
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             }

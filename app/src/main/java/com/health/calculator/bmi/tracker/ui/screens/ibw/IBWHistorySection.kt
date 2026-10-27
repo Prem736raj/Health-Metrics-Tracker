@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -71,7 +71,7 @@ fun IBWHistorySection(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
                 )
             ) {
                 Column(
@@ -90,12 +90,12 @@ fun IBWHistorySection(
                     Text(
                         text = stringResource(R.string.txt_no_ibw_calculations_yet),
                         style = MaterialTheme.typography.titleSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                     Text(
                         text = stringResource(R.string.txt_calculate_your_ideal_weight_an),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(top = 4.dp)
                     )
@@ -119,7 +119,7 @@ fun IBWHistorySection(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
+                    containerColor = DetailColors.surface(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
                 )
             ) {
                 Row(
@@ -136,7 +136,7 @@ fun IBWHistorySection(
                     Text(
                         text = stringResource(R.string.txt_save_at_least_2_calculations_w),
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
                     )
                 }
             }
@@ -242,7 +242,7 @@ private fun StatisticsSummaryCard(
                                 Text(
                                     text = stringResource(R.string.txt_closest_to_ideal),
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = AppColors.text(HealthColors.Healthy)
+                                    color = DetailColors.text(HealthColors.Healthy)
                                 )
                                 Text(
                                     text = "${"%.1f".format(diff)} $unit from ideal on ${
@@ -250,7 +250,7 @@ private fun StatisticsSummaryCard(
                                             .format(Date(closest.timestamp))
                                     }",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                                    color = DetailColors.text(DetailColors.Secondary),
                                     fontSize = 12.sp
                                 )
                             }
@@ -284,7 +284,7 @@ private fun StatisticsSummaryCard(
                                 Text(
                                     text = stringResource(R.string.txt_furthest_from_ideal),
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = AppColors.text(HealthColors.Warning)
+                                    color = DetailColors.text(HealthColors.Warning)
                                 )
                                 Text(
                                     text = "${"%.1f".format(diff)} $unit from ideal on ${
@@ -292,7 +292,7 @@ private fun StatisticsSummaryCard(
                                             .format(Date(furthest.timestamp))
                                     }",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                                    color = DetailColors.text(DetailColors.Secondary),
                                     fontSize = 12.sp
                                 )
                             }
@@ -310,12 +310,12 @@ private fun StatItem(label: String, value: String, color: Color) {
         Text(
             text = value,
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            color = AppColors.text(color)
+            color = DetailColors.text(color)
         )
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             textAlign = TextAlign.Center,
             lineHeight = 14.sp
         )
@@ -372,7 +372,7 @@ private fun WeightTrendGraph(
                 Text(
                     stringResource(R.string.txt_actual_weight),
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Box(
@@ -385,7 +385,7 @@ private fun WeightTrendGraph(
                 Text(
                     stringResource(R.string.txt_ideal_weight),
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    color = DetailColors.text(DetailColors.Secondary)
                 )
             }
 
@@ -472,13 +472,13 @@ private fun WeightTrendGraph(
                 Text(
                     "${"%.0f".format(minW)} $unit",
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
                 Text(
                     "${"%.0f".format(maxW)} $unit",
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
+                    color = DetailColors.text(DetailColors.Secondary),
                     fontSize = 12.sp
                 )
             }
@@ -513,12 +513,12 @@ private fun HistoryEntryCard(
                     Text(
                         text = "IBW: ${"%.1f".format(entry.frameAdjustedDevineKg * factor)} $unit",
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        color = DetailColors.text(MaterialTheme.colorScheme.primary)
                     )
                     Text(
                         text = "${dateFormat.format(Date(entry.timestamp))} • ${timeFormat.format(Date(entry.timestamp))}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        color = DetailColors.text(DetailColors.Secondary),
                         fontSize = 12.sp
                     )
                 }
@@ -539,7 +539,7 @@ private fun HistoryEntryCard(
                             Text(
                                 text = "${if (diff > 0) "+" else ""}${"%.1f".format(diff * factor)} $unit",
                                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                color = AppColors.text(diffColor),
+                                color = DetailColors.text(diffColor),
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
                                 fontSize = 12.sp
                             )
@@ -615,13 +615,13 @@ private fun DetailRow(label: String, value: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
-            color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            color = DetailColors.text(DetailColors.Secondary),
             fontSize = 12.sp
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = DetailColors.text(MaterialTheme.colorScheme.onSurface),
             fontSize = 12.sp
         )
     }

@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.ibw
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -47,7 +47,7 @@ fun IBWResultScreen(
     onNavigateToBMR: () -> Unit = {},
     onNavigateToWHR: () -> Unit = {}
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val scrollState = rememberScrollState()
     var visible by remember { mutableStateOf(false) }
@@ -58,7 +58,7 @@ fun IBWResultScreen(
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                    colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(
                         MaterialTheme.colorScheme.surface,
                         MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     )
@@ -80,7 +80,7 @@ fun IBWResultScreen(
                         .padding(bottom = 16.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = AppColors.surface(MaterialTheme.colorScheme.tertiaryContainer)
+                        containerColor = DetailColors.surface(MaterialTheme.colorScheme.tertiaryContainer)
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
@@ -105,7 +105,7 @@ fun IBWResultScreen(
                         Text(
                             text = warning,
                             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
-                            color = MaterialTheme.colorScheme.onTertiaryContainer,
+                            color = DetailColors.text(MaterialTheme.colorScheme.onTertiaryContainer),
                             lineHeight = 18.sp
                         )
                     }
@@ -267,7 +267,7 @@ private fun PrimaryResultCard(
     showInKg: Boolean,
     onToggleUnit: () -> Unit
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val weight = if (showInKg) result.frameAdjustedDevineKg else result.frameAdjustedDevineLbs
     val unit = if (showInKg) "kg" else "lbs"
@@ -293,7 +293,7 @@ private fun PrimaryResultCard(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                        colors = if (DetailColors.active) listOf(DetailColors.SurfaceAlt, DetailColors.Surface) else listOf(
                             MaterialTheme.colorScheme.primaryContainer,
                             MaterialTheme.colorScheme.secondaryContainer
                         )
@@ -306,64 +306,10 @@ private fun PrimaryResultCard(
                     .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = stringResource(R.string.txt_your_ideal_body_weight),
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                BranchRangeHeader(
+                    title = if (weightAvailable) stringResource(R.string.txt_1f).format(animatedWeight) + " " + unit.uppercase() else "—",
+                    subtitle = stringResource(R.string.txt_your_ideal_body_weight)
                 )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // Animated Weight Gauge
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(220.dp)
-                ) {
-                    // Background Track
-                    Canvas(modifier = Modifier.fillMaxSize()) {
-                        drawArc(
-                            color = Color.White.copy(alpha = 0.5f),
-                            startAngle = 135f,
-                            sweepAngle = 270f,
-                            useCenter = false,
-                            style = Stroke(width = 20.dp.toPx(), cap = StrokeCap.Round)
-                        )
-                    }
-
-                    // Progress
-                    Canvas(modifier = Modifier.fillMaxSize()) {
-                        drawArc(
-                            brush = Brush.sweepGradient(
-                                0f to colorPrimary,
-                                0.5f to colorSecondary,
-                                1f to colorTertiary
-                            ),
-                            startAngle = 135f,
-                            sweepAngle = 270f * (animatedWeight / (if(showInKg) 120f else 260f)).coerceAtMost(1f),
-                            useCenter = false,
-                            style = Stroke(width = 20.dp.toPx(), cap = StrokeCap.Round)
-                        )
-                    }
-
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = if (weightAvailable) stringResource(R.string.txt_1f).format(animatedWeight) else "—",
-                            style = MaterialTheme.typography.displayLarge.copy(
-                                fontWeight = FontWeight.Black,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        )
-                        Text(
-                            text = unit.uppercase(),
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
 
                 Surface(
                     onClick = onToggleUnit,
@@ -384,7 +330,7 @@ private fun PrimaryResultCard(
                         Text(
                             "Switch to ${if (showInKg) "lbs" else "kg"}",
                             style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary
+                            color = DetailColors.text(MaterialTheme.colorScheme.primary)
                         )
                     }
                 }
@@ -392,7 +338,7 @@ private fun PrimaryResultCard(
                 Text(
                     text = if (weightAvailable) "Adjusted for ${result.frameSize} frame" else "Historical equations are unavailable below 60 inches",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
+                    color = DetailColors.text(MaterialTheme.colorScheme.onPrimaryContainer),
                     modifier = Modifier.padding(top = 12.dp)
                 )
             }
@@ -409,7 +355,7 @@ private fun BMIRangeCard(result: IBWResult, showInKg: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)))
+        colors = CardDefaults.cardColors(containerColor = DetailColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -476,7 +422,7 @@ private fun FormulaComparisonCard(result: IBWResult, showInKg: Boolean) {
                     Text(
                         stringResource(R.string.txt_different_formulas_are_used_by),
                         style = MaterialTheme.typography.labelSmall,
-                        color = AppColors.text(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                        color = DetailColors.text(DetailColors.Secondary)
                     )
                 }
             }
