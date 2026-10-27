@@ -1,6 +1,9 @@
 package com.health.calculator.bmi.tracker.ui.screens.aicoach
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -37,6 +40,7 @@ fun AiCoachScreen(
     onNavigateBack: () -> Unit,
     viewModel: AiCoachViewModel = hiltViewModel()
 ) {
+    DetailScreenTheme(DetailFeature.ASSISTANT) {
     val messages by viewModel.messages.collectAsStateWithLifecycle()
     val isTyping by viewModel.isTyping.collectAsStateWithLifecycle()
     val isDisclosureAccepted by viewModel.isDisclosureAccepted.collectAsStateWithLifecycle()
@@ -48,7 +52,7 @@ fun AiCoachScreen(
     val listState = rememberLazyListState()
 
     LaunchedEffect(messages.size) {
-        if (messages.isNotEmpty()) listState.animateScrollToItem(messages.lastIndex)
+        if (messages.isNotEmpty()) listState.animateScrollToItem(messages.size)
     }
 
     if (!isDisclosureAccepted) {
@@ -104,8 +108,8 @@ fun AiCoachScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = if (AppColors.isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    titleContentColor = AppColors.Text,
+                    navigationIconContentColor = AppColors.Text
                 ),
                 actions = {
                     IconButton(onClick = { showClearDialog = true }, enabled = messages.any { it.isUser }) {
@@ -119,12 +123,9 @@ fun AiCoachScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .consumeWindowInsets(paddingValues)
+                .imePadding()
         ) {
-            ContextSharingCard(
-                enabled = isContextSharingEnabled,
-                onEnabledChange = viewModel::setContextSharingEnabled
-            )
-
             notice?.let { message ->
                 Surface(
                     modifier = Modifier
@@ -159,6 +160,12 @@ fun AiCoachScreen(
                 contentPadding = PaddingValues(vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                item(key = "context_sharing") {
+                    ContextSharingCard(
+                        enabled = isContextSharingEnabled,
+                        onEnabledChange = viewModel::setContextSharingEnabled
+                    )
+                }
                 items(messages) { message ->
                     MessageBubble(message = message)
                 }
@@ -237,6 +244,7 @@ fun AiCoachScreen(
             }
         )
     }
+    }
 }
 
 @Composable
@@ -244,7 +252,7 @@ private fun ContextSharingCard(enabled: Boolean, onEnabledChange: (Boolean) -> U
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(vertical = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Row(
@@ -270,14 +278,14 @@ fun MessageBubble(message: ChatMessage) {
     val uriHandler = LocalUriHandler.current
 
     val bubbleColor = when {
-        message.isUser -> MaterialTheme.colorScheme.primary
+        message.isUser -> AppColors.Accent
         message.isError -> MaterialTheme.colorScheme.errorContainer
-        else -> MaterialTheme.colorScheme.secondaryContainer
+        else -> AppColors.SurfaceAlt
     }
     val textColor = when {
-        message.isUser -> MaterialTheme.colorScheme.onPrimary
+        message.isUser -> AppColors.OnAccent
         message.isError -> MaterialTheme.colorScheme.onErrorContainer
-        else -> MaterialTheme.colorScheme.onSecondaryContainer
+        else -> AppColors.Text
     }
     val alignment = if (message.isUser) Alignment.End else Alignment.Start
 
@@ -298,7 +306,8 @@ fun MessageBubble(message: ChatMessage) {
             }
             Box(
                 modifier = Modifier
-                    .widthIn(max = 280.dp)
+                    .widthIn(max = 560.dp)
+                    .fillMaxWidth(0.88f)
                     .clip(
                         RoundedCornerShape(
                             topStart = 20.dp,
@@ -320,7 +329,7 @@ fun MessageBubble(message: ChatMessage) {
                     SelectionContainer {
                         Text(
                             text = annotatedString,
-                            color = AppColors.text(textColor),
+                            color = textColor,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }

@@ -1,5 +1,7 @@
 package com.health.calculator.bmi.tracker.ui.components.history
 
+import com.health.calculator.bmi.tracker.ui.components.SupportingWrapRow
+
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -38,7 +40,7 @@ fun BatchOperationsBar(
             tonalElevation = 4.dp,
             shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
         ) {
-            Row(
+            SupportingWrapRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp),

@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -30,13 +30,25 @@ fun ReminderCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(if (reminder.isEnabled)
+            containerColor = if (AppColors.active) {
+                if (reminder.isEnabled) AppColors.Surface else AppColors.SurfaceAlt
+            } else AppColors.surface(if (reminder.isEnabled)
                 MaterialTheme.colorScheme.surface
             else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            if (AppColors.active) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text(reminder.getTimesDisplayText(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                        Text(reminder.getDaysDisplayText(), style = MaterialTheme.typography.bodySmall, color = AppColors.Secondary)
+                    }
+                    Text(if (reminder.isEnabled) "Enabled" else "Paused", style = MaterialTheme.typography.labelLarge, color = AppColors.Secondary)
+                }
+                HorizontalDivider(Modifier.padding(vertical = 12.dp), color = AppColors.Outline)
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -47,7 +59,7 @@ fun ReminderCard(
                         text = reminder.title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.secondaryText(if (reminder.isEnabled)
+                        color = if (AppColors.active) AppColors.Text else AppColors.secondaryText(if (reminder.isEnabled)
                             MaterialTheme.colorScheme.onSurface
                         else MaterialTheme.colorScheme.onSurfaceVariant)
                     )
@@ -56,7 +68,7 @@ fun ReminderCard(
                             text = reminder.message,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1
+                            maxLines = if (AppColors.active) Int.MAX_VALUE else 1
                         )
                     }
                 }
@@ -83,7 +95,7 @@ fun ReminderCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column {
+                if (!AppColors.active) Column {
                     Text(
                         text = reminder.getTimesDisplayText(),
                         style = MaterialTheme.typography.bodyMedium,

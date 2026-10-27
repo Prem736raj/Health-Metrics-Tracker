@@ -1,7 +1,12 @@
 // ui/screens/reports/WeeklyReportScreen.kt
 package com.health.calculator.bmi.tracker.ui.screens.reports
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.SupportingLeafMark
+import com.health.calculator.bmi.tracker.ui.components.SupportingSectionLabel
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -55,12 +60,15 @@ fun WeeklyReportScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    DetailScreenTheme(DetailFeature.REPORT) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface),
                 title = { Text(stringResource(R.string.txt_weekly_report), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
@@ -97,6 +105,16 @@ fun WeeklyReportScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                uiState.error?.let { error ->
+                    item(key = "report_error") {
+                        Surface(color = AppColors.SurfaceAlt, shape = RoundedCornerShape(12.dp)) {
+                            Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                Icon(Icons.Outlined.Info, contentDescription = null, tint = AppColors.Danger)
+                                Text(error, color = AppColors.Danger, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                            }
+                        }
+                    }
+                }
                 if (summary != null) {
                     // Non-judgmental logging rhythm summary. The legacy grade
                     // remains in storage for schema compatibility only.
@@ -123,7 +141,7 @@ fun WeeklyReportScreen(
                     // Highlights
                     if (summary.highlights.isNotEmpty()) {
                         item(key = "highlights_header") {
-                            Text(stringResource(R.string.txt_highlights), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            SupportingSectionLabel(stringResource(R.string.txt_highlights))
                         }
                         items(summary.highlights, key = { it.title }) { highlight ->
                             HighlightCard(highlight = highlight)
@@ -133,7 +151,7 @@ fun WeeklyReportScreen(
                     // Metric Summaries
                     if (summary.metricSummaries.isNotEmpty()) {
                         item(key = "metrics_header") {
-                            Text(stringResource(R.string.txt_this_week_s_metrics), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            SupportingSectionLabel(stringResource(R.string.txt_this_week_s_metrics))
                         }
                         items(summary.metricSummaries, key = { it.metricName }) { metric ->
                             MetricSummaryCard(metric = metric)
@@ -150,7 +168,7 @@ fun WeeklyReportScreen(
                     // Next Week Goals
                     if (summary.nextWeekGoals.isNotEmpty()) {
                         item(key = "goals_header") {
-                            Text(stringResource(R.string.txt_next_week_focus), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            SupportingSectionLabel(stringResource(R.string.txt_next_week_focus))
                         }
                         items(summary.nextWeekGoals, key = { it.suggestion }) { goal ->
                             NextWeekGoalCard(goal = goal)
@@ -160,7 +178,7 @@ fun WeeklyReportScreen(
                     // Previous reports
                     if (uiState.previousReports.size > 1) {
                         item(key = "prev_header") {
-                            Text(stringResource(R.string.txt_previous_reports), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            SupportingSectionLabel(stringResource(R.string.txt_previous_reports))
                         }
                         items(
                             uiState.previousReports.drop(1).take(8),
@@ -217,86 +235,30 @@ fun WeeklyReportScreen(
             onDismiss = viewModel::dismissShareDialog
         )
     }
+    }
 }
 
 @Composable
 private fun WeeklyRhythmCard(grade: String, message: String, weekStart: Long, weekEnd: Long) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
-
     val dateFmt = SimpleDateFormat("MMM d", Locale.getDefault())
     val dateRange = "${dateFmt.format(Date(weekStart))} – ${dateFmt.format(Date(weekEnd))}"
-
-    val accentColor = MaterialTheme.colorScheme.primary
     val rhythmLabel = WellnessEngagementPolicy.weeklyRhythmLabel(grade)
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(0.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(accentColor.copy(alpha = 0.15f), accentColor.copy(alpha = 0.05f))
-                    ),
-                    shape = RoundedCornerShape(20.dp)
-                )
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(dateRange, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // A neutral rhythm icon avoids turning wellness logging into
-                // an academic grade or a judgment of health.
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .background(accentColor.copy(alpha = 0.15f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "↻",
-                        style = MaterialTheme.typography.displaySmall,
-                        fontWeight = FontWeight.Bold,
-                        color = AppColors.text(accentColor)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = rhythmLabel,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
+    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Text(dateRange, style = MaterialTheme.typography.labelLarge, color = AppColors.Secondary, modifier = Modifier.weight(1f))
+            SupportingLeafMark()
         }
+        HorizontalDivider(color = AppColors.Outline)
+        Text(rhythmLabel, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold, color = AppColors.Text)
+        Text(message, style = MaterialTheme.typography.bodyMedium, color = AppColors.Secondary)
     }
 }
 
 @Composable
 private fun HealthScoreChangeCard(scoreStart: Int, scoreEnd: Int, change: Int) {
     val changeColor = when {
-        change > 0 -> HealthColors.Healthy
-        change < 0 -> HealthColors.Danger
+        change > 0 -> AppColors.Success
+        change < 0 -> AppColors.Danger
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
@@ -338,13 +300,13 @@ private fun HealthScoreChangeCard(scoreStart: Int, scoreEnd: Int, change: Int) {
                     Text(
                         text = if (change > 0) "↑" else "↓",
                         style = MaterialTheme.typography.titleLarge,
-                        color = AppColors.text(changeColor)
+                        color = changeColor
                     )
                     Text(
                         text = "${if (change > 0) "+" else ""}$change",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = AppColors.text(changeColor)
+                        color = changeColor
                     )
                     Text(
                         text = stringResource(R.string.txt_vs_last_week),
@@ -363,6 +325,7 @@ private fun HealthScoreChangeCard(scoreStart: Int, scoreEnd: Int, change: Int) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun MetricSummaryCard(metric: MetricWeeklySummary) {
     val trendColor = when (metric.trend) {
@@ -372,50 +335,18 @@ private fun MetricSummaryCard(metric: MetricWeeklySummary) {
         MetricTrend.NEW -> MaterialTheme.colorScheme.primary
         MetricTrend.NO_DATA -> MaterialTheme.colorScheme.onSurfaceVariant
     }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(1.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = reportIcon(metric.icon),
-                contentDescription = metric.metricName,
-                tint = trendColor,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(metric.metricName, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                Text(
-                    text = metric.currentValue,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(metric.detail, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(metric.trend.arrow, style = MaterialTheme.typography.titleMedium)
-                Text(
-                    metric.trend.label,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = AppColors.text(trendColor),
-                    fontWeight = FontWeight.Medium
-                )
-                metric.previousValue?.let {
-                    Text("Was: $it", style = MaterialTheme.typography.labelSmall, color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)))
-                }
-            }
+    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Icon(reportIcon(metric.icon), contentDescription = null, tint = AppColors.Accent)
+            Text(metric.metricName, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
         }
+        Text(metric.currentValue, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = AppColors.Text)
+        Text(metric.detail, style = MaterialTheme.typography.bodySmall, color = AppColors.Secondary)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text("${metric.trend.arrow} ${metric.trend.label}", style = MaterialTheme.typography.labelLarge, color = trendColor)
+            metric.previousValue?.let { Text("Was: $it", style = MaterialTheme.typography.bodySmall, color = AppColors.Secondary) }
+        }
+        HorizontalDivider(color = AppColors.Outline)
     }
 }
 

@@ -1,6 +1,9 @@
 package com.health.calculator.bmi.tracker.ui.screens.history
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -43,6 +46,7 @@ fun HistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel(),
     statsViewModel: StatisticsViewModel = hiltViewModel()
 ) {
+    DetailScreenTheme(DetailFeature.HISTORY) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -218,15 +222,15 @@ fun HistoryScreen(
                         trailingIcon = {
                             if (searchQuery.isNotEmpty()) {
                                 IconButton(onClick = { viewModel.onSearchQueryChange("") }) {
-                                    Icon(Icons.Default.Clear, null)
+                                    Icon(Icons.Default.Clear, "Clear search")
                                 }
                             }
                         },
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                            unfocusedContainerColor = AppColors.SurfaceAlt,
+                            focusedContainerColor = AppColors.SurfaceAlt
                         )
                     )
 
@@ -368,5 +372,6 @@ fun HistoryScreen(
                 }
             )
         }
+    }
     }
 }

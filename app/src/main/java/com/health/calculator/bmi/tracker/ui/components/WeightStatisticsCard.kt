@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -42,7 +42,7 @@ fun WeightStatisticsCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(
+            SupportingWrapRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -55,8 +55,8 @@ fun WeightStatisticsCard(
 
                 // Trend indicator
                 val trendColor = when (statistics.trendDirection) {
-                    WeightTrendDirection.LOSING -> HealthColors.Healthy
-                    WeightTrendDirection.GAINING -> HealthColors.Warning
+                    WeightTrendDirection.LOSING -> (if (AppColors.active) AppColors.Success else HealthColors.Healthy)
+                    WeightTrendDirection.GAINING -> (if (AppColors.active) AppColors.Warning else HealthColors.Warning)
                     WeightTrendDirection.STABLE -> MaterialTheme.colorScheme.onSurfaceVariant
                 }
                 val trendIcon = when (statistics.trendDirection) {
@@ -117,7 +117,7 @@ fun WeightStatisticsCard(
                         String.format("%.1f %s", it * multiplier, unit)
                     } ?: "—",
                     modifier = Modifier.weight(1f),
-                    valueColor = HealthColors.Healthy
+                    valueColor = (if (AppColors.active) AppColors.Success else HealthColors.Healthy)
                 )
                 StatItem(
                     label = "Highest",
@@ -125,7 +125,7 @@ fun WeightStatisticsCard(
                         String.format("%.1f %s", it * multiplier, unit)
                     } ?: "—",
                     modifier = Modifier.weight(1f),
-                    valueColor = HealthColors.Warning
+                    valueColor = (if (AppColors.active) AppColors.Warning else HealthColors.Warning)
                 )
             }
 
@@ -143,7 +143,7 @@ fun WeightStatisticsCard(
                     } ?: "—",
                     modifier = Modifier.weight(1f),
                     valueColor = statistics.totalChange?.let {
-                        if (it <= 0) HealthColors.Healthy else HealthColors.Warning
+                        if (it <= 0) (if (AppColors.active) AppColors.Success else HealthColors.Healthy) else (if (AppColors.active) AppColors.Warning else HealthColors.Warning)
                     }
                 )
                 StatItem(

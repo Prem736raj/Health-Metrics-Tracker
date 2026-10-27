@@ -1,7 +1,7 @@
 // app/src/main/java/com/health/calculator/bmi/tracker/ui/components/InactivityNotificationSettings.kt
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 

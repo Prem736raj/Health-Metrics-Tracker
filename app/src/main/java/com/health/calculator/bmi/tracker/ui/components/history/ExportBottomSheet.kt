@@ -3,7 +3,10 @@ package com.health.calculator.bmi.tracker.ui.components.history
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -46,6 +49,7 @@ fun ExportBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .then(if (AppColors.active) Modifier.verticalScroll(rememberScrollState()) else Modifier)
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 32.dp)
         ) {

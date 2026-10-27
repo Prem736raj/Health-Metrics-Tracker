@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components.history
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,8 +28,8 @@ fun HistoryDateHeader(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            .clickable(onClick = onToggleCollapse),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+            .then(if (AppColors.active) Modifier else Modifier.clickable(onClick = onToggleCollapse)),
+        color = if (AppColors.active) AppColors.SurfaceAlt else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
         shape = RoundedCornerShape(10.dp)
     ) {
         Row(
@@ -62,10 +63,10 @@ fun HistoryDateHeader(
                 }
             }
 
-            Icon(
+            if (!AppColors.active) Icon(
                 imageVector = if (isCollapsed) Icons.Default.ExpandMore else Icons.Default.ExpandLess,
                 contentDescription = if (isCollapsed) "Expand" else "Collapse",
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                tint = AppColors.secondaryText(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 modifier = Modifier.size(20.dp)
             )
         }

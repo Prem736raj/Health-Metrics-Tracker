@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.history
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -108,6 +108,7 @@ fun StatisticsScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OverallStatsCard(stats: OverallStatistics) {
     Card(
@@ -142,27 +143,27 @@ fun OverallStatsCard(stats: OverallStatistics) {
                     imageVector = Icons.Default.Analytics,
                     contentDescription = null,
                     modifier = Modifier.size(48.dp),
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                    tint = AppColors.Accent
                 )
             }
 
-            Divider(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+            Divider(color = AppColors.Outline)
 
-            Row(modifier = Modifier.fillMaxWidth()) {
+            FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 StatItem(
                     label = "Active Days",
                     value = stats.totalActiveDays.toString(),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.widthIn(min = 88.dp).weight(1f)
                 )
                 StatItem(
                     label = "Avg/Day",
                     value = String.format("%.1f", stats.averageCalculationsPerDay),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.widthIn(min = 88.dp).weight(1f)
                 )
                 StatItem(
                     label = "Since",
                     value = stats.firstUseDateFormatted.split(",")[0],
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.widthIn(min = 88.dp).weight(1f)
                 )
             }
         }
@@ -187,7 +188,7 @@ fun StatItem(label: String, value: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun StreakCard(currentStreak: Int, longestStreak: Int) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -205,7 +206,7 @@ fun StreakCard(currentStreak: Int, longestStreak: Int) {
                     .size(60.dp)
                     .background(
                         brush = Brush.verticalGradient(
-                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(HealthColors.Warning, HealthColors.Caution)
+                            colors = if (AppColors.active) listOf(AppColors.SurfaceAlt, AppColors.SurfaceAlt) else if (darkGradientSurface) listOf(AppColors.surface(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, 2), AppColors.surface(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, 2)) else listOf(HealthColors.Warning, HealthColors.Caution)
                         ),
                         shape = CircleShape
                     ),
@@ -214,7 +215,7 @@ fun StreakCard(currentStreak: Int, longestStreak: Int) {
                 Icon(
                     imageVector = Icons.Default.Whatshot,
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = AppColors.Accent,
                     modifier = Modifier.size(32.dp)
                 )
             }
@@ -284,7 +285,7 @@ fun HeatmapMonthCard(month: HeatmapMonth) {
                                 Modifier.weight(1f).aspectRatio(1f).padding(vertical = 2.dp)
                                     .clip(RoundedCornerShape(4.dp))
                                     .background(if (!inMonth) Color.Transparent else if ((day?.count ?: 0) > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant)
-                                    .then(if (inMonth && date == today) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp)) else Modifier)
+                                    .then(if (inMonth && date == today) Modifier.border(2.dp, if ((day?.count ?: 0) > 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp)) else Modifier)
                                     .semantics { if (inMonth) contentDescription = "$date: ${day?.count ?: 0} calculations${if (date == today) ", today" else ""}" },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -313,6 +314,7 @@ fun TrendSummaryCard(trend: HealthTrendSummary) {
             ) {
                 Text(
                     text = trend.title,
+                    modifier = Modifier.weight(1f).padding(end = 12.dp),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -355,8 +357,8 @@ fun TrendSummaryCard(trend: HealthTrendSummary) {
 @Composable
 fun TrendChip(percentage: Float, direction: TrendDirection) {
     val color = when (direction) {
-        TrendDirection.IMPROVING -> HealthColors.Healthy
-        TrendDirection.DECLINING -> HealthColors.Danger
+        TrendDirection.IMPROVING -> AppColors.Success
+        TrendDirection.DECLINING -> AppColors.Danger
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
     val icon = when (numericChangeDirection(percentage)) {
@@ -371,9 +373,9 @@ fun TrendChip(percentage: Float, direction: TrendDirection) {
     }
 
     Surface(
-        color = color.copy(alpha = 0.1f),
+        color = AppColors.SurfaceAlt,
         shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(1.dp, color.copy(alpha = 0.2f))
+        border = BorderStroke(1.dp, AppColors.Outline)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -390,7 +392,7 @@ fun TrendChip(percentage: Float, direction: TrendDirection) {
                 text = "${String.format("%.1f", Math.abs(percentage))}%",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = AppColors.text(color)
+                color = color
             )
         }
     }
@@ -412,7 +414,7 @@ fun EmptyTrendsCard() {
             Icon(
                 imageVector = Icons.Default.Timeline,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                tint = AppColors.Secondary
             )
             Text(
                 text = stringResource(R.string.txt_no_trends_available_yet),

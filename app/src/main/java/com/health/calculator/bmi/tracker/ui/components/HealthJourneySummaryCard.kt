@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -32,7 +32,7 @@ fun HealthJourneySummaryCard(
     summary: HealthJourneySummary,
     modifier: Modifier = Modifier
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.components.detail.DetailColors.isDark
 
     val primaryColor = MaterialTheme.colorScheme.primary
     val tertiaryColor = MaterialTheme.colorScheme.tertiary
@@ -48,7 +48,7 @@ fun HealthJourneySummaryCard(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                        colors = if (darkGradientSurface) listOf(AppColors.surface(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, 2), AppColors.surface(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, 2)) else listOf(
                             primaryColor.copy(alpha = 0.15f),
                             tertiaryColor.copy(alpha = 0.1f)
                         )
@@ -141,8 +141,8 @@ fun HealthJourneySummaryCard(
                         Icon(
                             Icons.Default.TrendingUp,
                             contentDescription = null,
-                            tint = if (summary.healthScoreChange > 0) HealthColors.Healthy
-                            else HealthColors.Warning,
+                            tint = if (summary.healthScoreChange > 0) (if (AppColors.active) AppColors.Success else HealthColors.Healthy)
+                            else (if (AppColors.active) AppColors.Warning else HealthColors.Warning),
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
@@ -152,8 +152,8 @@ fun HealthJourneySummaryCard(
                             else "Wellness Score consistency changed by ${summary.healthScoreChange} points",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium,
-                            color = AppColors.text(if (summary.healthScoreChange > 0) HealthColors.Healthy
-                            else HealthColors.Warning)
+                            color = AppColors.text(if (summary.healthScoreChange > 0) (if (AppColors.active) AppColors.Success else HealthColors.Healthy)
+                            else (if (AppColors.active) AppColors.Warning else HealthColors.Warning))
                         )
                     }
                 }

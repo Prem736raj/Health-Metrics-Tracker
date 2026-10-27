@@ -1,7 +1,7 @@
 // ui/components/NotificationChannelSettings.kt
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -106,8 +106,8 @@ private fun ChannelItem(name: String, description: String, isEnabled: Boolean) {
         }
 
         Badge(
-            containerColor = if (isEnabled) HealthColors.Healthy else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+            containerColor = if (AppColors.active) { if (isEnabled) AppColors.Accent else AppColors.SurfaceAlt } else if (isEnabled) HealthColors.Healthy else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (AppColors.active) { if (isEnabled) AppColors.OnAccent else AppColors.Secondary } else if (isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 8.dp)
         ) {
             Text(

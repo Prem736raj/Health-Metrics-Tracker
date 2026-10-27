@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -19,6 +19,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -62,17 +65,28 @@ fun WeightTrendGraph(
 
     val lineColor = MaterialTheme.colorScheme.primary
     val goalColor = MaterialTheme.colorScheme.tertiary
-    val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+    val gridColor = if (AppColors.active) AppColors.Outline else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
     val dotColor = MaterialTheme.colorScheme.primary
     val surfaceColor = MaterialTheme.colorScheme.surface
-    val towardGoalColor = HealthColors.Healthy
-    val awayFromGoalColor = HealthColors.Caution
+    val towardGoalColor = if (AppColors.active) AppColors.Success else HealthColors.Healthy
+    val awayFromGoalColor = if (AppColors.active) AppColors.Warning else HealthColors.Caution
 
     val textMeasurer = rememberTextMeasurer()
     val labelStyle = TextStyle(
         fontSize = 12.sp,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
+
+    val detailActive = AppColors.active
+    val density = LocalDensity.current
+    val chartLeft = if (detailActive) with(density) { 64.dp.toPx() } else 45f
+    val chartRight = if (detailActive) with(density) { 28.dp.toPx() } else 16f
+    val chartTop = if (detailActive) with(density) { 24.dp.toPx() } else 16f
+    val chartBottom = if (detailActive) with(density) { 40.dp.toPx() } else 30f
+    val dayFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val sameDay = sortedEntries.map { dayFormat.format(Date(it.dateMillis)) }.distinct().size == 1
+    val chartDescription = "Weight trend, ${sortedEntries.size} entries. " +
+        "First: ${sortedEntries.first().formattedWeight(useMetric)}. Latest: ${sortedEntries.last().formattedWeight(useMetric)}."
 
     var selectedPoint by remember { mutableStateOf<Int?>(null) }
 
@@ -96,11 +110,12 @@ fun WeightTrendGraph(
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(if (detailActive) 240.dp else 200.dp)
+                    .then(if (detailActive) Modifier.semantics { contentDescription = chartDescription } else Modifier)
                     .pointerInput(sortedEntries) {
                         detectTapGestures { offset ->
-                            val paddingLeft = 45f
-                            val paddingRight = 16f
+                            val paddingLeft = chartLeft
+                            val paddingRight = chartRight
                             val graphWidth = size.width - paddingLeft - paddingRight
 
                             if (sortedEntries.size < 2) return@detectTapGestures
@@ -115,10 +130,10 @@ fun WeightTrendGraph(
                         }
                     }
             ) {
-                val paddingLeft = 45f
-                val paddingRight = 16f
-                val paddingTop = 16f
-                val paddingBottom = 30f
+                val paddingLeft = chartLeft
+                val paddingRight = chartRight
+                val paddingTop = chartTop
+                val paddingBottom = chartBottom
                 val graphWidth = size.width - paddingLeft - paddingRight
                 val graphHeight = size.height - paddingTop - paddingBottom
 
@@ -234,7 +249,7 @@ fun WeightTrendGraph(
                         sortedEntries.size <= 5 -> sortedEntries.indices.toList()
                         else -> listOf(0, sortedEntries.size / 2, sortedEntries.lastIndex)
                     }
-                    val dateFmt = SimpleDateFormat("MMM d", Locale.getDefault())
+                    val dateFmt = SimpleDateFormat(if (detailActive && sameDay) "h:mm a" else "MMM d", Locale.getDefault())
 
                     labelIndices.forEach { idx ->
                         if (idx < sortedEntries.size) {
@@ -244,7 +259,7 @@ fun WeightTrendGraph(
                             drawText(
                                 textLayoutResult = dateMeasured,
                                 topLeft = Offset(
-                                    x - dateMeasured.size.width / 2,
+                                    if (detailActive) (x - dateMeasured.size.width / 2).coerceIn(0f, (size.width - dateMeasured.size.width).coerceAtLeast(0f)) else x - dateMeasured.size.width / 2,
                                     size.height - dateMeasured.size.height
                                 )
                             )
@@ -280,6 +295,7 @@ fun WeightTrendGraph(
                             )
                             Text(
                                 text = dateFmt.format(Date(entry.dateMillis)),
+                                modifier = Modifier.then(if (detailActive) Modifier.weight(1f).padding(start = 12.dp) else Modifier),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

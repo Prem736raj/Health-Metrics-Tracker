@@ -1,6 +1,10 @@
 package com.health.calculator.bmi.tracker.presentation.settings
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.detailPalette
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.core.constants.AppLinks
@@ -38,6 +42,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -120,6 +125,7 @@ import com.health.calculator.bmi.tracker.data.healthconnect.HealthConnectPermiss
 import com.health.calculator.bmi.tracker.data.preferences.PlantPreferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.health.calculator.bmi.tracker.ui.components.SupportingLeafMark
 import com.health.calculator.bmi.tracker.ui.components.InactivityNotificationSettings
 import com.health.calculator.bmi.tracker.data.repository.InactivityRepository
 import com.health.calculator.bmi.tracker.notifications.InactivityCheckScheduler
@@ -129,9 +135,9 @@ import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 
 // ─── Accent Colors ────────────────────────────────────────────────────────────
 
-private val SettingsAccent = com.health.calculator.bmi.tracker.ui.theme.HealthColors.BelowNormal
-private val DangerRed = HealthColors.Danger
-private val WarningOrange = HealthColors.Caution
+private val SettingsAccent: Color @Composable get() = AppColors.accent(HealthColors.BelowNormal)
+private val DangerRed: Color @Composable get() = AppColors.Danger
+private val WarningOrange: Color @Composable get() = AppColors.Warning
 
 // ─── Main Settings Screen ─────────────────────────────────────────────────────
 
@@ -142,6 +148,7 @@ fun SettingsScreen(
     onNavigateToDataManagement: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    DetailScreenTheme(DetailFeature.SETTINGS) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -735,6 +742,7 @@ fun SettingsScreen(
             onDismiss = { viewModel.hideClearAllDataDialog() }
         )
     }
+    }
 }
 
 // ─── Section Header ───────────────────────────────────────────────────────────
@@ -748,6 +756,7 @@ private fun SectionHeader(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(top = 16.dp, bottom = 4.dp, start = 4.dp)
     ) {
+        SupportingLeafMark(Modifier.padding(end = 8.dp))
         Icon(
             imageVector = icon,
             contentDescription = null,
@@ -774,9 +783,9 @@ private fun SettingsCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            containerColor = AppColors.Surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -795,7 +804,7 @@ private fun SettingsDivider() {
     HorizontalDivider(
         modifier = Modifier.padding(horizontal = 56.dp),
         thickness = 0.5.dp,
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+        color = AppColors.Outline
     )
 }
 
@@ -859,7 +868,7 @@ private fun SettingsClickItem(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = iconTint,
+                tint = AppColors.icon(iconTint),
                 modifier = Modifier.size(18.dp)
             )
         }
@@ -889,6 +898,7 @@ private fun SettingsClickItem(
         if (trailingText != null) {
             Text(
                 text = trailingText,
+                modifier = Modifier.widthIn(max = 120.dp).padding(start = 8.dp),
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -900,7 +910,7 @@ private fun SettingsClickItem(
         Icon(
             imageVector = Icons.Filled.ChevronRight,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+            tint = AppColors.Secondary,
             modifier = Modifier.size(20.dp)
         )
     }
@@ -919,7 +929,7 @@ private fun SettingsToggleItem(
     enabled: Boolean = true
 ) {
     val itemAlpha by animateFloatAsState(
-        targetValue = if (enabled) 1f else 0.5f,
+        targetValue = 1f,
         label = "toggle_alpha"
     )
 
@@ -941,7 +951,7 @@ private fun SettingsToggleItem(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = iconTint,
+                tint = AppColors.icon(iconTint),
                 modifier = Modifier.size(18.dp)
             )
         }
@@ -968,7 +978,7 @@ private fun SettingsToggleItem(
             onCheckedChange = onCheckedChange,
             enabled = enabled,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
+                checkedThumbColor = AppColors.OnAccent,
                 checkedTrackColor = SettingsAccent,
                 uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
@@ -1002,7 +1012,7 @@ private fun SettingsInfoItem(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = iconTint,
+                tint = AppColors.icon(iconTint),
                 modifier = Modifier.size(18.dp)
             )
         }
@@ -1045,7 +1055,7 @@ private fun MedicalDisclaimerCard() {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
+                    tint = AppColors.Danger,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
@@ -1054,7 +1064,7 @@ private fun MedicalDisclaimerCard() {
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = AppColors.text(MaterialTheme.colorScheme.error.copy(alpha = 0.8f))
+                    color = AppColors.Danger
                 )
             }
 
@@ -1118,7 +1128,7 @@ private fun UnitSystemPickerDialog(
                             .clickable { onSystemSelected(system) }
                             .border(
                                 width = if (isSelected) 1.5.dp else 0.dp,
-                                color = if (isSelected) SettingsAccent.copy(alpha = 0.3f) else Color.Transparent,
+                                color = if (isSelected) AppColors.Outline else Color.Transparent,
                                 shape = RoundedCornerShape(14.dp)
                             )
                             .padding(horizontal = 16.dp, vertical = 14.dp),
@@ -1191,9 +1201,14 @@ private fun ThemePickerDialog(
                         ThemeMode.DARK -> HealthColors.Info
                         ThemeMode.SYSTEM -> SettingsAccent
                     }
+                    val preview = detailPalette(DetailFeature.SETTINGS, when (mode) {
+                        ThemeMode.LIGHT -> false
+                        ThemeMode.DARK -> true
+                        ThemeMode.SYSTEM -> AppColors.isDark
+                    })
                     val bgColor by animateColorAsState(
                         targetValue = if (isSelected)
-                            themeColor.copy(alpha = 0.1f)
+                            AppColors.SurfaceAlt
                         else
                             Color.Transparent,
                         label = "theme_bg"
@@ -1207,7 +1222,7 @@ private fun ThemePickerDialog(
                             .clickable { onThemeSelected(mode) }
                             .border(
                                 width = if (isSelected) 1.5.dp else 0.dp,
-                                color = if (isSelected) themeColor.copy(alpha = 0.3f) else Color.Transparent,
+                                color = if (isSelected) AppColors.Outline else Color.Transparent,
                                 shape = RoundedCornerShape(14.dp)
                             )
                             .padding(horizontal = 16.dp, vertical = 14.dp),
@@ -1216,10 +1231,14 @@ private fun ThemePickerDialog(
                         Icon(
                             imageVector = themeIcon,
                             contentDescription = null,
-                            tint = if (isSelected) themeColor else MaterialTheme.colorScheme.onSurfaceVariant,
+                            tint = if (isSelected) AppColors.Accent else AppColors.Secondary,
                             modifier = Modifier.size(24.dp)
                         )
                         Spacer(modifier = Modifier.width(14.dp))
+                        Box(Modifier.width(32.dp).height(32.dp).background(preview.background, RoundedCornerShape(6.dp)).border(1.dp, preview.outline, RoundedCornerShape(6.dp)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.width(16.dp).height(4.dp).background(preview.accent, RoundedCornerShape(2.dp)))
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = mode.displayName,
@@ -1233,7 +1252,7 @@ private fun ThemePickerDialog(
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = null,
-                                tint = themeColor,
+                                tint = AppColors.Accent,
                                 modifier = Modifier.size(20.dp)
                             )
                         }

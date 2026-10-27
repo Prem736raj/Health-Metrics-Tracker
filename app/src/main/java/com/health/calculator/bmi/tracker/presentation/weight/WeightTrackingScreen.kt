@@ -1,6 +1,9 @@
 package com.health.calculator.bmi.tracker.presentation.weight
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -25,12 +28,13 @@ import com.health.calculator.bmi.tracker.ui.components.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun WeightTrackingScreen(
     viewModel: WeightTrackingViewModel,
     onBackClick: () -> Unit
 ) {
+    DetailScreenTheme(DetailFeature.WEIGHT) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -65,6 +69,8 @@ fun WeightTrackingScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface),
                 title = { Text(stringResource(R.string.txt_weight_tracking), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -121,12 +127,9 @@ fun WeightTrackingScreen(
             // Trend Graph
             item {
                 Column {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.txt_history_trends),
@@ -135,7 +138,7 @@ fun WeightTrackingScreen(
                         )
 
                         // Time Filter Chips
-                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             WeightTimeFilter.values().take(3).forEach { filter ->
                                 FilterChip(
                                     selected = uiState.timeFilter == filter,
@@ -211,6 +214,7 @@ fun WeightTrackingScreen(
         )
     }
 
+    }
 }
 
 @Composable
@@ -221,7 +225,7 @@ private fun WeightComparisonCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(
@@ -251,7 +255,7 @@ private fun ComparisonRow(
         val display = if (useMetric) value else value * 2.20462
         String.format(Locale.getDefault(), "%.1f %s", display, unit)
     }
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text("$label vs previous", style = MaterialTheme.typography.bodyMedium)
         if (comparison == null) {
             Text("Need more logs", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -278,7 +282,7 @@ private fun HistoryItem(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(
             containerColor = AppColors.surface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
         )
@@ -323,7 +327,7 @@ private fun HistoryItem(
                     Icon(
                         Icons.Default.Delete,
                         contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
+                        tint = AppColors.Danger,
                         modifier = Modifier.size(20.dp)
                     )
                 }

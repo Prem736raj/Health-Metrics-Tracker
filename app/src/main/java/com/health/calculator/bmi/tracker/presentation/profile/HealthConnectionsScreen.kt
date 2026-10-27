@@ -1,6 +1,9 @@
 package com.health.calculator.bmi.tracker.presentation.profile
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -54,6 +57,7 @@ fun HealthConnectionsScreen(
     onBackClick: () -> Unit,
     onNavigateToCalculator: (String) -> Unit
 ) {
+    DetailScreenTheme(DetailFeature.CONNECTIONS) {
     val healthConnectViewModel: SettingsViewModel = hiltViewModel()
     val healthConnectState by healthConnectViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -75,6 +79,8 @@ fun HealthConnectionsScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface),
                 title = { Text(stringResource(R.string.txt_health_connections), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -84,27 +90,23 @@ fun HealthConnectionsScreen(
             )
         }
     ) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .background(MaterialTheme.colorScheme.surface)
+                .padding(padding),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            ConnectionHeader(state.healthConnectionMap)
-
-            HealthConnectAccessCard(
-                state = healthConnectState,
-                onConnect = { feature ->
-                    permissionLauncher.launch(HealthConnectPermissionPolicy.permissionsFor(feature))
-                },
-                onSync = healthConnectViewModel::syncHealthConnectData
-            )
-
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+            item { ConnectionHeader(state.healthConnectionMap) }
+            item {
+                HealthConnectAccessCard(
+                    state = healthConnectState,
+                    onConnect = { feature ->
+                        permissionLauncher.launch(HealthConnectPermissionPolicy.permissionsFor(feature))
+                    },
+                    onSync = healthConnectViewModel::syncHealthConnectData
+                )
+            }
                 if (healthConnectState.healthConnectStepHistory.isNotEmpty()) {
                     item {
                         StepHistorySummary(
@@ -135,8 +137,8 @@ fun HealthConnectionsScreen(
                         )
                     }
                 }
-            }
         }
+    }
     }
 }
 
@@ -232,8 +234,7 @@ private fun HealthConnectAccessCard(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = AppColors.surface(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.55f))
         )
@@ -310,7 +311,7 @@ private fun HealthConnectFeatureRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            TextButton(onClick = onClick) { Text(if (connected) "Refresh" else "Connect") }
+            Icon(Icons.Outlined.Shield, contentDescription = if (connected) "Connected" else "Optional access", tint = if (connected) AppColors.Success else AppColors.Secondary)
         }
     }
 }
@@ -321,8 +322,7 @@ fun ConnectionHeader(map: HealthConnectionMap?) {
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row(
@@ -346,7 +346,7 @@ fun ConnectionHeader(map: HealthConnectionMap?) {
 fun StatItem(label: String, value: String, valueColor: Color = MaterialTheme.colorScheme.primary) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold, color = valueColor)
-        Text(text = label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+        Text(text = label, style = MaterialTheme.typography.labelMedium, color = if (AppColors.active) AppColors.Secondary else MaterialTheme.colorScheme.onPrimaryContainer)
     }
 }
 
@@ -444,8 +444,8 @@ fun InputSection(title: String, fields: List<String>, color: Color, isOutput: Bo
             fields.forEach { field ->
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = color.copy(alpha = 0.1f),
-                    contentColor = color
+                    color = if (AppColors.active) AppColors.SurfaceAlt else color.copy(alpha = 0.1f),
+                    contentColor = if (AppColors.active) AppColors.Text else color
                 ) {
                     Text(
                         text = field,
@@ -471,6 +471,7 @@ private fun connectionIcon(connection: HealthConnection): androidx.compose.ui.gr
 }
 
 // FlowRow copy for Compose 1.3/Material3 (simple implementation)
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 fun FlowRow(
     modifier: Modifier = Modifier,
@@ -478,6 +479,14 @@ fun FlowRow(
     crossAxisSpacing: androidx.compose.ui.unit.Dp = 0.dp,
     content: @Composable () -> Unit
 ) {
+    if (AppColors.active) {
+        androidx.compose.foundation.layout.FlowRow(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(mainAxisSpacing),
+            verticalArrangement = Arrangement.spacedBy(crossAxisSpacing)
+        ) { content() }
+        return
+    }
     androidx.compose.ui.layout.Layout(content = content, modifier = modifier) { measurables, constraints ->
         val chipConstraints = constraints.copy(minWidth = 0, minHeight = 0)
         val placeables = measurables.map { it.measure(chipConstraints) }
