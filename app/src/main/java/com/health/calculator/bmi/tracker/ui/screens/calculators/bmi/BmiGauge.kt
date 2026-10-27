@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -88,6 +92,7 @@ private fun bmiToPosition(bmi: Double): Float {
  * - Category labels below the bar
  * - BMI value label above the pointer
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BmiGauge(
     bmiValue: Double,
@@ -117,6 +122,7 @@ fun BmiGauge(
     }
 
     val categoryColor = bmiCategoryUiColor(category)
+    val markerHalo = AppColors.Text
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -126,13 +132,13 @@ fun BmiGauge(
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.dp)
+                .height(64.dp)
         ) {
-            val labelWidth = 56.dp
+            val labelWidth = 80.dp
             val labelOffset = (maxWidth * animatedPosition.value - labelWidth / 2)
                 .coerceIn(0.dp, (maxWidth - labelWidth).coerceAtLeast(0.dp))
 
-            Canvas(modifier = Modifier.fillMaxWidth().height(40.dp)) {
+            Canvas(modifier = Modifier.fillMaxWidth().height(64.dp)) {
                 val barWidth = size.width
                 val triangleSize = 10.dp.toPx()
                 val pointerX = (animatedPosition.value * barWidth)
@@ -162,15 +168,15 @@ fun BmiGauge(
             ) {
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = categoryColor,
+                    color = AppColors.Accent,
                     modifier = Modifier.offset(x = labelOffset)
                 ) {
                     Text(
                         text = String.format("%.1f", bmiValue),
-                        style = MaterialTheme.typography.labelMedium.copy(
+                        style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color.White,
+                        color = AppColors.OnAccent,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                     )
                 }
@@ -236,7 +242,7 @@ fun BmiGauge(
             // Draw pointer line on the bar
             val pointerX = animatedPosition.value * barWidth
             drawLine(
-                color = Color.White,
+                color = markerHalo,
                 start = Offset(pointerX, 0f),
                 end = Offset(pointerX, barHeightPx),
                 strokeWidth = 3.dp.toPx(),
@@ -245,7 +251,7 @@ fun BmiGauge(
 
             // Draw pointer circle
             drawCircle(
-                color = Color.White,
+                color = markerHalo,
                 radius = barHeightPx / 2 + 2.dp.toPx(),
                 center = Offset(pointerX, barHeightPx / 2)
             )
@@ -259,58 +265,62 @@ fun BmiGauge(
         Spacer(modifier = Modifier.height(8.dp))
 
         // ── Category Labels ───────────────────────────────────────────
-        Row(
-            modifier = Modifier.fillMaxWidth()
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
                 text = stringResource(R.string.txt_underweight),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.weight(1f))
+
             Text(
                 text = stringResource(R.string.txt_normal),
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontSize = 9.sp,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp).copy(
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = HealthColors.Healthy.copy(alpha = 0.8f)
+                color = AppColors.text(HealthColors.Healthy.copy(alpha = 0.8f))
             )
-            Spacer(modifier = Modifier.weight(1f))
+
             Text(
                 text = stringResource(R.string.txt_overweight),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.weight(1f))
+
             Text(
                 text = stringResource(R.string.txt_obese),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
         // BMI boundary numbers
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.weight(0.15f))
-            Text(stringResource(R.string.txt_16), style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f))
-            Spacer(modifier = Modifier.weight(0.08f))
-            Text(stringResource(R.string.txt_18_5), style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f))
-            Spacer(modifier = Modifier.weight(0.2f))
-            Text(stringResource(R.string.txt_25), style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f))
-            Spacer(modifier = Modifier.weight(0.15f))
-            Text(stringResource(R.string.txt_30), style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f))
-            Spacer(modifier = Modifier.weight(0.12f))
-            Text(stringResource(R.string.txt_35), style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f))
-            Spacer(modifier = Modifier.weight(0.1f))
-            Text(stringResource(R.string.txt_40), style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f))
-            Spacer(modifier = Modifier.weight(0.05f))
+        FlowRow(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(18.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
+            Text(stringResource(R.string.txt_16), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            Text(stringResource(R.string.txt_18_5), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            Text(stringResource(R.string.txt_25), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            Text(stringResource(R.string.txt_30), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            Text(stringResource(R.string.txt_35), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            Text(stringResource(R.string.txt_40), style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+
         }
     }
 }

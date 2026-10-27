@@ -41,7 +41,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailHero
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -149,6 +152,18 @@ fun BmiCalculatorScreen(
     onNavigateToHistory: () -> Unit,
     viewModel: BmiViewModel = hiltViewModel()
 ) {
+    DetailScreenTheme(DetailFeature.BMI) {
+        BmiCalculatorContent(onNavigateBack, onNavigateToHistory, viewModel)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BmiCalculatorContent(
+    onNavigateBack: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    viewModel: BmiViewModel
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val focusManager = LocalFocusManager.current
@@ -206,17 +221,17 @@ fun BmiCalculatorScreen(
                         Text(
                             text = stringResource(R.string.txt_bmi_calculator),
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            maxLines = 1,
-                            overflow = androidx.compose.ui.text.style.TextOverflow.Clip
+                            maxLines = 2,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                         )
                         Text(
                             text = if (uiState.showResult) "Your Result"
                                    else if (pagerState.currentPage == 1) "Your BMI History"
                                    else if (pagerState.currentPage == 2) "Educational Content"
                                    else "Adult reference categories",
-                            style = MaterialTheme.typography.labelMedium,
-                            maxLines = 1,
-                            overflow = androidx.compose.ui.text.style.TextOverflow.Clip,
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 2,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                             color = AppColors.secondaryText(if (uiState.showResult)
                                 uiState.bmiResult?.let { bmiCategoryUiColor(it.category) } ?: FeatureColors.BmiDeep
                             else FeatureColors.BmiDeep.copy(alpha = 0.8f))
@@ -324,7 +339,7 @@ fun BmiCalculatorScreen(
                                         }
                                     },
                                     selectedContentColor = AppColors.accent(FeatureColors.BmiDeep),
-                                    unselectedContentColor = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                    unselectedContentColor = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                                 )
                             }
                         }
@@ -468,6 +483,12 @@ private fun BmiInputContent(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        DetailHero(
+            title = "Your measurement folio",
+            subtitle = "Weight and height, with context for the number.",
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(20.dp))
         // --- Profile Data Banner ---
         if (uiState.hasAnyProfileData && !uiState.isProfileLoaded && !uiState.isLoading) {
             ProfileDataBanner(onRestore = { viewModel.restoreProfileData() })
@@ -757,7 +778,7 @@ private fun BmiInputContent(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.txt_calculates_your_body_mass_inde),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -793,7 +814,7 @@ private fun ProfileFieldBadge() {
     ) {
         Text(
             text = stringResource(R.string.txt_from_profile),
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
         )
@@ -825,7 +846,7 @@ private fun UnitToggle(
                 Text(
                     text = leftLabel,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -838,7 +859,7 @@ private fun UnitToggle(
                 Text(
                     text = rightLabel,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -880,7 +901,7 @@ private fun ProfileDataBanner(onRestore: () -> Unit) {
                 text = stringResource(R.string.txt_use_it),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
+                color = AppColors.text(MaterialTheme.colorScheme.primary),
                 modifier = Modifier.clickable(onClick = onRestore)
             )
         }

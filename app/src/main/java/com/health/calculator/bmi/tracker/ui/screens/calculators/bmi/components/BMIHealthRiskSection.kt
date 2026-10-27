@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -80,7 +80,7 @@ fun BMIHealthRiskSection(
                         )
                         Text(
                             text = stringResource(R.string.txt_based_on_your_bmi_category),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -211,15 +211,15 @@ private fun RiskLevelBadge(riskLevel: RiskLevel) {
             Icon(
                 imageVector = riskLevelIcon(riskLevel),
                 contentDescription = null,
-                tint = badgeColor,
+                tint = AppColors.icon(badgeColor),
                 modifier = Modifier.size(14.dp)
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = riskLevel.label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                 fontWeight = FontWeight.SemiBold,
-                color = badgeColor
+                color = AppColors.text(badgeColor)
             )
         }
     }
@@ -304,7 +304,7 @@ private fun ExpandableRiskSection(
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            tint = accentColor,
+                            tint = AppColors.icon(accentColor),
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -322,9 +322,9 @@ private fun ExpandableRiskSection(
                             ) {
                                 Text(
                                     text = "$itemCount",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                                     fontWeight = FontWeight.Bold,
-                                    color = accentColor,
+                                    color = AppColors.text(accentColor),
                                     modifier = Modifier.padding(
                                         horizontal = 7.dp,
                                         vertical = 2.dp
@@ -412,7 +412,7 @@ private fun HealthRiskCard(risk: HealthRiskItem) {
                     Icon(
                         imageVector = bmiRiskIcon(risk.icon),
                         contentDescription = null,
-                        tint = severityColor,
+                        tint = AppColors.icon(severityColor),
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -442,8 +442,8 @@ private fun HealthRiskCard(risk: HealthRiskItem) {
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = severityLabel,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = severityColor,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
+                            color = AppColors.text(severityColor),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -454,7 +454,7 @@ private fun HealthRiskCard(risk: HealthRiskItem) {
 
             Text(
                 text = risk.description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 18.sp
             )
@@ -500,7 +500,7 @@ private fun RecommendationCard(recommendation: RecommendationItem) {
                 Spacer(modifier = Modifier.height(3.dp))
                 Text(
                     text = recommendation.description,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     lineHeight = 18.sp
                 )
@@ -529,16 +529,16 @@ private fun ActionStepItem(
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = "$stepNumber",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                     fontWeight = FontWeight.Bold,
-                    color = accentColor
+                    color = AppColors.text(accentColor)
                 )
             }
         }
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             lineHeight = 18.sp,
             modifier = Modifier.weight(1f)
@@ -576,14 +576,14 @@ private fun DoctorNoteCard(
             Icon(
                 imageVector = Icons.Outlined.LocalHospital,
                 contentDescription = null,
-                tint = urgencyColor,
+                tint = AppColors.icon(urgencyColor),
                 modifier = Modifier.size(22.dp)
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = note,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     lineHeight = 18.sp
                 )
@@ -608,7 +608,7 @@ private fun MedicalDisclaimerCard() {
         Icon(
             imageVector = Icons.Outlined.Info,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(16.dp)
         )
         Spacer(modifier = Modifier.width(6.dp))
@@ -620,10 +620,10 @@ private fun MedicalDisclaimerCard() {
                     "overall body composition. Always consult a qualified healthcare " +
                     "professional for personalized medical guidance. Never disregard " +
                     "professional medical advice because of information provided here.",
-            style = MaterialTheme.typography.bodySmall,
-            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
-            lineHeight = 16.sp,
-            fontSize = 12.sp
+            style = MaterialTheme.typography.bodyMedium,
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+            lineHeight = 20.sp,
+            fontSize = 14.sp
         )
     }
 }

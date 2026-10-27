@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -166,7 +166,7 @@ fun BmiEducationContent(
 
 @Composable
 private fun EducationHeader() {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -188,7 +188,7 @@ private fun EducationHeader() {
                     .clip(RoundedCornerShape(12.dp))
                     .background(
                         Brush.linearGradient(
-                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
+                            colors = listOf(
                                 EducationAccent.copy(alpha = 0.15f),
                                 EducationAccentLight.copy(alpha = 0.08f)
                             )
@@ -216,8 +216,8 @@ private fun EducationHeader() {
                 )
                 Text(
                     text = stringResource(R.string.txt_understand_your_results_and_wh),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                     lineHeight = 18.sp
                 )
             }
@@ -397,11 +397,11 @@ private fun HowCalculatedContent() {
             ) {
                 Text(
                     text = stringResource(R.string.txt_bmi_formula),
-                    style = MaterialTheme.typography.labelMedium.copy(
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp).copy(
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     ),
-                    color = HealthColors.BelowNormal
+                    color = AppColors.text(HealthColors.BelowNormal)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -419,10 +419,10 @@ private fun HowCalculatedContent() {
                     ) {
                         Text(
                             text = stringResource(R.string.txt_metric),
-                            style = MaterialTheme.typography.labelSmall.copy(
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp).copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
-                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -457,10 +457,10 @@ private fun HowCalculatedContent() {
                     ) {
                         Text(
                             text = stringResource(R.string.txt_imperial),
-                            style = MaterialTheme.typography.labelSmall.copy(
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp).copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
-                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -540,27 +540,27 @@ private fun CategoriesContent() {
                 ) {
                     Text(
                         text = stringResource(R.string.txt_category),
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp).copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                         modifier = Modifier.weight(1.1f)
                     )
                     Text(
                         text = stringResource(R.string.txt_bmi_range),
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp).copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                         modifier = Modifier.weight(0.7f),
                         textAlign = TextAlign.Center
                     )
                     Text(
                         text = stringResource(R.string.txt_risk),
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp).copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                         modifier = Modifier.weight(0.7f),
                         textAlign = TextAlign.End
                     )
@@ -596,20 +596,20 @@ private fun CategoriesContent() {
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = cat.name,
-                            style = MaterialTheme.typography.bodySmall.copy(
+                            style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = if (cat.name == "Normal Weight") FontWeight.Bold else FontWeight.Medium
                             ),
-                            color = if (cat.name == "Normal Weight")
+                            color = AppColors.text(if (cat.name == "Normal Weight")
                                 cat.color
                             else
-                                MaterialTheme.colorScheme.onSurface,
+                                MaterialTheme.colorScheme.onSurface),
                             modifier = Modifier.weight(1f)
                         )
 
                         // BMI range
                         Text(
                             text = cat.range,
-                            style = MaterialTheme.typography.bodySmall.copy(
+                            style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium
                             ),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -620,11 +620,11 @@ private fun CategoriesContent() {
                         // Risk level
                         Text(
                             text = cat.risk,
-                            style = MaterialTheme.typography.bodySmall.copy(
+                            style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium,
-                                fontSize = 12.sp
+                                fontSize = 14.sp
                             ),
-                            color = cat.color,
+                            color = AppColors.text(cat.color),
                             modifier = Modifier.weight(0.7f),
                             textAlign = TextAlign.End
                         )
@@ -715,8 +715,8 @@ private fun LimitationsContent() {
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = item.description,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                             lineHeight = 18.sp
                         )
                     }
@@ -817,10 +817,10 @@ private fun TipsContent() {
                     ) {
                         Text(
                             text = tip.number.toString(),
-                            style = MaterialTheme.typography.labelSmall.copy(
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp).copy(
                                 fontWeight = FontWeight.Bold
                             ),
-                            color = tip.color
+                            color = AppColors.text(tip.color)
                         )
                     }
 
@@ -846,8 +846,8 @@ private fun TipsContent() {
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = tip.description,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                             lineHeight = 18.sp
                         )
                     }
@@ -912,8 +912,8 @@ private fun WhenDoctorContent() {
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = trigger.text,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                             lineHeight = 18.sp
                         )
                     }
@@ -946,13 +946,13 @@ private fun WhenDoctorContent() {
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
-                        color = MaterialTheme.colorScheme.error
+                        color = AppColors.text(MaterialTheme.colorScheme.error)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = stringResource(R.string.txt_a_healthcare_professional_can_),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                         lineHeight = 18.sp
                     )
                 }
@@ -968,7 +968,7 @@ private fun ContentText(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
-        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)),
+        color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
         lineHeight = 22.sp
     )
 }
@@ -1000,8 +1000,8 @@ private fun HighlightBox(
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodySmall,
-                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
                 lineHeight = 18.sp
             )
         }
@@ -1027,8 +1027,8 @@ private fun KeyPoint(
                 }
                 append(value)
             },
-            style = MaterialTheme.typography.bodySmall,
-            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)),
+            style = MaterialTheme.typography.bodyMedium,
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
             lineHeight = 18.sp
         )
     }
@@ -1043,7 +1043,7 @@ private fun EducationDisclaimer() {
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(AppColors.surface(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.1f)))
-            .then(if (AppColors.isDark) Modifier.border(1.dp, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.WarningOutline, RoundedCornerShape(12.dp)) else Modifier)
+            .then(if (AppColors.isDark) Modifier.border(1.dp, AppColors.Warning, RoundedCornerShape(12.dp)) else Modifier)
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.Top
     ) {
@@ -1058,9 +1058,9 @@ private fun EducationDisclaimer() {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(R.string.txt_this_educational_content_is_fo_2),
-            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)),
-            lineHeight = 16.sp
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+            color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant),
+            lineHeight = 20.sp
         )
     }
 }

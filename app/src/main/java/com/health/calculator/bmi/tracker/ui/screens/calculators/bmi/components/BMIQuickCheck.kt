@@ -1,6 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
-import com.health.calculator.bmi.tracker.ui.theme.AppColors
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -37,7 +37,7 @@ fun BMIQuickCheckCard(
     onQuickCheck: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val darkGradientSurface = com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark
+
 
     val hasProfileData = profileWeightKg > 0f && profileHeightCm > 0f && profileAge > 0
 
@@ -59,10 +59,7 @@ fun BMIQuickCheckCard(
                     .fillMaxWidth()
                     .background(
                         brush = Brush.horizontalGradient(
-                            colors = if (darkGradientSurface) listOf(com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2, com.health.calculator.bmi.tracker.ui.theme.DarkRoles.Level2) else listOf(
-                                AppColors.surface(MaterialTheme.colorScheme.primary, 2),
-                                AppColors.surface(MaterialTheme.colorScheme.tertiary, 2)
-                            )
+                            colors = listOf(AppColors.SurfaceAlt, AppColors.SurfaceAlt)
                         ),
                         shape = RoundedCornerShape(16.dp)
                     )
@@ -78,7 +75,7 @@ fun BMIQuickCheckCard(
                             text = stringResource(R.string.txt_quick_check),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = AppColors.text(Color.White)
+                            color = AppColors.Text
                         )
                         Spacer(modifier = Modifier.height(4.dp))
 
@@ -86,8 +83,8 @@ fun BMIQuickCheckCard(
                         val greeting = if (name != null) "Hi $name!" else "Profile data ready!"
                         Text(
                             text = greeting,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.secondaryText(Color.White.copy(alpha = 0.9f))
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = AppColors.Secondary
                         )
 
                         Spacer(modifier = Modifier.height(2.dp))
@@ -102,8 +99,8 @@ fun BMIQuickCheckCard(
                         }
                         Text(
                             text = "$weightText • $heightText • Age ${profileAge}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = AppColors.secondaryText(Color.White.copy(alpha = 0.7f))
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = AppColors.Secondary
                         )
                     }
 
@@ -145,7 +142,7 @@ private fun QuickCheckButton(onClick: () -> Unit) {
             modifier = Modifier
                 .size((56 * scale).dp)
                 .clip(CircleShape)
-                .background(Color.White.copy(alpha = glowAlpha * 0.3f))
+                .background(AppColors.Accent.copy(alpha = glowAlpha * 0.3f))
         )
 
         Button(
@@ -153,8 +150,8 @@ private fun QuickCheckButton(onClick: () -> Unit) {
             modifier = Modifier.size(48.dp),
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = MaterialTheme.colorScheme.primary
+                containerColor = AppColors.Accent,
+                contentColor = AppColors.OnAccent
             ),
             contentPadding = PaddingValues(0.dp),
             elevation = ButtonDefaults.buttonElevation(
@@ -225,13 +222,13 @@ fun LastUsedInputCard(
                 Column {
                     Text(
                         text = "Last used ($timeAgo)",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "$weightText  •  $heightText  •  Age $age  •  $genderText",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -243,7 +240,7 @@ fun LastUsedInputCard(
             FilledTonalButton(onClick = onApply, contentPadding = PaddingValues(horizontal = 12.dp),
                 colors = ButtonDefaults.filledTonalButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                    contentColor = MaterialTheme.colorScheme.primary
+                    contentColor = AppColors.OnAccent
                 )) {
                 Text(stringResource(R.string.txt_use))
             }

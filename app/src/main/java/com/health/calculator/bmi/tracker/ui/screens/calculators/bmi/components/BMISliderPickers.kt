@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.components
 
+import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
 
@@ -84,7 +85,7 @@ fun RealTimeBMIPreview(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(R.string.txt_live_bmi_preview),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = if (AppColors.active) MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp) else MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(2.dp))
@@ -98,12 +99,12 @@ fun RealTimeBMIPreview(
                             text = String.format("%.1f", animatedBMI),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = categoryColor.value
+                            color = if (AppColors.active) AppColors.Text else categoryColor.value
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = stringResource(R.string.txt_kg_m_1),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
@@ -122,9 +123,9 @@ fun RealTimeBMIPreview(
                 ) {
                     Text(
                         text = category,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = if (AppColors.active) MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp) else MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = categoryColor.value,
+                        color = if (AppColors.active) AppColors.Text else categoryColor.value,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
                     )
@@ -154,6 +155,7 @@ private fun MiniCategoryBar(
         label = "markerAnim"
     )
     val markerColor = getBMICategoryColor(bmi)
+    val markerHalo = if (AppColors.active) AppColors.Text else Color.White
 
     Canvas(
         modifier = modifier
@@ -203,7 +205,7 @@ private fun MiniCategoryBar(
         val markerRadius = 7.dp.toPx()
         val markerX = (animatedPosition * size.width).coerceIn(markerRadius, size.width - markerRadius)
         drawCircle(
-            color = Color.White,
+            color = markerHalo,
             radius = markerRadius,
             center = Offset(markerX, size.height / 2)
         )
@@ -257,7 +259,7 @@ fun WeightSliderPicker(
                 text = "${String.format("%.1f", displayValue)} $unit",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = if (AppColors.active) AppColors.Text else MaterialTheme.colorScheme.primary
             )
         }
 
@@ -293,12 +295,12 @@ fun WeightSliderPicker(
         ) {
             Text(
                 text = "${range.start.roundToInt()} $unit",
-                style = MaterialTheme.typography.bodySmall,
+                style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = "${range.endInclusive.roundToInt()} $unit",
-                style = MaterialTheme.typography.bodySmall,
+                style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -331,7 +333,7 @@ fun WeightSliderPicker(
 
             Text(
                 text = stringResource(R.string.txt_fine_tune),
-                style = MaterialTheme.typography.bodySmall,
+                style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -405,7 +407,7 @@ fun HeightSliderPicker(
                 text = displayText,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = if (AppColors.active) AppColors.Text else MaterialTheme.colorScheme.primary
             )
         }
 
@@ -447,12 +449,12 @@ fun HeightSliderPicker(
                 ) {
                     Text(
                         text = if (isUnitCm) "50 cm" else "1ft 8in",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = if (isUnitCm) "250 cm" else "8ft 2in",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -495,7 +497,7 @@ fun HeightSliderPicker(
 
             Text(
                 text = stringResource(R.string.txt_fine_tune_1_cm),
-                style = MaterialTheme.typography.bodySmall,
+                style = if (AppColors.active) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -532,6 +534,7 @@ private fun HeightVisualIndicator(
     )
     val primaryColor = MaterialTheme.colorScheme.primary
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
+    val personDot = if (AppColors.active) MaterialTheme.colorScheme.onPrimary else Color.White
 
     Canvas(modifier = modifier) {
         val barWidth = 12.dp.toPx()
@@ -562,7 +565,7 @@ private fun HeightVisualIndicator(
             center = Offset(size.width / 2, iconY.coerceAtLeast(6.dp.toPx()))
         )
         drawCircle(
-            color = Color.White,
+            color = personDot,
             radius = 3.dp.toPx(),
             center = Offset(size.width / 2, iconY.coerceAtLeast(6.dp.toPx()))
         )
@@ -593,7 +596,7 @@ fun InputModeToggle(
                 label = {
                     Text(
                         stringResource(R.string.txt_keyboard),
-                        style = MaterialTheme.typography.labelMedium
+                        style = if (AppColors.active) MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp) else MaterialTheme.typography.labelMedium
                     )
                 },
                 modifier = Modifier.weight(1f),
@@ -611,7 +614,7 @@ fun InputModeToggle(
                 label = {
                     Text(
                         stringResource(R.string.txt_sliders),
-                        style = MaterialTheme.typography.labelMedium
+                        style = if (AppColors.active) MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp) else MaterialTheme.typography.labelMedium
                     )
                 },
                 modifier = Modifier.weight(1f),
