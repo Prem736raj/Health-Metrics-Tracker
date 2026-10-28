@@ -1,8 +1,10 @@
-"""Protect all pre-existing light constants and the complete light scheme."""
+"""Protect the approved botanical light constants and complete light scheme."""
 from pathlib import Path
 import subprocess, re
 root = Path(__file__).resolve().parents[1]
-base = "81271c5"
+# The user subsequently approved botanical day/night designs. Preserve that
+# accepted design rather than comparing with the superseded violet palette.
+base = "c6f5dac"
 folder = "app/src/main/java/com/health/calculator/bmi/tracker/ui/theme/"
 def previous(file):
     return subprocess.check_output(["git", "show", f"{base}:{folder}{file}"], cwd=root).decode("utf-8")
