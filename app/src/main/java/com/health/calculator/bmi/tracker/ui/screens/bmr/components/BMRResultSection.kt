@@ -157,15 +157,16 @@ private fun PrimaryBMRCard(
                 Spacer(modifier = Modifier.width(8.dp))
                 Surface(
                     onClick = onToggleUnit,
+                    modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp),
                     shape = RoundedCornerShape(8.dp),
                     color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                 ) {
                     Text(
-                        text = if (showKJ) "kcal" else "kJ",
+                        text = if (showKJ) "Use kcal" else "Use kJ",
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.SemiBold,
                         color = AppColors.text(MaterialTheme.colorScheme.primary),
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        modifier = Modifier.wrapContentSize().padding(horizontal = 12.dp, vertical = 10.dp)
                     )
                 }
             }

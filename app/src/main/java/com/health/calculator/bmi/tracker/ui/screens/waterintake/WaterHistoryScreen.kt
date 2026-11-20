@@ -2,6 +2,11 @@
 package com.health.calculator.bmi.tracker.ui.screens.waterintake
 
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.health.calculator.bmi.tracker.ui.components.detail.ChartReadings
+import com.health.calculator.bmi.tracker.ui.components.detail.trendAxisLabels
+import com.health.calculator.bmi.tracker.ui.components.detail.trendTickIndices
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
@@ -302,6 +307,7 @@ private fun CalendarCard(
 
                             CalendarDayCell(
                                 day = dayIndex,
+                                dateDescription = java.text.DateFormat.getDateInstance(java.text.DateFormat.FULL).format(dayCal.time),
                                 data = data,
                                 goalMl = goalMl,
                                 isToday = isToday,
@@ -322,6 +328,7 @@ private fun CalendarCard(
 @Composable
 private fun CalendarDayCell(
     day: Int,
+    dateDescription: String,
     data: DailyWaterData?,
     goalMl: Int,
     isToday: Boolean,
@@ -361,6 +368,14 @@ private fun CalendarDayCell(
                 if (isToday) Modifier.border(2.dp, FeatureColors.WaterStart, RoundedCornerShape(8.dp))
                 else Modifier
             )
+            .semantics(mergeDescendants = true) {
+                contentDescription = "$dateDescription, " + when {
+                    isFuture -> "Future date"
+                    data == null -> "No intake logged"
+                    else -> "${data.totalMl} ml, goal $goalMl ml, " +
+                        if (goalMl > 0 && data.totalMl >= goalMl) "Goal met" else "Below goal"
+                }
+            }
             .clickable(enabled = !isFuture && data != null) { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -579,7 +594,7 @@ private fun TrendsTab(
                 visible = isVisible,
                 enter = fadeIn(tween(500, 100)) + slideInVertically(tween(500, 100)) { 40 }
             ) {
-                BarChartCard(
+                WaterIntakeTrend(
                     dailyData = dailyData,
                     goalMl = goalMl,
                     days = selectedRange
@@ -600,31 +615,16 @@ private fun TrendsTab(
 }
 
 @Composable
-private fun BarChartCard(
+fun WaterIntakeTrend(
     dailyData: Map<String, DailyWaterData>,
     goalMl: Int,
     days: Int
 ) {
-    val dateKeyFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val dayLabelFormat = SimpleDateFormat("dd", Locale.getDefault())
-    val monthDayFormat = SimpleDateFormat("MMM d", Locale.getDefault())
+    val readings = waterTrendReadings(dailyData, days)
+    val labels = trendAxisLabels(readings.map { it.timestamp })
+    val chartData = readings.mapIndexed { index, reading -> labels[index] to (reading.totalMl ?: 0) }
 
-    val chartData = remember(dailyData, days) {
-        val result = mutableListOf<Pair<String, Int>>()
-        val cal = Calendar.getInstance()
-        for (i in days - 1 downTo 0) {
-            val dayCal = cal.clone() as Calendar
-            dayCal.add(Calendar.DAY_OF_YEAR, -i)
-            val key = dateKeyFormat.format(dayCal.time)
-            val label = if (days <= 14) dayLabelFormat.format(dayCal.time)
-            else monthDayFormat.format(dayCal.time)
-            val totalMl = dailyData[key]?.totalMl ?: 0
-            result.add(label to totalMl)
-        }
-        result
-    }
-
-    val maxMl = (chartData.maxOfOrNull { it.second } ?: goalMl).coerceAtLeast(goalMl)
+    val maxMl = (chartData.maxOfOrNull { it.second } ?: goalMl).coerceAtLeast(goalMl).coerceAtLeast(1)
     val avgMl = if (chartData.isNotEmpty()) {
         chartData.filter { it.second > 0 }.let { active ->
             if (active.isNotEmpty()) active.sumOf { it.second } / active.size else 0
@@ -664,6 +664,12 @@ private fun BarChartCard(
                 Text(stringResource(R.string.txt_daily_intake), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
             }
 
+            Text("Goal: $goalMl ml · Average on logged days: $avgMl ml",
+                style = MaterialTheme.typography.bodySmall, color = DetailColors.Secondary)
+            if (readings.none { it.totalMl != null }) {
+                Text("No intake logged in this period", color = DetailColors.Secondary,
+                    style = MaterialTheme.typography.bodyMedium)
+            }
             val goalLabel = stringResource(R.string.txt_goal)
             val goalLabelColor = DetailColors.Text
             val goalLabelSize = with(LocalDensity.current) { 12.sp.toPx() }
@@ -673,15 +679,17 @@ private fun BarChartCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
+                    .semantics { contentDescription = "Daily intake over $days days; goal $goalMl ml. Expand daily water readings for values." }
             ) {
                 val chartWidth = size.width
-                val chartHeight = size.height - 30f
+                val plotTop = 28.dp.toPx()
+                val chartHeight = (size.height - plotTop - 28.dp.toPx()).coerceAtLeast(1f)
                 val barCount = chartData.size
-                val barSpacing = 4f
+                val barSpacing = 4.dp.toPx()
                 val barWidth = ((chartWidth - (barCount - 1) * barSpacing) / barCount).coerceAtLeast(4f)
 
                 // Goal line
-                val goalY = chartHeight * (1f - goalMl.toFloat() / maxMl)
+                val goalY = plotTop + chartHeight * (1f - goalMl.toFloat() / maxMl)
                 drawLine(
                     color = HealthColors.Healthy.copy(alpha = 0.7f),
                     start = Offset(0f, goalY),
@@ -694,11 +702,12 @@ private fun BarChartCard(
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
                         goalLabel,
-                        chartWidth - 50f,
+                        chartWidth - 4.dp.toPx(),
                         goalY - 8f,
                         android.graphics.Paint().apply {
                             color = goalLabelColor.toArgb()
                             textSize = goalLabelSize
+                            textAlign = android.graphics.Paint.Align.RIGHT
                             isAntiAlias = true
                         }
                     )
@@ -706,7 +715,7 @@ private fun BarChartCard(
 
                 // Average line
                 if (avgMl > 0) {
-                    val avgY = chartHeight * (1f - avgMl.toFloat() / maxMl)
+                    val avgY = plotTop + chartHeight * (1f - avgMl.toFloat() / maxMl)
                     drawLine(
                         color = FeatureColors.WaterStart.copy(alpha = 0.65f),
                         start = Offset(0f, avgY),
@@ -735,29 +744,31 @@ private fun BarChartCard(
 
                     drawRoundRect(
                         color = barColor,
-                        topLeft = Offset(x, chartHeight - barHeight),
+                        topLeft = Offset(x, plotTop + chartHeight - barHeight),
                         size = Size(barWidth, barHeight),
                         cornerRadius = CornerRadius(4f)
                     )
                 }
-            }
-
-            // X-axis labels (show subset)
-            if (chartData.size <= 14) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    val step = if (chartData.size > 7) 2 else 1
-                    chartData.filterIndexed { index, _ -> index % step == 0 }.forEach { (label, _) ->
-                        Text(
-                            text = label,
-                            fontSize = 12.sp,
-                            color = DetailColors.text(DetailColors.Secondary)
-                        )
-                    }
+                val tickPaint = android.graphics.Paint().apply {
+                    color = goalLabelColor.toArgb()
+                    textSize = goalLabelSize
+                    textAlign = android.graphics.Paint.Align.CENTER
+                    isAntiAlias = true
+                }
+                trendTickIndices(chartData.size).forEach { index ->
+                    val label = labels[index]
+                    val halfText = tickPaint.measureText(label) / 2
+                    val x = (index * (barWidth + barSpacing) + barWidth / 2)
+                        .coerceIn(halfText, (chartWidth - halfText).coerceAtLeast(halfText))
+                    drawContext.canvas.nativeCanvas.drawText(label, x, size.height - 4.dp.toPx(), tickPaint)
                 }
             }
+
+            ChartReadings("Daily water readings", readings.map { reading ->
+                reading.date.toString() to (reading.totalMl?.let { ml ->
+                    "$ml ml; goal $goalMl ml; " + if (goalMl > 0 && ml >= goalMl) "Goal met" else "Below goal"
+                } ?: "No intake logged; goal $goalMl ml")
+            })
 
             // Legend row
             Row(
