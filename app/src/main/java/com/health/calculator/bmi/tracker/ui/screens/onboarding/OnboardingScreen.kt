@@ -1130,8 +1130,11 @@ private fun BottomSection(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
+                        val buttonText = selectedAction?.let {
+                            stringResource(R.string.onboarding_start_with_action, stringResource(it.labelRes))
+                        } ?: stringResource(R.string.onboarding_explore_home)
                         Text(
-                            text = stringResource(R.string.onboarding_explore_home),
+                            text = buttonText,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp
