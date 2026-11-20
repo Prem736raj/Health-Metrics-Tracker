@@ -82,7 +82,8 @@ import com.health.calculator.bmi.tracker.data.model.kgToLbs
 import com.health.calculator.bmi.tracker.ui.theme.HealthColors
 import kotlinx.coroutines.delay
 
-private val BmiAccent = HealthColors.Info
+private val BmiAccent: Color
+    @Composable get() = AppColors.Accent
 
 @Composable
 fun BmiResultSection(
@@ -347,7 +348,7 @@ private fun ActionButtonsSection(
                     .height(50.dp),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = BmiAccent
+                    contentColor = AppColors.Accent
                 ),
                 border = androidx.compose.foundation.BorderStroke(
                     1.dp, BmiAccent.copy(alpha = 0.3f)

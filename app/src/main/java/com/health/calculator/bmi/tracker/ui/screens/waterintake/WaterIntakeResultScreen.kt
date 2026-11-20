@@ -79,10 +79,26 @@ fun WaterIntakeResultScreen(
     onNavigateBack: () -> Unit,
     onRecalculate: () -> Unit,
     onStartTracking: () -> Unit
+) = WaterIntakeResultContent(
+    result = viewModel.calculationResult,
+    onNavigateBack = onNavigateBack,
+    onRecalculate = onRecalculate,
+    onStartTracking = onStartTracking,
+    onSave = viewModel::saveToHistory
+)
+
+/** Full result presentation without a ViewModel, also used by runtime fixtures. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WaterIntakeResultContent(
+    result: WaterIntakeCalculation?,
+    onNavigateBack: () -> Unit,
+    onRecalculate: () -> Unit,
+    onStartTracking: () -> Unit,
+    onSave: () -> Unit
 ) = DetailScreenTheme(DetailFeature.WATER) {
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
-    val result = viewModel.calculationResult
     if (result == null) {
         Scaffold(
             topBar = {
@@ -240,7 +256,7 @@ fun WaterIntakeResultScreen(
                     visible = isVisible,
                     enter = fadeIn(tween(500, 500)) + slideInVertically(tween(500, 500)) { 40 }
                 ) {
-                    FactorBreakdownCard(viewModel)
+                    FactorBreakdownCard(result)
                 }
 
                 // Hydration tips
@@ -264,7 +280,7 @@ fun WaterIntakeResultScreen(
                     isSaved = isSaved,
                     onSave = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        viewModel.saveToHistory()
+                        onSave()
                         isSaved = true
                         showSaveConfirmation = true
                     },
@@ -937,8 +953,7 @@ private fun HourlyTimeline(hourlyMl: Int, wakingHours: Int) {
 // ─── Factor Breakdown ────────────────────────────────────────────────────────
 
 @Composable
-private fun FactorBreakdownCard(viewModel: WaterIntakeViewModel) {
-    val result = viewModel.calculationResult ?: return
+private fun FactorBreakdownCard(result: WaterIntakeCalculation) {
 
     // Keep the explanation aligned with the calculator: this is a beverage
     // starting point, not a weight-based prescription or a medical target.

@@ -3,6 +3,14 @@ package com.health.calculator.bmi.tracker.ui.screens.calculators.bmi
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors as AppColors
 import androidx.compose.ui.res.stringResource
 import com.health.calculator.bmi.tracker.R
+import com.health.calculator.bmi.tracker.ui.components.detail.ChartReadings
+import com.health.calculator.bmi.tracker.ui.components.detail.ChartPointPicker
+import com.health.calculator.bmi.tracker.ui.components.detail.trendAxisLabels
+import com.health.calculator.bmi.tracker.ui.components.detail.trendTickIndices
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -149,7 +157,12 @@ fun BmiTrendSection(
                 visible = showContent,
                 enter = fadeIn(tween(400, delayMillis = 200))
             ) {
-                NotEnoughDataCard(readingsCount = trendData.stats.totalReadings)
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    trendData.points.lastOrNull()?.let { point ->
+                        PointTooltip(point = point, onDismiss = null)
+                    }
+                    NotEnoughDataCard(readingsCount = trendData.stats.totalReadings)
+                }
             }
         } else {
             // ── Comparison Card ────────────────────────────────────────
@@ -282,7 +295,7 @@ private fun NotEnoughDataCard(readingsCount: Int) {
             ) {
                 Icon(
                     Icons.Filled.BarChart, null,
-                    tint = AppColors.icon(TrendAccent).copy(alpha = 0.5f),
+                    tint = AppColors.icon(TrendAccent),
                     modifier = Modifier.size(32.dp)
                 )
             }
@@ -311,36 +324,6 @@ private fun NotEnoughDataCard(readingsCount: Int) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf(
-                    Icons.Outlined.Timeline to "Track weekly",
-                    Icons.Outlined.Flag to "Set goals"
-                ).forEach { (icon, label) ->
-                    Surface(
-                        shape = RoundedCornerShape(10.dp),
-                        color = TrendAccent.copy(alpha = 0.06f),
-                        border = androidx.compose.foundation.BorderStroke(0.5.dp, TrendAccent.copy(alpha = 0.15f))
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = icon,
-                                contentDescription = null,
-                                tint = AppColors.icon(TrendAccent.copy(alpha = 0.7f)),
-                                modifier = Modifier.size(14.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                label,
-                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp),
-                                color = AppColors.text(TrendAccent.copy(alpha = 0.7f))
-                            )
-                        }
-                    }
-                }
-            }
         }
     }
 }
@@ -433,9 +416,10 @@ private fun ComparisonCard(stats: BmiTrendStats) {
 
 // ─── BMI Trend Graph ──────────────────────────────────────────────────────────
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
-    var selectedPoint by remember { mutableStateOf<BmiTrendPoint?>(null) }
+    var selectedPoint by remember(points) { mutableStateOf<BmiTrendPoint?>(null) }
 
     // Animate line drawing
     val lineProgress = remember { Animatable(0f) }
@@ -498,11 +482,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
             val darkChart = AppColors.isDark
             val graphLine = AppColors.accent(GraphLineColor)
             val pointHalo = AppColors.Surface
-            val sameDateCounts = points.groupingBy { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it.timestamp)) }.eachCount()
-            val xLabels = points.map { point ->
-                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(point.timestamp))
-                if ((sameDateCounts[date] ?: 0) > 1) SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(point.timestamp)) else formatShortDate(point.timestamp)
-            }
+            val xLabels = trendAxisLabels(points.map { it.timestamp })
 
             Box(
                 modifier = Modifier
@@ -512,6 +492,7 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                 Canvas(
                     modifier = Modifier
                         .fillMaxSize()
+                        .semantics { contentDescription = "BMI chart, ${points.size} readings. Use Select a reading or BMI readings for values." }
                         .pointerInput(points) {
                             detectTapGestures { offset ->
                                 if (points.isEmpty()) return@detectTapGestures
@@ -540,8 +521,8 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
 
                     // BMI range for y-axis
                     val allValues = points.map { it.bmiValue }
-                    val minBmi = (allValues.min() - 2).coerceAtLeast(12.0)
-                    val maxBmi = (allValues.max() + 2).coerceAtMost(50.0)
+                    val minBmi = (allValues.min() - 2).coerceAtLeast(0.0)
+                    val maxBmi = allValues.max() + 2
                     val bmiRange = maxBmi - minBmi
 
                     fun bmiToY(bmi: Double): Float {
@@ -684,14 +665,13 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                     }
 
                     // ── X-Axis Date Labels ────────────────────────────
-                    val labelCount = (points.size).coerceAtMost(5)
-                    val step = ((points.size - 1).toFloat() / (labelCount - 1).coerceAtLeast(1)).toInt().coerceAtLeast(1)
-                    for (i in points.indices step step) {
+                    for (i in trendTickIndices(points.size, if (xLabels.any { it.length > 8 }) 2 else 3)) {
                         val x = indexToX(i)
                         val dateStr = xLabels[i]
                         drawContext.canvas.nativeCanvas.drawText(
                             dateStr,
-                            x,
+                            x.coerceIn(14.sp.toPx() * dateStr.length * .26f,
+                                width - 14.sp.toPx() * dateStr.length * .26f),
                             height - 6f,
                             android.graphics.Paint().apply {
                                 color = surfaceVariant.toArgb()
@@ -706,9 +686,10 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
 
             // Zone legend
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ZoneLegend(ZoneUnderweight, "Under")
                 Spacer(modifier = Modifier.width(12.dp))
@@ -718,6 +699,14 @@ private fun BmiTrendGraph(points: List<BmiTrendPoint>) {
                 Spacer(modifier = Modifier.width(12.dp))
                 ZoneLegend(ZoneObese, "Obese")
             }
+            ChartPointPicker(
+                labels = points.map { "${formatFullDate(it.timestamp)} · ${String.format("%.1f", it.bmiValue)} BMI" },
+                selectedIndex = points.indexOf(selectedPoint),
+                onSelect = { selectedPoint = points[it] }
+            )
+            ChartReadings("BMI readings", points.map {
+                formatFullDate(it.timestamp) to "BMI ${String.format("%.1f", it.bmiValue)} · ${it.category.label} · ${it.inputSummary}"
+            })
         }
     }
 }
@@ -741,7 +730,7 @@ private fun ZoneLegend(color: Color, label: String) {
 }
 
 @Composable
-private fun PointTooltip(point: BmiTrendPoint, onDismiss: () -> Unit) {
+private fun PointTooltip(point: BmiTrendPoint, onDismiss: (() -> Unit)?) {
     val catColor = bmiCategoryColor(point.category)
     Surface(
         shape = RoundedCornerShape(12.dp),
@@ -768,7 +757,7 @@ private fun PointTooltip(point: BmiTrendPoint, onDismiss: () -> Unit) {
                     color = AppColors.secondaryText(MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
-            IconButton(onClick = onDismiss, modifier = Modifier.size(48.dp)) {
+            if (onDismiss != null) IconButton(onClick = onDismiss, modifier = Modifier.size(48.dp)) {
                 Icon(Icons.Filled.Close, "Dismiss", modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
@@ -777,6 +766,7 @@ private fun PointTooltip(point: BmiTrendPoint, onDismiss: () -> Unit) {
 
 // ─── Statistics Card ──────────────────────────────────────────────────────────
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun StatisticsCard(stats: BmiTrendStats) {
     Card(
@@ -798,29 +788,31 @@ private fun StatisticsCard(stats: BmiTrendStats) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                maxItemsInEachRow = 2
             ) {
                 StatItem(
                     label = "Current",
                     value = String.format("%.1f", stats.currentBmi),
-                    color = bmiCategoryColor(stats.currentCategory)
+                    color = bmiCategoryColor(stats.currentCategory), modifier = Modifier.weight(1f)
                 )
                 StatItem(
                     label = "Average",
                     value = String.format("%.1f", stats.averageBmi),
-                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.averageBmi))
+                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.averageBmi)), modifier = Modifier.weight(1f)
                 )
                 StatItem(
                     label = "Lowest",
                     value = String.format("%.1f", stats.lowestBmi),
-                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.lowestBmi))
+                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.lowestBmi)), modifier = Modifier.weight(1f)
                 )
                 StatItem(
                     label = "Highest",
                     value = String.format("%.1f", stats.highestBmi),
-                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.highestBmi))
+                    color = bmiCategoryColor(BmiCategory.fromBmi(stats.highestBmi)), modifier = Modifier.weight(1f)
                 )
             }
 
@@ -843,8 +835,8 @@ private fun StatisticsCard(stats: BmiTrendStats) {
 }
 
 @Composable
-private fun StatItem(label: String, value: String, color: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun StatItem(label: String, value: String, color: Color, modifier: Modifier = Modifier) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             value,
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
@@ -866,7 +858,7 @@ private fun formatShortDate(timestamp: Long): String {
 }
 
 private fun formatFullDate(timestamp: Long): String {
-    return SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(timestamp))
+    return SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
 }
 
 private fun formatTimeSince(timestamp: Long): String {

@@ -9,6 +9,17 @@ import com.health.calculator.bmi.tracker.R
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.health.calculator.bmi.tracker.ui.components.detail.ChartReadings
+import com.health.calculator.bmi.tracker.ui.components.detail.trendAxisLabels
+import com.health.calculator.bmi.tracker.ui.components.detail.trendTickIndices
+import java.time.LocalDate
+import java.time.ZoneId
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -58,15 +69,12 @@ fun CalorieHistoryScreen(
     var selectedDate by rememberSaveable { mutableStateOf<String?>(null) }
     val analytics = remember { com.health.calculator.bmi.tracker.domain.usecase.CalorieHistoryAnalyticsUseCase() }
 
-    val calendarData by remember(logs, calendarYear, calendarMonth) {
-        derivedStateOf { analytics.getCalendarData(logs, calendarYear, calendarMonth) }
+    val presentationLogs = remember(logs) { caloriePresentationLogs(logs) }
+    val calendarData by remember(presentationLogs, calendarYear, calendarMonth) {
+        derivedStateOf { analytics.getCalendarData(presentationLogs, calendarYear, calendarMonth) }
     }
-    val trendData by remember(logs, selectedTrendDays) {
-        derivedStateOf { analytics.getFilteredTrendData(logs, selectedTrendDays) }
-    }
-    val macroTrend by remember(logs, selectedTrendDays) {
-        derivedStateOf { analytics.getMacroTrend(logs, selectedTrendDays) }
-    }
+    val periodLogs = caloriePeriodLogs(presentationLogs, selectedTrendDays)
+    val macroTrend = analytics.getMacroTrend(periodLogs.reversed(), periodLogs.size)
 
     Scaffold(
         topBar = {
@@ -119,8 +127,8 @@ fun CalorieHistoryScreen(
             )
 
             // Trend Graph
-            CalorieTrendGraph(
-                trendData = trendData,
+            CalorieHistoryTrend(
+                logs = presentationLogs,
                 targetCalories = stats.targetCalories,
                 selectedDays = selectedTrendDays,
                 onDaysChanged = { selectedTrendDays = it }
@@ -147,7 +155,7 @@ fun CalorieHistoryScreen(
     selectedDate?.let { date ->
         CalorieDayDetailsDialog(
             date = date,
-            log = analytics.findLogForDate(logs, date),
+            log = analytics.findLogForDate(presentationLogs, date),
             onDismiss = { selectedDate = null }
         )
     }
@@ -621,173 +629,89 @@ private fun CalendarLegendItem(color: Color, label: String) {
     }
 }
 
+/** Stateless trend surface; selection is owned by its caller. */
 @Composable
-private fun CalorieTrendGraph(
-    trendData: List<Pair<String, Double>>,
+fun CalorieHistoryTrend(
+    logs: List<DailyFoodLog>,
     targetCalories: Double,
     selectedDays: Int,
     onDaysChanged: (Int) -> Unit
 ) {
-    val animatedProgress by animateFloatAsState(
-        targetValue = 1f,
-        animationSpec = tween(1500, easing = FastOutSlowInEasing),
-        label = "trend"
-    )
+    val readings = caloriePeriodLogs(logs, selectedDays)
+    val dates = readings.map { LocalDate.parse(it.date) }
+    val labels = trendAxisLabels(dates.map {
+        it.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    })
+    val target = targetCalories.takeIf { it.isFinite() && it > 0.0 } ?: 0.0
+    val graphColor = MaterialTheme.colorScheme.primary
+    val targetColor = DetailColors.Success
+    val textColor = DetailColors.Text
+    val gridColor = MaterialTheme.colorScheme.outlineVariant
+    val labelSize = with(LocalDensity.current) { 12.sp.toPx() }
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    stringResource(R.string.txt_calorie_trend),
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Time filter
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
+    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(stringResource(R.string.txt_calorie_trend),
+                style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(7, 14, 30, 90).forEach { days ->
-                    FilterChip(
-                        selected = selectedDays == days,
-                        onClick = { onDaysChanged(days) },
-                        label = { Text("${days}d", fontSize = 12.sp) },
-                        modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                    FilterChip(selected = selectedDays == days, onClick = { onDaysChanged(days) },
+                        label = { Text("$days days") }, modifier = Modifier.heightIn(min = 48.dp))
                 }
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            if (trendData.size < 2) {
-                Box(
-                    modifier = Modifier.fillMaxWidth().height(150.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        stringResource(R.string.txt_not_enough_data_for_the_select),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = DetailColors.text(DetailColors.Secondary)
-                    )
-                }
-                return@Column
-            }
-
-            val values = trendData.map { it.second }
-            val minVal = (minOf(values.minOrNull() ?: 0.0, targetCalories) * 0.9).toFloat()
-            val maxVal = (maxOf(values.maxOrNull() ?: 0.0, targetCalories) * 1.1).toFloat()
-            val valRange = maxVal - minVal
-
-            val graphColor = MaterialTheme.colorScheme.primary
-            val targetColor = HealthColors.Healthy
-            val overColor = HealthColors.Caution
-            val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(160.dp)
-            ) {
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    val w = size.width; val h = size.height
-                    val padL = 40.dp.toPx(); val padR = 12.dp.toPx()
-                    val padT = 8.dp.toPx(); val padB = 24.dp.toPx()
-                    val graphW = w - padL - padR; val graphH = h - padT - padB
-                    val pointCount = trendData.size
-                    val stepX = graphW / (pointCount - 1).toFloat()
-
-                    fun yPos(value: Float) = padT + graphH - ((value - minVal) / valRange * graphH)
-                    fun xPos(index: Int) = padL + index * stepX
-
-                    // Grid lines
-                    for (i in 0..4) {
-                        val y = padT + graphH * i / 4
-                        drawLine(gridColor, Offset(padL, y), Offset(w - padR, y), strokeWidth = 1.dp.toPx())
+            Text("Current target: ${"%.0f".format(target)} kcal/day",
+                style = MaterialTheme.typography.bodySmall, color = DetailColors.Secondary)
+            if (readings.isEmpty()) {
+                Text(stringResource(R.string.txt_not_enough_data_for_the_select),
+                    color = DetailColors.Secondary, style = MaterialTheme.typography.bodyMedium)
+            } else {
+                val values = readings.map { it.totalCalories }
+                val minVal = (minOf(values.min(), target) * 0.9).coerceAtLeast(0.0)
+                val maxVal = maxOf(values.max(), target, minVal + 1.0) * 1.1
+                val range = (maxVal - minVal).coerceAtLeast(1.0)
+                Canvas(Modifier.fillMaxWidth().height(210.dp).semantics {
+                    contentDescription = "Calorie intake, $selectedDays calendar days. Expand daily calorie readings for values."
+                }) {
+                    val left = 52.dp.toPx()
+                    val right = size.width - 20.dp.toPx()
+                    val top = 12.dp.toPx()
+                    val bottom = size.height - 32.dp.toPx()
+                    fun y(value: Double) = (bottom - (value - minVal) / range * (bottom - top)).toFloat()
+                    fun x(index: Int): Float = if (dates.size == 1) (left + right) / 2 else {
+                        val span = (dates.last().toEpochDay() - dates.first().toEpochDay()).coerceAtLeast(1)
+                        left + (right - left) * (dates[index].toEpochDay() - dates.first().toEpochDay()).toFloat() / span
                     }
-
-                    // Target line
-                    val targetY = yPos(targetCalories.toFloat())
-                    drawLine(
-                        color = targetColor,
-                        start = Offset(padL, targetY),
-                        end = Offset((w - padR) * animatedProgress, targetY),
-                        strokeWidth = 2.dp.toPx(),
-                        pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(12f, 8f))
-                    )
-
-                    // Fill area under graph
-                    if (pointCount >= 2) {
-                        val fillPath = Path()
-                        trendData.forEachIndexed { index, (_, value) ->
-                            val x = xPos(index) * animatedProgress
-                            val y = yPos(value.toFloat())
-                            if (index == 0) fillPath.moveTo(x, y) else fillPath.lineTo(x, y)
-                        }
-                        fillPath.lineTo(xPos(pointCount - 1) * animatedProgress, padT + graphH)
-                        fillPath.lineTo(xPos(0) * animatedProgress, padT + graphH)
-                        fillPath.close()
-                        drawPath(fillPath, color = graphColor.copy(alpha = 0.1f))
-
-                        // Main line
-                        val linePath = Path()
-                        trendData.forEachIndexed { index, (_, value) ->
-                            val x = xPos(index) * animatedProgress
-                            val y = yPos(value.toFloat())
-                            if (index == 0) linePath.moveTo(x, y) else linePath.lineTo(x, y)
-                        }
-                        drawPath(linePath, color = graphColor, style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round))
-
-                        // Points
-                        trendData.forEachIndexed { index, (_, value) ->
-                            val x = xPos(index) * animatedProgress
-                            val y = yPos(value.toFloat())
-                            val ptColor = if (value > targetCalories + 200) overColor else graphColor
-                            drawCircle(Color.White, radius = 5.dp.toPx(), center = Offset(x, y))
-                            drawCircle(ptColor, radius = 3.5.dp.toPx(), center = Offset(x, y))
-                        }
+                    val paint = android.graphics.Paint().apply {
+                        color = textColor.toArgb(); textSize = labelSize; isAntiAlias = true
+                        textAlign = android.graphics.Paint.Align.RIGHT
+                    }
+                    for (i in 0..2) {
+                        val value = minVal + range * i / 2
+                        val pos = y(value)
+                        drawLine(gridColor, Offset(left, pos), Offset(right, pos), 1.dp.toPx())
+                        drawContext.canvas.nativeCanvas.drawText("%.0f".format(value), left - 6.dp.toPx(), pos + labelSize / 3, paint)
+                    }
+                    drawLine(targetColor, Offset(left, y(target)), Offset(right, y(target)), 2.dp.toPx(),
+                        pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(12f, 8f)))
+                    val path = Path()
+                    values.forEachIndexed { index, value ->
+                        if (index == 0) path.moveTo(x(index), y(value)) else path.lineTo(x(index), y(value))
+                        drawCircle(graphColor, 4.dp.toPx(), Offset(x(index), y(value)))
+                    }
+                    drawPath(path, graphColor, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round))
+                    paint.textAlign = android.graphics.Paint.Align.CENTER
+                    trendTickIndices(readings.size).forEach { index ->
+                        val half = paint.measureText(labels[index]) / 2
+                        val pos = x(index).coerceIn(half, (size.width - half).coerceAtLeast(half))
+                        drawContext.canvas.nativeCanvas.drawText(labels[index], pos, size.height - 4.dp.toPx(), paint)
                     }
                 }
-            }
-
-            // X-axis labels
-            if (trendData.isNotEmpty()) {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    val labelCount = minOf(trendData.size, 5)
-                    val step = if (labelCount > 1) (trendData.size - 1) / (labelCount - 1) else 0
-                    repeat(labelCount) { i ->
-                        val idx = i * step
-                        Text(
-                            trendData.getOrNull(idx)?.first ?: "",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = DetailColors.text(DetailColors.Secondary),
-                            fontSize = 12.sp
-                        )
-                    }
-                }
-            }
-
-            // Legend
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(stringResource(R.string.txt_intake), style = MaterialTheme.typography.labelSmall, fontSize = 12.sp)
-                Spacer(modifier = Modifier.width(12.dp))
-                Box(modifier = Modifier.width(16.dp).height(2.dp).background(HealthColors.Healthy))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text("Target (${"%.0f".format(targetCalories)} kcal)", style = MaterialTheme.typography.labelSmall, fontSize = 12.sp)
+                Text("Intake in kcal · dashed line: current target",
+                    style = MaterialTheme.typography.bodySmall, color = DetailColors.Secondary)
+                ChartReadings("Daily calorie readings", readings.map {
+                    it.date to "${"%.0f".format(it.totalCalories)} kcal; current target ${"%.0f".format(target)} kcal"
+                })
             }
         }
     }
