@@ -276,7 +276,7 @@ private fun ForestText(
         fontFamily = if (serif) FontFamily.Serif else FontFamily.SansSerif,
         fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
         fontSize = size.coerceAtLeast(12f).sp,
-        lineHeight = (size * lineHeightRatio).coerceAtLeast(16f).sp,
+        lineHeight = (size * lineHeightRatio).coerceAtLeast(15f).sp,
         letterSpacing = 0.sp, textAlign = align
     ))
 }
@@ -310,21 +310,21 @@ private fun BoxScope.ForestFeatureCards(page: Int, unit: Float, height: Dp, widt
     Row(
         Modifier.fillMaxWidth().offset(y = height * if (page == 0) .637f else .633f)
             .padding(horizontal = width * if (page == 0) .055f else .04f)
-            .height(height * if (page == 0) .193f else .170f),
+            .height(height * if (page == 0) .204f else .170f),
         horizontalArrangement = Arrangement.spacedBy(7.dp * unit)
     ) {
         features.forEach { feature ->
             Column(
                 Modifier.weight(1f).fillMaxSize().forestGlass(13.dp * unit)
-                    .padding(horizontal = 5.dp * unit, vertical = (if (page == 0) 8.dp else 14.dp) * unit),
+                    .padding(horizontal = 4.dp * unit, vertical = (if (page == 0) 6.dp else 14.dp) * unit),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ForestDisc(feature.symbol, feature.color, Modifier.size((if (page == 0) 44.dp else 48.dp) * unit), feature.color.copy(alpha = .12f), iconFraction = .55f)
-                Spacer(Modifier.height((if (page == 0) 5.dp else 7.dp) * unit))
+                ForestDisc(feature.symbol, feature.color, Modifier.size((if (page == 0) 40.dp else 48.dp) * unit), feature.color.copy(alpha = .12f), iconFraction = .55f)
+                Spacer(Modifier.height((if (page == 0) 3.dp else 7.dp) * unit))
                 ForestText(stringResource(feature.title), 13.5f * unit, ForestColors.text, serif = page == 1, bold = true)
-                Spacer(Modifier.height((if (page == 0) 3.dp else 4.dp) * unit))
+                Spacer(Modifier.height((if (page == 0) 2.dp else 4.dp) * unit))
                 ForestText(stringResource(feature.description), (if (page == 0) 12f else 12.2f) * unit, ForestColors.secondary,
-                    lineHeightRatio = if (page == 0) 1.3f else 1.42f)
+                    lineHeightRatio = if (page == 0) 1.25f else 1.42f)
             }
         }
     }
