@@ -343,7 +343,7 @@ private fun BoxScope.ForestActionCards(
 ) {
     Column(
         Modifier.fillMaxWidth().offset(y = height * .520f).padding(horizontal = width * .04f)
-            .height(maxOf(height * .165f, 96.dp + 9.dp * unit)),
+            .height(maxOf(height * .185f, 120.dp + 9.dp * unit)),
         verticalArrangement = Arrangement.spacedBy(9.dp * unit)
     ) {
         OnboardingStartAction.entries.chunked(2).forEach { actions ->
