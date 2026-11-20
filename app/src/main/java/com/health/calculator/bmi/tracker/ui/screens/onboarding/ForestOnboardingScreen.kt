@@ -316,11 +316,11 @@ private fun BoxScope.ForestFeatureCards(page: Int, unit: Float, height: Dp, widt
         features.forEach { feature ->
             Column(
                 Modifier.weight(1f).fillMaxSize().forestGlass(13.dp * unit)
-                    .padding(horizontal = 4.dp * unit, vertical = (if (page == 0) 6.dp else 14.dp) * unit),
+                    .padding(horizontal = 4.dp * unit, vertical = 6.dp * unit),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ForestDisc(feature.symbol, feature.color, Modifier.size((if (page == 0) 40.dp else 48.dp) * unit), feature.color.copy(alpha = .12f), iconFraction = .55f)
-                Spacer(Modifier.height((if (page == 0) 3.dp else 7.dp) * unit))
+                ForestDisc(feature.symbol, feature.color, Modifier.size(40.dp * unit), feature.color.copy(alpha = .12f), iconFraction = .55f)
+                Spacer(Modifier.height(3.dp * unit))
                 ForestText(stringResource(feature.title), 13.5f * unit, ForestColors.text, serif = page == 1, bold = true)
                 Spacer(Modifier.height((if (page == 0) 2.dp else 4.dp) * unit))
                 ForestText(stringResource(feature.description), (if (page == 0) 12f else 12.2f) * unit, ForestColors.secondary,
