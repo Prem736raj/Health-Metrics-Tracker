@@ -41,6 +41,8 @@ Google recommends at least a week between submission and launch, and reviews can
 
 ## Work queue for the AI engineer
 
+**Progress on November 22:** R01 was exercised on an API 34 emulator using synthetic readings. From Track → Blood pressure, the empty-state action opened the entry form. Saving two different readings produced two rows; canceling a third kept the count at two. After returning to the log from the form, Back reached Track in one step. This verifies the basic logging journey on the local debug build. The remaining release gates below apply to the signed candidate.
+
 Work in dependency order. Each row is a reviewable change or a small series of changes. P0 items block this launch. P1 items establish the promised user experience. P2 items are experiments that can move to January.
 
 | ID | Priority and implementation | Acceptance evidence |

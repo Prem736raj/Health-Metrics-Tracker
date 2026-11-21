@@ -703,8 +703,10 @@ fun NavGraph(
                 viewModel = bpViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToLogs = {
-                    navController.navigate(Screen.BloodPressureLog.route) {
-                        launchSingleTop = true
+                    if (navController.previousBackStackEntry?.destination?.route == Screen.BloodPressureLog.route) {
+                        navController.popBackStack()
+                    } else {
+                        navController.navigate(Screen.BloodPressureLog.route) { launchSingleTop = true }
                     }
                 },
                 onNavigateToTrends = {
@@ -1329,7 +1331,10 @@ fun NavGraph(
             }
         ) {
             BpLogScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                onAddReading = {
+                    navController.navigate(Screen.BloodPressureCalculator.route) { launchSingleTop = true }
+                }
             )
         }
         composable(

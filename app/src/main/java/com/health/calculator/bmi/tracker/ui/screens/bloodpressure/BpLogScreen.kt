@@ -4,6 +4,7 @@ import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import com.health.calculator.bmi.tracker.R
 
 
@@ -57,6 +58,7 @@ private fun bpTimeOfDayIcon(value: String?): ImageVector? = when (value) {
 @Composable
 fun BpLogScreen(
     onNavigateBack: () -> Unit,
+    onAddReading: () -> Unit,
     viewModel: BpLogViewModel = hiltViewModel()
 ) = DetailScreenTheme(DetailFeature.BLOOD_PRESSURE) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,7 +72,7 @@ fun BpLogScreen(
                         Text(stringResource(R.string.txt_bp_log), fontWeight = FontWeight.Bold)
                         if (uiState.readingsCount > 0) {
                             Text(
-                                "${uiState.readingsCount} readings",
+                                pluralStringResource(R.plurals.bp_log_reading_count, uiState.readingsCount, uiState.readingsCount),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = DetailColors.text(DetailColors.Secondary)
                             )
@@ -83,6 +85,13 @@ fun BpLogScreen(
                         onNavigateBack()
                     }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    if (uiState.readings.isNotEmpty()) {
+                        IconButton(onClick = onAddReading) {
+                            Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.bp_add_reading))
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -101,7 +110,7 @@ fun BpLogScreen(
                 CircularProgressIndicator()
             }
         } else if (uiState.readings.isEmpty()) {
-            BpLogEmptyState(modifier = Modifier.padding(padding))
+            BpLogEmptyState(onAddReading, modifier = Modifier.padding(padding))
         } else {
             LazyColumn(
                 modifier = Modifier
@@ -442,7 +451,7 @@ private fun BpLogEntryCard(
 // ─── Log Empty State ───────────────────────────────────────────────────────────
 
 @Composable
-private fun BpLogEmptyState(modifier: Modifier = Modifier) {
+private fun BpLogEmptyState(onAddReading: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -475,11 +484,14 @@ private fun BpLogEmptyState(modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Center
             )
             Text(
-                "Your blood pressure readings will appear here.\nCheck your BP to start tracking!",
+                stringResource(R.string.bp_log_empty_hint),
                 style = MaterialTheme.typography.bodyMedium,
                 color = DetailColors.text(DetailColors.Secondary),
                 textAlign = TextAlign.Center
             )
+            Button(onClick = onAddReading) {
+                Text(stringResource(R.string.bp_record_first_reading))
+            }
         }
     }
 }

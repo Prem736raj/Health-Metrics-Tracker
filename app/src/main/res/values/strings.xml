@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">Health Metrics Tracker</string>
+    <string name="bp_log_empty_hint">Enter a reading from your blood pressure monitor to start your log.</string>
+    <string name="bp_record_first_reading">Record first reading</string>
+    <string name="bp_add_reading">Add reading</string>
+    <plurals name="bp_log_reading_count">
+        <item quantity="one">%1$d reading</item>
+        <item quantity="other">%1$d readings</item>
+    </plurals>
 
 <string name="widget_water_small_description">Shows your daily water intake progress</string>
 <string name="widget_water_medium_description">Shows water intake with quick-add buttons</string>
