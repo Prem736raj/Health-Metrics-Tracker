@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 import com.health.calculator.bmi.tracker.data.model.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import java.util.*
 import java.text.SimpleDateFormat
@@ -74,6 +75,8 @@ class StatisticsRepository private constructor(
 
     /** Health trend summary for a specific calculator type */
     fun getTrendSummary(type: CalculatorType): Flow<HealthTrendSummary?> {
+        // Sleep duration alone cannot be graded as improving or declining.
+        if (type == CalculatorType.SLEEP) return flowOf(null)
         return historyRepository.getAllEntries().map { entries ->
             val typeEntries = entries.filter { it.calculatorKey == type.key }
                 .sortedBy { it.timestamp }

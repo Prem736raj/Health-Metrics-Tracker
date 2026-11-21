@@ -28,6 +28,17 @@ interface HistoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEntry(entry: HistoryEntry): Long
 
+    @Query("SELECT id FROM history_entries WHERE calculator_key = :key AND timestamp = :timestamp AND details_json = :details LIMIT 1")
+    suspend fun findMatchingEntry(key: String, timestamp: Long, details: String): Long?
+
+    @Transaction
+    suspend fun insertEntryOnce(entry: HistoryEntry): Boolean {
+        val details = requireNotNull(entry.detailsJson)
+        if (findMatchingEntry(entry.calculatorKey, entry.timestamp, details) != null) return false
+        insertEntry(entry)
+        return true
+    }
+
     @Query("DELETE FROM history_entries WHERE id = :entryId")
     suspend fun deleteEntryById(entryId: Long)
 

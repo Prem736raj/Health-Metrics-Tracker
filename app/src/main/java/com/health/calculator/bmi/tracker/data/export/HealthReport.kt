@@ -12,6 +12,7 @@ internal enum class ReportTool(val title: String, val calculator: CalculatorType
     WATER_LOG("Water log"),
     FOOD_LOG("Food log"),
     STEPS("Steps from Health Connect"),
+    SLEEP("Sleep duration", CalculatorType.SLEEP),
     BMI("Body mass index", CalculatorType.BMI),
     BMR("Resting energy (BMR)", CalculatorType.BMR),
     WAIST_HIP("Waist-to-hip ratio", CalculatorType.WHR),

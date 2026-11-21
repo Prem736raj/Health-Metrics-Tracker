@@ -100,6 +100,8 @@ class HistoryRepository @Inject constructor(
         return historyDao.insertEntry(entry)
     }
 
+    suspend fun addEntryOnce(entry: HistoryEntry): Boolean = historyDao.insertEntryOnce(entry)
+
     /** Delete entry by ID */
     suspend fun deleteEntry(id: Long) {
         historyDao.deleteEntryById(id)

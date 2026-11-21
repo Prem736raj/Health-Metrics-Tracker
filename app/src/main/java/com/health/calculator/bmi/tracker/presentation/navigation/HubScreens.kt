@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Assessment
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.Calculate
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.DirectionsWalk
@@ -123,7 +124,7 @@ private fun TrackHubContent(
 }
 
 enum class CalculatorDestination {
-    BMI, BMR, BLOOD_PRESSURE, WATER, CALORIES, WAIST_HIP, HEART_RATE, IDEAL_WEIGHT, BSA, METABOLIC, UNITS
+    BMI, BMR, BLOOD_PRESSURE, WATER, CALORIES, WAIST_HIP, HEART_RATE, IDEAL_WEIGHT, BSA, METABOLIC, UNITS, SLEEP
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -292,6 +293,7 @@ private fun calculatorIcon(destination: CalculatorDestination): ImageVector = wh
     CalculatorDestination.BSA -> Icons.Outlined.Timeline
     CalculatorDestination.METABOLIC -> Icons.Outlined.Flag
     CalculatorDestination.UNITS -> Icons.Outlined.SwapHoriz
+    CalculatorDestination.SLEEP -> Icons.Outlined.Bedtime
 }
 
 private fun calculatorAccent(destination: CalculatorDestination): Color = when (destination) {
@@ -306,6 +308,7 @@ private fun calculatorAccent(destination: CalculatorDestination): Color = when (
     CalculatorDestination.BSA -> CalculatorColors.BSA
     CalculatorDestination.METABOLIC -> CalculatorColors.MetabolicSyndrome
     CalculatorDestination.UNITS -> HealthColors.Info
+    CalculatorDestination.SLEEP -> HealthColors.Info
 }
 
 @Composable

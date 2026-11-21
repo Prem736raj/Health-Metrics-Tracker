@@ -58,6 +58,7 @@ import com.health.calculator.bmi.tracker.ui.screens.articles.HealthArticlesScree
 import com.health.calculator.bmi.tracker.ui.screens.export.ExportDataScreen
 import com.health.calculator.bmi.tracker.ui.screens.export.HealthReportScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.UnitConverterScreen
+import com.health.calculator.bmi.tracker.ui.screens.calculators.SleepDurationScreen
 import com.health.calculator.bmi.tracker.ui.screens.common.PlaceholderScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiCalculatorScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiViewModel
@@ -411,6 +412,7 @@ fun NavGraph(
                         CalculatorDestination.BSA -> Screen.BsaCalculator.route
                         CalculatorDestination.METABOLIC -> Screen.MetabolicSyndromeCalculator.route
                         CalculatorDestination.UNITS -> Screen.UnitConverter.route
+                        CalculatorDestination.SLEEP -> Screen.SleepDurationCalculator.route
                     }
                     navController.navigate(route) { launchSingleTop = true }
                 }
@@ -447,6 +449,10 @@ fun NavGraph(
 
         composable(route = Screen.UnitConverter.route) {
             UnitConverterScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(route = Screen.SleepDurationCalculator.route) {
+            SleepDurationScreen(onBack = { navController.popBackStack() })
         }
 
         composable(route = Screen.AiCoach.route) {

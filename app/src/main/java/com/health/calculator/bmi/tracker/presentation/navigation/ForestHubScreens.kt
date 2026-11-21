@@ -252,4 +252,5 @@ private fun forestCalculatorIcon(id: CalculatorDestination): ImageVector = when 
     CalculatorDestination.BSA -> Icons.Outlined.AccessibilityNew
     CalculatorDestination.METABOLIC -> Icons.Outlined.Science
     CalculatorDestination.UNITS -> Icons.Outlined.SwapHoriz
+    CalculatorDestination.SLEEP -> Icons.Outlined.Bedtime
 }

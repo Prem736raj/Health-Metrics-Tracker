@@ -18,7 +18,8 @@ enum class CalculatorType(
     BSA("Body Surface Area", "BSA", "👤", "bsa"),
     IBW("Ideal Body Weight", "IBW", "🏋️", "ibw"),
     CALORIE("Daily Calories", "Cal", "🍽️", "calorie"),
-    HEART_RATE("Heart Rate Zones", "HR", "💓", "hr");
+    HEART_RATE("Heart Rate Zones", "HR", "💓", "hr"),
+    SLEEP("Sleep duration", "Sleep", "🌙", "sleep");
 
     companion object {
         fun fromKey(key: String): CalculatorType? =

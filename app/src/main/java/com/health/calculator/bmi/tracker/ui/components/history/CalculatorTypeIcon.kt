@@ -2,6 +2,7 @@ package com.health.calculator.bmi.tracker.ui.components.history
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.HealthAndSafety
 import androidx.compose.material.icons.outlined.LocalFireDepartment
@@ -31,4 +32,5 @@ internal fun calculatorTypeIcon(type: CalculatorType): ImageVector = when (type)
     CalculatorType.IBW -> Icons.Outlined.MonitorWeight
     CalculatorType.CALORIE -> Icons.Outlined.Restaurant
     CalculatorType.HEART_RATE -> Icons.Outlined.FavoriteBorder
+    CalculatorType.SLEEP -> Icons.Outlined.Bedtime
 }

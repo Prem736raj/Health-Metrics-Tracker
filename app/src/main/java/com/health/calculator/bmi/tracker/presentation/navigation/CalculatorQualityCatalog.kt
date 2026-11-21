@@ -31,6 +31,17 @@ object CalculatorQualityCatalog {
             related = listOf(CalculatorDestination.IDEAL_WEIGHT, CalculatorDestination.WAIST_HIP)
         ),
         CalculatorQualityInfo(
+            id = CalculatorDestination.SLEEP,
+            title = "Sleep duration",
+            description = "Estimate sleep from your own times and save a session to your report.",
+            inputs = "Wake date, time you tried to sleep, final wake-up time, and optional minutes spent falling asleep or awake.",
+            method = "Elapsed time between the two times minus the minutes spent falling asleep and awake in between.",
+            interpretation = "Use the estimate to keep a record of nights, naps, or daytime sleep.",
+            limitations = "The estimate depends on the times you remember. It cannot measure sleep stages or assess sleep quality.",
+            sources = listOf("National Heart, Lung, and Blood Institute: Sleep Diary (nhlbi.nih.gov)"),
+            related = emptyList()
+        ),
+        CalculatorQualityInfo(
             id = CalculatorDestination.BMR,
             title = "Resting energy (BMR)",
             description = "An estimate of energy used at rest in a typical day.",

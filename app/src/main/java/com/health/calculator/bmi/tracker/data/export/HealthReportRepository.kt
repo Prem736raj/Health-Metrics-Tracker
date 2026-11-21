@@ -1,5 +1,6 @@
 package com.health.calculator.bmi.tracker.data.export
 
+import com.health.calculator.bmi.tracker.data.calculator.formatSleepDuration
 import com.health.calculator.bmi.tracker.data.local.AppDatabase
 import com.health.calculator.bmi.tracker.data.repository.FoodLogRepository
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,8 @@ internal class HealthReportRepository(
             records[tool] = history[tool.calculator?.key].orEmpty().map { entry ->
                 val result = listOf(entry.resultValue, entry.resultLabel)
                     .filter { it.isNotBlank() }.joinToString(" ")
-                ReportRecord(entry.timestamp, result, entry.category.orEmpty())
+                val sleep = entry.resultValue.toLongOrNull()?.takeIf { tool == ReportTool.SLEEP && it >= 0 }
+                ReportRecord(entry.timestamp, sleep?.let(::formatSleepDuration) ?: result, entry.category.orEmpty())
             }
         }
 
