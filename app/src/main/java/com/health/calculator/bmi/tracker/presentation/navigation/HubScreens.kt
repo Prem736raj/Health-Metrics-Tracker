@@ -73,10 +73,11 @@ fun TrackHubScreen(
     onOpenHealthConnections: () -> Unit,
     onOpenHistory: () -> Unit,
     onOpenReminders: () -> Unit,
-    onOpenHealthReport: () -> Unit
+    onOpenHealthReport: () -> Unit,
+    onOpenMedicalRecords: () -> Unit
 ) {
     com.health.calculator.bmi.tracker.ui.theme.ForestScreenTheme {
-        TrackHubContent(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders, onOpenHealthReport)
+        TrackHubContent(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders, onOpenHealthReport, onOpenMedicalRecords)
     }
 }
 
@@ -90,10 +91,11 @@ private fun TrackHubContent(
     onOpenHealthConnections: () -> Unit,
     onOpenHistory: () -> Unit,
     onOpenReminders: () -> Unit,
-    onOpenHealthReport: () -> Unit
+    onOpenHealthReport: () -> Unit,
+    onOpenMedicalRecords: () -> Unit
 ) {
     if (com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
-        ForestTrackHubScreen(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders, onOpenHealthReport)
+        ForestTrackHubScreen(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders, onOpenHealthReport, onOpenMedicalRecords)
         return
     }
     HubScaffold(
@@ -118,6 +120,7 @@ private fun TrackHubContent(
             item { HubActionCard("Steps and connected data", "Choose whether to connect Health Connect", Icons.Outlined.DirectionsWalk, onOpenHealthConnections, FeatureColors.StepsDeep) }
             item { HubActionCard("History", "Review, edit or remove previous entries", Icons.Outlined.History, onOpenHistory, HealthColors.Info) }
             item { HubActionCard("Health report", "Preview and share selected records", Icons.Outlined.Description, onOpenHealthReport, HealthColors.Info) }
+            item { HubActionCard("Medical records", "Log readings, medications and visits", Icons.Outlined.Description, onOpenMedicalRecords, HealthColors.Info) }
             item { HubActionCard("Reminders", "Choose helpful prompts only when you want them", Icons.Outlined.Notifications, onOpenReminders, FeatureColors.BpDeep) }
         }
     }

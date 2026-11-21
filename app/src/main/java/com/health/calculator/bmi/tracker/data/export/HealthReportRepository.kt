@@ -57,6 +57,13 @@ internal class HealthReportRepository(
             .filter { it.steps > 0 }
             .map { ReportRecord(it.dayStartMillis, "${number.format(it.steps)} steps", "Cached daily total") }
 
+        val medicalRecords = database.medicalRecordDao().inRange(start, end).groupBy { it.kind }
+        ReportTool.entries.forEach { tool ->
+            val kind = tool.medicalRecordKind ?: return@forEach
+            records[tool] = medicalRecords[kind.name].orEmpty().map { record ->
+                ReportRecord(record.timestamp, kind.reportResult(record), kind.reportContext(record))
+            }
+        }
         HealthReport(window, records)
     }
 }

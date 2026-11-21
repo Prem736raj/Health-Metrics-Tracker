@@ -90,17 +90,20 @@ internal fun HealthReportScreen(onBack: () -> Unit, viewModel: HealthReportViewM
                     else -> {
                         val window = requireNotNull(report).window
                         item {
-                            val allSelected = sections.all { it.tool in state.selected }
                             val preview = requireNotNull(snapshot)
+                            val standard = sections.map { it.tool }.filterNot { it.requiresOptIn }.toSet()
+                            val allStandardSelected = state.selected.containsAll(standard)
                             Column {
                                 Text("${preview.recordCountLabel} from ${preview.sectionCountLabel}",
                                     style = MaterialTheme.typography.titleMedium)
-                                Text("The PDF leaves out names, personal notes and medication details.",
+                                Text("Personal notes, clinic names and prescription instructions stay on this device.",
                                     style = MaterialTheme.typography.bodySmall)
-                                TextButton(enabled = !state.sharing, onClick = {
-                                    val visible = sections.map { it.tool }.toSet()
-                                    viewModel.select(if (allSelected) state.selected - visible else state.selected + visible)
-                                }) { Text(if (allSelected) "Clear selection" else "Select all") }
+                                if (standard.isNotEmpty() || preview.sections.isNotEmpty()) {
+                                    TextButton(enabled = !state.sharing, onClick = {
+                                        val visible = sections.map { it.tool }.toSet()
+                                        viewModel.select(if (allStandardSelected) state.selected - visible else state.selected + standard)
+                                    }) { Text(if (allStandardSelected) "Clear selection" else "Select standard sections") }
+                                }
                             }
                         }
                         items(sections, key = { it.tool }) { section ->
@@ -131,6 +134,8 @@ private fun ReportSectionCard(section: ReportSection, window: ReportWindow, chec
                         Text(section.tool.title, style = MaterialTheme.typography.titleMedium)
                         val count = section.records.size
                         Text(if (count == 1) "1 record" else "$count records", style = MaterialTheme.typography.bodySmall)
+                        if (section.tool.requiresOptIn) Text("Includes titles or medication names",
+                            style = MaterialTheme.typography.bodySmall)
                     }
                     Icon(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
                         if (expanded) "Collapse preview" else "Expand preview")

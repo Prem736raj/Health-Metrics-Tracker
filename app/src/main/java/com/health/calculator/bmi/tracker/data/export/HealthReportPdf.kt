@@ -67,8 +67,9 @@ internal class HealthReportPdf(private val context: Context) {
             canvas.drawText(report.window.title, 40f, 117f, heroLabel)
             canvas.drawText("${report.recordCountLabel} across ${report.sectionCountLabel}", 40f, 144f, heroLabel)
             canvas.drawText("Records by tool", 40f, 221f, heading)
+            val rowSpacing = minOf(26f, 366f / maxOf(1, report.sections.size - 1))
             report.sections.forEachIndexed { index, section ->
-                val y = 251f + 26f * index
+                val y = 251f + rowSpacing * index
                 canvas.drawText(section.tool.title, 40f, y, body)
                 block.color = wash
                 canvas.drawRoundRect(265f, y - 9f, 503f, y + 1f, 5f, 5f, block)

@@ -6,6 +6,7 @@ import com.health.calculator.bmi.tracker.data.export.ReportRecord
 import com.health.calculator.bmi.tracker.data.export.ReportTool
 import com.health.calculator.bmi.tracker.data.export.ReportWindow
 import com.health.calculator.bmi.tracker.data.model.CalculatorType
+import com.health.calculator.bmi.tracker.data.records.MedicalRecordKind
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -16,6 +17,18 @@ import java.time.ZoneId
 class HealthReportTest {
     private val now = Instant.parse("2026-11-22T05:00:00Z")
     private val window = ReportWindow(ReportPeriod.WEEK, now, ZoneId.of("Asia/Kolkata"))
+
+    @Test
+    fun everyMedicalRecordHasASectionAndPrivateSectionsAreOptIn() {
+        assertEquals(MedicalRecordKind.entries.toSet(), ReportTool.entries.mapNotNull { it.medicalRecordKind }.toSet())
+        val report = HealthReport(window, mapOf(
+            ReportTool.GLUCOSE to listOf(ReportRecord(window.end, "98 mg/dL")),
+            ReportTool.MEDICATIONS to listOf(ReportRecord(window.end, "Sample medication")),
+            ReportTool.VISITS to listOf(ReportRecord(window.end, "Follow-up"))
+        ))
+        assertEquals(listOf(ReportTool.GLUCOSE), report.snapshot(ReportTool.defaultSelection).sections.map { it.tool })
+        assertEquals(3, report.snapshot(ReportTool.defaultSelection + ReportTool.MEDICATIONS + ReportTool.VISITS).recordCount)
+    }
 
     @Test
     fun everyRecordedCalculatorHasExactlyOneReportSection() {

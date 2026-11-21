@@ -37,7 +37,8 @@ internal fun ForestTrackHubScreen(
     onOpenBloodPressure: () -> Unit, onOpenFood: () -> Unit,
     onOpenHealthConnections: () -> Unit, onOpenHistory: () -> Unit,
     onOpenReminders: () -> Unit,
-    onOpenHealthReport: () -> Unit
+    onOpenHealthReport: () -> Unit,
+    onOpenMedicalRecords: () -> Unit
 ) {
     val light = BotanicalPalette.isLight
     val listState = rememberLazyListState()
@@ -108,6 +109,9 @@ internal fun ForestTrackHubScreen(
             }
             item {
                 ForestActionRow(ForestAction("Health report", "Preview and share selected records", Icons.Outlined.Description, onOpenHealthReport), leaves = true)
+            }
+            item {
+                ForestActionRow(ForestAction("Medical records", "Log readings, medications and visits", Icons.Outlined.MedicalServices, onOpenMedicalRecords), leaves = true)
             }
         }
     }

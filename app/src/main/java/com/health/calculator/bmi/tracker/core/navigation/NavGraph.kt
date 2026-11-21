@@ -59,6 +59,7 @@ import com.health.calculator.bmi.tracker.ui.screens.export.ExportDataScreen
 import com.health.calculator.bmi.tracker.ui.screens.export.HealthReportScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.UnitConverterScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.SleepDurationScreen
+import com.health.calculator.bmi.tracker.ui.screens.records.MedicalRecordsScreen
 import com.health.calculator.bmi.tracker.ui.screens.common.PlaceholderScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiCalculatorScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiViewModel
@@ -393,7 +394,8 @@ fun NavGraph(
                 onOpenHealthConnections = { navController.navigate(Screen.HealthConnections.route) { launchSingleTop = true } },
                 onOpenHistory = { navController.navigate(Screen.History.route) { launchSingleTop = true } },
                 onOpenReminders = { navController.navigate(Screen.Reminders.route) { launchSingleTop = true } },
-                onOpenHealthReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } }
+                onOpenHealthReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } },
+                onOpenMedicalRecords = { navController.navigate(Screen.MedicalRecords.route) { launchSingleTop = true } }
             )
         }
 
@@ -445,6 +447,13 @@ fun NavGraph(
 
         composable(route = Screen.HealthReport.route) {
             HealthReportScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(route = Screen.MedicalRecords.route) {
+            MedicalRecordsScreen(
+                onBack = { navController.popBackStack() },
+                onOpenReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } }
+            )
         }
 
         composable(route = Screen.UnitConverter.route) {

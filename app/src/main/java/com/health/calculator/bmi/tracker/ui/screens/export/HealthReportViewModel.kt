@@ -28,7 +28,7 @@ import javax.inject.Inject
 internal data class HealthReportState(
     val period: ReportPeriod = ReportPeriod.MONTH,
     val report: HealthReport? = null,
-    val selected: Set<ReportTool> = ReportTool.entries.toSet(),
+    val selected: Set<ReportTool> = ReportTool.defaultSelection,
     val loading: Boolean = true,
     val sharing: Boolean = false,
     val loadFailed: Boolean = false,
@@ -45,7 +45,7 @@ internal class HealthReportViewModel @Inject constructor(
     private val pdf = HealthReportPdf(application)
     private val exporter = DataExportManager.getInstance(application)
     private val initialSelection = savedState.get<ArrayList<String>>("reportTools")
-        ?.map(ReportTool::valueOf)?.toSet() ?: ReportTool.entries.toSet()
+        ?.map(ReportTool::valueOf)?.toSet() ?: ReportTool.defaultSelection
     private val _state = MutableStateFlow(HealthReportState(selected = initialSelection))
     val state = _state.asStateFlow()
     private var loadingJob: Job? = null

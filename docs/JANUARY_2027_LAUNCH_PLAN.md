@@ -47,6 +47,8 @@ Google recommends at least a week between submission and launch, and reviews can
 
 **Shared report:** Track also opens a report for saved calculator results and tracker records, including a combined BP and weight selection. Users can choose 7, 30 or 90 days, expand each section to preview records, and export the selection as a PDF with a chart and dated tables. Water and food logs show daily totals. The report takes BP and water from their dedicated histories so old copies in general history do not inflate their counts. User-selected note inclusion remains open.
 
+**Medical records:** Track now includes blood glucose, temperature, oxygen saturation, a medication list and a visit journal. Each has editable, searchable local history. Reports include the selected measurements. Medication names and visit titles require explicit selection. The report omits private notes, clinic names and prescription instructions.
+
 Work in dependency order. Each row is a reviewable change or a small series of changes. P0 items block this launch. P1 items establish the promised user experience. P2 items are experiments that can move to January.
 
 | ID | Priority and implementation | Acceptance evidence |
@@ -102,7 +104,7 @@ Use the same weights as the original review. For each row award 2 points for eac
 
 | Horizon | Expansion toward a complete record | Condition for proceeding |
 |---|---|---|
-| **January** | Add visit notes, provider/date search and a local attachment folder for lab PDFs or prescription images. Link a file to a visit, preview before sharing, include it in backup, and allow permanent deletion. | Pilot users repeatedly need records that the January report cannot capture. Validate file type/size, storage limits, private previews, deletion and archive portability with synthetic files first. |
+| **January** | Extend the visit journal with a local attachment folder for lab PDFs or prescription images. Link a file to a visit, preview before sharing, include it in backup, and allow permanent deletion. | Pilot users repeatedly need records that the January report cannot capture. Validate file type/size, storage limits, private previews, deletion and archive portability with synthetic files first. |
 | **February** | Add a medication list as entered by the user, lab values with units and lab-supplied reference intervals, and optional BP import through Health Connect. | Identity, units, provenance, corrections and duplicate handling work for each new record type. Ask only for the specific permission required by a selected feature. |
 | **Later** | Evaluate caregiver profiles, device partnerships, or interoperable exports when there is a named workflow and partner. AI-assisted document extraction can draft fields for the user to verify against the source before saving. | Review consent, access isolation, revocation, accuracy and migration first. Family members' records must be isolated across history, reports, backups, widgets and notifications before enabling multi-profile use. |
 

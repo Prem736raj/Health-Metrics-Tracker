@@ -1,18 +1,27 @@
 package com.health.calculator.bmi.tracker.data.export
 
 import com.health.calculator.bmi.tracker.data.model.CalculatorType
+import com.health.calculator.bmi.tracker.data.records.MedicalRecordKind
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-internal enum class ReportTool(val title: String, val calculator: CalculatorType? = null) {
+internal enum class ReportTool(
+    val title: String,
+    val calculator: CalculatorType? = null,
+    val medicalRecordKind: MedicalRecordKind? = null,
+    val requiresOptIn: Boolean = false
+) {
     BLOOD_PRESSURE("Blood pressure", CalculatorType.BLOOD_PRESSURE),
     WEIGHT("Weight"),
     WATER_LOG("Water log"),
     FOOD_LOG("Food log"),
     STEPS("Steps from Health Connect"),
     SLEEP("Sleep duration", CalculatorType.SLEEP),
+    GLUCOSE("Blood glucose", medicalRecordKind = MedicalRecordKind.GLUCOSE),
+    TEMPERATURE("Temperature", medicalRecordKind = MedicalRecordKind.TEMPERATURE),
+    OXYGEN("Oxygen saturation", medicalRecordKind = MedicalRecordKind.OXYGEN),
     BMI("Body mass index", CalculatorType.BMI),
     BMR("Resting energy (BMR)", CalculatorType.BMR),
     WAIST_HIP("Waist-to-hip ratio", CalculatorType.WHR),
@@ -21,10 +30,16 @@ internal enum class ReportTool(val title: String, val calculator: CalculatorType
     BSA("Body surface area", CalculatorType.BSA),
     WEIGHT_ESTIMATE("Height-based weight estimate", CalculatorType.IBW),
     ENERGY_ESTIMATE("Daily energy estimate", CalculatorType.CALORIE),
-    HEART_RATE("Heart-rate zones", CalculatorType.HEART_RATE);
+    HEART_RATE("Heart-rate zones", CalculatorType.HEART_RATE),
+    MEDICATIONS("Medication entries", medicalRecordKind = MedicalRecordKind.MEDICATION, requiresOptIn = true),
+    VISITS("Visit entries", medicalRecordKind = MedicalRecordKind.VISIT, requiresOptIn = true);
 
     val fromCalculationHistory: Boolean
         get() = calculator != null && this != BLOOD_PRESSURE && this != WATER_ESTIMATE
+
+    companion object {
+        val defaultSelection = entries.filterNot { it.requiresOptIn }.toSet()
+    }
 }
 
 internal enum class ReportPeriod(val days: Int) {
