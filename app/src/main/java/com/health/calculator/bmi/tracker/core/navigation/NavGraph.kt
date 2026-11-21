@@ -56,6 +56,10 @@ import com.health.calculator.bmi.tracker.ui.screens.onboarding.OnboardingStartAc
 import com.health.calculator.bmi.tracker.ui.screens.splash.SplashScreen
 import com.health.calculator.bmi.tracker.ui.screens.articles.HealthArticlesScreen
 import com.health.calculator.bmi.tracker.ui.screens.export.ExportDataScreen
+import com.health.calculator.bmi.tracker.ui.screens.export.HealthReportScreen
+import com.health.calculator.bmi.tracker.ui.screens.calculators.UnitConverterScreen
+import com.health.calculator.bmi.tracker.ui.screens.calculators.SleepDurationScreen
+import com.health.calculator.bmi.tracker.ui.screens.records.MedicalRecordsScreen
 import com.health.calculator.bmi.tracker.ui.screens.common.PlaceholderScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiCalculatorScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiViewModel
@@ -389,7 +393,9 @@ fun NavGraph(
                 onOpenFood = { navController.navigate(Screen.FoodLog.route) { launchSingleTop = true } },
                 onOpenHealthConnections = { navController.navigate(Screen.HealthConnections.route) { launchSingleTop = true } },
                 onOpenHistory = { navController.navigate(Screen.History.route) { launchSingleTop = true } },
-                onOpenReminders = { navController.navigate(Screen.Reminders.route) { launchSingleTop = true } }
+                onOpenReminders = { navController.navigate(Screen.Reminders.route) { launchSingleTop = true } },
+                onOpenHealthReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } },
+                onOpenMedicalRecords = { navController.navigate(Screen.MedicalRecords.route) { launchSingleTop = true } }
             )
         }
 
@@ -407,6 +413,8 @@ fun NavGraph(
                         CalculatorDestination.IDEAL_WEIGHT -> Screen.IdealWeightCalculator.route
                         CalculatorDestination.BSA -> Screen.BsaCalculator.route
                         CalculatorDestination.METABOLIC -> Screen.MetabolicSyndromeCalculator.route
+                        CalculatorDestination.UNITS -> Screen.UnitConverter.route
+                        CalculatorDestination.SLEEP -> Screen.SleepDurationCalculator.route
                     }
                     navController.navigate(route) { launchSingleTop = true }
                 }
@@ -435,6 +443,25 @@ fun NavGraph(
                     }
                 }
             )
+        }
+
+        composable(route = Screen.HealthReport.route) {
+            HealthReportScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(route = Screen.MedicalRecords.route) {
+            MedicalRecordsScreen(
+                onBack = { navController.popBackStack() },
+                onOpenReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } }
+            )
+        }
+
+        composable(route = Screen.UnitConverter.route) {
+            UnitConverterScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(route = Screen.SleepDurationCalculator.route) {
+            SleepDurationScreen(onBack = { navController.popBackStack() })
         }
 
         composable(route = Screen.AiCoach.route) {
@@ -703,8 +730,10 @@ fun NavGraph(
                 viewModel = bpViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToLogs = {
-                    navController.navigate(Screen.BloodPressureLog.route) {
-                        launchSingleTop = true
+                    if (navController.previousBackStackEntry?.destination?.route == Screen.BloodPressureLog.route) {
+                        navController.popBackStack()
+                    } else {
+                        navController.navigate(Screen.BloodPressureLog.route) { launchSingleTop = true }
                     }
                 },
                 onNavigateToTrends = {
@@ -1329,7 +1358,13 @@ fun NavGraph(
             }
         ) {
             BpLogScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                onAddReading = {
+                    navController.navigate(Screen.BloodPressureCalculator.route) { launchSingleTop = true }
+                },
+                onVisitReport = {
+                    navController.navigate(Screen.BloodPressureExport.route) { launchSingleTop = true }
+                }
             )
         }
         composable(
@@ -1400,6 +1435,7 @@ fun NavGraph(
             ExportDataScreen(
                 onNavigateBack = { navController.popBackStack() },
                 onOpenHistoryExport = { navController.navigate(Screen.History.route) },
+                onOpenHealthReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } },
                 onOpenDataManagement = { navController.navigate(Screen.DataManagement.route) }
             )
         }

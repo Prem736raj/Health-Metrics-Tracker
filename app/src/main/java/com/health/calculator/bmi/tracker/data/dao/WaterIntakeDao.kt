@@ -16,6 +16,9 @@ interface WaterIntakeDao {
     @Query("SELECT * FROM water_intake_calculations ORDER BY timestamp DESC")
     fun getAllCalculations(): Flow<List<WaterIntakeCalculation>>
 
+    @Query("SELECT * FROM water_intake_calculations WHERE timestamp BETWEEN :start AND :end ORDER BY timestamp DESC")
+    suspend fun getReportCalculations(start: Long, end: Long): List<WaterIntakeCalculation>
+
     @Query("SELECT * FROM water_intake_calculations ORDER BY timestamp DESC LIMIT 1")
     suspend fun getLatestCalculation(): WaterIntakeCalculation?
 

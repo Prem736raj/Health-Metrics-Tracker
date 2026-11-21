@@ -31,6 +31,17 @@ object CalculatorQualityCatalog {
             related = listOf(CalculatorDestination.IDEAL_WEIGHT, CalculatorDestination.WAIST_HIP)
         ),
         CalculatorQualityInfo(
+            id = CalculatorDestination.SLEEP,
+            title = "Sleep duration",
+            description = "Estimate sleep from your own times and save a session to your report.",
+            inputs = "Wake date, time you tried to sleep, final wake-up time, and optional minutes spent falling asleep or awake.",
+            method = "Elapsed time between the two times minus the minutes spent falling asleep and awake in between.",
+            interpretation = "Use the estimate to keep a record of nights, naps, or daytime sleep.",
+            limitations = "The estimate depends on the times you remember. It cannot measure sleep stages or assess sleep quality.",
+            sources = listOf("National Heart, Lung, and Blood Institute: Sleep Diary (nhlbi.nih.gov)"),
+            related = emptyList()
+        ),
+        CalculatorQualityInfo(
             id = CalculatorDestination.BMR,
             title = "Resting energy (BMR)",
             description = "An estimate of energy used at rest in a typical day.",
@@ -128,6 +139,17 @@ object CalculatorQualityCatalog {
             limitations = "Cut-offs vary by guideline and population, and this tool cannot assess the full clinical picture.",
             sources = listOf("International Diabetes Federation consensus definition", "American Heart Association metabolic syndrome overview"),
             related = listOf(CalculatorDestination.BLOOD_PRESSURE, CalculatorDestination.WAIST_HIP, CalculatorDestination.BMI)
+        ),
+        CalculatorQualityInfo(
+            id = CalculatorDestination.UNITS,
+            title = "Unit converter",
+            description = "Convert weight, height and fluid measurements.",
+            inputs = "A nonnegative measurement and its source unit.",
+            method = "Multiplication or division by the published unit conversion factor.",
+            interpretation = "The output is the same measurement in another unit.",
+            limitations = "Fluid ounces are U.S. customary fluid ounces. Displayed results are rounded.",
+            sources = listOf("NIST Guide to the SI, Appendix B (nist.gov)"),
+            related = listOf(CalculatorDestination.BMI, CalculatorDestination.WATER)
         )
     )
 

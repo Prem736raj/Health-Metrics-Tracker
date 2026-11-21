@@ -36,7 +36,9 @@ internal fun ForestTrackHubScreen(
     onOpenWeight: () -> Unit, onOpenWater: () -> Unit,
     onOpenBloodPressure: () -> Unit, onOpenFood: () -> Unit,
     onOpenHealthConnections: () -> Unit, onOpenHistory: () -> Unit,
-    onOpenReminders: () -> Unit
+    onOpenReminders: () -> Unit,
+    onOpenHealthReport: () -> Unit,
+    onOpenMedicalRecords: () -> Unit
 ) {
     val light = BotanicalPalette.isLight
     val listState = rememberLazyListState()
@@ -104,6 +106,12 @@ internal fun ForestTrackHubScreen(
             }
             item {
                 ForestActionRow(ForestAction("Reminders", "Choose helpful prompts only\nwhen you want them", Icons.Outlined.Notifications, onOpenReminders), leaves = true)
+            }
+            item {
+                ForestActionRow(ForestAction("Health report", "Preview and share selected records", Icons.Outlined.Description, onOpenHealthReport), leaves = true)
+            }
+            item {
+                ForestActionRow(ForestAction("Medical records", "Log readings, medications and visits", Icons.Outlined.MedicalServices, onOpenMedicalRecords), leaves = true)
             }
         }
     }
@@ -247,4 +255,6 @@ private fun forestCalculatorIcon(id: CalculatorDestination): ImageVector = when 
     CalculatorDestination.IDEAL_WEIGHT -> ForestIcons.Weight
     CalculatorDestination.BSA -> Icons.Outlined.AccessibilityNew
     CalculatorDestination.METABOLIC -> Icons.Outlined.Science
+    CalculatorDestination.UNITS -> Icons.Outlined.SwapHoriz
+    CalculatorDestination.SLEEP -> Icons.Outlined.Bedtime
 }

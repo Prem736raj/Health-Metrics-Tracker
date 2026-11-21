@@ -102,12 +102,12 @@ class ConfigurationResilienceTest {
 
     @Test
     fun databaseVersionConstant_isCurrentVersion() {
-        // The AppDatabase.version is 16. If someone bumps it, this test
+        // The AppDatabase.version is 17. If someone bumps it, this test
         // reminds them to also add a migration and update fixtures.
         assertEquals(
             "If you bumped the database version, add a migration and update tests",
-            16,
-            com.health.calculator.bmi.tracker.data.local.AppDatabase.MIGRATION_15_16.endVersion
+            17,
+            com.health.calculator.bmi.tracker.data.local.AppDatabase.MIGRATION_16_17.endVersion
         )
     }
 }

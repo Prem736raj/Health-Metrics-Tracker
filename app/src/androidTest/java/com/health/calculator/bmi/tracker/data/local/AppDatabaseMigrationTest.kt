@@ -143,6 +143,25 @@ class AppDatabaseMigrationTest {
     // ── Full chain test ─────────────────────────────────────────────
 
     @Test
+    fun migrate16To17PreservesPreviousHistoryAndCreatesMedicalRecords() {
+        helper.createDatabase(TEST_DB, 16).apply {
+            execSQL("INSERT INTO history_entries (calculator_key,result_value,result_label,timestamp) VALUES ('sleep','205','min',100)")
+            close()
+        }
+        helper.runMigrationsAndValidate(TEST_DB, 17, true, AppDatabase.MIGRATION_16_17).use { migrated ->
+            migrated.query("SELECT result_value FROM history_entries WHERE calculator_key='sleep'").use {
+                assertTrue(it.moveToFirst())
+                assertEquals("205", it.getString(0))
+            }
+            migrated.execSQL("INSERT INTO medical_records (id,kind,timestamp,value,unit,context,detail,note) VALUES ('test','GLUCOSE',200,'102','mg/dL','Fasting','','')")
+            migrated.query("SELECT value FROM medical_records WHERE id='test'").use {
+                assertTrue(it.moveToFirst())
+                assertEquals("102", it.getString(0))
+            }
+        }
+    }
+
+    @Test
     fun allMigrations_13to16_chainedPreservesData() {
         helper.createDatabase(TEST_DB, 13).apply {
             execSQL(
@@ -185,22 +204,10 @@ class AppDatabaseMigrationTest {
     // ── Safety gate ─────────────────────────────────────────────────
 
     @Test
-    fun databaseBuilder_doesNotUseFallbackToDestructiveMigration() {
-        // This test verifies the builder code path. If fallbackToDestructiveMigration
-        // were set, creating the DB at version 13 and opening at version 16 without
-        // any migrations would succeed (by dropping all tables). With proper migrations
-        // only, the builder must use the registered migration objects.
-        //
-        // We verify this indirectly: the database companion provides migrations
-        // 13→14, 14→15, 15→16 and the builder uses addMigrations(). If someone
-        // accidentally adds fallbackToDestructiveMigration, the chain test above
-        // would still pass but data could be lost in production when a version gap
-        // has no migration. This test documents the intent.
+    fun databaseBuilder_opensCurrentSchema() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val db = AppDatabase.getDatabase(context)
-        // If we got here without a crash, the database opened with migrations.
-        // The version must be 16 (current).
-        assertEquals(16, db.openHelper.readableDatabase.version)
+        assertEquals(17, db.openHelper.readableDatabase.version)
         db.close()
     }
 

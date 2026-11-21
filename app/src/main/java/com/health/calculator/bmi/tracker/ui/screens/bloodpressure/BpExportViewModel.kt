@@ -6,8 +6,12 @@ import javax.inject.Inject
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.health.calculator.bmi.tracker.data.export.BpExportManager
+import com.health.calculator.bmi.tracker.data.export.BpVisitPeriod
+import com.health.calculator.bmi.tracker.data.export.BpVisitReport
+import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.data.local.AppDatabase
 import com.health.calculator.bmi.tracker.data.local.entity.BloodPressureEntity
 // import com.health.calculator.bmi.tracker.data.preferences.ProfilePreferences
@@ -29,14 +33,18 @@ data class BpExportUiState(
     val latestEntity: BloodPressureEntity? = null,
     val isGeneratingPdf: Boolean = false,
     val isGeneratingCsv: Boolean = false,
-    val isGeneratingDoctorReport: Boolean = false,
+    val isGeneratingVisitReport: Boolean = false,
+    val visitReportFailed: Boolean = false,
     val isGeneratingImage: Boolean = false,
     val showSuccess: Boolean = false,
     val successMessage: String = ""
 )
 
 @HiltViewModel
-class BpExportViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
+class BpExportViewModel @Inject constructor(
+    application: Application,
+    private val savedStateHandle: SavedStateHandle
+) : AndroidViewModel(application) {
 
     private val database = AppDatabase.getDatabase(application)
     private val repository = BloodPressureRepository(database.bloodPressureDao())
@@ -45,6 +53,8 @@ class BpExportViewModel @Inject constructor(application: Application) : AndroidV
 
     private val _uiState = MutableStateFlow(BpExportUiState())
     val uiState: StateFlow<BpExportUiState> = _uiState.asStateFlow()
+    private val _visitReport = MutableStateFlow<BpVisitReport?>(null)
+    internal val visitReport = _visitReport.asStateFlow()
 
     private var allReadings: List<BloodPressureEntity> = emptyList()
     private var profileName: String = ""
@@ -71,6 +81,9 @@ class BpExportViewModel @Inject constructor(application: Application) : AndroidV
                 } else "—"
 
                 val latest = readings.firstOrNull()
+                val period = savedStateHandle.get<String>("bpVisitPeriod")?.let(BpVisitPeriod::valueOf)
+                    ?: BpVisitPeriod.LAST_7_DAYS
+                selectVisitPeriod(period)
                 val latestText = latest?.let { "${it.systolic}/${it.diastolic} mmHg" } ?: ""
 
                 _uiState.update {
@@ -100,7 +113,7 @@ class BpExportViewModel @Inject constructor(application: Application) : AndroidV
 
         viewModelScope.launch {
             val uri = withContext(Dispatchers.IO) {
-                exportManager.exportToPdf(allReadings, profileName, isDoctorReport = false)
+                exportManager.exportToPdf(allReadings, profileName)
             }
             _uiState.update { it.copy(isGeneratingPdf = false) }
 
@@ -132,21 +145,31 @@ class BpExportViewModel @Inject constructor(application: Application) : AndroidV
         }
     }
 
-    fun onExportDoctorReport() {
-        if (allReadings.isEmpty()) return
-        _uiState.update { it.copy(isGeneratingDoctorReport = true) }
+    internal fun selectVisitPeriod(period: BpVisitPeriod) {
+        savedStateHandle["bpVisitPeriod"] = period.name
+        _visitReport.value = BpVisitReport(period, Instant.now(), ZoneId.systemDefault(), allReadings)
+        _uiState.update { it.copy(visitReportFailed = false) }
+    }
+
+    internal fun shareVisitReport(report: BpVisitReport) {
+        if (report.readings.isEmpty() || _uiState.value.isGeneratingVisitReport) return
+        _uiState.update { it.copy(isGeneratingVisitReport = true, visitReportFailed = false) }
 
         viewModelScope.launch {
-            val uri = withContext(Dispatchers.IO) {
-                exportManager.exportToPdf(allReadings, profileName, isDoctorReport = true)
-            }
-            _uiState.update { it.copy(isGeneratingDoctorReport = false) }
-
-            uri?.let {
-                exportManager.shareFile(it, "application/pdf", "Share Doctor Report")
-                _uiState.update { state ->
-                    state.copy(showSuccess = true, successMessage = "Doctor report generated!")
+            try {
+                val uri = withContext(Dispatchers.IO) {
+                    exportManager.exportVisitReport(report)
                 }
+                val title = getApplication<Application>().getString(R.string.bp_visit_report)
+                if (uri == null) {
+                    _uiState.update { it.copy(visitReportFailed = true) }
+                } else {
+                    exportManager.shareFile(uri, "application/pdf", title)
+                }
+            } catch (_: android.content.ActivityNotFoundException) {
+                _uiState.update { it.copy(visitReportFailed = true) }
+            } finally {
+                _uiState.update { it.copy(isGeneratingVisitReport = false) }
             }
         }
     }

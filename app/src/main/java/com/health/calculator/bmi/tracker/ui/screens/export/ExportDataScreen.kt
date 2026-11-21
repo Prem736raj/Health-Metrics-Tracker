@@ -23,6 +23,7 @@ import com.health.calculator.bmi.tracker.ui.components.detail.*
 fun ExportDataScreen(
     onNavigateBack: () -> Unit,
     onOpenHistoryExport: () -> Unit,
+    onOpenHealthReport: () -> Unit,
     onOpenDataManagement: () -> Unit
 ) {
     DetailScreenTheme(DetailFeature.EXPORT) {
@@ -37,6 +38,14 @@ fun ExportDataScreen(
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         SupportingLeafMark()
                         Text(stringResource(R.string.export_backup_subtitle), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+                    }
+                }
+                item {
+                    OutlinedCard(onClick = onOpenHealthReport, modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("Health report", style = MaterialTheme.typography.titleLarge)
+                            Text("Choose calculators and trackers, preview your records, and share a PDF.")
+                        }
                     }
                 }
                 item {

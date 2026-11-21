@@ -35,6 +35,7 @@ sealed class Screen(val route: String) {
     data object IdealWeightCalculator : Screen("ideal_body_weight")
     data object DailyCalorieCalculator : Screen("calculator/daily_calorie")
     data object HeartRateZoneCalculator : Screen("calculator/heart_rate_zone")
+    data object SleepDurationCalculator : Screen("calculator/sleep_duration")
     data object FoodLog : Screen("food_log")
     data object CalorieHistory : Screen("calorie_history")
 
@@ -57,6 +58,9 @@ sealed class Screen(val route: String) {
     data object HealthArticles : Screen("health_articles")
     data object Achievements : Screen("achievements")
     data object ExportData : Screen("export_data")
+    data object HealthReport : Screen("health_report")
+    data object MedicalRecords : Screen("medical_records")
+    data object UnitConverter : Screen("unit_converter")
     data object DataManagement : Screen("data_management")
     data object HealthConnections : Screen("health_connections")
     data object WeightTracking : Screen("weight_tracking")

@@ -5,6 +5,7 @@ import com.health.calculator.bmi.tracker.ui.components.detail.DetailFeature
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailScreenTheme
 import com.health.calculator.bmi.tracker.ui.components.detail.DetailColors
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import com.health.calculator.bmi.tracker.R
 
 
@@ -36,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.health.calculator.bmi.tracker.ui.theme.HealthColors
+import com.health.calculator.bmi.tracker.data.export.BpVisitPeriod
+import com.health.calculator.bmi.tracker.data.export.BpVisitReport
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +47,7 @@ fun BpExportScreen(
     viewModel: BpExportViewModel = hiltViewModel()
 ) = DetailScreenTheme(DetailFeature.BLOOD_PRESSURE) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val visitReport by viewModel.visitReport.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
 
     Scaffold(
@@ -72,6 +76,16 @@ fun BpExportScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            visitReport?.let { report ->
+                BpVisitReportCard(
+                    report = report,
+                    isGenerating = uiState.isGeneratingVisitReport,
+                    showError = uiState.visitReportFailed,
+                    onSelectPeriod = viewModel::selectVisitPeriod,
+                    onShare = { viewModel.shareVisitReport(report) }
+                )
+            }
+
             // Stats summary
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -135,56 +149,6 @@ fun BpExportScreen(
                     viewModel.onExportCsv()
                 }
             )
-
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-
-            // Doctor Report
-            Text(
-                stringResource(R.string.txt_for_your_doctor),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-
-            ExportOptionCard(
-                icon = Icons.Outlined.LocalHospital,
-                iconColor = HealthColors.Good,
-                title = "Doctor-Ready Report",
-                description = "Professional medical report with last 30 readings, morning/evening averages, medication status, and clinical formatting. Print-friendly layout.",
-                buttonText = "Generate Doctor Report",
-                isLoading = uiState.isGeneratingDoctorReport,
-                isEnabled = uiState.totalReadings > 0,
-                onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    viewModel.onExportDoctorReport()
-                },
-                isPrimary = true
-            )
-
-            // Doctor report info
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = DetailColors.surface(HealthColors.Good.copy(alpha = 0.08f))
-                ),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Row(
-                    modifier = Modifier.padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Icon(
-                        Icons.Outlined.Info,
-                        contentDescription = null,
-                        tint = HealthColors.Good,
-                        modifier = Modifier.size(18.dp).padding(top = 2.dp)
-                    )
-                    Text(
-                        stringResource(R.string.txt_the_doctor_report_includes_you),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = DetailColors.text(HealthColors.Good.copy(alpha = 0.9f))
-                    )
-                }
-            }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
@@ -256,6 +220,61 @@ fun BpExportScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun BpVisitReportCard(
+    report: BpVisitReport,
+    isGenerating: Boolean,
+    showError: Boolean,
+    onSelectPeriod: (BpVisitPeriod) -> Unit,
+    onShare: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(stringResource(R.string.bp_visit_report), style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.bp_visit_contents), style = MaterialTheme.typography.bodyMedium)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                BpVisitPeriod.entries.forEach { period ->
+                    FilterChip(
+                        selected = report.period == period,
+                        onClick = { onSelectPeriod(period) },
+                        enabled = !isGenerating,
+                        label = { Text(stringResource(R.string.bp_visit_last_days, period.days)) }
+                    )
+                }
+            }
+            Text(report.dateRange, style = MaterialTheme.typography.bodyMedium)
+            if (report.readings.isEmpty()) {
+                Text(stringResource(R.string.bp_visit_empty), style = MaterialTheme.typography.bodyMedium)
+            } else {
+                val count = report.readings.size
+                Text(pluralStringResource(R.plurals.bp_log_reading_count, count, count))
+                Text(
+                    stringResource(R.string.bp_visit_days_covered, report.daysWithReadings, report.period.days),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            if (showError) {
+                Text(stringResource(R.string.bp_visit_share_error), color = MaterialTheme.colorScheme.error)
+            }
+            Button(
+                onClick = onShare,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = report.readings.isNotEmpty() && !isGenerating
+            ) {
+                Text(stringResource(if (isGenerating) R.string.txt_generating else R.string.bp_visit_share_pdf))
+            }
+        }
+    }
+}
+
 @Composable
 private fun ExportStatItem(
     value: String,
@@ -292,8 +311,7 @@ private fun ExportOptionCard(
     buttonText: String,
     isLoading: Boolean,
     isEnabled: Boolean,
-    onClick: () -> Unit,
-    isPrimary: Boolean = false
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -341,54 +359,28 @@ private fun ExportOptionCard(
                 }
             }
 
-            if (isPrimary) {
-                Button(
-                    onClick = onClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = isEnabled && !isLoading,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = iconColor
+            OutlinedButton(
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = isEnabled && !isLoading,
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = iconColor
+                ),
+                border = BorderStroke(1.dp, iconColor.copy(alpha = 0.3f))
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(18.dp),
+                        color = iconColor,
+                        strokeWidth = 2.dp
                     )
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(18.dp),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            strokeWidth = 2.dp
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.txt_generating), fontWeight = FontWeight.Bold)
-                    } else {
-                        Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(buttonText, fontWeight = FontWeight.Bold)
-                    }
-                }
-            } else {
-                OutlinedButton(
-                    onClick = onClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = isEnabled && !isLoading,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = iconColor
-                    ),
-                    border = BorderStroke(1.dp, iconColor.copy(alpha = 0.3f))
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(18.dp),
-                            color = iconColor,
-                            strokeWidth = 2.dp
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.txt_generating), fontWeight = FontWeight.Medium)
-                    } else {
-                        Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(buttonText, fontWeight = FontWeight.Medium)
-                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(stringResource(R.string.txt_generating), fontWeight = FontWeight.Medium)
+                } else {
+                    Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(buttonText, fontWeight = FontWeight.Medium)
                 }
             }
         }

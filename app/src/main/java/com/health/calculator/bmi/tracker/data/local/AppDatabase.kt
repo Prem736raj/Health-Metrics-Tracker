@@ -19,6 +19,8 @@ import com.health.calculator.bmi.tracker.data.model.WaterStreakData
 import com.health.calculator.bmi.tracker.data.dao.WaterGamificationDao
 import com.health.calculator.bmi.tracker.data.model.UrineColorEntry
 import com.health.calculator.bmi.tracker.data.dao.UrineColorDao
+import com.health.calculator.bmi.tracker.data.records.MedicalRecord
+import com.health.calculator.bmi.tracker.data.records.MedicalRecordDao
 
 
 /**
@@ -41,9 +43,10 @@ import com.health.calculator.bmi.tracker.data.dao.UrineColorDao
         com.health.calculator.bmi.tracker.data.models.Reminder::class,
         com.health.calculator.bmi.tracker.data.models.WeeklyReport::class,
         com.health.calculator.bmi.tracker.data.local.entity.ChatMessageEntity::class,
-        com.health.calculator.bmi.tracker.data.model.StepHistoryEntry::class
+        com.health.calculator.bmi.tracker.data.model.StepHistoryEntry::class,
+        MedicalRecord::class
     ],
-    version = 16,
+    version = 17,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -87,6 +90,8 @@ abstract class AppDatabase : RoomDatabase() {
     /** DAO for date-level Health Connect step snapshots. */
     abstract fun stepHistoryDao(): com.health.calculator.bmi.tracker.data.local.dao.StepHistoryDao
 
+    internal abstract fun medicalRecordDao(): MedicalRecordDao
+
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -114,6 +119,24 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_16_17 = object : Migration(16, 17) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """CREATE TABLE IF NOT EXISTS medical_records (
+                        id TEXT NOT NULL PRIMARY KEY,
+                        kind TEXT NOT NULL,
+                        timestamp INTEGER NOT NULL,
+                        value TEXT NOT NULL,
+                        unit TEXT NOT NULL,
+                        context TEXT NOT NULL,
+                        detail TEXT NOT NULL,
+                        note TEXT NOT NULL
+                    )""".trimIndent()
+                )
+                database.execSQL("CREATE INDEX IF NOT EXISTS index_medical_records_timestamp ON medical_records (timestamp)")
+            }
+        }
+
         /**
          * Returns the singleton database instance, creating it if needed.
          */
@@ -125,7 +148,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "health_calculator_database"
                 )
                     .addMigrations(MIGRATION_13_14, MIGRATION_14_15)
-                    .addMigrations(MIGRATION_15_16)
+                    .addMigrations(MIGRATION_15_16, MIGRATION_16_17)
                     .build()
                     .also { INSTANCE = it }
             }
