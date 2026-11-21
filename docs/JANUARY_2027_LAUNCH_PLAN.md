@@ -43,6 +43,8 @@ Google recommends at least a week between submission and launch, and reviews can
 
 **Progress on November 22:** R01 was exercised on an API 34 emulator using synthetic readings. From Track → Blood pressure, the empty-state action opened the entry form. Saving two different readings produced two rows; canceling a third kept the count at two. After returning to the log from the form, Back reached Track in one step. This verifies the basic logging journey on the local debug build. The remaining release gates below apply to the signed candidate.
 
+**R06 progress:** The BP log links to a visit report with a 7- or 30-day preview showing the selected dates, reading count and days with readings. The visit PDF uses that selection and leaves out profile names, notes and medication details. On the API 34 debug build, an empty selection disabled sharing, and two-page fixtures matched the preview at 43 and 44 rows. The unified BP and weight report and user-selected note inclusion remain open.
+
 Work in dependency order. Each row is a reviewable change or a small series of changes. P0 items block this launch. P1 items establish the promised user experience. P2 items are experiments that can move to January.
 
 | ID | Priority and implementation | Acceptance evidence |

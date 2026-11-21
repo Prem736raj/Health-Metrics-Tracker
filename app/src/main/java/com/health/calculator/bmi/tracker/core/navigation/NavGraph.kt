@@ -1334,6 +1334,9 @@ fun NavGraph(
                 onNavigateBack = { navController.popBackStack() },
                 onAddReading = {
                     navController.navigate(Screen.BloodPressureCalculator.route) { launchSingleTop = true }
+                },
+                onVisitReport = {
+                    navController.navigate(Screen.BloodPressureExport.route) { launchSingleTop = true }
                 }
             )
         }

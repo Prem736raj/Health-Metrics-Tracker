@@ -8,6 +8,17 @@
         <item quantity="one">%1$d reading</item>
         <item quantity="other">%1$d readings</item>
     </plurals>
+    <string name="bp_visit_report">Visit report</string>
+    <string name="bp_visit_pdf_title">Blood pressure visit report</string>
+    <string name="bp_visit_contents">Share dated BP and pulse readings. The visit PDF excludes your name, notes and medication details.</string>
+    <string name="bp_visit_last_days">Last %1$d days</string>
+    <string name="bp_visit_days_covered">Days with readings: %1$d of %2$d</string>
+    <string name="bp_visit_timezone">Measurement times shown in %1$s</string>
+    <string name="bp_visit_average_entry">Average of %1$d readings</string>
+    <string name="bp_visit_single_entry">Single reading</string>
+    <string name="bp_visit_empty">No readings in this period.</string>
+    <string name="bp_visit_share_pdf">Share visit PDF</string>
+    <string name="bp_visit_share_error">Couldn’t share the visit PDF. Try again.</string>
 
 <string name="widget_water_small_description">Shows your daily water intake progress</string>
 <string name="widget_water_medium_description">Shows water intake with quick-add buttons</string>

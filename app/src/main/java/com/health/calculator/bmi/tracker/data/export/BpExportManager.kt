@@ -9,8 +9,11 @@ import android.graphics.*
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Environment
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.health.calculator.bmi.tracker.R
 import com.health.calculator.bmi.tracker.data.local.entity.BloodPressureEntity
 import com.health.calculator.bmi.tracker.data.model.*
 import java.io.File
@@ -348,10 +351,16 @@ class BpExportManager(@ApplicationContext private val context: Context) {
 
     // ─── PDF Report ────────────────────────────────────────────────────────────
 
-    fun exportToPdf(
+    fun exportToPdf(readings: List<BloodPressureEntity>, profileName: String): Uri? =
+        writePdf(readings, profileName)
+
+    internal fun exportVisitReport(report: BpVisitReport): Uri? =
+        writePdf(report.readings, profileName = "", visit = report)
+
+    private fun writePdf(
         readings: List<BloodPressureEntity>,
         profileName: String,
-        isDoctorReport: Boolean = false
+        visit: BpVisitReport? = null
     ): Uri? {
         try {
             val document = PdfDocument()
@@ -379,7 +388,7 @@ class BpExportManager(@ApplicationContext private val context: Context) {
 
             // Paints
             val titlePaint = Paint().apply {
-                color = if (isDoctorReport) Color.rgb(30, 136, 229) else Color.rgb(0, 121, 107)
+                color = Color.rgb(0, 121, 107)
                 textSize = 22f
                 typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
                 isAntiAlias = true
@@ -392,7 +401,7 @@ class BpExportManager(@ApplicationContext private val context: Context) {
             }
             val headerPaint = Paint().apply {
                 color = Color.rgb(100, 100, 100)
-                textSize = 11f
+                textSize = 9f
                 typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
                 isAntiAlias = true
             }
@@ -411,8 +420,8 @@ class BpExportManager(@ApplicationContext private val context: Context) {
                 strokeWidth = 1f
             }
 
-            val sortedReadings = readings.sortedByDescending { it.measurementTimestamp }
-            val displayReadings = if (isDoctorReport) sortedReadings.take(30) else sortedReadings
+            val zone = visit?.zone ?: ZoneId.systemDefault()
+            val displayReadings = readings.sortedByDescending { it.measurementTimestamp }
 
             // Page 1
             var (page, cvs) = startNewPage()
@@ -421,28 +430,9 @@ class BpExportManager(@ApplicationContext private val context: Context) {
             yPos = MARGIN
 
             // ─── Header ─────
-            if (isDoctorReport) {
-                val headerBg = Paint().apply {
-                    color = Color.rgb(227, 242, 253)
-                    style = Paint.Style.FILL
-                }
-                canvas.drawRect(0f, 0f, PDF_PAGE_WIDTH.toFloat(), 80f, headerBg)
-
-                titlePaint.textSize = 20f
-                canvas.drawText("Blood Pressure Report", MARGIN, 35f, titlePaint)
-
-                val medicalPaint = Paint().apply {
-                    color = Color.rgb(30, 136, 229)
-                    textSize = 11f
-                    isAntiAlias = true
-                }
-                canvas.drawText("CONFIDENTIAL - For Medical Professional Review", MARGIN, 55f, medicalPaint)
-
-                yPos = 100f
-            } else {
-                canvas.drawText("Blood Pressure Report", MARGIN, yPos + 22f, titlePaint)
-                yPos += 40f
-            }
+            val title = if (visit != null) context.getString(R.string.bp_visit_pdf_title) else "Blood Pressure Report"
+            canvas.drawText(title, MARGIN, yPos + 22f, titlePaint)
+            yPos += 40f
 
             // Patient info
             if (profileName.isNotEmpty()) {
@@ -450,7 +440,7 @@ class BpExportManager(@ApplicationContext private val context: Context) {
                 yPos += 20f
             }
 
-            val dateRange = if (displayReadings.isNotEmpty()) {
+            val dateRange = visit?.dateRange ?: if (displayReadings.isNotEmpty()) {
                 val oldest = LocalDateTime.ofInstant(
                     Instant.ofEpochMilli(displayReadings.last().measurementTimestamp),
                     ZoneId.systemDefault()
@@ -466,8 +456,17 @@ class BpExportManager(@ApplicationContext private val context: Context) {
             yPos += 15f
             canvas.drawText("Total Readings: ${displayReadings.size}", MARGIN, yPos, bodyPaint)
             yPos += 15f
+            if (visit != null) {
+                canvas.drawText(
+                    context.getString(R.string.bp_visit_days_covered, visit.daysWithReadings, visit.period.days),
+                    MARGIN, yPos, bodyPaint
+                )
+                yPos += 15f
+                canvas.drawText(context.getString(R.string.bp_visit_timezone, zone.id), MARGIN, yPos, bodyPaint)
+                yPos += 15f
+            }
             canvas.drawText(
-                "Generated: ${LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy 'at' hh:mm a"))}",
+                "Generated: ${LocalDateTime.now(zone).format(DateTimeFormatter.ofPattern("MMM dd, yyyy 'at' hh:mm a"))}",
                 MARGIN, yPos, smallPaint
             )
             yPos += 25f
@@ -499,63 +498,15 @@ class BpExportManager(@ApplicationContext private val context: Context) {
                 }
 
                 canvas.drawText(
-                    "Highest: ${displayReadings.maxOf { it.systolic }}/${displayReadings.maxOf { it.diastolic }} mmHg",
+                    "Systolic range: ${displayReadings.minOf { it.systolic }}–${displayReadings.maxOf { it.systolic }} mmHg",
                     MARGIN, yPos, bodyPaint
                 )
                 yPos += 15f
                 canvas.drawText(
-                    "Lowest: ${displayReadings.minOf { it.systolic }}/${displayReadings.minOf { it.diastolic }} mmHg",
+                    "Diastolic range: ${displayReadings.minOf { it.diastolic }}–${displayReadings.maxOf { it.diastolic }} mmHg",
                     MARGIN, yPos, bodyPaint
                 )
                 yPos += 15f
-
-                // Morning vs Evening (doctor report)
-                if (isDoctorReport) {
-                    val morningReadings = displayReadings.filter {
-                        it.timeOfDay == BpTimeOfDay.MORNING.name
-                    }
-                    val eveningReadings = displayReadings.filter {
-                        it.timeOfDay == BpTimeOfDay.EVENING.name || it.timeOfDay == BpTimeOfDay.NIGHT.name
-                    }
-
-                    if (morningReadings.isNotEmpty()) {
-                        val mSys = morningReadings.map { it.systolic }.average()
-                        val mDia = morningReadings.map { it.diastolic }.average()
-                        canvas.drawText(
-                            "Morning Avg: ${String.format("%.0f", mSys)}/${String.format("%.0f", mDia)} mmHg (${morningReadings.size} readings)",
-                            MARGIN, yPos, bodyPaint
-                        )
-                        yPos += 15f
-                    }
-                    if (eveningReadings.isNotEmpty()) {
-                        val eSys = eveningReadings.map { it.systolic }.average()
-                        val eDia = eveningReadings.map { it.diastolic }.average()
-                        canvas.drawText(
-                            "Evening Avg: ${String.format("%.0f", eSys)}/${String.format("%.0f", eDia)} mmHg (${eveningReadings.size} readings)",
-                            MARGIN, yPos, bodyPaint
-                        )
-                        yPos += 15f
-                    }
-
-                    // Medication status
-                    val medicatedCount = displayReadings.count { it.onMedication }
-                    if (medicatedCount > 0) {
-                        canvas.drawText(
-                            "Readings on medication: $medicatedCount of ${displayReadings.size}",
-                            MARGIN, yPos, bodyPaint
-                        )
-                        yPos += 15f
-
-                        val medNames = displayReadings
-                            .filter { it.onMedication && it.medicationName.isNotEmpty() }
-                            .map { it.medicationName }
-                            .distinct()
-                        if (medNames.isNotEmpty()) {
-                            canvas.drawText("Medications: ${medNames.joinToString(", ")}", MARGIN, yPos, bodyPaint)
-                            yPos += 15f
-                        }
-                    }
-                }
 
                 // Category distribution
                 yPos += 5f
@@ -586,29 +537,36 @@ class BpExportManager(@ApplicationContext private val context: Context) {
             yPos += 20f
 
             // Table headers
-            val colX = floatArrayOf(MARGIN, 110f, 175f, 235f, 285f, 325f, 410f)
-            val headers = arrayOf("Date/Time", "SYS", "DIA", "Pulse", "PP", "Category", "Note")
+            val colX = floatArrayOf(MARGIN, 110f, 175f, 235f, 293f, 325f, 410f)
+            val lastColumn = if (visit != null) "Entry type" else "Note"
+            val headers = arrayOf("Date/Time", "SYS (mmHg)", "DIA (mmHg)", "Pulse (bpm)", "PP", "Category", lastColumn)
 
             val headerBg = Paint().apply {
                 color = Color.rgb(240, 240, 240)
                 style = Paint.Style.FILL
             }
-            canvas.drawRect(MARGIN - 5, yPos - 12f, PDF_PAGE_WIDTH - MARGIN + 5, yPos + 4f, headerBg)
-
-            headers.forEachIndexed { i, header ->
-                canvas.drawText(header, colX[i], yPos, headerPaint)
+            fun drawTableHeader() {
+                canvas.drawRect(MARGIN - 5, yPos - 12f, PDF_PAGE_WIDTH - MARGIN + 5, yPos + 4f, headerBg)
+                headers.forEachIndexed { i, header ->
+                    canvas.drawText(header, colX[i], yPos, headerPaint)
+                }
+                yPos += 16f
             }
-            yPos += 16f
+            drawTableHeader()
 
+
+            val rowDateFormatter = DateTimeFormatter.ofPattern("dd MMM HH:mm")
             displayReadings.forEach { entity ->
                 val result = checkPageBreak(yPos, 16f, currentPage)
+                val pageChanged = result.second !== currentPage
                 yPos = result.first
                 currentPage = result.second
                 canvas = result.third
+                if (pageChanged) drawTableHeader()
 
                 val dt = LocalDateTime.ofInstant(
                     Instant.ofEpochMilli(entity.measurementTimestamp),
-                    ZoneId.systemDefault()
+                    zone
                 )
 
                 val catDisplay = try {
@@ -617,7 +575,7 @@ class BpExportManager(@ApplicationContext private val context: Context) {
 
                 val medIcon = if (entity.onMedication) " 💊" else ""
 
-                canvas.drawText(dt.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")), colX[0], yPos, bodyPaint)
+                canvas.drawText(dt.format(rowDateFormatter), colX[0], yPos, bodyPaint)
                 canvas.drawText("${entity.systolic}", colX[1], yPos, bodyPaint)
                 canvas.drawText("${entity.diastolic}", colX[2], yPos, bodyPaint)
                 canvas.drawText("${entity.pulse ?: "-"}", colX[3], yPos, bodyPaint)
@@ -629,7 +587,14 @@ class BpExportManager(@ApplicationContext private val context: Context) {
                 }
                 canvas.drawText(catDisplay.take(12) + medIcon, colX[5], yPos, catPaint)
 
-                if (entity.note.isNotEmpty()) {
+                if (visit != null) {
+                    val entryType = if (entity.isAveragedResult) {
+                        context.getString(R.string.bp_visit_average_entry, entity.readingsInAverage)
+                    } else {
+                        context.getString(R.string.bp_visit_single_entry)
+                    }
+                    canvas.drawText(entryType, colX[6], yPos, smallPaint)
+                } else if (entity.note.isNotEmpty()) {
                     canvas.drawText(entity.note.take(18), colX[6], yPos, smallPaint)
                 }
 
@@ -642,28 +607,30 @@ class BpExportManager(@ApplicationContext private val context: Context) {
 
             // Footer
             yPos += 20f
-            val footResult = checkPageBreak(yPos, 40f, currentPage)
+            val disclaimerPaint = TextPaint().apply {
+                color = Color.DKGRAY
+                textSize = 9f
+                isAntiAlias = true
+            }
+            val footerText = ExportDisclosurePolicy.shareFooter()
+            val footerWidth = (PDF_PAGE_WIDTH - MARGIN * 2).toInt()
+            val footer = StaticLayout.Builder.obtain(footerText, 0, footerText.length, disclaimerPaint, footerWidth)
+                .build()
+            val footResult = checkPageBreak(yPos, 10f + footer.height, currentPage)
             yPos = footResult.first
             currentPage = footResult.second
             canvas = footResult.third
 
             canvas.drawLine(MARGIN, yPos, PDF_PAGE_WIDTH - MARGIN, yPos, linePaint)
-            yPos += 15f
-
-            val disclaimerPaint = Paint().apply {
-                color = Color.rgb(150, 150, 150)
-                textSize = 8f
-                isAntiAlias = true
-            }
-            ExportDisclosurePolicy.shareFooter().split('\n').forEach { line ->
-                canvas.drawText(line, MARGIN, yPos, disclaimerPaint)
-                yPos += 12f
-            }
+            canvas.save()
+            canvas.translate(MARGIN, yPos + 10f)
+            footer.draw(canvas)
+            canvas.restore()
 
             document.finishPage(currentPage)
 
             // Save file
-            val prefix = if (isDoctorReport) "bp_doctor_report" else "bp_report"
+            val prefix = if (visit != null) "bp_visit_report" else "bp_report"
             val fileName = "${prefix}_${System.currentTimeMillis()}.pdf"
             val file = File(exportDirectory, fileName)
             FileOutputStream(file).use { out ->

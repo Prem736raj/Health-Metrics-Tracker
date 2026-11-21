@@ -59,6 +59,7 @@ private fun bpTimeOfDayIcon(value: String?): ImageVector? = when (value) {
 fun BpLogScreen(
     onNavigateBack: () -> Unit,
     onAddReading: () -> Unit,
+    onVisitReport: () -> Unit,
     viewModel: BpLogViewModel = hiltViewModel()
 ) = DetailScreenTheme(DetailFeature.BLOOD_PRESSURE) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -89,6 +90,9 @@ fun BpLogScreen(
                 },
                 actions = {
                     if (uiState.readings.isNotEmpty()) {
+                        IconButton(onClick = onVisitReport) {
+                            Icon(Icons.Outlined.PictureAsPdf, contentDescription = stringResource(R.string.bp_visit_report))
+                        }
                         IconButton(onClick = onAddReading) {
                             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.bp_add_reading))
                         }
