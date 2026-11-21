@@ -13,6 +13,9 @@ interface HistoryDao {
     @Query("SELECT * FROM history_entries ORDER BY timestamp DESC")
     fun getAllEntries(): Flow<List<HistoryEntry>>
 
+    @Query("SELECT * FROM history_entries WHERE timestamp BETWEEN :start AND :end ORDER BY timestamp DESC")
+    suspend fun getReportEntries(start: Long, end: Long): List<HistoryEntry>
+
     @Query("SELECT * FROM history_entries ORDER BY timestamp DESC LIMIT :limit")
     suspend fun getAllEntriesSync(limit: Int): List<HistoryEntry>
 

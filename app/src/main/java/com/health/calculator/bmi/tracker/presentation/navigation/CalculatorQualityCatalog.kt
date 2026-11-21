@@ -128,6 +128,17 @@ object CalculatorQualityCatalog {
             limitations = "Cut-offs vary by guideline and population, and this tool cannot assess the full clinical picture.",
             sources = listOf("International Diabetes Federation consensus definition", "American Heart Association metabolic syndrome overview"),
             related = listOf(CalculatorDestination.BLOOD_PRESSURE, CalculatorDestination.WAIST_HIP, CalculatorDestination.BMI)
+        ),
+        CalculatorQualityInfo(
+            id = CalculatorDestination.UNITS,
+            title = "Unit converter",
+            description = "Convert weight, height and fluid measurements.",
+            inputs = "A nonnegative measurement and its source unit.",
+            method = "Multiplication or division by the published unit conversion factor.",
+            interpretation = "The output is the same measurement in another unit.",
+            limitations = "Fluid ounces are U.S. customary fluid ounces. Displayed results are rounded.",
+            sources = listOf("NIST Guide to the SI, Appendix B (nist.gov)"),
+            related = listOf(CalculatorDestination.BMI, CalculatorDestination.WATER)
         )
     )
 

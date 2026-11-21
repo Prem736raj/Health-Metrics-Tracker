@@ -56,6 +56,8 @@ import com.health.calculator.bmi.tracker.ui.screens.onboarding.OnboardingStartAc
 import com.health.calculator.bmi.tracker.ui.screens.splash.SplashScreen
 import com.health.calculator.bmi.tracker.ui.screens.articles.HealthArticlesScreen
 import com.health.calculator.bmi.tracker.ui.screens.export.ExportDataScreen
+import com.health.calculator.bmi.tracker.ui.screens.export.HealthReportScreen
+import com.health.calculator.bmi.tracker.ui.screens.calculators.UnitConverterScreen
 import com.health.calculator.bmi.tracker.ui.screens.common.PlaceholderScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiCalculatorScreen
 import com.health.calculator.bmi.tracker.ui.screens.calculators.bmi.BmiViewModel
@@ -389,7 +391,8 @@ fun NavGraph(
                 onOpenFood = { navController.navigate(Screen.FoodLog.route) { launchSingleTop = true } },
                 onOpenHealthConnections = { navController.navigate(Screen.HealthConnections.route) { launchSingleTop = true } },
                 onOpenHistory = { navController.navigate(Screen.History.route) { launchSingleTop = true } },
-                onOpenReminders = { navController.navigate(Screen.Reminders.route) { launchSingleTop = true } }
+                onOpenReminders = { navController.navigate(Screen.Reminders.route) { launchSingleTop = true } },
+                onOpenHealthReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } }
             )
         }
 
@@ -407,6 +410,7 @@ fun NavGraph(
                         CalculatorDestination.IDEAL_WEIGHT -> Screen.IdealWeightCalculator.route
                         CalculatorDestination.BSA -> Screen.BsaCalculator.route
                         CalculatorDestination.METABOLIC -> Screen.MetabolicSyndromeCalculator.route
+                        CalculatorDestination.UNITS -> Screen.UnitConverter.route
                     }
                     navController.navigate(route) { launchSingleTop = true }
                 }
@@ -435,6 +439,14 @@ fun NavGraph(
                     }
                 }
             )
+        }
+
+        composable(route = Screen.HealthReport.route) {
+            HealthReportScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(route = Screen.UnitConverter.route) {
+            UnitConverterScreen(onBack = { navController.popBackStack() })
         }
 
         composable(route = Screen.AiCoach.route) {
@@ -1408,6 +1420,7 @@ fun NavGraph(
             ExportDataScreen(
                 onNavigateBack = { navController.popBackStack() },
                 onOpenHistoryExport = { navController.navigate(Screen.History.route) },
+                onOpenHealthReport = { navController.navigate(Screen.HealthReport.route) { launchSingleTop = true } },
                 onOpenDataManagement = { navController.navigate(Screen.DataManagement.route) }
             )
         }

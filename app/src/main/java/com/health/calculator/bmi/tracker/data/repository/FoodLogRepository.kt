@@ -166,6 +166,22 @@ class FoodLogRepository @Inject constructor(@ApplicationContext private val cont
         } catch (_: Exception) { emptyList() }
     }
 
+    internal fun getSavedLogsForReport(): List<DailyFoodLog> {
+        val logs = prefs.all
+        val history = logs["history_logs"] as? String
+        val archived = history?.let { encoded ->
+            runCatching { JSONArray(encoded) }.getOrNull()?.let { array ->
+                (0 until array.length()).mapNotNull { index ->
+                    runCatching { fromJson(array.getJSONObject(index)) }.getOrNull()
+                }
+            }
+        }.orEmpty()
+        val current = (logs["today_log"] as? String)?.let { encoded ->
+            runCatching { fromJson(JSONObject(encoded)) }.getOrNull()
+        }
+        return (listOfNotNull(current) + archived).distinctBy { it.date }
+    }
+
     private fun loadTodayLog() {
         val savedDate = prefs.getString("log_date", "") ?: ""
         val today = todayKey

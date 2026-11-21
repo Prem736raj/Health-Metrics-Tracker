@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Assessment
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.ShowChart
+import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.outlined.Timeline
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -69,10 +71,11 @@ fun TrackHubScreen(
     onOpenFood: () -> Unit,
     onOpenHealthConnections: () -> Unit,
     onOpenHistory: () -> Unit,
-    onOpenReminders: () -> Unit
+    onOpenReminders: () -> Unit,
+    onOpenHealthReport: () -> Unit
 ) {
     com.health.calculator.bmi.tracker.ui.theme.ForestScreenTheme {
-        TrackHubContent(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders)
+        TrackHubContent(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders, onOpenHealthReport)
     }
 }
 
@@ -85,10 +88,11 @@ private fun TrackHubContent(
     onOpenFood: () -> Unit,
     onOpenHealthConnections: () -> Unit,
     onOpenHistory: () -> Unit,
-    onOpenReminders: () -> Unit
+    onOpenReminders: () -> Unit,
+    onOpenHealthReport: () -> Unit
 ) {
     if (com.health.calculator.bmi.tracker.ui.theme.AppColors.isDark || com.health.calculator.bmi.tracker.ui.components.forest.LocalBotanicalScreen.current) {
-        ForestTrackHubScreen(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders)
+        ForestTrackHubScreen(onOpenWeight, onOpenWater, onOpenBloodPressure, onOpenFood, onOpenHealthConnections, onOpenHistory, onOpenReminders, onOpenHealthReport)
         return
     }
     HubScaffold(
@@ -112,13 +116,14 @@ private fun TrackHubContent(
             item { HubActionCard("Food and calories", "Optional meal and calorie notes", Icons.Outlined.LocalDining, onOpenFood, CalculatorColors.DailyCalorie) }
             item { HubActionCard("Steps and connected data", "Choose whether to connect Health Connect", Icons.Outlined.DirectionsWalk, onOpenHealthConnections, FeatureColors.StepsDeep) }
             item { HubActionCard("History", "Review, edit or remove previous entries", Icons.Outlined.History, onOpenHistory, HealthColors.Info) }
+            item { HubActionCard("Health report", "Preview and share selected records", Icons.Outlined.Description, onOpenHealthReport, HealthColors.Info) }
             item { HubActionCard("Reminders", "Choose helpful prompts only when you want them", Icons.Outlined.Notifications, onOpenReminders, FeatureColors.BpDeep) }
         }
     }
 }
 
 enum class CalculatorDestination {
-    BMI, BMR, BLOOD_PRESSURE, WATER, CALORIES, WAIST_HIP, HEART_RATE, IDEAL_WEIGHT, BSA, METABOLIC
+    BMI, BMR, BLOOD_PRESSURE, WATER, CALORIES, WAIST_HIP, HEART_RATE, IDEAL_WEIGHT, BSA, METABOLIC, UNITS
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -286,6 +291,7 @@ private fun calculatorIcon(destination: CalculatorDestination): ImageVector = wh
     CalculatorDestination.IDEAL_WEIGHT -> Icons.Outlined.MonitorWeight
     CalculatorDestination.BSA -> Icons.Outlined.Timeline
     CalculatorDestination.METABOLIC -> Icons.Outlined.Flag
+    CalculatorDestination.UNITS -> Icons.Outlined.SwapHoriz
 }
 
 private fun calculatorAccent(destination: CalculatorDestination): Color = when (destination) {
@@ -299,6 +305,7 @@ private fun calculatorAccent(destination: CalculatorDestination): Color = when (
     CalculatorDestination.IDEAL_WEIGHT -> CalculatorColors.IdealWeight
     CalculatorDestination.BSA -> CalculatorColors.BSA
     CalculatorDestination.METABOLIC -> CalculatorColors.MetabolicSyndrome
+    CalculatorDestination.UNITS -> HealthColors.Info
 }
 
 @Composable

@@ -48,15 +48,15 @@ class ForestMainScreensTest(private val themeMode: ThemeMode) {
         }
     }
 
-    @Test fun track_equalCards_andAllSevenActions() {
+    @Test fun track_equalCards_andAllActions() {
         val clicked = mutableListOf<Int>()
-        show(Screen.Track.route) { TrackHubScreen({clicked.add(0)}, {clicked.add(1)}, {clicked.add(2)}, {clicked.add(3)}, {clicked.add(4)}, {clicked.add(5)}, {clicked.add(6)}) }
+        show(Screen.Track.route) { TrackHubScreen({clicked.add(0)}, {clicked.add(1)}, {clicked.add(2)}, {clicked.add(3)}, {clicked.add(4)}, {clicked.add(5)}, {clicked.add(6)}, {clicked.add(7)}) }
         verifyVisibleText("track")
         val badgeLayouts = mutableListOf<TextLayoutResult>()
         compose.onNodeWithText("Better habits\na brighter you").fetchSemanticsNode()
             .config[SemanticsActions.GetTextLayoutResult].action?.invoke(badgeLayouts)
         assertEquals("The reference header badge must stay on two lines", 2, badgeLayouts.single().lineCount)
-        listOf("Weight", "Water", "Blood pressure", "Food and calories", "Steps and\nconnected data", "History", "Reminders").forEachIndexed { index, title ->
+        listOf("Weight", "Water", "Blood pressure", "Food and calories", "Steps and\nconnected data", "History", "Reminders", "Health report").forEachIndexed { index, title ->
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText(title))
             compose.onNodeWithText(title).performClick()
             compose.runOnIdle { assertEquals(index, clicked.last()) }
@@ -68,7 +68,7 @@ class ForestMainScreensTest(private val themeMode: ThemeMode) {
         assertEquals(weight.width, water.width, 1f)
     }
 
-    @Test fun calculators_allTenDestinations_andQualitySheet() {
+    @Test fun calculators_allDestinations_andQualitySheet() {
         var opened: CalculatorDestination? = null
         show(Screen.Calculators.route) { CalculatorsHubScreen { opened = it } }
         verifyVisibleText("calculators")

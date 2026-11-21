@@ -28,6 +28,9 @@ interface BloodPressureDao {
     @Query("SELECT * FROM blood_pressure_readings WHERE isPartOfAverage = 0 ORDER BY measurementTimestamp DESC")
     fun getMainReadings(): Flow<List<BloodPressureEntity>>
 
+    @Query("SELECT * FROM blood_pressure_readings WHERE isPartOfAverage = 0 AND measurementTimestamp BETWEEN :start AND :end ORDER BY measurementTimestamp DESC")
+    suspend fun getReportReadings(start: Long, end: Long): List<BloodPressureEntity>
+
     @Query("SELECT * FROM blood_pressure_readings WHERE id = :id")
     suspend fun getReadingById(id: Long): BloodPressureEntity?
 
